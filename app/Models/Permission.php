@@ -9,5 +9,18 @@ class Permission extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name'];
+    protected $fillable = [
+        'user_id',
+        'role',
+        'add',
+        'edit',
+        'delete',
+        'view',
+        'excel',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 }

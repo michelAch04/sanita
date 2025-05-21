@@ -6,20 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('customer_id')->constrained('users')->onDelete('cascade');
+            $table->decimal('delivery_charge', 10, 2)->default(0);
+            $table->string('promocode')->nullable();
+            $table->boolean('purchased')->default(false);
+            $table->boolean('cancelled')->default(false);
+            $table->timestamp('expires_at')->nullable();
+            $table->timestamps(); // created_at and updated_at
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('carts');

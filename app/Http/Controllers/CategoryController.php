@@ -25,26 +25,36 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         try {
-            $request->validate([
+            $validate = $request->validate([
                 'name' => 'required|string|max:255',
                 'hidden' => 'required|boolean',
+                'image' => 'nullable|mimes:jpg,jpeg,png,gif,svg|max:2048' // Only allow safe image types
             ]);
 
-            $category = Category::create($request->only(['name', 'hidden']));
+            $extension = $request->image->extension();
 
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $extension = $image->getClientOriginalExtension();
-                $imageName = $category->id . '.' . $extension;
-                $image->storeAs('categories', $imageName, 'public');
-                $category->update(['image' => $imageName, 'extension' => $extension]);
-            }
+            $category = Category::create([
+                'name' => $validate['name'],
+                'extension' => $extension,
+                'hidden' => $validate['hidden'],
+                'cancelled' => 0,
+            ]);
+
+            // Save the image with the slideshow ID as the file name
+            $imageName = $category->id . '.' . $category->extension;
+            // dd($imageName);
+            $request->image->move(public_path('storage/categories'), $imageName);
 
             return redirect()->route('categories.index')->with('success', 'Category created successfully.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()
+                ->withErrors($e->validator)
+                ->withInput();
         } catch (\Exception $e) {
             return redirect()->route('categories.create')->with('error', 'Failed to create category: ' . $e->getMessage());
         }
     }
+
 
     public function edit(Category $category)
     {
@@ -59,46 +69,52 @@ class CategoryController extends Controller
         }
     }
 
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(Request $request, Category $category)
     {
-        try {
-            if ($category->cancelled == 1) {
-                return redirect()->route('categories.index')->with('error', 'This category is cancelled and cannot be updated.');
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'hidden' => 'required|boolean',
+        ]);
+
+
+        $category->name = $validatedData['name'];
+        $category->hidden = $validatedData['hidden'];
+
+        if ($request->hasFile('image')) {
+            // Define old and new (archive) paths
+            $oldPath = public_path('storage/slideshow/' . $category->id . '.' . $category->extension);
+            if (file_exists($oldPath)) {
+                unlink($oldPath);
             }
 
-            $request->validate([
-                'name' => 'required|string|max:255',
-                'hidden' => 'required|boolean',
-            ]);
+            $extension = $request->image->extension();
+            $imageName = $category->id . '.' . $extension;
+            $request->image->move(public_path('storage/categories'), $imageName);
 
-            $category->update($request->only(['name', 'hidden']));
-
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $extension = $image->getClientOriginalExtension();
-                $imageName = $category->id . '.' . $extension;
-                $image->storeAs('categories', $imageName, 'public');
-                $category->update(['image' => $imageName, 'extension' => $extension]);
-            }
-
-            return redirect()->route('categories.index')->with('success', 'Category updated successfully.');
-        } catch (\Exception $e) {
-            return redirect()->route('categories.edit', $category->id)->with('error', 'Failed to update category: ' . $e->getMessage());
+            $category->extension = $extension;
         }
+        $category->save();
+
+        return redirect()->route('categories.index')->with('success', 'Slide updated successfully.');
     }
 
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy(Category $category)
     {
-        try {
-            if ($category->cancelled == 1) {
-                return redirect()->route('categories.index')->with('error', 'This category is already cancelled.');
-            }
-
-            $category->update(['cancelled' => 1]);
-
-            return redirect()->route('categories.index')->with('success', 'Category cancelled successfully.');
-        } catch (\Exception $e) {
-            return redirect()->route('categories.index')->with('error', 'Failed to cancel category: ' . $e->getMessage());
+        $oldPath = public_path('storage/categories/' . $category->id . '.' . $category->extension);
+        if (file_exists($oldPath)) {
+            unlink($oldPath);
         }
+
+        // Mark the slideshow as cancelled (soft delete)
+        $category->update(['cancelled' => 1]);
+
+        return redirect()->route('categories.index')->with('success', 'Slide deleted successfully.');
     }
 }

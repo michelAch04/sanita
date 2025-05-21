@@ -8,11 +8,13 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
+    // Show the login form
     public function showLoginForm()
     {
         return view('cms.auth.login');
     }
 
+    // Handle the login
     public function login(Request $request)
     {
         $request->validate([
@@ -20,7 +22,8 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
-        if (Auth::attempt($request->only('email', 'password'))) {
+        if (Auth::guard('web')->attempt($request->only('email', 'password'))) {
+            // Redirect to the CMS dashboard or intended page
             return redirect()->intended('/cms/dashboard');
         }
 
@@ -29,9 +32,12 @@ class LoginController extends Controller
         ]);
     }
 
+    // Handle logout
     public function logout(Request $request)
     {
-        Auth::logout();
+        Auth::guard('web')->logout();
+
+        // Optionally, add a success message
         return redirect('/login')->with('success', 'Logged out successfully.');
     }
 }

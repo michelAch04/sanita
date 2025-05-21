@@ -24,7 +24,7 @@ class BrandController extends Controller
         $request->validate([
             'name' => 'required|string|max:255|unique:brands,name',
             'hidden' => 'required|boolean',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Validate image
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif',
         ]);
 
         try {
@@ -32,6 +32,8 @@ class BrandController extends Controller
             $brand = Brand::create([
                 'name' => $request->name,
                 'hidden' => $request->hidden,
+                'extension' => 'png',
+                'cancelled' => 0,
             ]);
 
             // Handle the image upload

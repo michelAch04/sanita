@@ -11,6 +11,11 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SubcategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\SlideshowController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\CartController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -26,39 +31,38 @@ use App\Http\Controllers\OrderController;
 Route::get('/login', function () {
     return view('cms/auth/login');
 });
+// Admin login and logout routes
+Route::get('/cms/login', [LoginController::class, 'showLoginForm'])->name('admin.login');
+Route::post('/cms/login', [LoginController::class, 'login']);
+Route::post('/cms/logout', [LoginController::class, 'logout'])->name('admin.logout');
+// Customer signin and signout and signup routes
+Route::get('/signin', [AuthController::class, 'showSignIn'])->name('customer.signin');
+Route::post('/signin', [AuthController::class, 'signIn']);
+Route::get('/signup', [AuthController::class, 'showSignUp'])->name('customer.signup');
+Route::post('/signup', [AuthController::class, 'signUp']);
+Route::post('/signout', [AuthController::class, 'signOut'])->name('customer.signout');
 
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [LoginController::class, 'login']);
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::get('/', function () {
+
+Route::middleware('auth:customer')->group(function () {
+    Route::resource('cart', CartController::class);
+});
+
+Route::get('', function () {
     return view('/sanita/index');
-})->name('index');
+})->name('sanita.index');
 
-Route::middleware(['auth'])->group(function () {
-
-    Route::get('/cms/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::middleware('auth:web')->group(function () {
+    Route::get('/cms/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::get('/cms/aboutus', [AboutUsController::class, 'edit'])->name('aboutus.edit');
     Route::put('/cms/aboutus', [AboutUsController::class, 'update'])->name('aboutus.update');
-
-    Route::get('/cms/users', [UserController::class, 'index'])->name('users.index'); // View and create users
-    Route::post('/cms/users', [UserController::class, 'store'])->name('users.store'); // Store new user
-    Route::get('/cms/users/create', [UserController::class, 'create'])->name('users.create'); // Create user form
-    Route::get('/cms/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit'); // Edit user form
-    Route::put('/cms/users/{user}', [UserController::class, 'update'])->name('users.update'); // Update user
-    Route::delete('/cms/users/{user}', [UserController::class, 'destroy'])->name('users.destroy'); // Delete user
-
-    Route::get('/cms/brands', [BrandController::class, 'index'])->name('brands.index'); // View all brands
-    Route::post('/cms/brands', [BrandController::class, 'store'])->name('brands.store'); // Store new brand
-    Route::get('/cms/brands/create', [BrandController::class, 'create'])->name('brands.create'); // Create brand form
-    Route::get('/cms/brands/{brand}/edit', [BrandController::class, 'edit'])->name('brands.edit'); // Edit brand form
-    Route::put('/cms/brands/{brand}', [BrandController::class, 'update'])->name('brands.update'); // Update brand
-    Route::delete('/cms/brands/{brand}', [BrandController::class, 'destroy'])->name('brands.destroy'); // Delete brand
-
+    Route::resource('/cms/users', UserController::class);
+    Route::resource('/cms/brands', BrandController::class);
     Route::resource('/cms/products', ProductController::class);
     Route::resource('/cms/categories', CategoryController::class);
     Route::resource('/cms/subcategories', SubcategoryController::class);
     Route::resource('/cms/customers', CustomerController::class);
     Route::resource('/cms/orders', OrderController::class);
-    
+    Route::resource('/cms/slideshow', SlideshowController::class);
+    Route::resource('/cms/permissions', PermissionController::class);
 });

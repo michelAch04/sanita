@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('slideshows', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('extension');
+            $table->tinyInteger('hidden')->default(0);
+            $table->tinyInteger('cancelled')->default(0);
             $table->timestamps();
         });
     }
@@ -22,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('slideshows');
     }
 };

@@ -22,4 +22,8 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function permission()
+    {
+        return $this->hasOne(Permission::class, 'user_id', 'id');
+    }
 }

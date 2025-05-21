@@ -12,7 +12,7 @@ class AboutUsController extends Controller
         // Fetch the current "About Us" content from the database
         $aboutUs = AboutUs::first();
 
-        return view('cms.aboutus');
+        return view('cms.aboutus', compact('aboutUs'));
     }
     public function update(Request $request)
     {

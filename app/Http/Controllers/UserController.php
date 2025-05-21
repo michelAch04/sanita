@@ -5,18 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
     public function index()
     {
-        $users = User::where('cancelled', 0)->get(); // Fetch all active users
-        return view('cms.users.index', compact('users')); // Pass users to the view
+        $users = User::where('cancelled', 0)->get();
+        return view('cms.users.index', compact('users'));
     }
 
     public function create()
     {
-        
         return view('cms.users.create');
     }
 
@@ -33,6 +33,7 @@ class UserController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
+                'remember_token' => Str::random(60),
                 'cancelled' => 0,
             ]);
 
@@ -58,7 +59,8 @@ class UserController extends Controller
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password)
+            'password' => $request->password ? Hash::make($request->password) : $user->password,
+            'remember_token' => Str::random(60),
         ]);
 
         return redirect()->route('users.index')->with('success', 'User updated successfully.');
