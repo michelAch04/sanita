@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('subcategories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->json('extension')->nullable();
+            $table->string('extension')->nullable();
             $table->foreignId('categories_id')->constrained('categories')->onDelete('cascade');
             $table->tinyInteger('hidden')->default(0);
             $table->tinyInteger('cancelled')->default(0);

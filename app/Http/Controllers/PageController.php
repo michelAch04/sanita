@@ -11,13 +11,14 @@ class PageController extends Controller
     /**
      * Fetch all visible pages ordered by 'order'.
      */
-    public static function getPages()
+    public static function getPages($userId)
     {
-        $pages = Page::with('Permission')
-            ->whereHas('Permission', function ($query) {
-                $query->where('view', 1);
-            })
-            ->orderBy('order')
+        $pages = Permission::where('user_id', $userId)
+            ->where('view', 1)
+            ->with('page')
+            ->join('pages', 'permissions.pages_id', '=', 'pages.id')
+            ->orderBy('pages.order')
+            ->select('permissions.*')
             ->get();
 
         return $pages;

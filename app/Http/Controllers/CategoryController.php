@@ -99,7 +99,7 @@ class CategoryController extends Controller
         }
         $category->save();
 
-        return redirect()->route('categories.index')->with('success', 'Slide updated successfully.');
+        return redirect()->route('categories.index')->with('success', 'categories updated successfully.');
     }
 
     /**
@@ -112,9 +112,10 @@ class CategoryController extends Controller
             unlink($oldPath);
         }
 
-        // Mark the slideshow as cancelled (soft delete)
-        $category->update(['cancelled' => 1]);
 
-        return redirect()->route('categories.index')->with('success', 'Slide deleted successfully.');
+        dd($category->update(['cancelled' => 1]));
+        dd($category);
+
+        return redirect()->route('categories.index')->with('success', 'categories deleted successfully.');
     }
 }

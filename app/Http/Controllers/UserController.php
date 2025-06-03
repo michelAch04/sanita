@@ -11,7 +11,10 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::where('cancelled', 0)->get();
+        $user = auth()->guard('web')->user();
+        $user_id = $user->id;
+
+        $users = User::where('cancelled', 0)->where('id', '!=', $user_id)->get();
         return view('cms.users.index', compact('users'));
     }
 
@@ -22,17 +25,39 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validate = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|email',
             'password' => 'nullable|string|min:8|confirmed',
         ]);
 
         try {
+            // First, check if the user exists and is cancelled
+            $existingUser = User::where('email', $validate['email'])->first();
+
+            if ($existingUser) {
+                if ($existingUser->cancelled == 1) {
+                    // Reactivate cancelled user
+                    $existingUser->name = $validate['name'];
+                    if (!empty($validate['password'])) {
+                        $existingUser->password = Hash::make($validate['password']);
+                    }
+                    $existingUser->remember_token = Str::random(60);
+                    $existingUser->cancelled = 0;
+                    $existingUser->save();
+
+                    return redirect()->route('users.index')->with('success', 'User reactivated successfully.');
+                } else {
+                    // Email already taken by an active user
+                    return redirect()->back()->withInput()->withErrors(['email' => 'The email has already been taken.']);
+                }
+            }
+
+            // If no user exists, create new user
             User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
+                'name' => $validate['name'],
+                'email' => $validate['email'],
+                'password' => Hash::make($validate['password']),
                 'remember_token' => Str::random(60),
                 'cancelled' => 0,
             ]);
@@ -42,6 +67,8 @@ class UserController extends Controller
             return redirect()->route('users.index')->with('error', 'Failed to create user: ' . $e->getMessage());
         }
     }
+
+
 
     public function edit(User $user)
     {

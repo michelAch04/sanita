@@ -42,15 +42,16 @@ Route::get('/signup', [AuthController::class, 'showSignUp'])->name('customer.sig
 Route::post('/signup', [AuthController::class, 'signUp']);
 Route::post('/signout', [AuthController::class, 'signOut'])->name('customer.signout');
 
-
-
-Route::middleware('auth:customer')->group(function () {
-    Route::resource('cart', CartController::class);
-});
-
 Route::get('', function () {
     return view('/sanita/index');
 })->name('sanita.index');
+
+Route::get('/about', [AboutUsController::class, 'show'])->name('about');
+Route::view('/contact', 'sanita.contactus')->name('contact');
+
+Route::middleware('auth:customer')->group(function () {
+    Route::resource('cart', CartController::class)->name('index', 'cart.index');
+});
 
 Route::middleware('auth:web')->group(function () {
     Route::get('/cms/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
@@ -65,4 +66,5 @@ Route::middleware('auth:web')->group(function () {
     Route::resource('/cms/orders', OrderController::class);
     Route::resource('/cms/slideshow', SlideshowController::class);
     Route::resource('/cms/permissions', PermissionController::class);
+    Route::post('/cms/permissions/ajax-update', [PermissionController::class, 'ajaxUpdate'])->name('permissions.ajaxUpdate');
 });

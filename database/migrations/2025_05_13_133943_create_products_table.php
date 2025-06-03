@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('family_code')->nullable();
             $table->string('family_description')->nullable();
             $table->foreignId('brand_id')->constrained('brands')->onDelete('cascade');
-            $table->tinyInteger('tax')->default(0);
+            $table->string('tax')->default('N');
             $table->integer('available_quantity')->default(0);
             $table->tinyInteger('hidden')->default(0);
             $table->tinyInteger('automatic_hide')->default(0);

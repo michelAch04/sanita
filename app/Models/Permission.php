@@ -19,8 +19,13 @@ class Permission extends Model
         'excel',
     ];
 
+    public function page()
+    {
+        return $this->belongsTo(Page::class, 'pages_id');
+    }
+
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

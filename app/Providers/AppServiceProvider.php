@@ -9,6 +9,7 @@ use App\Http\Controllers\PageController;
 use App\Models\Product;
 use App\Models\Slideshow;
 use App\Models\Category;
+use Illuminate\Support\Facades\Auth;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -35,7 +36,10 @@ class AppServiceProvider extends ServiceProvider
         View::share('categories', Category::where('hidden', 0)->where('cancelled', 0)->get());
         view::share('products', Product::where('hidden', 0)->where('cancelled', 0)->get());
 
-        // Share the Pages data with all views
-        View::share('pages', PageController::getPages());
+        View::composer('*', function ($view) {
+            $userId = Auth::id();
+            $permissions = $userId ? PageController::getPages($userId) : collect();
+            $view->with('permissions', $permissions);
+        });
     }
 }

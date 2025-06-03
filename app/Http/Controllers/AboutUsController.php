@@ -7,6 +7,12 @@ use App\Models\AboutUs;
 
 class AboutUsController extends Controller
 {
+    public function show()
+    {
+        $aboutUs = AboutUs::first(); // Or your actual logic to get the about content
+
+        return view('sanita.aboutus', compact('aboutUs'));
+    }
     public function edit()
     {
         // Fetch the current "About Us" content from the database

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,6 +12,7 @@ class LoginController extends Controller
     // Show the login form
     public function showLoginForm()
     {
+
         return view('cms.auth.login');
     }
 
@@ -21,6 +23,16 @@ class LoginController extends Controller
             'email' => 'required|email',
             'password' => 'required',
         ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if ($user && $user->cancelled == 1) {
+            return back()->withErrors(['email' => 'Your account has been deactivated.']);
+        }
+
+        if ($user && $user->remember_token == null) {
+            return back()->withErrors(['email' => 'Your account has not been activated.']);
+        }
 
         if (Auth::guard('web')->attempt($request->only('email', 'password'))) {
             // Redirect to the CMS dashboard or intended page

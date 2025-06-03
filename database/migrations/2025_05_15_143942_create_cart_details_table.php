@@ -10,11 +10,11 @@ class CreateCartDetailsTable extends Migration
     {
         Schema::create('cart_details', function (Blueprint $table) {
             $table->id();
-            // Foreign key to products table
-            $table->foreignId('product_id')->constrained()->onDelete('cascade');
+            $table->foreignId('carts_id')->constrained('carts')->onDelete('cascade');
+            $table->foreignId('products_id')->constrained()->onDelete('cascade');
             $table->decimal('unit_price');
             $table->integer('quantity');
-
+            $table->tinyInteger('cancelled')->default(0);
             $table->timestamps();
         });
     }

@@ -13,32 +13,42 @@ class CartController extends Controller
 {
     public function index()
     {
-
-        $carts = Cart::where('purchased', false)
+        $cart = Cart::where('purchased', 0)
             ->with('customers')
+            ->with(['cartDetails' => function ($query) {
+                $query->where('cancelled', 0)->with('product');
+            }])
+            ->where('customers_id', Auth::id())
             ->first();
 
-
-        return view('cms.cart.index', compact('carts'));
+        return view('sanita.cart.index', compact('cart'));
     }
 
     public function store(Request $request)
     {
         $product = Product::findOrFail($request->product_id);
 
+        // Step 1: Create or fetch cart (header)
         $cart = Cart::firstOrCreate(
-            ['customer_id' => Auth::id(), 'purchased' => false],
+            ['customers_id' => Auth::id(), 'purchased' => false],
             ['expires_at' => now()->addDay()]
         );
 
-        $cartDetail = $cart->cartDetails()->where('product_id', $product->id)->first();
+        // Step 2: Check if product already exists in cart details
+        $cartDetail = CartDetail::where('carts_id', $cart->id)
+            ->where('products_id', $product->id)
+            ->first();
+
+        // step 3 check if the product is deleted or cancelled 
+
 
         if ($cartDetail) {
-            $cartDetail->quantity++;
+            $cartDetail->quantity += 1;
             $cartDetail->save();
         } else {
-            $cart->cartDetails()->create([
-                'product_id' => $product->id,
+            CartDetail::create([
+                'carts_id' => $cart->id,
+                'products_id' => $product->id,
                 'desc' => $product->small_description ?? $product->description,
                 'unit_price' => $product->unit_price,
                 'quantity' => 1,
@@ -47,6 +57,7 @@ class CartController extends Controller
 
         return redirect()->route('cart.index')->with('success', 'Product added to cart!');
     }
+
 
     public function update(Request $request, $id)
     {
@@ -65,12 +76,12 @@ class CartController extends Controller
 
     public function destroy(string $id)
     {
-        $cart = Cart::where('customer_id', Auth::id())
+        $cart = Cart::where('customers_id', Auth::id())
             ->where('purchased', false)
             ->first();
 
         if ($cart) {
-            $cart->cartDetails()->where('id', $id)->delete();
+            $cart->cartDetails()->where('id', $id)->update(['cancelled' => 1]);
         }
 
         return redirect()->route('cart.index')->with('success', 'Product removed from cart.');

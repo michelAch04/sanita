@@ -5,65 +5,54 @@ namespace App\Http\Controllers;
 
 use App\Models\Permission;
 use App\Models\User;
+use App\Models\Page;
 use Illuminate\Http\Request;
 
 class PermissionController extends Controller
 {
     public function index()
     {
-        $permissions = Permission::with('user')->get();
-        return view('cms.permission.index', compact('permissions'));
+        $users = User::all();
+        return view('cms.permission.index', compact('users'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $users = User::all();
-        return view('cms.permission.create', compact('users'));
+        $user = null;
+        if ($request->user_id) {
+            $user = User::find($request->user_id);
+        }
+        $pages = Page::all();
+        return view('cms.permission.create', compact('users', 'user', 'pages'));
     }
 
-    public function store(Request $request)
+
+
+    public function update(Request $request, $permission = null)
     {
         $request->validate([
             'user_id' => 'required|exists:users,id',
-            'name' => 'required|string|max:255',
-            'can_view' => 'required|boolean',
+            'permissions' => 'required|array',
         ]);
 
-        Permission::create($request->only(['user_id', 'name', 'can_view']));
+        $userId = $request->input('user_id');
+        $permissions = $request->input('permissions', []);
 
-        return redirect()->route('permissions.index')->with('success', 'Permission created successfully.');
-    }
+        foreach ($permissions as $pageId => $fields) {
+            $perm = Permission::firstOrNew([
+                'user_id' => $userId,
+                'pages_id' => $pageId,
+            ]);
+            $perm->pages_id = $pageId;
+            $perm->view = isset($fields['view']) ? 1 : 0;
+            $perm->add = isset($fields['add']) ? 1 : 0;
+            $perm->edit = isset($fields['edit']) ? 1 : 0;
+            $perm->delete = isset($fields['delete']) ? 1 : 0;
+            $perm->excel = isset($fields['excel']) ? 1 : 0;
+            $perm->save();
+        }
 
-    public function edit($id)
-    {
-        $permission = Permission::findOrFail($id);
-        $users = User::all();
-        return view('cms.permission.edit', compact('permission', 'users'));
-    }
-
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'name' => 'required|string|max:255',
-            'can_view' => 'required|boolean',
-            'can_edit' => 'required|boolean',
-            'can_delete' => 'required|boolean',
-            'can_add' => 'required|boolean',
-            'can_excel' => 'required|boolean',
-        ]);
-
-        $permission = Permission::findOrFail($id);
-        $permission->update($request->only(['user_id', 'name', 'can_view', 'can_edit', 'can_delete', 'can_add', 'can_excel']));
-
-        return redirect()->route('permissions.index')->with('success', 'Permission updated successfully.');
-    }
-
-    public function destroy($id)
-    {
-        $permission = Permission::findOrFail($id);
-        $permission->update(['cancelled' => 1]);
-
-        return redirect()->route('permissions.index')->with('success', 'Permission deleted successfully.');
+        return redirect()->back()->with('success', 'Permissions updated successfully.');
     }
 }

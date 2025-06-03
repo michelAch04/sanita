@@ -9,23 +9,21 @@ class Cart extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'customer_id',
-        'cart_detail_id',
+        'customers_id',
         'expires_at',
         'purchased',
         'locked',
         'cancelled',
         'delivery_charge',
         'promocode',
-
     ];
     public function cartDetails()
     {
-        return $this->hasMany(CartDetail::class);
+        return $this->hasMany(CartDetail::class, 'carts_id');
     }
 
     public function customers()
     {
-        return $this->belongsTo(Customer::class, 'customer_id');
+        return $this->belongsTo(Customer::class, 'customera_id');
     }
 }

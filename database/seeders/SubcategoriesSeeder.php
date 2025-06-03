@@ -10,15 +10,10 @@ class SubcategoriesSeeder extends Seeder
     public function run(): void
     {
         DB::table('subcategories')->insert([
-            [
-                'name' => 'Subcategory 1',
-                'categories_id' => 1,
-                'hidden' => 0,
-                'cancelled' => 0,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            // Add more subcategories as needed
+            ['id' => 1, 'name' => 'Paper Towels', 'categories_id' => 1, 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 2, 'name' => 'Sanitizers', 'categories_id' => 1, 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 3, 'name' => 'Gloves', 'categories_id' => 1, 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 4, 'name' => 'Napkins & Tissues', 'categories_id' => 1, 'created_at' => now(), 'updated_at' => now()],
         ]);
     }
 }

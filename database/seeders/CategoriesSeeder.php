@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class CategoriesSeeder extends Seeder
 {
@@ -11,13 +12,29 @@ class CategoriesSeeder extends Seeder
     {
         DB::table('categories')->insert([
             [
-                'name' => 'Category 1',
+                'id' => 1,
+                'name' => 'Cleaning Supplies',
                 'hidden' => 0,
-                'cancelled' => 0,
+                'extension' => 'jpg',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            // Add more categories as needed
+            [
+                'id' => 2,
+                'name' => 'Paper Products',
+                'hidden' => 0,
+                'extension' => 'png',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id' => 3,
+                'name' => 'Disposable Wear',
+                'hidden' => 1,
+                'extension' => 'jpg',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }
