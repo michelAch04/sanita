@@ -76,3 +76,58 @@
         .w-15{
             width: 15% !important;
         }
+#app-container {
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 50px;
+    transition: width 0.3s ease;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    flex-shrink: 0;
+}
+
+.sidebar .sidebar-label {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    white-space: nowrap;
+}
+
+.sidebar:hover {
+    width: 200px;
+}
+
+.sidebar:hover .sidebar-label {
+    opacity: 1;
+}
+
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    height: 100vh;
+    z-index: 1000;
+}
+
+.sidebar-collapsed .sidebar-label {
+    display: hidden;
+}
+
+.sidebar:hover .sidebar-label {
+    display: block;
+}
+
+.sidebar-logout{
+    display: inline !important;
+}
+
+.logout-icon{
+    margin-left: 0.8rem;
+    transition: margin-left 0.2s ease;
+}
+
+.sidebar:hover .logout-icon{
+    margin-left: 0.1rem !important;
+}
