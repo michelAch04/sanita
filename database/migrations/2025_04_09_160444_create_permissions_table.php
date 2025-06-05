@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('permissions', function (Blueprint $table) {
             $table->id();
-            $table->tinyInteger('user_id')->unsigned()->index();
-            $table->unsignedBigInteger('pages_id')->nullable()->index(); // Add this line
+            $table->unsignedBigInteger('users_id')->nullable()->index();
+            $table->unsignedBigInteger('pages_id')->nullable()->index();
             $table->tinyInteger('add')->default(0);
             $table->tinyInteger('edit')->default(0);
             $table->tinyInteger('delete')->default(0);
@@ -22,7 +22,7 @@ return new class extends Migration
             $table->tinyInteger('excel')->default(0);
             $table->timestamps();
 
-            // Add foreign key constraint
+            $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('pages_id')->references('id')->on('pages')->onDelete('cascade');
         });
     }

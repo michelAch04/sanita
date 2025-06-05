@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Share the AboutUs data with all views
-        // View::share('aboutus', AboutUs::first());
+        View::share('aboutus', AboutUs::first());
 
         // Share the Slideshow data with all views
         View::share('slideshow', Slideshow::where('hidden', 0)->where('cancelled', 0)->get());

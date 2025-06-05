@@ -66,5 +66,5 @@ Route::middleware('auth:web')->group(function () {
     Route::resource('/cms/orders', OrderController::class);
     Route::resource('/cms/slideshow', SlideshowController::class);
     Route::resource('/cms/permissions', PermissionController::class);
-    Route::post('/cms/permissions/ajax-update', [PermissionController::class, 'ajaxUpdate'])->name('permissions.ajaxUpdate');
+    Route::get('/cms/cart', [CartController::class, 'cmsindex'])->name('cart.cmsindex');
 });

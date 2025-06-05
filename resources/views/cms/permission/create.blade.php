@@ -40,7 +40,7 @@
 <form method="POST" action="{{ route('permissions.update', ['permission' => 0]) }}">
     @csrf
     @method('PUT')
-    <input type="hidden" name="user_id" value="{{ $user->id }}">
+    <input type="hidden" name="users_id" value="{{ $user->id }}">
     <table class="table table-bordered mt-4">
         <thead>
             <tr>
@@ -70,7 +70,7 @@
         <tbody>
             @foreach($pages as $page)
             @php
-            $permission = \App\Models\Permission::where('user_id', $user->id)
+            $permission = \App\Models\Permission::where('users_id', $user->id)
             ->where('pages_id', $page->id)
             ->first();
             @endphp

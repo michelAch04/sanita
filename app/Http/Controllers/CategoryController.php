@@ -113,8 +113,7 @@ class CategoryController extends Controller
         }
 
 
-        dd($category->update(['cancelled' => 1]));
-        dd($category);
+        $category->update(['cancelled' => 1]);
 
         return redirect()->route('categories.index')->with('success', 'categories deleted successfully.');
     }

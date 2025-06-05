@@ -29,19 +29,19 @@ class PermissionController extends Controller
 
 
 
-    public function update(Request $request, $permission = null)
+    public function update(Request $request)
     {
         $request->validate([
-            'user_id' => 'required|exists:users,id',
+            'users_id' => 'required|exists:users,id',
             'permissions' => 'required|array',
         ]);
 
-        $userId = $request->input('user_id');
+        $userId = $request->input('users_id');
         $permissions = $request->input('permissions', []);
 
         foreach ($permissions as $pageId => $fields) {
             $perm = Permission::firstOrNew([
-                'user_id' => $userId,
+                'users_id' => $userId,
                 'pages_id' => $pageId,
             ]);
             $perm->pages_id = $pageId;

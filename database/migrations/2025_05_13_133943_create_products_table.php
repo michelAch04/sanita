@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('extension')->nullable();
             $table->string('sku')->unique();
-            $table->foreignId('subcategory_id')->constrained('subcategories')->onDelete('cascade');
+            $table->foreignId('subcategories_id')->constrained('subcategories')->onDelete('cascade');
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('small_description', 255)->nullable();
@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('product_line_description')->nullable();
             $table->string('family_code')->nullable();
             $table->string('family_description')->nullable();
-            $table->foreignId('brand_id')->constrained('brands')->onDelete('cascade');
+            $table->foreignId('brands_id')->constrained('brands')->onDelete('cascade');
             $table->tinyInteger('tax')->default('0');
             $table->integer('available_quantity')->default(0);
             $table->tinyInteger('hidden')->default(0);
