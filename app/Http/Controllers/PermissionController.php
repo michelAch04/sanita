@@ -10,27 +10,27 @@ use Illuminate\Http\Request;
 
 class PermissionController extends Controller
 {
-public function index(Request $request)
-{
-    $query = User::query();
+    public function index(Request $request)
+    {
+        $query = User::query();
 
-    if ($request->filled('query')) {
-        $search = $request->query('query');
-        $query->where(function ($q) use ($search) {
-            $q->where('id', 'like', "{$search}%")
-              ->orWhere('name', 'like', "{$search}%")
-              ->orWhere('email', 'like', "{$search}%");
-        });
+        if ($request->filled('query')) {
+            $search = $request->query('query');
+            $query->where(function ($q) use ($search) {
+                $q->where('id', 'like', "{$search}%")
+                    ->orWhere('name', 'like', "{$search}%")
+                    ->orWhere('email', 'like', "{$search}%");
+            });
+        }
+
+        $users = $query->get();
+
+        if ($request->ajax()) {
+            return view('cms.permission.index', compact('users'))->renderSections()['permissions_list'];
+        }
+
+        return view('cms.permission.index', compact('users'));
     }
-
-    $users = $query->get();
-
-    if ($request->ajax()) {
-        return view('cms.permission.index', compact('users'))->renderSections()['permissions_list'];
-    }
-
-    return view('cms.permission.index', compact('users'));
-}
 
 
     public function create(Request $request)
@@ -69,6 +69,7 @@ public function index(Request $request)
             $perm->excel = isset($fields['excel']) ? 1 : 0;
             $perm->save();
         }
+        dd($permissions);
 
         return redirect()->back()->with('success', 'Permissions updated successfully.');
     }

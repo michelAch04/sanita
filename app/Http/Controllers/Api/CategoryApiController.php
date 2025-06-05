@@ -12,7 +12,10 @@ class CategoryApiController extends Controller
      */
     public function index()
     {
-        //
+        $categories = Category::where('cancelled', 0)
+            ->orderBy('name')
+            ->get(['id', 'name', 'hidden']);
+        return response()->json($categories);
     }
 
     /**

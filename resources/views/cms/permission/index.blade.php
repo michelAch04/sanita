@@ -48,7 +48,7 @@ $canAdd = $permissions && $permissions->add;
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->name }}</td>
                             <td class="text-end">
-                                <a href="{{ route('permissions.create', ['user_id' => $user->id]) }}" target="_blank" class="btn btn-sm btn-teal fw-medium">
+                                <a href="{{ route('permissions.create', ['user_id' => $user->id]) }}" class="btn btn-sm btn-teal fw-medium">
                                     View Permissions
                                 </a>
                             </td>
