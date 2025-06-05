@@ -5,10 +5,10 @@
 @php
 use App\Models\Permission;
 $permissions = Permission::with('page')
-    ->join('pages', 'permissions.pages_id', '=', 'pages.id')
-    ->where('permissions.user_id', auth()->user()->id)
-    ->where('pages.name', 'Permissions')
-    ->first();
+->join('pages', 'permissions.pages_id', '=', 'pages.id')
+->where('permissions.users_id', auth()->user()->id)
+->where('pages.name', 'Permissions')
+->first();
 
 $canAdd = $permissions && $permissions->add;
 @endphp
@@ -43,20 +43,20 @@ $canAdd = $permissions && $permissions->add;
                     <tbody id="permissions-table-body">
                         @section('permissions_list')
                         @forelse ($users as $user)
-                            <tr class="bg-hover-light-grey">
-                                <td>{{ $user->id }}</td>
-                                <td>{{ $user->email }}</td>
-                                <td>{{ $user->name }}</td>
-                                <td class="text-end">
-                                    <a href="{{ route('permissions.create', ['user_id' => $user->id]) }}" target="_blank" class="btn btn-sm btn-teal fw-medium">
-                                        View Permissions
-                                    </a>
-                                </td>
-                            </tr>
+                        <tr class="bg-hover-light-grey">
+                            <td>{{ $user->id }}</td>
+                            <td>{{ $user->email }}</td>
+                            <td>{{ $user->name }}</td>
+                            <td class="text-end">
+                                <a href="{{ route('permissions.create', ['user_id' => $user->id]) }}" target="_blank" class="btn btn-sm btn-teal fw-medium">
+                                    View Permissions
+                                </a>
+                            </td>
+                        </tr>
                         @empty
-                            <tr class="bg-hover-light-grey">
-                                <td colspan="4" class="text-center text-muted">No users found.</td>
-                            </tr>
+                        <tr class="bg-hover-light-grey">
+                            <td colspan="4" class="text-center text-muted">No users found.</td>
+                        </tr>
                         @endforelse
                         @endsection
 

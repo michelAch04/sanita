@@ -1,38 +1,52 @@
 @extends('cms.layout')
 
+@section('title', 'Edit Permissions')
 
+@php
+use App\Models\Permission;
+@endphp
+@push('styles')
+<style>
+    nav {
+        display: none !important;
+    }
+
+    main {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+</style>
+@endpush
 
 @section('content')
 
 @if ($errors->any())
-<div class="alert alert-danger">
-    <ul>
-        @foreach ($errors->all() as $error)
-        <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-</div>
+@foreach ($errors->all() as $error)
+<script>
+    window.addEventListener('DOMContentLoaded', function() {
+        showToast('danger', '{!! json_encode($error) !!}');
+    });
+</script>
+@endforeach
 @endif
 
 @if (session('success'))
-<div class="alert alert-success">
-    {{ session('success') }}
-</div>
+<script>
+    window.addEventListener('DOMContentLoaded', function() {
+        showToast('success', '{!! json_encode(session('
+            success ')) !!}');
+        setTimeout(() => {
+            window.close();
+        }, 2500);
+    });
+</script>
 @endif
 
-<div class="container mt-4">
-    <div class="mb-3">
-        <label for="userSelect" class="form-label">Select User</label>
-        <select id="userSelect" class="form-select" style="width: 300px;">
-            <option value="">-- Select User --</option>
-            @foreach($users as $u)
-            <option value="{{ route('permissions.create', ['user_id' => $u->id]) }}"
-                {{ (request('user_id') == $u->id) ? 'selected' : '' }}>
-                {{ $u->email }}
-            </option>
-            @endforeach
-        </select>
-    </div>
+{{-- Back Button --}}
+<div class="mb-3">
+    <button onclick="window.close()" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Back
+    </button>
 </div>
 
 @if(isset($user))
@@ -40,7 +54,7 @@
 <form method="POST" action="{{ route('permissions.update', ['permission' => 0]) }}">
     @csrf
     @method('PUT')
-    <input type="hidden" name="users_id" value="{{ $user->id }}">
+    <input type="hidden" name="user_id" value="{{ $user->id }}">
     <table class="table table-bordered mt-4">
         <thead>
             <tr>
@@ -70,7 +84,7 @@
         <tbody>
             @foreach($pages as $page)
             @php
-            $permission = \App\Models\Permission::where('users_id', $user->id)
+            $permission = \App\Models\Permission::where('user_id', $user->id)
             ->where('pages_id', $page->id)
             ->first();
             @endphp
@@ -106,27 +120,21 @@
 
 
 <script>
-    document.getElementById('userSelect').addEventListener('change', function() {
-        if (this.value) {
-            window.location.href = this.value;
-        }
-    });
-
     // Check All functionality
-    document.getElementById('checkAllView').addEventListener('change', function() {
-        document.querySelectorAll('input[type="checkbox"][name*="[view]"]').forEach(cb => cb.checked = this.checked);
+    document.getElementById('checkAllView')?.addEventListener('change', function() {
+        document.querySelectorAll('input[name*="[view]"]').forEach(cb => cb.checked = this.checked);
     });
-    document.getElementById('checkAllAdd').addEventListener('change', function() {
-        document.querySelectorAll('input[type="checkbox"][name*="[add]"]').forEach(cb => cb.checked = this.checked);
+    document.getElementById('checkAllAdd')?.addEventListener('change', function() {
+        document.querySelectorAll('input[name*="[add]"]').forEach(cb => cb.checked = this.checked);
     });
-    document.getElementById('checkAllEdit').addEventListener('change', function() {
-        document.querySelectorAll('input[type="checkbox"][name*="[edit]"]').forEach(cb => cb.checked = this.checked);
+    document.getElementById('checkAllEdit')?.addEventListener('change', function() {
+        document.querySelectorAll('input[name*="[edit]"]').forEach(cb => cb.checked = this.checked);
     });
-    document.getElementById('checkAllDelete').addEventListener('change', function() {
-        document.querySelectorAll('input[type="checkbox"][name*="[delete]"]').forEach(cb => cb.checked = this.checked);
+    document.getElementById('checkAllDelete')?.addEventListener('change', function() {
+        document.querySelectorAll('input[name*="[delete]"]').forEach(cb => cb.checked = this.checked);
     });
-    document.getElementById('checkAllExcel').addEventListener('change', function() {
-        document.querySelectorAll('input[type="checkbox"][name*="[excel]"]').forEach(cb => cb.checked = this.checked);
+    document.getElementById('checkAllExcel')?.addEventListener('change', function() {
+        document.querySelectorAll('input[name*="[excel]"]').forEach(cb => cb.checked = this.checked);
     });
 </script>
 @endsection
