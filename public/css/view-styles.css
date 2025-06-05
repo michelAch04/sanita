@@ -72,3 +72,7 @@
             /* soft, full shadow */
             transition: box-shadow 0.3s ease-in-out;
         }
+
+        .w-15{
+            width: 15% !important;
+        }

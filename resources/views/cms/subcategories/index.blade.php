@@ -57,7 +57,7 @@ $canDelete = $permissions && $permissions->delete;
                                         @if($canDelete)
                                         <li>
                                             <button type="button" class="dropdown-item text-danger bg-hover-light-grey"
-                                                onclick="confirmDelete('{{ route('subcategories.destroy', $subcategory->id) }} ')">
+                                                onclick="confirmDelete({{ route('subcategories.destroy', $subcategory->id) }})">
                                                 <i class="bi bi-trash3 me-2"></i>Delete
                                             </button>
                                         </li>

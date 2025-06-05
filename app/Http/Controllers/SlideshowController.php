@@ -10,11 +10,29 @@ class SlideshowController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $slideshows = Slideshow::where('cancelled', 0)->get();
+        $query = Slideshow::query();
+
+        if ($request->filled('query')) {
+            $search = $request->query('query');
+
+            $query->where(function ($q) use ($search) {
+                $q->where('id', 'like', "{$search}%")
+                    ->orWhere('name', 'like', "{$search}%");
+            });
+        }
+
+        $slideshows = $query->where('cancelled', 0)->get(); // ← Use the filtered query
+
+        if ($request->ajax()) {
+            $view = view('cms.slideshow.index', compact('slideshows'))->renderSections();
+            return $view['slideshows_list'];
+        }
+
         return view('cms.slideshow.index', compact('slideshows'));
     }
+
 
     /**
      * Show the form for creating a new resource.
