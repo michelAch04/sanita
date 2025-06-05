@@ -19,7 +19,6 @@ return new class extends Migration
             $table->integer('order')->default(0);
             $table->string('icon')->nullable();
             $table->timestamps();
-            $table->foreign('permission_id')->references('id')->on('permissions')->onDelete('cascade');
         });
     }
 

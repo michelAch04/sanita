@@ -11,13 +11,20 @@ class DatabaseSeeder extends Seeder
         // Call CategoriesSeeder first
         $this->call(CategoriesSeeder::class);
 
-        // Then BrandsSeeder
+        // // Then BrandsSeeder
         $this->call(BrandsSeeder::class);
 
         // Then SubcategoriesSeeder (which needs categories)
         $this->call(SubcategoriesSeeder::class);
 
-        // Finally, ProductsSeeder (which needs subcategories and brands)
+        // // Finally, ProductsSeeder (which needs subcategories and brands)
         $this->call(ProductsSeeder::class);
+
+        $this->call(PermissionSeeder::class);
+        
+        $this->call(PagesSeeder::class);
+
+        $this->call(UserSeeder::class);
+
     }
 }

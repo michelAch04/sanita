@@ -10,7 +10,7 @@ class SubcategoryController extends Controller
 {
     public function index()
     {
-        $subcategories = Subcategory::with('category')->get();
+        $subcategories = Subcategory::with('category')->where('cancelled',0)->get();
         return view('cms.subcategories.index', compact('subcategories'));
     }
 

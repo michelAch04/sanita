@@ -25,6 +25,9 @@ return new class extends Migration
             // Add foreign key constraint
             $table->foreign('pages_id')->references('id')->on('pages')->onDelete('cascade');
         });
+        Schema::table('pages', function (Blueprint $table) {
+            $table->foreign('permission_id')->references('id')->on('permissions')->onDelete('cascade');
+        });
     }
 
     /**

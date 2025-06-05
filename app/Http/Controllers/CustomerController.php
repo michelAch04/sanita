@@ -10,25 +10,26 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         try {
-            // Start a query on the Customer model
             $query = Customer::query();
 
-            // Check if a search query is provided
             if ($request->filled('query')) {
                 $search = $request->query('query');
 
-                // Search across multiple fields
-                $query->where('id', 'like', "%{$search}%")
-                      ->orWhere('first_name', 'like', "%{$search}%")
-                      ->orWhere('last_name', 'like', "%{$search}%")
-                      ->orWhere('email', 'like', "%{$search}%")
-                      ->orWhere('mobile', 'like', "%{$search}%");
+                $query->where(function ($q) use ($search) {
+                    $q->where('id', 'like', "{$search}%")
+                        ->orWhere('first_name', 'like', "{$search}%")
+                        ->orWhere('last_name', 'like', "{$search}%")
+                        ->orWhere('email', 'like', "{$search}%")
+                        ->orWhere('mobile', 'like', "{$search}%");
+                });
             }
 
-            // Get the filtered results
             $customers = $query->where('cancelled', 0)->get();
 
-            // Return the view with the customers
+            if ($request->ajax()) {
+                return view('cms.customers.index', compact('customers'))->renderSections()['customers_list'];
+            }
+
             return view('cms.customers.index', compact('customers'));
         } catch (\Exception $e) {
             return redirect()->route('customers.index')->with('error', 'Failed to fetch customers: ' . $e->getMessage());
