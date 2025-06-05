@@ -20,6 +20,12 @@ class CartController extends Controller
             }])
             ->where('customers_id', Auth::id())
             ->first();
+            
+        // Check if cart exists and is expired
+        if ($cart->cancelled != 1 && $cart->expires_at && now()->greaterThan($cart->expires_at)) {
+            $cart->cartDetails()->update(['cancelled' => 1]);
+            $cart->update(['cancelled' => 1]);
+        }
 
         return view('sanita.cart.index', compact('cart'));
     }
@@ -40,8 +46,6 @@ class CartController extends Controller
             ->first();
 
         // step 3 check if the product is deleted or cancelled 
-
-
         if ($cartDetail) {
             $cartDetail->quantity += 1;
             $cartDetail->save();

@@ -22,6 +22,8 @@ $canDelete = $permissions && $permissions->delete;
             <tr>
                 <th>Name</th>
                 <th>Category</th>
+                <th>Created At</th>
+                <th>Updated At</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -30,6 +32,8 @@ $canDelete = $permissions && $permissions->delete;
             <tr>
                 <td>{{ $subcategory->name }}</td>
                 <td>{{ $subcategory->category->name }}</td>
+                <td>{{ $subcategory->created_at->format('Y-m-d H:i:s') }}</td>
+                <td>{{ $subcategory->updated_at->format('Y-m-d H:i:s') }}</td>
                 <td>
                     @if($canEdit)
                     <a href="{{ route('subcategories.edit', $subcategory->id) }}" class="btn btn-warning btn-sm">Edit</a>
