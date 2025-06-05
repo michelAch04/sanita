@@ -11,7 +11,7 @@
 }
 
 .ios-checkbox {
-  --checkbox-size: 28px;
+  --checkbox-size: 18px;
   --checkbox-color: #3b82f6;
   --checkbox-bg: #dbeafe;
   --checkbox-border: #93c5fd;
@@ -31,14 +31,14 @@
   position: relative;
   width: var(--checkbox-size);
   height: var(--checkbox-size);
-  border-radius: 8px;
+  border-radius: 4px;
   transition: transform 0.2s ease;
 }
 
 .checkbox-bg {
   position: absolute;
   inset: 0;
-  border-radius: 8px;
+  border-radius: 4px;
   border: 2px solid var(--checkbox-border);
   background: white;
   transition: all 0.2s ease;
@@ -109,6 +109,20 @@
   --checkbox-bg: #fee2e2;
   --checkbox-border: #fca5a5;
 }
+
+.ios-checkbox.teal {
+  --checkbox-color: #38B2AC;    /* Your teal */
+  --checkbox-bg: #B2DFDB;       /* A lighter teal for background */
+  --checkbox-border: #4DB6AC;   /* Slightly darker teal border */
+}
+
+.ios-checkbox.yellow {
+  --checkbox-color: #EAB308;    /* Bright yellow (Tailwind yellow-500) */
+  --checkbox-bg: #FEF3C7;       /* Light yellow background */
+  --checkbox-border: #FCD34D;   /* Medium yellow border */
+}
+
+
 
 @keyframes bounce {
   0%,
