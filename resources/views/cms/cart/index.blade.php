@@ -1,9 +1,10 @@
 @extends('cms.layout')
 
 @section('title', 'Carts')
+@php
 use App\Models\Permission;
 $permissions = Permission::with('page')->join('pages', 'permissions.pages_id', '=', 'pages.id')
-->where('permissions.user_id', auth()->user()->id)
+->where('permissions.users_id', auth()->user()->id)
 ->where('pages.name', 'Carts')
 ->first();
 $canAdd = $permissions && $permissions->add;
@@ -33,15 +34,19 @@ $canDelete = $permissions && $permissions->delete;
             @foreach ($carts as $cart)
             <tr>
                 <td>{{ $cart->id }}</td>
-                <td>{{ $cart->customer->name }}</td>
+                <td>
+                    {{ optional($cart->customer)->first_name ?? '' }}
+                    {{ optional($cart->customer)->last_name ? ' ' . $cart->customer->last_name : '' }}
+                    {{ optional($cart->customer)->id ?? '-' }}
+                </td>
                 <td>{{ $cart->created_at }}</td>
                 <td>{{ $cart->updated_at }}</td>
                 <td>
                     @if($canEdit)
-                    <a href="{{ route('carts.edit', $cart->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="{{ route('cart.cmsindex', $cart->id) }}" class="btn btn-warning btn-sm">Edit</a>
                     @endif
                     @if($canDelete)
-                    <form action="{{ route('carts.destroy', $cart->id) }}" method="POST" class="d-inline">
+                    <form action="{{ route('cart.cmsindex', $cart->id) }}" method="POST" class="d-inline">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>

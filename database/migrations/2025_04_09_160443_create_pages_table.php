@@ -12,10 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pages', function (Blueprint $table) {
-            $table->id(); // Primary key
-            $table->string('name'); // Name of the page
-            $table->string('url'); // URL of the page
-            $table->unsignedBigInteger('permission_id')->nullable();
+            $table->id();
+            $table->string('name');
+            $table->string('url');
             $table->integer('order')->default(0);
             $table->string('icon')->nullable();
             $table->timestamps();

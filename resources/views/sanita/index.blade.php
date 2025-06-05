@@ -23,8 +23,6 @@
                     <div class="card-body">
                         @if($category->extension)
                         <img src="{{ asset('storage/categories/' . $category->id . '.' . $category->extension) }}" alt="{{ $category->name }}" class="img-fluid rounded-circle mb-2" style="width: 100px; height: 100px; object-fit: cover;">
-                        @else
-                        <img src="{{ asset('images/default-category.jpg') }}" alt="Default Image" class="img-fluid rounded-circle mb-2" style="width: 100px; height: 100px; object-fit: cover;">
                         @endif
                         <h5 class="card-title">
 

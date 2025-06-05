@@ -5,7 +5,7 @@
 @php
 use App\Models\Permission;
 $permissions = Permission::with('page')->join('pages', 'permissions.pages_id', '=', 'pages.id')
-->where('permissions.user_id', auth()->user()->id)
+->where('permissions.users_id', auth()->user()->id)
 ->where('pages.name', 'Brands')
 ->first();
 $canAdd = $permissions && $permissions->add;

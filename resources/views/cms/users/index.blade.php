@@ -5,10 +5,10 @@
 @php
 use App\Models\Permission;
 $permissions = Permission::with('page')
-    ->join('pages', 'permissions.pages_id', '=', 'pages.id')
-    ->where('permissions.user_id', auth()->user()->id)
-    ->where('pages.name', 'Users')
-    ->first();
+->join('pages', 'permissions.pages_id', '=', 'pages.id')
+->where('permissions.users_id', auth()->user()->id)
+->where('pages.name', 'Users')
+->first();
 $canAdd = $permissions && $permissions->add;
 $canEdit = $permissions && $permissions->edit;
 $canDelete = $permissions && $permissions->delete;
@@ -86,4 +86,3 @@ $canDelete = $permissions && $permissions->delete;
     </div>
 </div>
 @endsection
-

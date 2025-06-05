@@ -10,7 +10,7 @@ class SubcategoryController extends Controller
 {
     public function index()
     {
-        $subcategories = Subcategory::with('category')->where('cancelled',0)->get();
+        $subcategories = Subcategory::with('category')->where('cancelled', 0)->get();
         return view('cms.subcategories.index', compact('subcategories'));
     }
 
@@ -62,6 +62,7 @@ class SubcategoryController extends Controller
     public function destroy(Subcategory $subcategory)
     {
         $subcategory->update(['cancelled' => 1]);
+
 
         return redirect()->route('subcategories.index')->with('success', 'Subcategory deleted successfully.');
     }

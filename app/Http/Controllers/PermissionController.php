@@ -10,27 +10,27 @@ use Illuminate\Http\Request;
 
 class PermissionController extends Controller
 {
-public function index(Request $request)
-{
-    $query = User::query();
+    public function index(Request $request)
+    {
+        $query = User::query();
 
-    if ($request->filled('query')) {
-        $search = $request->query('query');
-        $query->where(function ($q) use ($search) {
-            $q->where('id', 'like', "{$search}%")
-              ->orWhere('name', 'like', "{$search}%")
-              ->orWhere('email', 'like', "{$search}%");
-        });
+        if ($request->filled('query')) {
+            $search = $request->query('query');
+            $query->where(function ($q) use ($search) {
+                $q->where('id', 'like', "{$search}%")
+                    ->orWhere('name', 'like', "{$search}%")
+                    ->orWhere('email', 'like', "{$search}%");
+            });
+        }
+
+        $users = $query->get();
+
+        if ($request->ajax()) {
+            return view('cms.permission.index', compact('users'))->renderSections()['permissions_list'];
+        }
+
+        return view('cms.permission.index', compact('users'));
     }
-
-    $users = $query->get();
-
-    if ($request->ajax()) {
-        return view('cms.permission.index', compact('users'))->renderSections()['permissions_list'];
-    }
-
-    return view('cms.permission.index', compact('users'));
-}
 
 
     public function create(Request $request)
@@ -46,19 +46,19 @@ public function index(Request $request)
 
 
 
-    public function update(Request $request, $permission = null)
+    public function update(Request $request)
     {
         $request->validate([
-            'user_id' => 'required|exists:users,id',
+            'users_id' => 'required|exists:users,id',
             'permissions' => 'required|array',
         ]);
 
-        $userId = $request->input('user_id');
+        $userId = $request->input('users_id');
         $permissions = $request->input('permissions', []);
 
         foreach ($permissions as $pageId => $fields) {
             $perm = Permission::firstOrNew([
-                'user_id' => $userId,
+                'users_id' => $userId,
                 'pages_id' => $pageId,
             ]);
             $perm->pages_id = $pageId;
@@ -69,6 +69,7 @@ public function index(Request $request)
             $perm->excel = isset($fields['excel']) ? 1 : 0;
             $perm->save();
         }
+        dd($permissions);
 
         return redirect()->back()->with('success', 'Permissions updated successfully.');
     }

@@ -13,7 +13,7 @@ class PageController extends Controller
      */
     public static function getPages($userId)
     {
-        $pages = Permission::where('user_id', $userId)
+        $pages = Permission::where('users_id', $userId)
             ->where('view', 1)
             ->with('page')
             ->join('pages', 'permissions.pages_id', '=', 'pages.id')

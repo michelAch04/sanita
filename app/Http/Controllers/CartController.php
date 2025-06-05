@@ -14,14 +14,29 @@ class CartController extends Controller
     public function index()
     {
         $cart = Cart::where('purchased', 0)
-            ->with('customers')
+            ->with('customer')
             ->with(['cartDetails' => function ($query) {
                 $query->where('cancelled', 0)->with('product');
             }])
             ->where('customers_id', Auth::id())
             ->first();
 
+        // Fix: Check if $cart is not null before accessing its properties
+        if ($cart && $cart->cancelled != 1 && $cart->expires_at && now()->greaterThan($cart->expires_at)) {
+            $cart->cartDetails()->update(['cancelled' => 1]);
+            $cart->update(['cancelled' => 1]);
+        }
+
         return view('sanita.cart.index', compact('cart'));
+    }
+
+    public function cmsindex()
+    {
+        $carts = Cart::where('cancelled', 0)
+            ->with('customer')
+            ->with('cartDetails')
+            ->get();
+        return view('cms.cart.index', compact('carts'));
     }
 
     public function store(Request $request)
@@ -40,8 +55,6 @@ class CartController extends Controller
             ->first();
 
         // step 3 check if the product is deleted or cancelled 
-
-
         if ($cartDetail) {
             $cartDetail->quantity += 1;
             $cartDetail->save();
