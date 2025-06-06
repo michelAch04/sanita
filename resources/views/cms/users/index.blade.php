@@ -15,12 +15,20 @@ $canDelete = $permissions && $permissions->delete;
 @endphp
 
 @section('content')
+{{-- Search --}}
+<div class="d-flex justify-content-center w-100 mb-3">
+    <form class="search-form d-flex align-items-center w-50" data-search-target="#user-table-body" action="{{ route('users.index') }}">
+        <input type="text" name="query" class="form-control me-2 search-input rounded-pill shadow-soft" placeholder="Search..." autocomplete="off">
+    </form>
+</div>
+
 <div class="container mt-5">
     {{-- Header --}}
     <div class="card-header text-dark d-flex justify-content-between align-items-center m-2 mb-3">
         <h2 class="mb-0">Users</h2>
         @if($canAdd)
-        <a href="{{ route('users.create') }}" class="btn btn-teal fw-medium">+ Create User</a>
+        <a href="{{ route('users.create') }}" class="btn bubbles fw-medium">
+            <span class="text">+ Create User</span></a>
         @endif
     </div>
 
@@ -38,7 +46,8 @@ $canDelete = $permissions && $permissions->delete;
                             <th class="text-end">Options</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="user-table-body">
+                        @section('users_list')
                         @forelse ($users as $user)
                         <tr class="bg-hover-light-grey">
                             <td>{{ $user->name }}</td>
@@ -62,7 +71,7 @@ $canDelete = $permissions && $permissions->delete;
                                         @if($canDelete)
                                         <li>
                                             <button type="button" class="dropdown-item text-danger bg-hover-light-grey"
-                                                onclick="confirmDelete({{ route('users.destroy', $user->id) }}">
+                                                onclick="confirmDelete('{{ route('users.destroy', $user->id) }}')">
                                                 <i class="bi bi-trash3 me-2"></i>Delete
                                             </button>
                                         </li>
@@ -79,6 +88,9 @@ $canDelete = $permissions && $permissions->delete;
                             <td colspan="5" class="text-center text-muted">No users found.</td>
                         </tr>
                         @endforelse
+                        @endsection
+
+                        @yield('users_list')
                     </tbody>
                 </table>
             </div>

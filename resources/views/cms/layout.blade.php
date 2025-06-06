@@ -25,7 +25,7 @@
 
             <!-- Sidebar -->
             <nav id="sidebar" class="sidebar bg-dark text-white sidebar-collapsed">
-                <div class="sidebar-header p-3 fw-bold d-flex align-items-center gap-2">
+                <div class="sidebar-header p-2 fw-bold d-flex align-items-center gap-2">
                     <i class="fas fa-user-cog fs-5"></i>
                     <span class="sidebar-label">Admin Panel</span>
                 </div>

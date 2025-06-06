@@ -7,15 +7,32 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    public function index()
-    {
-        try {
-            $categories = Category::where('cancelled', 0)->get(); // Only fetch non-cancelled categories
-            return view('cms.categories.index', compact('categories'));
-        } catch (\Exception $e) {
-            return redirect()->route('categories.index')->with('error', 'Failed to fetch categories: ' . $e->getMessage());
+public function index(Request $request)
+{
+    try {
+        $query = Category::query();
+
+        if ($request->filled('query')) {
+            $search = $request->query('query');
+
+            $query->where(function ($q) use ($search) {
+                $q->where('id', 'like', "{$search}%")
+                    ->orWhere('name', 'like', "{$search}%");
+            });
         }
+
+        $categories = $query->get();
+
+        if ($request->ajax()) {
+            return view('cms.categories.index', compact('categories'))->renderSections()['categories_list'];
+        }
+
+        return view('cms.categories.index', compact('categories'));
+    } catch (\Exception $e) {
+        return redirect()->route('categories.index')->with('error', 'Failed to fetch categories: ' . $e->getMessage());
     }
+}
+
 
     public function create()
     {

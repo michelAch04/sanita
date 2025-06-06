@@ -8,11 +8,32 @@ use Illuminate\Http\Request;
 
 class SubcategoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $subcategories = Subcategory::with('category')->where('cancelled', 0)->get();
-        return view('cms.subcategories.index', compact('subcategories'));
+        try {
+            $query = Subcategory::with('category');
+
+            if ($request->filled('query')) {
+                $search = $request->query('query');
+
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "{$search}%")
+                        ->orWhereHas('category', fn($catQ) => $catQ->where('name', 'like', "{$search}%"));
+                });
+            }
+
+            $subcategories = $query->get();
+
+            if ($request->ajax()) {
+                return view('cms.subcategories.index', compact('subcategories'))->renderSections()['subcategories_list'];
+            }
+
+            return view('cms.subcategories.index', compact('subcategories'));
+        } catch (\Exception $e) {
+            return redirect()->route('subcategories.index')->with('error', 'Failed to fetch subcategories: ' . $e->getMessage());
+        }
     }
+
 
     public function create()
     {

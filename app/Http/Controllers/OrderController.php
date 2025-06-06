@@ -8,15 +8,36 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    public function index()
-    {
-        try {
-            $orders = Order::where('cancelled', 0)->with('customer')->get();
-            return view('cms.orders.index', compact('orders'));
-        } catch (\Exception $e) {
-            return redirect()->route('orders.index')->with('error', 'Failed to fetch orders: ' . $e->getMessage());
+public function index(Request $request)
+{
+    try {
+        $query = Order::with('customer');
+
+        if ($request->filled('query') ) {
+            $search = $request->query('query');
+
+            $query->where(function ($q) use ($search) {
+                $q->where('id', 'like', "{$search}%")
+                    ->orWhere('status', 'like', "{$search}%")
+                    ->orWhereHas('customer', function ($q2) use ($search) {
+                        $q2->where('first_name', 'like', "{$search}%")
+                           ->orWhere('last_name', 'like', "{$search}%")
+                           ->orWhereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ["{$search}%"]);
+                    });
+            });
         }
+
+        $orders = $query->get();
+
+        if ($request->ajax()) {
+            return view('cms.orders.index', compact('orders'))->renderSections()['orders_list'];
+        }
+
+        return view('cms.orders.index', compact('orders'));
+    } catch (\Exception $e) {
+        return redirect()->route('orders.index')->with('error', 'Failed to fetch orders: ' . $e->getMessage());
     }
+}
 
     public function create()
     {

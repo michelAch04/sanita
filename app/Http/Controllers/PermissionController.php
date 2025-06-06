@@ -69,7 +69,6 @@ class PermissionController extends Controller
             $perm->excel = isset($fields['excel']) ? 1 : 0;
             $perm->save();
         }
-        dd($permissions);
 
         return redirect()->back()->with('success', 'Permissions updated successfully.');
     }

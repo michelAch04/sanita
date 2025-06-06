@@ -10,11 +10,32 @@ use App\Models\Subcategory;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::where('cancelled', 0)->get();
-        return view('cms.products.index', compact('products'));
+        try {
+            $query = Product::query();
+
+            if ($request->filled('query')) {
+                $search = $request->query('query');
+
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%$search%")
+                        ->orWhere('small_description', 'like', "$search%");
+                });
+            }
+
+            $products = $query->get();
+
+            if ($request->ajax()) {
+                return view('cms.products.index', compact('products'))->renderSections()['products_list'];
+            }
+
+            return view('cms.products.index', compact('products'));
+        } catch (\Exception $e) {
+            return redirect()->route('products.index')->with('error', 'Failed to fetch products: ' . $e->getMessage());
+        }
     }
+
 
     public function create()
     {

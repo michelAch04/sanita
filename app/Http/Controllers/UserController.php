@@ -9,13 +9,29 @@ use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $user = auth()->guard('web')->user();
-        $user_id = $user->id;
+        try {
+            $query = User::where('id', '!=', auth()->id()); // 👈 exclude current user
 
-        $users = User::where('cancelled', 0)->where('id', '!=', $user_id)->get();
-        return view('cms.users.index', compact('users'));
+            if ($request->filled('query')) {
+                $search = $request->query('query');
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "$search%")
+                        ->orWhere('email', 'like', "$search%");
+                });
+            }
+
+            $users = $query->get();
+
+            if ($request->ajax()) {
+                return view('cms.users.index', compact('users'))->renderSections()['users_list'];
+            }
+
+            return view('cms.users.index', compact('users'));
+        } catch (\Exception $e) {
+            return redirect()->route('users.index')->with('error', 'Failed to fetch users: ' . $e->getMessage());
+        }
     }
 
     public function create()

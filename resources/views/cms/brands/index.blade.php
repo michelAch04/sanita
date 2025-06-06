@@ -14,12 +14,19 @@ $canDelete = $permissions && $permissions->delete;
 @endphp
 
 @section('content')
+{{-- Search --}}
+<div class="d-flex justify-content-center w-100 mb-3">
+    <form class="search-form d-flex align-items-center w-50" data-search-target="#brand-table-body" action="{{ route('brands.index') }}">
+        <input type="text" name="query" class="form-control me-2 search-input rounded-pill shadow-soft" placeholder="Search..." autocomplete="off">
+    </form>
+</div>
+
 <div class="container mt-5">
     {{-- Header --}}
     <div class="card-header text-dark d-flex justify-content-between align-items-center m-2 mb-3">
         <h2 class="mb-0">Brands</h2>
         @if($canAdd)
-        <a href="{{ route('brands.create') }}" class="btn btn-teal fw-medium">+ Add Brand</a>
+        <a href="{{ route('brands.create') }}" class="btn bubbles fw-medium"><span class="text">+ Add Brand</span></a>
         @endif
     </div>
 
@@ -40,7 +47,8 @@ $canDelete = $permissions && $permissions->delete;
                             <th class="text-end">Options</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="brand-table-body">
+                        @section('brands_list')
                         @forelse ($brands as $brand)
                         <tr class="bg-hover-light-grey">
                             <td>
@@ -92,6 +100,9 @@ $canDelete = $permissions && $permissions->delete;
                             <td colspan="8" class="text-center text-muted">No brands found.</td>
                         </tr>
                         @endforelse
+                        @endsection
+
+                        @yield('brands_list')
                     </tbody>
                 </table>
             </div>

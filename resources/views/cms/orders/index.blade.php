@@ -15,13 +15,24 @@ $canDelete = $permissions && $permissions->delete;
 @endphp
 
 @section('content')
+
+{{-- Search --}}
+<div class="d-flex justify-content-center w-100 mb-3">
+    <form class="search-form d-flex align-items-center w-50"
+        data-search-target="#order-table-body"
+        action="{{ route('orders.index') }}">
+        <input type="text" name="query" class="form-control me-2 search-input rounded-pill shadow-soft"
+            placeholder="Search..." autocomplete="off">
+    </form>
+</div>
+
 <div class="container mt-5">
 
     {{-- Header --}}
     <div class="card-header text-dark d-flex justify-content-between align-items-center m-2 mb-3">
         <h2 class="mb-0">Orders</h2>
         @if($canAdd)
-        <a href="{{ route('orders.create') }}" class="btn btn-teal fw-medium">+ Create Order</a>
+        <a href="{{ route('orders.create') }}" class="btn bubbles fw-medium"><span class="text">+ Create Order</span></a>
         @endif
     </div>
 
@@ -39,7 +50,8 @@ $canDelete = $permissions && $permissions->delete;
                             <th class="text-end">Options</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="order-table-body">
+                        @section('orders_list')
                         @forelse ($orders as $order)
                         <tr class="bg-hover-light-grey">
                             <td>{{ $order->id }}</td>
@@ -49,7 +61,8 @@ $canDelete = $permissions && $permissions->delete;
                             <td class="text-end">
                                 @if($canEdit || $canDelete)
                                 <div class="dropdown {{ $loop->first ? 'dropstart' : '' }}">
-                                    <button class="btn btn-sm text-secondary rounded-circle border-0 bg-hover-teal" type="button" data-bs-toggle="dropdown">
+                                    <button class="btn btn-sm text-secondary rounded-circle border-0 bg-hover-teal"
+                                        type="button" data-bs-toggle="dropdown">
                                         <i class="bi bi-three-dots-vertical"></i>
                                     </button>
                                     <ul class="dropdown-menu {{ $loop->first ? '' : 'dropdown-menu-end' }}">
@@ -80,6 +93,8 @@ $canDelete = $permissions && $permissions->delete;
                             <td colspan="5" class="text-center text-muted">No orders found.</td>
                         </tr>
                         @endforelse
+                        @endsection
+                        @yield('orders_list')
                     </tbody>
                 </table>
             </div>

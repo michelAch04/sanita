@@ -14,12 +14,20 @@ $canDelete = $permissions && $permissions->delete;
 @endphp
 
 @section('content')
+{{-- Search --}}
+<div class="d-flex justify-content-center w-100 mb-3">
+    <form class="search-form d-flex align-items-center w-50" data-search-target="#subcategory-table-body" action="{{ route('subcategories.index') }}">
+        <input type="text" name="query" class="form-control me-2 search-input rounded-pill shadow-soft" placeholder="Search..." autocomplete="off">
+    </form>
+</div>
+
 <div class="container mt-5">
     {{-- Header --}}
     <div class="card-header text-dark d-flex justify-content-between align-items-center m-2 mb-3">
         <h2 class="mb-0">Subcategories</h2>
         @if($canAdd)
-        <a href="{{ route('subcategories.create') }}" class="btn btn-teal fw-medium">+ Add Subcategory</a>
+        <a href="{{ route('subcategories.create') }}" class="btn bubbles fw-medium">
+            <span class="text">+ Add Subcategory</span></a>
         @endif
     </div>
 
@@ -35,7 +43,8 @@ $canDelete = $permissions && $permissions->delete;
                             <th class="text-end">Options</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="subcategory-table-body">
+                        @section('subcategories_list')
                         @forelse ($subcategories as $subcategory)
                         <tr class="bg-hover-light-grey">
                             <td>{{ $subcategory->name }}</td>
@@ -57,7 +66,7 @@ $canDelete = $permissions && $permissions->delete;
                                         @if($canDelete)
                                         <li>
                                             <button type="button" class="dropdown-item text-danger bg-hover-light-grey"
-                                                onclick="confirmDelete({{ route('subcategories.destroy', $subcategory->id) }})">
+                                                onclick="confirmDelete('{{ route('subcategories.destroy', $subcategory->id) }}')">
                                                 <i class="bi bi-trash3 me-2"></i>Delete
                                             </button>
                                         </li>
@@ -74,6 +83,9 @@ $canDelete = $permissions && $permissions->delete;
                             <td colspan="3" class="text-center text-muted">No subcategories found.</td>
                         </tr>
                         @endforelse
+                        @endsection
+
+                        @yield('subcategories_list')
                     </tbody>
                 </table>
             </div>

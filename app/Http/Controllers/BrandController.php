@@ -7,10 +7,29 @@ use Illuminate\Http\Request;
 
 class BrandController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $brands = Brand::where('cancelled', 0)->get(); // Fetch all brands
-        return view('cms.brands.index', compact('brands'));
+        try {
+            $query = Brand::query();
+
+            if ($request->filled('query')) {
+                $search = $request->query('query');
+
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%$search%");
+                });
+            }
+
+            $brands = $query->get();
+
+            if ($request->ajax()) {
+                return view('cms.brands.index', compact('brands'))->renderSections()['brands_list'];
+            }
+
+            return view('cms.brands.index', compact('brands'));
+        } catch (\Exception $e) {
+            return redirect()->route('brands.index')->with('error', 'Failed to fetch brands: ' . $e->getMessage());
+        }
     }
 
     public function create()
