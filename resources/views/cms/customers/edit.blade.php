@@ -3,52 +3,89 @@
 @section('title', 'Edit Customer')
 
 @section('content')
-<div class="container mt-5">
-    <h2>Edit Customer</h2>
-
-    @if (session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<div class="container mt-3">
+    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+        <h2 class="mb-3">Edit Customer</h2>
     </div>
-    @endif
 
-    @if (session('error'))
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        {{ session('error') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    @endif
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <form action="{{ route('customers.update', $customer->id) }}" method="POST">
+                @csrf
+                @method('PUT')
 
-    <form action="{{ route('customers.update', $customer->id) }}" method="POST">
-        @csrf
-        @method('PUT')
-        <div class="form-group mb-3">
-            <label for="first_name">First Name</label>
-            <input type="text" id="first_name" name="first_name" class="form-control" value="{{ old('first_name', $customer->first_name) }}" required>
+                {{-- First Name --}}
+                <div class="input-container mb-5 mt-3">
+                    <input type="text" name="first_name" value="{{ old('first_name', $customer->first_name) }}" required>
+                    <label class="label">First Name</label>
+                    <div class="underline"></div>
+                </div>
 
-            <label for="last_name" class="mt-3">Last Name</label>
-            <input type="text" id="last_name" name="last_name" class="form-control" value="{{ old('last_name', $customer->last_name) }}" required>
+                {{-- Last Name --}}
+                <div class="input-container mb-5">
+                    <input type="text" name="last_name" value="{{ old('last_name', $customer->last_name) }}" required>
+                    <label class="label">Last Name</label>
+                    <div class="underline"></div>
+                </div>
 
-            <label for="dob" class="mt-3">Date of Birth</label>
-            <input type="date" id="dob" name="dob" class="form-control" value="{{ old('DOB', $customer->DOB) }}">
+                {{-- Date of Birth --}}
+                <div class="input-container mb-4">
+                    <input type="date" name="dob" value="{{ old('DOB', $customer->DOB) }}">
+                    <label class="label">Date of Birth</label>
+                    <div class="underline"></div>
+                </div>
 
-            <label for="gender" class="mt-3">Gender</label>
-            <select id="gender" name="gender" class="form-control">
-                <option value="male" {{ old('gender', $customer->gender) == 'male' ? 'selected' : '' }}>Male</option>
-                <option value="female" {{ old('gender', $customer->gender) == 'female' ? 'selected' : '' }}>Female</option>
-            </select>
+                {{-- Gender Toggle --}}
+                <div class="checkbox-wrapper-8 mb-5">
+                    <label for="gender" class="visible-label">Gender</label>
+                    <input type="checkbox" id="gender" name="gender" class="tgl" value="male"
+                        {{ old('gender', $customer->gender) === 'male' ? 'checked' : '' }}>
+                    <label for="gender" class="tgl-btn" data-tg-on="Male" data-tg-off="Female"></label>
+                </div>
 
-            <label for="mobile" class="mt-3">Mobile</label>
-            <input type="text" id="mobile" name="mobile" class="form-control" value="{{ old('mobile', $customer->mobile) }}">
+                {{-- Mobile --}}
+                <div class="input-container mb-5">
+                    <input type="text" name="mobile" value="{{ old('mobile', $customer->mobile) }}">
+                    <label class="label">Mobile</label>
+                    <div class="underline"></div>
+                </div>
 
-            <label for="email" class="mt-3">Email</label>
-            <input type="email" id="email" name="email" class="form-control" value="{{ old('email', $customer->email) }}" required>
+                {{-- Email --}}
+                <div class="input-container mb-5">
+                    <input type="email" name="email" value="{{ old('email', $customer->email) }}" required>
+                    <label class="label">Email</label>
+                    <div class="underline"></div>
+                </div>
 
-            <label for="password" class="mt-3">Password</label>
-            <input type="password" id="password" name="password" class="form-control">
+                {{-- Password --}}
+                <div class="input-container mb-5">
+                    <input type="text" name="password" placeholder="">
+                    <label class="label">Password (optional)</label>
+                    <div class="underline"></div>
+                </div>
+
+                {{-- Submit & Cancel --}}
+                <div class="d-flex justify-content-end">
+                    <a href="{{ route('customers.index') }}" class="btn bubbles bubbles-grey me-2">
+                        <span class="text">Cancel</span>
+                    </a>
+                    <button type="submit" class="btn bubbles">
+                        <span class="text">Update</span>
+                    </button>
+                </div>
+            </form>
         </div>
-        <button type="submit" class="btn btn-success">Update Customer</button>
-    </form>
+    </div>
 </div>
+<style>
+    .checkbox-wrapper-8 .tgl + .tgl-btn {
+        background:rgb(232, 123, 190) !important;
+    }
+    .checkbox-wrapper-8 .tgl:checked + .tgl-btn {
+        background:rgb(125, 128, 221) !important;
+    }
+    .checkbox-wrapper-8 .tgl + .tgl-btn {
+        width: 3.5em;
+    }
+</style>
 @endsection

@@ -83,27 +83,29 @@ class BrandController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'hidden' => 'required|boolean',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validate image (optional)
+            'visible' => 'nullable|boolean', // visible is the checkbox name in the form
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         try {
             $brand = Brand::findOrFail($id);
 
-            // Update the brand's name and hidden status
+            // Convert visible checkbox into hidden DB value (inverted logic)
+            $hidden = $request->has('visible') ? 0 : 1;
+
+            // Update name and hidden status
             $brand->update([
                 'name' => $request->name,
-                'hidden' => $request->hidden,
+                'hidden' => $hidden,
             ]);
 
-            // Handle the image upload if a new image is provided
+            // Handle optional image upload
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
-                $extension = $image->getClientOriginalExtension(); // Get the file extension
-                $imageName = $brand->id . '.' . $extension; // Rename the image to the ID of the record
-                $image->storeAs('brands', $imageName, 'public'); // Save the image in 'storage/app/public/brands'
+                $extension = $image->getClientOriginalExtension();
+                $imageName = $brand->id . '.' . $extension;
+                $image->storeAs('brands', $imageName, 'public');
 
-                // Update the brand with the new image extension
                 $brand->update([
                     'extension' => $extension,
                 ]);
@@ -114,6 +116,7 @@ class BrandController extends Controller
             return redirect()->route('brands.edit', $id)->with('error', 'Failed to update brand: ' . $e->getMessage());
         }
     }
+
 
     public function destroy(Brand $brand)
     {

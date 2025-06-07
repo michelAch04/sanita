@@ -117,17 +117,21 @@ class ProductController extends Controller
                 'available_quantity' => 'required|integer|min:0',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'small_description' => 'nullable|string|max:255',
-                'hidden' => 'required|boolean',
+                'visible' => 'nullable|boolean', // visible is the checkbox name in the form
             ]);
 
-            $product->update($request->only([
+            // Convert 'visible' checkbox to 'hidden' field (inverted logic)
+            $data = $request->only([
                 'name',
                 'description',
                 'unit_price',
                 'available_quantity',
                 'small_description',
-                'hidden'
-            ]));
+            ]);
+
+            $data['hidden'] = !$request->boolean('visible'); // <-- this flips visible to hidden
+
+            $product->update($data);
 
             if ($request->hasFile('image')) {
                 $image = $request->file('image');

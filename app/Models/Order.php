@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     protected $fillable = [
-        'customer_id',
+        'customers_id',
         'total',
         'status',
         'payment_method',
@@ -17,7 +17,7 @@ class Order extends Model
 
     public function customer()
     {
-        return $this->belongsTo(User::class, 'customer_id');
+        return $this->belongsTo(Customer::class, 'customers_id');
     }
 
     public function orderDetails()

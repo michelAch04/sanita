@@ -7,31 +7,31 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-public function index(Request $request)
-{
-    try {
-        $query = Category::query();
+    public function index(Request $request)
+    {
+        try {
+            $query = Category::query();
 
-        if ($request->filled('query')) {
-            $search = $request->query('query');
+            if ($request->filled('query')) {
+                $search = $request->query('query');
 
-            $query->where(function ($q) use ($search) {
-                $q->where('id', 'like', "{$search}%")
-                    ->orWhere('name', 'like', "{$search}%");
-            });
+                $query->where(function ($q) use ($search) {
+                    $q->where('id', 'like', "{$search}%")
+                        ->orWhere('name', 'like', "{$search}%");
+                });
+            }
+
+            $categories = $query->get();
+
+            if ($request->ajax()) {
+                return view('cms.categories.index', compact('categories'))->renderSections()['categories_list'];
+            }
+
+            return view('cms.categories.index', compact('categories'));
+        } catch (\Exception $e) {
+            return redirect()->route('categories.index')->with('error', 'Failed to fetch categories: ' . $e->getMessage());
         }
-
-        $categories = $query->get();
-
-        if ($request->ajax()) {
-            return view('cms.categories.index', compact('categories'))->renderSections()['categories_list'];
-        }
-
-        return view('cms.categories.index', compact('categories'));
-    } catch (\Exception $e) {
-        return redirect()->route('categories.index')->with('error', 'Failed to fetch categories: ' . $e->getMessage());
     }
-}
 
 
     public function create()
@@ -94,16 +94,14 @@ public function index(Request $request)
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'hidden' => 'required|boolean',
+            'visible' => 'required|boolean',
         ]);
 
-
         $category->name = $validatedData['name'];
-        $category->hidden = $validatedData['hidden'];
+        $category->hidden = !$validatedData['visible']; // invert visible to store hidden
 
         if ($request->hasFile('image')) {
-            // Define old and new (archive) paths
-            $oldPath = public_path('storage/slideshow/' . $category->id . '.' . $category->extension);
+            $oldPath = public_path('storage/categories/' . $category->id . '.' . $category->extension);
             if (file_exists($oldPath)) {
                 unlink($oldPath);
             }
@@ -114,9 +112,10 @@ public function index(Request $request)
 
             $category->extension = $extension;
         }
+
         $category->save();
 
-        return redirect()->route('categories.index')->with('success', 'categories updated successfully.');
+        return redirect()->route('categories.index')->with('success', 'Category updated successfully.');
     }
 
     /**

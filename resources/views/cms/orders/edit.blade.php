@@ -3,47 +3,186 @@
 @section('title', 'Edit Order')
 
 @section('content')
-    <div class="container mt-5">
-        <h2>Edit Order</h2>
-
-        @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-
-        <form action="{{ route('orders.update', $order->id) }}" method="POST">
-            @csrf
-            @method('PUT')
-            <div class="form-group mb-3">
-                <label for="customer_id">Customer</label>
-                <select id="customer_id" name="customer_id" class="form-control" required>
-                    @foreach ($customers as $customer)
-                        <option value="{{ $customer->id }}" {{ old('customer_id', $order->customer_id) == $customer->id ? 'selected' : '' }}>
-                            {{ $customer->name }}
-                        </option>
-                    @endforeach
-                </select>
-
-                <label for="status" class="mt-3">Status</label>
-                <select id="status" name="status" class="form-control" required>
-                    <option value="pending" {{ old('status', $order->status) == 'pending' ? 'selected' : '' }}>Pending</option>
-                    <option value="completed" {{ old('status', $order->status) == 'completed' ? 'selected' : '' }}>Completed</option>
-                    <option value="cancelled" {{ old('status', $order->status) == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
-                </select>
-
-                <label for="total_price" class="mt-3">Total Price</label>
-                <input type="number" id="total_price" name="total_price" class="form-control" step="0.01" value="{{ old('total_price', $order->total_price) }}" required>
-            </div>
-            <button type="submit" class="btn btn-success">Update Order</button>
-        </form>
+<div class="container mt-3">
+    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+        <h2 class="mb-3">Edit Order</h2>
     </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            <form action="{{ route('orders.update', $order->id) }}" method="POST">
+                @csrf
+                @method('PUT')
+
+                {{-- Customer Select2 --}}
+                <div class="input-container mb-5 mt-3" style="width: 30%; position: relative; padding-top: 5px;">
+                    <label for="customers_id" class="label">Customer</label>
+                    <select id="customers_id" name="customers_id" class="styled-select" required>
+                        @foreach ($customers as $customer)
+                            <option value="{{ $customer->id }}" {{ old('customers_id', $order->customers_id) == $customer->id ? 'selected' : '' }}>
+                                {{ $customer->first_name }} {{ $customer->last_name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <div class="underline"></div>
+                </div>
+                
+
+                {{-- Status Radio Buttons --}}
+                <div class="select-container mb-5 mt-3" style="width: 30%; position: relative;">
+                    <label for="status" class="label">Status</label>
+                    <div class="mt-2">
+                        <label class="select-label"><input type="radio" name="status" value="pending" {{ old('status', $order->status) == 'pending' ? 'checked' : '' }}> <span>Pending</span></label>
+                        <label class="select-label"><input type="radio" name="status" value="completed" {{ old('status', $order->status) == 'completed' ? 'checked' : '' }}> <span>Completed</span></label>
+                        <label class="select-label"><input type="radio" name="status" value="cancelled" {{ old('status', $order->status) == 'cancelled' ? 'checked' : '' }}> <span>Cancelled</span></label>
+                    </div>
+                </div>
+
+                {{-- Total Price --}}
+                <div class="input-container mb-5 mt-3" style="width: 30%;">
+                    <input type="number" id="total_amount" name="total_amount" value="{{ old('total_amount', $order->total_amount) }}" step="0.01" required style="width: 100%;">
+                    <label for="total_amount" class="label">Total Price</label>
+                    <div class="underline"></div>
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <a href="{{ route('orders.index') }}" class="btn bubbles bubbles-grey me-2">
+                        <span class="text">Cancel</span>
+                    </a>
+                    <button type="submit" class="btn bubbles">
+                        <span class="text">Update</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@push('styles')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@endpush
+
+@push('scripts')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#customers_id').select2({
+            placeholder: 'Select a customer',
+            allowClear: true,
+            width: '100%'
+        });
+    });
+</script>
+@endpush
+
+<style>
+    /* Match your input field */
+    .select2-container--default .select2-selection--single {
+        background: transparent;
+        border: none;
+        border-bottom: 2px solid #ccc;
+        border-radius: 0;
+        height: 36px;
+        padding-left: 0;
+        transition: all 0.3s ease;
+    }
+
+    .select2-container--default .select2-selection--single:hover,
+    .select2-container--default.select2-container--open .select2-selection--single {
+        border-color: teal;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: #333;
+        padding-left: 0;
+        font-size: 16px;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        top: 5px;
+    }
+
+    /* Style the search input box inside Select2 dropdown */
+    .select2-container .select2-search--dropdown .select2-search__field {
+        border: none;
+        outline: none;
+        padding: 6px 10px;
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+        /* subtle shadow */
+        transition: all 0.3s ease;
+        border-radius: 4px;
+    }
+
+    /* On focus: teal glow */
+    .select2-container .select2-search--dropdown .select2-search__field:focus {
+        box-shadow: 0 0 6px #38B2AC;
+    }
+
+
+    /* Always-active label above the field */
+    .input-container .label {
+        top: -20px;
+        font-size: 16px;
+        color: #38B2AC;
+    }
+
+    /* Select styling to match custom inputs */
+    .styled-select {
+        width: 100%;
+        background: transparent;
+        border: none;
+        border-bottom: 2px solid teal;
+        font-size: 16px;
+        color: #333;
+        padding: 0;
+        outline: none;
+        transition: all 0.3s ease;
+        appearance: none;
+        /* Removes default arrow on some browsers */
+    }
+
+    /* Arrow fix for consistent look */
+    .styled-select::-ms-expand {
+        display: none;
+    }
+
+    /* Underline always visible and teal */
+    .underline {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 2px;
+        width: 100%;
+        background-color: teal;
+        transition: all 0.3s ease;
+    }
+
+    .select2-container--open~.underline,
+    .select2-container--default.select2-container--focus~.underline {
+        transform: scaleX(1);
+    }
+
+    /* Dropdown highlight */
+    .select2-results__option--highlighted {
+        background-color: #38B2AC !important;
+        color: white;
+        transition: all 0.2s ease;
+    }
+</style>
+
 @endsection

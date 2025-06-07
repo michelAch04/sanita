@@ -71,14 +71,18 @@ class SubcategoryController extends Controller
     public function update(Request $request, Subcategory $subcategory)
     {
         $request->validate([
-            'category_id' => 'required|exists:categories,id',
+            'categories_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255',
         ]);
 
-        $subcategory->update($request->only(['category_id', 'name', 'description']));
+        $subcategory->update([
+            'name' => $request->name,
+            'categories_id' => $request->categories_id,
+        ]);
 
         return redirect()->route('subcategories.index')->with('success', 'Subcategory updated successfully.');
     }
+
 
     public function destroy(Subcategory $subcategory)
     {

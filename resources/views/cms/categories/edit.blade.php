@@ -3,58 +3,60 @@
 @section('title', 'Edit Category')
 
 @section('content')
-<div class="container mt-5">
+<div class="container mt-3">
     <div class="card shadow-sm border-0">
         <div class="card-header bg-light text-black">
             <h4 class="mb-0">Edit Category</h4>
         </div>
 
         <div class="card-body">
-            @if ($errors->any())
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <ul class="mb-0">
-                    @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            @endif
-
             <form action="{{ route('categories.update', $category->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
-                <div class="mb-3">
-                    <label for="name" class="form-label">Name <span class="text-danger">*</span></label>
-                    <input type="text" id="name" name="name" class="form-control" value="{{ old('name', $category->name) }}" required>
+                {{-- Name --}}
+                <div class="input-container mb-5 mt-3" style="width: 30%;">
+                    <input type="text" id="name" name="name" value="{{ old('name', $category->name) }}" required style="width: 100%;">
+                    <label for="name" class="label">Category Name</label>
+                    <div class="underline"></div>
                 </div>
 
-                <div class="mb-3">
-                    <label for="hidden" class="form-label">Hidden <span class="text-danger">*</span></label>
-                    <select id="hidden" name="hidden" class="form-select" required>
-                        <option value="0" {{ old('hidden', $category->hidden) == 0 ? 'selected' : '' }}>No</option>
-                        <option value="1" {{ old('hidden', $category->hidden) == 1 ? 'selected' : '' }}>Yes</option>
-                    </select>
+                {{-- Visibility Toggle --}}
+                <div class="checkbox-wrapper-8 mb-5">
+                    <label for="visible" class="visible-label">Visible</label>
+                    <input type="checkbox" id="visible" name="visible" class="tgl" value="1"
+                        {{ old('visible', !$category->hidden) ? 'checked' : '' }}>
+                    <label for="visible" class="tgl-btn" data-tg-on="Yes" data-tg-off="No"></label>
                 </div>
 
-                <div class="mb-3">
-                    <label for="image" class="form-label">Update Image</label>
-                    <input type="file" id="image" name="image" class="form-control" accept="image/*">
+                {{-- Upload Image --}}
+                <div class="d-flex align-items-start gap-4 mb-4 flex-wrap upload-container">
+                    <!-- Custom Upload Button -->
+                    <div>
+                        <label for="image" id="imageLabel" class="btn underline-btn">Upload Image</label>
+                        <input type="file" id="image" name="image" accept="image/*" hidden>
+                    </div>
 
+                    <!-- Image Preview -->
+                    <div id="previewContainer" style="display: none;">
+                        <img id="imagePreview" src="#" alt="Selected Image" class="img-thumbnail" style="max-width: 150px;">
+                        <div id="fileName" class="text-muted mt-2 small text-center text-decoration-underline mb-1"></div>
+                    </div>
+
+                    <!-- Existing Image -->
                     @if ($category->extension)
-                    <img src="{{ asset('storage/categories/' . $category->id . '.' . $category->extension) }}"
-                        alt="{{ $category->name }}"
-                        class="img-thumbnail mt-2"
-                        style="width: 100px; height: 100px;">
-                    @else
-                    <p class="text-muted mt-2">No Image Available</p>
+                    <div class="d-flex flex-column mt-3">
+                        <img src="{{ asset('storage/categories/' . $category->id . '.' . $category->extension) }}" alt="Current Image" class="img-thumbnail" style="max-width: 150px;">
+                        <p class="mb-1 text-muted small text-center text-decoration-underline">Current Image</p>
+                    </div>
                     @endif
                 </div>
 
+                {{-- Buttons --}}
                 <div class="d-flex justify-content-end">
-                    <a href="{{ route('categories.index') }}" class="btn btn-secondary me-2">Cancel</a>
-                    <button type="submit" class="btn btn-success">Update</button>
+                    <a href="{{ route('categories.index') }}" class="btn bubbles bubbles-grey me-2">
+                        <span class="text">Cancel</span></a>
+                    <button type="submit" class="btn bubbles"><span class="text">Update</span></button>
                 </div>
             </form>
         </div>

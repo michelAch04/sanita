@@ -8,36 +8,36 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-public function index(Request $request)
-{
-    try {
-        $query = Order::with('customer');
+    public function index(Request $request)
+    {
+        try {
+            $query = Order::with('customer');
 
-        if ($request->filled('query') ) {
-            $search = $request->query('query');
+            if ($request->filled('query')) {
+                $search = $request->query('query');
 
-            $query->where(function ($q) use ($search) {
-                $q->where('id', 'like', "{$search}%")
-                    ->orWhere('status', 'like', "{$search}%")
-                    ->orWhereHas('customer', function ($q2) use ($search) {
-                        $q2->where('first_name', 'like', "{$search}%")
-                           ->orWhere('last_name', 'like', "{$search}%")
-                           ->orWhereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ["{$search}%"]);
-                    });
-            });
+                $query->where(function ($q) use ($search) {
+                    $q->where('id', 'like', "{$search}%")
+                        ->orWhereHas('customer', function ($q2) use ($search) {
+                            $q2->where('first_name', 'like', "{$search}%")
+                                ->orWhere('last_name', 'like', "{$search}%")
+                                ->orWhereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ["{$search}%"]);
+                        });
+                });
+
+            }
+
+            $orders = $query->get();
+
+            if ($request->ajax()) {
+                return view('cms.orders.index', compact('orders'))->renderSections()['orders_list'];
+            }
+
+            return view('cms.orders.index', compact('orders'));
+        } catch (\Exception $e) {
+            return redirect()->route('orders.index')->with('error', 'Failed to fetch orders: ' . $e->getMessage());
         }
-
-        $orders = $query->get();
-
-        if ($request->ajax()) {
-            return view('cms.orders.index', compact('orders'))->renderSections()['orders_list'];
-        }
-
-        return view('cms.orders.index', compact('orders'));
-    } catch (\Exception $e) {
-        return redirect()->route('orders.index')->with('error', 'Failed to fetch orders: ' . $e->getMessage());
     }
-}
 
     public function create()
     {
@@ -93,12 +93,11 @@ public function index(Request $request)
             }
 
             $request->validate([
-                'customer_id' => 'required|exists:customers,id',
-                'status' => 'required|string|max:255',
-                'total_price' => 'required|numeric|min:0',
+                'customers_id' => 'required|exists:customers,id',
+                'total_amount' => 'required|numeric|min:0',
             ]);
 
-            $order->update($request->only(['customer_id', 'status', 'total_price']));
+            $order->update($request->only(['customers_id', 'total_amount']));
 
             return redirect()->route('orders.index')->with('success', 'Order updated successfully.');
         } catch (\Exception $e) {

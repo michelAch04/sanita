@@ -3,51 +3,95 @@
 @section('title', 'Edit Product')
 
 @section('content')
-<div class="container mt-5">
-    <h2>Edit Product</h2>
+<div class="container mt-3">
 
-    @if (session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+        <h2 class="mb-3">Edit Product</h2>
     </div>
-    @endif
 
-    @if (session('error'))
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        {{ session('error') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    @endif
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <form action="{{ route('products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
 
-    <form action="{{ route('products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        @method('PUT')
-        <div class="form-group mb-3">
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" class="form-control" value="{{ old('name', $product->name) }}" required>
-            <label for="description" class="mt-3">Description</label>
-            <textarea id="description" name="description" class="form-control">{{ old('description', $product->description) }}</textarea>
-            <label for="unit_price" class="mt-3">Price</label>
-            <input type="number" id="unit_price" name="unit_price" class="form-control" step="0.01" value="{{ old('unit_price', $product->unit_price) }}" required>
-            <label for="available_quantity" class="mt-3">Stock</label>
-            <input type="number" id="available_quantity" name="available_quantity" class="form-control" value="{{ old('available_quantity', $product->available_quantity) }}" required>
-            <label for="small_description">Small Description</label>
-            <textarea id="small_description" name="small_description" class="form-control">{{ old('small_description', $product->small_description) }}</textarea>
-            <label for="hidden" class="mt-3">Hidden</label>
-            <select id="hidden" name="hidden" class="form-control" required>
-                <option value="0" {{ old('hidden', $product->hidden) == 0 ? 'selected' : '' }}>No</option>
-                <option value="1" {{ old('hidden', $product->hidden) == 1 ? 'selected' : '' }}>Yes</option>
-            </select>
-            <label for="image" class="mt-3">Upload Image</label>
-            <input type="file" id="image" name="image" class="form-control" accept="image/*">
-            @if ($product->extension)
-            <p class="mt-2">Current Image:
-                <a href="{{ asset('storage/products/' . $product->image) }}" target="_blank">View Image</a>
-            </p>
-            @endif
+                {{-- Product Name --}}
+                <div class="input-container mb-5 mt-3" style="width: 30%;">
+                    <input type="text" id="name" name="name" value="{{ old('name', $product->name) }}" required
+                        style="width: 100%;">
+                    <label for="name" class="label">Product Name</label>
+                    <div class="underline"></div>
+                </div>
+
+                {{-- Product Description --}}
+                <div class="input-container mb-5" style="width: 60%;">
+                    <textarea id="description" name="description" class="mt-2" required>{{ old('description', $product->description) }}</textarea>
+                    <label for="description" class="label">Description</label>
+                </div>
+
+
+                {{-- Unit Price --}}
+                <div class="input-container mb-5">
+                    <input type="number" id="unit_price" name="unit_price" step="0.01" value="{{ old('unit_price', $product->unit_price) }}" required>
+                    <label for="unit_price" class="label">Price</label>
+                    <div class="underline"></div>
+                </div>
+
+                {{-- Available Quantity --}}
+                <div class="input-container mb-5">
+                    <input type="number" id="available_quantity" name="available_quantity" value="{{ old('available_quantity', $product->available_quantity) }}" required>
+                    <label for="available_quantity" class="label">Stock</label>
+                    <div class="underline"></div>
+                </div>
+
+                {{-- Small Description --}}
+                <div class="input-container mb-5" style="width: 30%;">
+                    <textarea id="small_description" name="small_description" class="mt-2">{{ old('small_description', $product->small_description) }}</textarea>
+                    <label for="small_description" class="label">Small Description</label>
+                    <div class="underline"></div>
+                </div>
+
+                {{-- Visibility Toggle --}}
+                <div class="checkbox-wrapper-8 mb-5">
+                    <label for="visible" class="visible-label">Visible</label>
+                    <input type="checkbox" id="visible" name="visible" class="tgl" value="1"
+                        {{ old('visible', !$product->hidden) ? 'checked' : '' }}>
+                    <label for="visible" class="tgl-btn" data-tg-on="Yes" data-tg-off="No"></label>
+                </div>
+
+                {{-- Upload Image --}}
+                <div class="d-flex align-items-start gap-4 mb-4 flex-wrap upload-container">
+                    <!-- Custom Upload Button -->
+                    <div>
+                        <label for="image" id="imageLabel" class="btn underline-btn">Upload Image</label>
+                        <input type="file" id="image" name="image" accept="image/*" hidden>
+                    </div>
+
+                    <!-- Image Preview -->
+                    <div id="previewContainer" style="display: none;">
+                        <img id="imagePreview" src="#" alt="Selected Image" class="img-thumbnail" style="max-width: 150px;">
+                        <div id="fileName" class="text-muted mt-2 small text-center text-decoration-underline mb-1"></div>
+                    </div>
+
+                    <!-- Existing Image -->
+                    @if ($product->extension)
+                    <div class="d-flex flex-column mt-3">
+                        <img src="{{ asset('storage/products/' . $product->id . '.' . $product->extension) }}" alt="Current Image" class="img-thumbnail" style="max-width: 150px;">
+                        <p class="mb-1 text-muted small text-center text-decoration-underline">Current Image</p>
+                    </div>
+                    @endif
+
+                </div>
+
+                {{-- Submit & Cancel --}}
+                <div class="d-flex justify-content-end">
+                    <a href="{{ route('products.index') }}" class="btn bubbles bubbles-grey me-2">
+                        <span class="text">Cancel</span></a>
+                    <button type="submit" class="btn bubbles"><span class="text">Update</span></button>
+                </div>
+
+            </form>
         </div>
-        <button type="submit" class="btn btn-success">Update Product</button>
-    </form>
+    </div>
 </div>
 @endsection

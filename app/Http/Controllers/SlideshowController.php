@@ -90,14 +90,13 @@ class SlideshowController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'hidden' => 'required|boolean',
+            'visible' => 'nullable|boolean',
         ]);
 
         $slideshow->name = $validatedData['name'];
-        $slideshow->hidden = $validatedData['hidden'];
+        $slideshow->hidden = $request->has('visible') ? 0 : 1;
 
         if ($request->hasFile('image')) {
-            // Define old and new (archive) paths
             $oldPath = public_path('storage/slideshow/' . $slideshow->id . '.' . $slideshow->extension);
             if (file_exists($oldPath)) {
                 unlink($oldPath);
@@ -109,6 +108,7 @@ class SlideshowController extends Controller
 
             $slideshow->extension = $extension;
         }
+
         $slideshow->save();
 
         return redirect()->route('slideshow.index')->with('success', 'Slide updated successfully.');

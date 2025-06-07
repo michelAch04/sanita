@@ -12,6 +12,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
+
+
     <link href="{{ asset('css/ui-tools.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/view-styles.css') }}" rel="stylesheet" />
 
@@ -47,7 +49,6 @@
                             <span class="sidebar-label sidebar-logout">Logout</span>
                         </button>
                     </li>
-
             </nav>
 
             <!-- Content -->
@@ -66,6 +67,12 @@
 
     <script src="{{ asset('js/modals.js') }}"></script>
     <script src="{{ asset('js/ajax-live-search.js') }}"></script>
+    <script src="{{ asset('js/file-input.js') }}"></script>
+    <!-- jQuery (required for Select2) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 
 </body>
 

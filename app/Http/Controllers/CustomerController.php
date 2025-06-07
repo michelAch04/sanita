@@ -90,23 +90,31 @@ class CustomerController extends Controller
                 'first_name' => 'required|string|max:255',
                 'last_name' => 'required|string|max:255',
                 'dob' => 'required|date',
-                'gender' => 'required|string|max:10',
                 'password' => 'nullable|string|min:8',
                 'mobile' => 'required|string|max:15',
                 'email' => 'required|email|unique:customers,email,' . $customer->id,
             ]);
 
-            $data = $request->only(['first_name', 'last_name', 'dob', 'gender', 'mobile', 'email']);
+            $data = $request->only(['first_name', 'last_name', 'dob', 'mobile', 'email']);
+            $data['DOB'] = $data['dob']; // Map it to match DB column
+            unset($data['dob']);
+
+            // Gender toggle logic
+            $data['gender'] = $request->has('gender') ? 'male' : 'female';
+
+
             if ($request->filled('password')) {
                 $data['password'] = bcrypt($request->password);
             }
+
             $customer->update($data);
 
             return redirect()->route('customers.index')->with('success', 'Customer updated successfully.');
         } catch (\Exception $e) {
-            return redirect()->route('customers.edit')->with('error', 'Failed to update customer: ' . $e->getMessage());
+            return redirect()->route('customers.edit', $customer->id)->with('error', 'Failed to update customer: ' . $e->getMessage());
         }
     }
+
 
     public function destroy(Customer $customer)
     {
