@@ -3,45 +3,75 @@
 @section('title', 'Add Subcategory')
 
 @section('content')
-    <div class="container mt-5">
-        <h2>Add Subcategory</h2>
+<div class="container mt-3">
 
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+        <h2 class="mb-3">Create Subcategory</h2>
+    </div>
 
-        <form action="{{ route('subcategories.store') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            <div class="form-group mb-3">
-                <label for="category_id">Category</label>
-                <select id="category_id" name="category_id" class="form-control" required>
-                    <option value="">Select a Category</option>
-                    @foreach ($categories as $category)
-                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <form action="{{ route('subcategories.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+
+                {{-- Category Select --}}
+                <div class="input-container mb-5 mt-3" style="width: 30%; position: relative; padding-top: 5px;">
+                    <label for="categories_id" class="label">Category</label>
+                    <select id="categories_id" name="categories_id" class="styled-select" required>
+                        <option value="">Select a category</option>
+                        @foreach ($categories as $category)
+                        <option value="{{ $category->id }}">
                             {{ $category->name }}
                         </option>
-                    @endforeach
-                </select>
+                        @endforeach
+                    </select>
+                    <div class="underline"></div>
+                </div>
 
-                <label for="name" class="mt-3">Name</label>
-                <input type="text" id="name" name="name" class="form-control" value="{{ old('name') }}" required>
+                {{-- Subcategory Name --}}
+                <div class="input-container mb-3 mt-3" style="width: 30%;">
+                    <input type="text" id="name" name="name" required style="width: 100%;">
+                    <label for="name" class="label">Subcategory Name</label>
+                    <div class="underline"></div>
+                </div>
 
-                <label for="hidden" class="mt-3">Hidden</label>
-                <select id="hidden" name="hidden" class="form-control" required>
-                    <option value="0" {{ old('hidden') == 0 ? 'selected' : '' }}>No</option>
-                    <option value="1" {{ old('hidden') == 1 ? 'selected' : '' }}>Yes</option>
-                </select>
+                {{-- Visible Toggle Switch --}}
+                <div class="checkbox-wrapper-8 mb-5">
+                    <label for="visible" class="visible-label">Visible</label>
+                    <input type="checkbox" id="visible" name="hidden" class="tgl" value="0" {{ old('hidden') == '0' ? 'checked' : '' }}>
+                    <label for="visible" class="tgl-btn" data-tg-on="Yes" data-tg-off="No"></label>
+                </div>
 
-                <label for="image" class="mt-3">Upload Image</label>
-                <input type="file" id="image" name="image" class="form-control" accept="image/*">
-            </div>
-            <button type="submit" class="btn btn-success">Add Subcategory</button>
-        </form>
+                {{-- Submit & Cancel --}}
+                <div class="d-flex justify-content-end">
+                    <a href="{{ route('subcategories.index') }}" class="btn bubbles bubbles-grey me-2">
+                        <span class="text">Cancel</span>
+                    </a>
+                    <button type="submit" class="btn bubbles">
+                        <span class="text">Create</span>
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
+</div>
+
+@push('styles')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@endpush
+
+@push('scripts')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#categories_id').select2({
+            placeholder: 'Select a category',
+            allowClear: true,
+            width: '100%'
+        });
+    });
+</script>
+@endpush
+@include('cms.partials.select2-style')
 @endsection

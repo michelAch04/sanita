@@ -52,7 +52,7 @@ class CustomerController extends Controller
                 'first_name' => 'required|string|max:255',
                 'last_name' => 'required|string|max:255',
                 'dob' => 'required|date',
-                'gender' => 'required|string|max:10',
+                'gender' => 'required|in:male,female',
                 'password' => 'required|string|min:8',
                 'mobile' => 'required|string|max:15',
                 'email' => 'required|email|unique:customers,email',
@@ -62,7 +62,7 @@ class CustomerController extends Controller
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
                 'dob' => $request->dob,
-                'gender' => $request->gender,
+                'gender' => $request->gender === 'male' ? 'male' : 'female', // <- adjusted line
                 'password' => bcrypt($request->password),
                 'mobile' => $request->mobile,
                 'email' => $request->email,

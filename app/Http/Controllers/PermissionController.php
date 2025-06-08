@@ -23,7 +23,7 @@ class PermissionController extends Controller
             });
         }
 
-        $users = $query->get();
+        $users = $query->where('cancelled', 0)->get();
 
         if ($request->ajax()) {
             return view('cms.permission.index', compact('users'))->renderSections()['permissions_list'];

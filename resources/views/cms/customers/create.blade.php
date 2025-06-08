@@ -3,52 +3,91 @@
 @section('title', 'Add Customer')
 
 @section('content')
-    <div class="container mt-5">
-        <h2>Add Customer</h2>
-
-        @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-
-        <form action="{{ route('customers.store') }}" method="POST">
-            @csrf
-            <div class="form-group mb-3">
-                <label for="first_name">First Name</label>
-                <input type="text" id="first_name" name="first_name" class="form-control" value="{{ old('first_name') }}" required>
-
-                <label for="last_name" class="mt-3">Last Name</label>
-                <input type="text" id="last_name" name="last_name" class="form-control" value="{{ old('last_name') }}" required>
-
-                <label for="dob" class="mt-3">Date of Birth</label>
-                <input type="date" id="dob" name="dob" class="form-control" value="{{ old('dob') }}">
-
-                <label for="gender" class="mt-3">Gender</label>
-                <select id="gender" name="gender" class="form-control">
-                    <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Male</option>
-                    <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Female</option>
-                    <option value="other" {{ old('gender') == 'other' ? 'selected' : '' }}>Other</option>
-                </select>
-
-                <label for="mobile" class="mt-3">Mobile</label>
-                <input type="text" id="mobile" name="mobile" class="form-control" value="{{ old('mobile') }}">
-
-                <label for="email" class="mt-3">Email</label>
-                <input type="email" id="email" name="email" class="form-control" value="{{ old('email') }}" required>
-
-                <label for="password" class="mt-3">Password</label>
-                <input type="password" id="password" name="password" class="form-control" required>
-            </div>
-            <button type="submit" class="btn btn-success">Add Customer</button>
-        </form>
+<div class="container mt-3">
+    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+        <h2 class="mb-3">Create Customer</h2>
     </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <form action="{{ route('customers.store') }}" method="POST">
+                @csrf
+
+                {{-- First Name --}}
+                <div class="input-container mb-5 mt-3">
+                    <input type="text" name="first_name" placeholder="" required>
+                    <label class="label">First Name</label>
+                    <div class="underline"></div>
+                </div>
+
+                {{-- Last Name --}}
+                <div class="input-container mb-5">
+                    <input type="text" name="last_name" placeholder="" required>
+                    <label class="label">Last Name</label>
+                    <div class="underline"></div>
+                </div>
+
+                {{-- Date of Birth --}}
+                <div class="input-container mb-4">
+                    <input type="date" name="dob" placeholder="">
+                    <label class="label">Date of Birth</label>
+                    <div class="underline"></div>
+                </div>
+
+                {{-- Gender Toggle --}}
+                <div class="checkbox-wrapper-8 mb-5">
+                    <label for="gender" class="visible-label">Gender</label>
+                    <input type="hidden" name="gender" value="female"> {{-- default value --}}
+                    <input type="checkbox" id="gender" name="gender" class="tgl" value="male">
+                    <label for="gender" class="tgl-btn" data-tg-on="Male" data-tg-off="Female"></label>
+                </div>
+
+                {{-- Mobile --}}
+                <div class="input-container mb-5">
+                    <input type="text" name="mobile" placeholder="">
+                    <label class="label">Mobile</label>
+                    <div class="underline"></div>
+                </div>
+
+                {{-- Email --}}
+                <div class="input-container mb-5">
+                    <input type="email" name="email" placeholder="" required>
+                    <label class="label">Email</label>
+                    <div class="underline"></div>
+                </div>
+
+                {{-- Password --}}
+                <div class="input-container mb-3">
+                    <input type="text" name="password" placeholder="" required>
+                    <label class="label">Password</label>
+                    <div class="underline"></div>
+                </div>
+
+                {{-- Submit & Cancel --}}
+                <div class="d-flex justify-content-end">
+                    <a href="{{ route('customers.index') }}" class="btn bubbles bubbles-grey me-2">
+                        <span class="text">Cancel</span>
+                    </a>
+                    <button type="submit" class="btn bubbles">
+                        <span class="text">Create</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .checkbox-wrapper-8 .tgl+.tgl-btn {
+        background: rgb(232, 123, 190) !important;
+    }
+
+    .checkbox-wrapper-8 .tgl:checked+.tgl-btn {
+        background: rgb(125, 128, 221) !important;
+    }
+
+    .checkbox-wrapper-8 .tgl+.tgl-btn {
+        width: 3.5em;
+    }
+</style>
 @endsection

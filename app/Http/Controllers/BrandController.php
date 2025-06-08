@@ -20,7 +20,7 @@ class BrandController extends Controller
                 });
             }
 
-            $brands = $query->get();
+            $brands = $query->where('cancelled', 0)->get();
 
             if ($request->ajax()) {
                 return view('cms.brands.index', compact('brands'))->renderSections()['brands_list'];
@@ -42,27 +42,29 @@ class BrandController extends Controller
         // Validate the request
         $request->validate([
             'name' => 'required|string|max:255|unique:brands,name',
-            'hidden' => 'required|boolean',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif',
         ]);
 
         try {
+            // Determine if brand is hidden (checkbox not checked = hidden)
+            $isHidden = $request->has('visible') ? 0 : 1;
+
             // Create the brand without the image first to get the ID
             $brand = Brand::create([
                 'name' => $request->name,
-                'hidden' => $request->hidden,
-                'extension' => 'png',
+                'hidden' => $isHidden,
+                'extension' => 'png', // temporary value
                 'cancelled' => 0,
             ]);
 
             // Handle the image upload
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
-                $extension = $image->getClientOriginalExtension(); // Get the file extension
-                $imageName = $brand->id . '.' . $extension; // Rename the image to the ID of the record
-                $image->storeAs('brands', $imageName, 'public'); // Save the image in 'storage/app/public/brands'
+                $extension = $image->getClientOriginalExtension();
+                $imageName = $brand->id . '.' . $extension;
+                $image->storeAs('brands', $imageName, 'public');
 
-                // Update the brand with the image extension
+                // Update the brand with the correct extension
                 $brand->update([
                     'extension' => $extension,
                 ]);
@@ -73,6 +75,7 @@ class BrandController extends Controller
             return redirect()->route('brands.create')->with('error', 'Failed to create brand: ' . $e->getMessage());
         }
     }
+
 
     public function edit(Brand $brand)
     {

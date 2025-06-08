@@ -11,6 +11,7 @@ use App\Models\Customer;
 
 class CartController extends Controller
 {
+    // cart in sanita home
     public function index()
     {
         $cart = Cart::where('purchased', 0)
@@ -28,15 +29,6 @@ class CartController extends Controller
         }
 
         return view('sanita.cart.index', compact('cart'));
-    }
-
-    public function cmsindex()
-    {
-        $carts = Cart::where('cancelled', 0)
-            ->with('customer')
-            ->with('cartDetails')
-            ->get();
-        return view('cms.cart.index', compact('carts'));
     }
 
     public function store(Request $request)
@@ -98,5 +90,29 @@ class CartController extends Controller
         }
 
         return redirect()->route('cart.index')->with('success', 'Product removed from cart.');
+    }
+
+    // cart in cms
+    public function cmsindex(Request $request)
+    {
+        $query = $request->input('query');
+
+        $carts = Cart::where('cancelled', 0)
+            ->when($query, function ($q) use ($query) {
+                $q->where('id', $query) // Match cart ID exactly
+                    ->orWhere('promocode', 'like', "{$query}%") // Search promo code
+                    ->orWhereHas('customer', function ($q2) use ($query) {
+                        $q2->where('first_name', 'like', "{$query}%")
+                            ->orWhere('last_name', 'like', "{$query}%")
+                            ->orWhere('id', $query);
+                    });
+            })
+            ->with(['customer', 'cartDetails'])
+            ->get();
+
+        if ($request->ajax()) {
+            return view('cms.cart.index', compact('carts'))->renderSections()['carts_list'];
+        }
+        return view('cms.cart.index', compact('carts'));
     }
 }

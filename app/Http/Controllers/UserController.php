@@ -22,7 +22,7 @@ class UserController extends Controller
                 });
             }
 
-            $users = $query->get();
+            $users = $query->where('cancelled', 0)->get();
 
             if ($request->ajax()) {
                 return view('cms.users.index', compact('users'))->renderSections()['users_list'];

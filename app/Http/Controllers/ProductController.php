@@ -24,7 +24,7 @@ class ProductController extends Controller
                 });
             }
 
-            $products = $query->get();
+            $products = $query->where('cancelled', 0)->get();
 
             if ($request->ajax()) {
                 return view('cms.products.index', compact('products'))->renderSections()['products_list'];
@@ -49,10 +49,9 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         try {
-            // Validate the incoming request data
             $request->validate([
                 'name' => 'required|string|max:255',
-                'sku' => 'required|string|max:255|unique:products,sku', // Ensure SKU is unique
+                'sku' => 'required|string|max:255|unique:products,sku',
                 'description' => 'nullable|string',
                 'small_description' => 'nullable|string|max:255',
                 'unit_price' => 'required|numeric|min:0',
@@ -60,12 +59,13 @@ class ProductController extends Controller
                 'threshold' => 'required|integer|min:0',
                 'tax' => 'required|integer|min:0',
                 'available_quantity' => 'required|integer|min:0',
-                'hidden' => 'required|boolean',
-                'automatic_hide' => 'required|boolean',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Image validation
+                'subcategories_id' => 'required|exists:subcategories,id',
+                'brands_id' => 'required|exists:brands,id',
+                'hidden' => 'boolean',
+                'automatic_hide' => 'boolean',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
-            // Create the product with the validated data
             $product = Product::create([
                 'name' => $request->name,
                 'sku' => $request->sku,
@@ -76,28 +76,24 @@ class ProductController extends Controller
                 'threshold' => $request->threshold,
                 'tax' => $request->tax,
                 'available_quantity' => $request->available_quantity,
-                'hidden' => $request->hidden,
-                'automatic_hide' => $request->automatic_hide,
-                'cancelled' => 0, // Default to not cancelled
-                'extension' => null, // Initialize extension to null
-                'subcategory_id' => null,
-                'brand_id' => null,
+                'subcategories_id' => $request->subcategories_id,
+                'brands_id' => $request->brands_id,
+                'hidden' => $request->has('hidden') ? 1 : 0,
+                'automatic_hide' => $request->has('automatic_hide') ? 1 : 0,
+                'cancelled' => 0,
+                'extension' => null,
             ]);
 
-            // If an image is uploaded, handle it
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $extension = $image->getClientOriginalExtension();
                 $imageName = $product->id . '.' . $extension;
                 $image->storeAs('products', $imageName, 'public');
-                // Update the product record with the image extension
                 $product->update(['extension' => $extension]);
             }
 
-            // Return success response
             return redirect()->route('products.index')->with('success', 'Product created successfully.');
         } catch (\Exception $e) {
-            // Handle exceptions and return an error message
             return redirect()->route('products.create')->with('error', 'Failed to create product: ' . $e->getMessage());
         }
     }

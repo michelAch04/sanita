@@ -22,7 +22,7 @@ class SubcategoryController extends Controller
                 });
             }
 
-            $subcategories = $query->get();
+            $subcategories = $query->where('cancelled', 0)->get();
 
             if ($request->ajax()) {
                 return view('cms.subcategories.index', compact('subcategories'))->renderSections()['subcategories_list'];
@@ -44,19 +44,33 @@ class SubcategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'category_id' => 'required|exists:categories,id',
+            'categories_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255',
-            'hidden' => 'required|boolean',
+            // hidden is handled manually (not required in validation)
         ]);
 
-        $subcategory = Subcategory::create($request->only(['category_id', 'name', 'hidden']));
+        // Determine hidden value (if checkbox checked, hidden = 0; else hidden = 1)
+        $hidden = $request->has('hidden') ? 0 : 1;
 
+        // Create the subcategory
+        $subcategory = Subcategory::create([
+            'categories_id' => $request->categories_id,
+            'name' => $request->name,
+            'hidden' => $hidden,
+        ]);
+
+        // Handle image upload if exists
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $extension = $image->getClientOriginalExtension();
             $imageName = $subcategory->id . '.' . $extension;
+
             $image->storeAs('subcategories', $imageName, 'public');
-            $subcategory->update(['image' => $imageName, 'extension' => $extension]);
+
+            $subcategory->update([
+                'image' => $imageName,
+                'extension' => $extension,
+            ]);
         }
 
         return redirect()->route('subcategories.index')->with('success', 'Subcategory created successfully.');

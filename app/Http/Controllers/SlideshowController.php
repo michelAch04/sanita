@@ -47,12 +47,15 @@ class SlideshowController extends Controller
      */
     public function store(Request $request)
     {
-        // Validate the request data
+        // Ensure 'hidden' is either '0' or '1'
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'hidden' => 'required|boolean',
+            'hidden' => 'nullable|in:0,1',
         ]);
+
+        // If not provided, fallback to hidden = 1 (not visible)
+        $hidden = $request->input('hidden', 1);
 
         // Extract the file extension
         $extension = $request->image->extension();
@@ -61,16 +64,14 @@ class SlideshowController extends Controller
         $slideshow = Slideshow::create([
             'name' => $validatedData['name'],
             'extension' => $extension,
-            'hidden' => $validatedData['hidden'],
+            'hidden' => $hidden,
             'cancelled' => 0,
         ]);
 
         // Save the image with the slideshow ID as the file name
         $imageName = $slideshow->id . '.' . $slideshow->extension;
-        // dd($imageName);
         $request->image->move(public_path('storage/slideshow'), $imageName);
 
-        // Redirect to the index page with a success message
         return redirect()->route('slideshow.index')->with('success', 'Slide added successfully.');
     }
 

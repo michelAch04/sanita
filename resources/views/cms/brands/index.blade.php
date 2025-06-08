@@ -26,7 +26,7 @@ $canDelete = $permissions && $permissions->delete;
     <div class="card-header text-dark d-flex justify-content-between align-items-center m-2 mb-3">
         <h2 class="mb-0">Brands</h2>
         @if($canAdd)
-        <a href="{{ route('brands.create') }}" class="btn bubbles fw-medium"><span class="text">+ Add Brand</span></a>
+        <a href="{{ route('brands.create') }}" class="btn bubbles fw-medium"><span class="text">+ Create Brand</span></a>
         @endif
     </div>
 

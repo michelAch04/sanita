@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Customer;
+use App\Models\Cart;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -24,10 +25,9 @@ class OrderController extends Controller
                                 ->orWhereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ["{$search}%"]);
                         });
                 });
-
             }
 
-            $orders = $query->get();
+            $orders = $query->where('cancelled', 0)->get();
 
             if ($request->ajax()) {
                 return view('cms.orders.index', compact('orders'))->renderSections()['orders_list'];
@@ -43,7 +43,8 @@ class OrderController extends Controller
     {
         try {
             $customers = Customer::where('cancelled', 0)->get();
-            return view('cms.orders.create', compact('customers'));
+            $carts = Cart::all(); // ← add this line to fetch all carts
+            return view('cms.orders.create', compact('customers', 'carts'));
         } catch (\Exception $e) {
             return redirect()->route('orders.index')->with('error', 'Failed to fetch customers: ' . $e->getMessage());
         }
@@ -53,12 +54,13 @@ class OrderController extends Controller
     {
         try {
             $request->validate([
-                'customer_id' => 'required|exists:customers,id',
+                'customers_id' => 'required|exists:customers,id',
+                'carts_id' => 'required|exists:carts,id',        // <-- add cart validation
                 'status' => 'required|string|max:255',
-                'total_price' => 'required|numeric|min:0',
+                'total_amount' => 'required|numeric|min:0',
             ]);
 
-            Order::create($request->only(['customer_id', 'status', 'total_price']));
+            Order::create($request->only(['customers_id', 'carts_id', 'status', 'total_amount'])); // <-- add carts_id here
 
             return redirect()->route('orders.index')->with('success', 'Order created successfully.');
         } catch (\Exception $e) {
@@ -95,9 +97,10 @@ class OrderController extends Controller
             $request->validate([
                 'customers_id' => 'required|exists:customers,id',
                 'total_amount' => 'required|numeric|min:0',
+                'status' => 'required',
             ]);
 
-            $order->update($request->only(['customers_id', 'total_amount']));
+            $order->update($request->only(['customers_id', 'total_amount', 'status']));
 
             return redirect()->route('orders.index')->with('success', 'Order updated successfully.');
         } catch (\Exception $e) {

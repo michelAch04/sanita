@@ -21,7 +21,7 @@ class CategoryController extends Controller
                 });
             }
 
-            $categories = $query->get();
+            $categories = $query->where('cancelled', 0)->get();
 
             if ($request->ajax()) {
                 return view('cms.categories.index', compact('categories'))->renderSections()['categories_list'];
@@ -42,25 +42,32 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         try {
+            // Checkbox value: visible = 1 (checked), not present if unchecked
+            // So we invert it to store 'hidden' in DB
+            $hidden = $request->has('visible') ? 0 : 1;
+
             $validate = $request->validate([
                 'name' => 'required|string|max:255',
-                'hidden' => 'required|boolean',
-                'image' => 'nullable|mimes:jpg,jpeg,png,gif,svg|max:2048' // Only allow safe image types
+                'image' => 'nullable|mimes:jpg,jpeg,png,gif,svg|max:2048',
             ]);
 
-            $extension = $request->image->extension();
+            $extension = null;
 
             $category = Category::create([
                 'name' => $validate['name'],
-                'extension' => $extension,
-                'hidden' => $validate['hidden'],
+                'extension' => null, // Temporary; will be updated if image is uploaded
+                'hidden' => $hidden,
                 'cancelled' => 0,
             ]);
 
-            // Save the image with the slideshow ID as the file name
-            $imageName = $category->id . '.' . $category->extension;
-            // dd($imageName);
-            $request->image->move(public_path('storage/categories'), $imageName);
+            if ($request->hasFile('image')) {
+                $extension = $request->file('image')->extension();
+                $imageName = $category->id . '.' . $extension;
+                $request->file('image')->move(public_path('storage/categories'), $imageName);
+
+                // Update category with extension
+                $category->update(['extension' => $extension]);
+            }
 
             return redirect()->route('categories.index')->with('success', 'Category created successfully.');
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -71,7 +78,6 @@ class CategoryController extends Controller
             return redirect()->route('categories.create')->with('error', 'Failed to create category: ' . $e->getMessage());
         }
     }
-
 
     public function edit(Category $category)
     {

@@ -3,68 +3,52 @@
 @section('title', 'Create User')
 
 @section('content')
-<div class="container mt-5">
+<div class="container mt-3">
+
+    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+        <h2 class="mb-3">Create User</h2>
+    </div>
+
     <div class="card shadow-sm border-0">
-        <div class="card-header bg-light">
-            <h4 class="mb-0">Create User</h4>
-        </div>
-
         <div class="card-body">
-            <!-- Success Message -->
-            @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            @endif
-
-            @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            @endif
-
-            <!-- Validation Errors -->
-            @if ($errors->any())
-            <div class="alert alert-danger alert-dismissible fade show">
-                <ul class="mb-0">
-                    @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-                <button type="button" class="close" data-dismiss="alert">
-                    <span>&times;</span>
-                </button>
-            </div>
-            @endif
-
             <form action="{{ route('users.store') }}" method="POST">
                 @csrf
 
-                <div class="form-group mb-4">
-                    <label for="name" class="fw-medium">Name</label>
-                    <input type="text" id="name" name="name" class="form-control border-0 rounded-pill shadow-soft mt-2" value="{{ old('name') }}" required>
+                {{-- Name --}}
+                <div class="input-container mb-5 mt-3">
+                    <input type="text" id="name" name="name" value="{{ old('name') }}" required placeholder="">
+                    <label for="name" class="label">Name</label>
+                    <div class="underline"></div>
                 </div>
 
-                <div class="form-group mb-4">
-                    <label for="email" class="fw-medium">Email</label>
-                    <input type="email" id="email" name="email" class="form-control border-0 rounded-pill shadow-soft mt-2" value="{{ old('email') }}" required>
+                {{-- Email --}}
+                <div class="input-container mb-5">
+                    <input type="email" id="email" name="email" value="{{ old('email') }}" required placeholder="">
+                    <label for="email" class="label">Email</label>
+                    <div class="underline"></div>
                 </div>
 
-                <div class="form-group mb-4">
-                    <label for="password" class="fw-medium">Password</label>
-                    <input type="password" id="password" name="password" class="form-control border-0 rounded-pill shadow-soft mt-2" required>
+                {{-- Password --}}
+                <div class="input-container mb-5">
+                    <input type="text" id="password" name="password" required placeholder="">
+                    <label for="password" class="label">Password</label>
+                    <div class="underline"></div>
                 </div>
 
-                <div class="form-group mb-4">
-                    <label for="password_confirmation" class="fw-medium">Confirm Password</label>
-                    <input type="password" id="password_confirmation" name="password_confirmation" class="form-control border-0 rounded-pill shadow-soft mt-2" required>
+                {{-- Confirm Password --}}
+                <div class="input-container mb-3">
+                    <input type="text" id="password_confirmation" name="password_confirmation" required placeholder="">
+                    <label for="password_confirmation" class="label">Confirm Password</label>
+                    <div class="underline"></div>
                 </div>
 
                 <div class="d-flex justify-content-end">
-                    <a href="{{ route('users.index') }}" class="btn btn-secondary me-2">Cancel</a>
-                    <button type="submit" class="btn btn-teal">Add</button>
+                    <a href="{{ route('users.index') }}" class="btn bubbles bubbles-grey me-2">
+                        <span class="text">Cancel</span>
+                    </a>
+                    <button type="submit" class="btn bubbles">
+                        <span class="text">Create</span>
+                    </button>
                 </div>
             </form>
         </div>

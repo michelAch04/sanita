@@ -3,33 +3,53 @@
 @section('title', 'Create Brand')
 
 @section('content')
-<div class="container mt-5">
-    <h2>Create Brand</h2>
+<div class="container mt-3">
 
-    @if (session('success'))
-    <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
+    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+        <h2 class="mb-3">Create Brand</h2>
+    </div>
 
-    @if (session('error'))
-    <div class="alert alert-danger">{{ session('error') }}</div>
-    @endif
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <form action="{{ route('brands.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
 
-    <form action="{{ route('brands.store') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        <div class="form-group mb-3">
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" class="form-control" required>
+                {{-- Brand Name --}}
+                <div class="input-container mb-5 mt-3">
+                    <input type="text" id="name" name="name" value="{{ old('name') }}" required placeholder="">
+                    <label for="name" class="label">Brand Name</label>
+                    <div class="underline"></div>
+                </div>
 
-            <label for="hidden" class="mt-3">Hidden</label>
-            <select id="hidden" name="hidden" class="form-control" required>
-                <option value="0">No</option>
-                <option value="1">Yes</option>
-            </select>
+                {{-- Visible --}}
+                <div class="checkbox-wrapper-8 mb-5">
+                    <label for="visible" class="visible-label">Visible</label>
+                    <input type="checkbox" id="visible" name="visible" class="tgl" value="1" checked>
+                    <label for="visible" class="tgl-btn" data-tg-on="Yes" data-tg-off="No"></label>
+                </div>
 
-            <label for="image" class="mt-3">Upload Image</label>
-            <input type="file" id="image" name="image" class="form-control" accept="image/*" required>
+                {{-- Upload Image --}}
+                <div class="d-flex align-items-start gap-4 mb-4 flex-wrap upload-container">
+                    <!-- Custom Upload Button -->
+                    <div>
+                        <label for="image" id="imageLabel" class="btn underline-btn">Upload Image</label>
+                        <input type="file" id="image" name="image" accept="image/*" hidden required>
+                    </div>
+
+                    <!-- Image Preview -->
+                    <div id="previewContainer" style="display: none;">
+                        <img id="imagePreview" src="#" alt="Selected Image" class="img-thumbnail" style="max-width: 150px;">
+                        <div id="fileName" class="text-muted mt-2 small text-center text-decoration-underline mb-1"></div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <a href="{{ route('brands.index') }}" class="btn bubbles bubbles-grey me-2">
+                        <span class="text">Cancel</span></a>
+                    <button type="submit" class="btn bubbles"><span class="text">Create</span></button>
+                </div>
+            </form>
         </div>
-        <button type="submit" class="btn btn-success">Create</button>
-    </form>
+    </div>
 </div>
 @endsection

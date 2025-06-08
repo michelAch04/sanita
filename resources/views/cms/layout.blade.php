@@ -11,11 +11,15 @@
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Summernote CSS (Bootstrap 5 compatible version) -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet">
 
 
 
     <link href="{{ asset('css/ui-tools.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/view-styles.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/select2-style.css') }}" rel="stylesheet" />
+
 
     @stack('styles') <!-- For page-specific CSS -->
 </head>
@@ -61,9 +65,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
 
 
-    @stack('scripts') <!-- For page-specific JS -->
     @include('components.toast')
     @include('components.modal')
+
+    @stack('scripts') <!-- For page-specific JS -->
 
     <script src="{{ asset('js/modals.js') }}"></script>
     <script src="{{ asset('js/ajax-live-search.js') }}"></script>
@@ -72,6 +77,11 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Select2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <!-- Summernote JS -->
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
+
+    @stack('after-scripts')
+
 
 
 </body>

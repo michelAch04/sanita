@@ -27,7 +27,7 @@ $canDelete = $permissions && $permissions->delete;
         <h2 class="mb-0">Subcategories</h2>
         @if($canAdd)
         <a href="{{ route('subcategories.create') }}" class="btn bubbles fw-medium">
-            <span class="text">+ Add Subcategory</span></a>
+            <span class="text">+ Create Subcategory</span></a>
         @endif
     </div>
 
