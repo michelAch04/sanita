@@ -17,7 +17,7 @@
 
                 {{-- Category Select --}}
                 <div class="input-container mb-5 mt-3" style="width: 30%; position: relative; padding-top: 5px;">
-                    <label for="categories_id" class="label">Category</label>
+                    <label for="categories_id" class="label select2-label">Category</label>
                     <select id="categories_id" name="categories_id" class="styled-select" required>
                         @foreach ($categories as $category)
                         <option value="{{ $category->id }}" {{ old('categories_id', $subcategory->categories_id) == $category->id ? 'selected' : '' }}>
@@ -100,5 +100,5 @@
     });
 </script>
 @endpush
-
+@include('cms.partials.select2-style')
 @endsection

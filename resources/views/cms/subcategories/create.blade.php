@@ -16,7 +16,7 @@
 
                 {{-- Category Select --}}
                 <div class="input-container mb-5 mt-3" style="width: 30%; position: relative; padding-top: 5px;">
-                    <label for="categories_id" class="label">Category</label>
+                    <label for="categories_id" class="label select2-label">Category</label>
                     <select id="categories_id" name="categories_id" class="styled-select" required>
                         <option value="">Select a category</option>
                         @foreach ($categories as $category)
@@ -30,7 +30,7 @@
 
                 {{-- Subcategory Name --}}
                 <div class="input-container mb-3 mt-3" style="width: 30%;">
-                    <input type="text" id="name" name="name" required style="width: 100%;">
+                    <input type="text" id="name" name="name" required style="width: 100%;" placeholder="">
                     <label for="name" class="label">Subcategory Name</label>
                     <div class="underline"></div>
                 </div>
@@ -90,5 +90,5 @@
     });
 </script>
 @endpush
-
+@include('cms.partials.select2-style')
 @endsection
