@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="google" content="notranslate">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sanita</title>
 
@@ -34,7 +35,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="{{ route('sanita.index') }}">
+            <a class="navbar-brand d-flex align-items-center" href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}">
                 <span>Sanita</span>
             </a>
 
@@ -45,13 +46,29 @@
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link active" href="{{ route('sanita.index') }}#categories">Categories</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="{{ route('sanita.index') }}#products">Products</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="{{ route('about') }}">About Us</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="{{ route('contact') }}">Contact Us</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}#categories">
+                            {{ __('nav.categories') }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}#products">
+                            {{ __('nav.products') }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ route('about', ['locale' => app()->getLocale()]) }}">
+                            {{ __('nav.about') }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ route('contact', ['locale' => app()->getLocale()]) }}">
+                            {{ __('nav.contact') }}
+                        </a>
+                    </li>
                     @auth('customer')
                     <li class="nav-item">
-                        <a href="{{ route('cart.index') }}" class="nav-link">
+                        <a href="{{ route('cart.index', ['locale' => app()->getLocale()]) }}" class="nav-link">
                             <i class="fas fa-shopping-cart cart-icon"></i>
                         </a>
                     </li>
@@ -60,7 +77,9 @@
 
                 <div class="d-flex ms-3">
                     @guest('customer')
-                    <a href="{{ route('customer.signin') }}" class="btn btn-outline-light me-2">Sign In</a>
+                    <a href="{{ route('customer.signin', ['locale' => app()->getLocale()]) }}" class="btn btn-outline-light me-2">
+                        {{ __('nav.sign_in') }}
+                    </a>
                     @else
                     <div class="dropdown">
                         <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown"
@@ -70,14 +89,22 @@
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="userDropdown">
                             <li>
-                                <form action="{{ route('customer.signout') }}" method="POST">
+                                <form action="{{ route('customer.signout', ['locale' => app()->getLocale()]) }}" method="POST">
                                     @csrf
-                                    <button type="submit" class="dropdown-item">Sign Out</button>
+                                    <button type="submit" class="dropdown-item">{{__('nav.sign_out')}}</button>
                                 </form>
                             </li>
                         </ul>
                     </div>
                     @endguest
+
+                    <form method="GET" action="" class="me-3">
+                        <select class="form-select" style="width:auto;display:inline;" onchange="window.location.href=this.value;">
+                            <option value="{{ route(\Illuminate\Support\Facades\Route::currentRouteName(), array_merge(request()->route()->parameters(), ['locale' => 'en'])) }}" {{ app()->getLocale() == 'en' ? 'selected' : '' }}>English</option>
+                            <option value="{{ route(\Illuminate\Support\Facades\Route::currentRouteName(), array_merge(request()->route()->parameters(), ['locale' => 'ar'])) }}" {{ app()->getLocale() == 'ar' ? 'selected' : '' }}>العربية</option>
+                            <option value="{{ route(\Illuminate\Support\Facades\Route::currentRouteName(), array_merge(request()->route()->parameters(), ['locale' => 'ku'])) }}" {{ app()->getLocale() == 'ku' ? 'selected' : '' }}>کوردی</option>
+                        </select>
+                    </form>
                 </div>
             </div>
         </div>
@@ -89,12 +116,20 @@
     <!-- Footer -->
     <footer class="footer text-center bg-dark text-white mt-auto py-4">
         <div class="container">
-            <p class="mb-1">&copy; 2025 Sanita. All rights reserved.</p>
+            <p class="mb-1">{{ __('nav.copyright') }}</p>
             <p>
-                <a href="#categories" class="text-white text-decoration-none">Categories</a> |
-                <a href="#products" class="text-white text-decoration-none">Products</a> |
-                <a href="#about-us" class="text-white text-decoration-none">About Us</a> |
-                <a href="#contact-us" class="text-white text-decoration-none">Contact Us</a>
+                <a href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}#categories" class="text-white text-decoration-none">
+                    {{ __('nav.categories') }}
+                </a> |
+                <a href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}#products" class="text-white text-decoration-none">
+                    {{ __('nav.products') }}
+                </a> |
+                <a href="{{ route('about', ['locale' => app()->getLocale()]) }}" class="text-white text-decoration-none">
+                    {{ __('nav.about') }}
+                </a> |
+                <a href="{{ route('contact', ['locale' => app()->getLocale()]) }}" class="text-white text-decoration-none">
+                    {{ __('nav.contact') }}
+                </a>
             </p>
         </div>
     </footer>

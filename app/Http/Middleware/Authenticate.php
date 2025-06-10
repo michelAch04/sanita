@@ -19,7 +19,7 @@ class Authenticate extends Middleware
             }
 
             // Redirect website users (e.g., cart, etc.) to customer login
-            return route('customer.signin'); // Customer login for website
+            return route('customer.signin', ['locale' => app()->getLocale()]); // Customer login for website
         }
 
         return null;

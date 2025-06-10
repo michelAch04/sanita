@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Translatable\HasTranslations;
 
 class Product extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'id',
         'name',
@@ -26,4 +28,13 @@ class Product extends Model
         'cancelled',
         'hidden',
     ];
+
+    public function subcategories()
+    {
+        return $this->belongsTo(Subcategory::class, 'subcategories_id');
+    }
+    public function brands()
+    {
+        return $this->belongsTo(Brand::class, 'brands_id');
+    }
 }

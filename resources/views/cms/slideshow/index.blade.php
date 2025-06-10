@@ -42,7 +42,7 @@ $canDelete = $permissions && $permissions->delete;
                             <th>ID</th>
                             <th>Image</th>
                             <th>Name</th>
-                            <th>Hidden</th>
+                            <th>Visible</th>
                             <th>Created At</th>
                             <th>Updated At</th>
                             <th class="text-end">Options</th>
@@ -60,7 +60,7 @@ $canDelete = $permissions && $permissions->delete;
                                     style="width: 80px; height: auto;">
                             </td>
                             <td>{{ $slide->name }}</td>
-                            <td>{{ $slide->hidden ? 'Yes' : 'No' }}</td>
+                            <td>{{ $slide->hidden ? 'No' : 'Yes' }}</td>
                             <td>{{ $slide->created_at->format('Y-m-d H:i') }}</td>
                             <td>{{ $slide->updated_at->format('Y-m-d H:i') }}</td>
                             <td class="text-end">

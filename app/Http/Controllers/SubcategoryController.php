@@ -94,6 +94,20 @@ class SubcategoryController extends Controller
             'categories_id' => $request->categories_id,
         ]);
 
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $extension = $image->getClientOriginalExtension();
+            $imageName = $subcategory->id . '.' . $extension;
+
+            $image->storeAs('subcategories', $imageName, 'public');
+
+            $subcategory->update([
+                'image' => $imageName,
+                'extension' => $extension,
+            ]);
+        }
+
+
         return redirect()->route('subcategories.index')->with('success', 'Subcategory updated successfully.');
     }
 

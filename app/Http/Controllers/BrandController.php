@@ -84,11 +84,14 @@ class BrandController extends Controller
 
     public function update(Request $request, $id)
     {
+
         $request->validate([
             'name' => 'required|string|max:255',
             'visible' => 'nullable|boolean', // visible is the checkbox name in the form
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+
 
         try {
             $brand = Brand::findOrFail($id);
@@ -107,7 +110,7 @@ class BrandController extends Controller
                 $image = $request->file('image');
                 $extension = $image->getClientOriginalExtension();
                 $imageName = $brand->id . '.' . $extension;
-                $image->storeAs('brands', $imageName, 'public');
+                $request->image->move(public_path('storage/brands'), $imageName);
 
                 $brand->update([
                     'extension' => $extension,
@@ -124,6 +127,11 @@ class BrandController extends Controller
     public function destroy(Brand $brand)
     {
         try {
+            $oldPath = public_path('storage/brands/' . $brand->id . '.' . $brand->extension);
+            if (file_exists($oldPath)) {
+                unlink($oldPath);
+            }
+
             $brand->update(['cancelled' => 1]);
 
             return redirect()->route('brands.index')->with('success', 'brand deleted successfully.');

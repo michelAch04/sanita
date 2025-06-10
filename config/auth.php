@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Authentication Defaults
@@ -105,6 +104,12 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
+        'customers' => [
+            'provider' => 'customers',
+            'table' => 'password_reset_tokens',
+            'expire' => 60,
+            'throttle' => 10,
+        ],
     ],
 
     /*
@@ -119,5 +124,4 @@ return [
     */
 
     'password_timeout' => 10800,
-
 ];

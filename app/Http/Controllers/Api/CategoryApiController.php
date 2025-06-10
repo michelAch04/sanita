@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Category;
 
 class CategoryApiController extends Controller
 {
@@ -23,7 +24,26 @@ class CategoryApiController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $categoriesData = $request->input('message');
+        $createdCategories = [];
+
+        foreach ($categoriesData as $data) {
+            $validated = validator($data, [
+                'name' => 'required|string|max:255|unique:categories,name',
+                'extension' => 'nullable|string|max:10',
+            ])->validate();
+
+            $category = Category::create([
+                'name' => $validated['name'],
+                'hidden' => $data['hidden'] ?? 0,
+                'extension' => $validated['extension'] ?? 'png',
+                'cancelled' => 0,
+            ]);
+
+            $createdCategories[] = $category;
+        }
+
+        return response()->json($createdCategories, 201);
     }
 
     /**

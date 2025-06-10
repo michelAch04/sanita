@@ -42,8 +42,14 @@ $canDelete = $permissions && $permissions->delete;
                             <th>Name</th>
                             <th>Small Description</th>
                             <th>Unit Price</th>
+                            <th>Shelf Price</th>
                             <th>Available Quantity</th>
-                            <th>Hidden</th>
+                            <th>Subcategory</th>
+                            <th>Brand</th>
+                            <th>Visible</th>
+                            <th>Automatic Hide</th>
+                            <th>Created At</th>
+                            <th>Updated At</th>
                             <th class="text-end">Options</th>
                         </tr>
                     </thead>
@@ -63,8 +69,14 @@ $canDelete = $permissions && $permissions->delete;
                             <td>{{ $product->name }}</td>
                             <td>{{ $product->small_description }}</td>
                             <td>${{ $product->unit_price }}</td>
+                            <td>${{ $product->shelf_price }}</td>
                             <td>{{ $product->available_quantity }}</td>
-                            <td>{{ $product->hidden ? 'Yes' : 'No' }}</td>
+                            <td>{{ $product->subcategories->name ?? 'N/A' }}</td>
+                            <td>{{ $product->brands->name ?? 'N/A' }}</td>
+                            <td>{{ $product->hidden ? 'No' : 'Yes' }}</td>
+                            <td>{{ $product->automatic_hide ? 'Yes' : 'No' }}</td>
+                            <td>{{ $product->created_at }}</td>
+                            <td>{{ $product->updated_at }}</td>
                             <td class="text-end">
                                 @if($canEdit || $canDelete)
                                 <div class="dropdown">

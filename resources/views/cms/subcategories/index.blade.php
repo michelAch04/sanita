@@ -38,8 +38,11 @@ $canDelete = $permissions && $permissions->delete;
                 <table class="table mb-0">
                     <thead class="bg-grey text-dark opacity-75">
                         <tr>
+                            <th>ID</th>
+                            <th>image</th>
                             <th>Name</th>
                             <th>Category</th>
+                            <th>Visible</th>
                             <th class="text-end">Options</th>
                         </tr>
                     </thead>
@@ -47,8 +50,19 @@ $canDelete = $permissions && $permissions->delete;
                         @section('subcategories_list')
                         @forelse ($subcategories as $subcategory)
                         <tr class="bg-hover-light-grey">
+                            <td>{{ $subcategory->id }}</td>
+                            <td>
+                                @if ($subcategory->extension)
+                                <a href="{{ asset('storage/subcategories/' . $subcategory->id . '.' . $subcategory->extension) }}" target="_blank">
+                                    <img src="{{ asset('storage/subcategories/' . $subcategory->id . '.' . $subcategory->extension) }}" alt="{{ $subcategory->name }}" width="60">
+                                </a>
+                                @else
+                                No Image
+                                @endif
+                            </td>
                             <td>{{ $subcategory->name }}</td>
                             <td>{{ $subcategory->category->name }}</td>
+                            <td>{{ $subcategory->hidden ? 'No' : 'Yes' }}</td>
                             <td class="text-end">
                                 @if($canEdit || $canDelete)
                                 <div class="dropdown">

@@ -1,0 +1,20 @@
+<?php
+return [
+    'title' => 'Your Cart',
+    'heading' => 'Your Shopping Cart',
+    'product' => 'Product',
+    'action' => 'Action',
+    'product_not_found' => 'Product not found',
+    'remove' => 'Remove',
+    'remove_confirm' => 'Remove this item?',
+    'cart_total' => 'Cart Total:',
+    'continue_shopping' => 'Continue Shopping',
+    'proceed_checkout' => 'Proceed to Checkout',
+    'empty' => 'Your cart is currently empty.',
+    'browse_products' => 'Browse Products',
+    'description' => 'Description',
+    'unit_price' => 'Unit Price',
+    'quantity' => 'Quantity',
+    'total' => 'Total',
+    'add_to_cart' => 'Add to Cart',
+];

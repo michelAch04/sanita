@@ -7,7 +7,6 @@ use App\Models\CartDetail;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Customer;
 
 class CartController extends Controller
 {
@@ -60,7 +59,7 @@ class CartController extends Controller
             ]);
         }
 
-        return redirect()->route('cart.index')->with('success', 'Product added to cart!');
+        return redirect()->route('cart.index', ['locale' => app()->getLocale()])->with('success', 'Product added to cart!');
     }
 
 
@@ -76,7 +75,7 @@ class CartController extends Controller
 
         $cartDetail->save();
 
-        return redirect()->route('cart.index')->with('success', 'Cart updated successfully!');
+        return redirect()->route('cart.index', ['locale' => app()->getLocale()])->with('success', 'Cart updated successfully!');
     }
 
     public function destroy(string $id)
@@ -89,7 +88,7 @@ class CartController extends Controller
             $cart->cartDetails()->where('id', $id)->update(['cancelled' => 1]);
         }
 
-        return redirect()->route('cart.index')->with('success', 'Product removed from cart.');
+        return redirect()->route('cart.index', ['locale' => app()->getLocale()])->with('success', 'Product removed from cart.');
     }
 
     // cart in cms

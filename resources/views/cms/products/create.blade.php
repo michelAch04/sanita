@@ -158,7 +158,7 @@
             width: '100%'
         });
     });
-        $(document).ready(function() {
+    $(document).ready(function() {
         $('#brands_id').select2({
             placeholder: 'Select a brand',
             allowClear: true,
@@ -167,5 +167,4 @@
     });
 </script>
 @endpush
-@include('cms.partials.select2-style');
 @endsection

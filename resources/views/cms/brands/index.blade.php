@@ -37,11 +37,10 @@ $canDelete = $permissions && $permissions->delete;
                 <table class="table mb-0">
                     <thead class="bg-grey text-dark opacity-75">
                         <tr>
-                            <th>Image</th>
                             <th>ID</th>
+                            <th>Image</th>
                             <th>Name</th>
-                            <th>Hidden</th>
-                            <th>Extension</th>
+                            <th>Visible</th>
                             <th>Created At</th>
                             <th>Updated At</th>
                             <th class="text-end">Options</th>
@@ -51,6 +50,7 @@ $canDelete = $permissions && $permissions->delete;
                         @section('brands_list')
                         @forelse ($brands as $brand)
                         <tr class="bg-hover-light-grey">
+                            <td>{{ $brand->id }}</td>
                             <td>
                                 @if ($brand->extension)
                                 <a href="{{ asset('storage/brands/' . $brand->id . '.' . $brand->extension) }}" target="_blank">
@@ -60,10 +60,8 @@ $canDelete = $permissions && $permissions->delete;
                                 No Image
                                 @endif
                             </td>
-                            <td>{{ $brand->id }}</td>
                             <td>{{ $brand->name }}</td>
-                            <td>{{ $brand->hidden ? 'Yes' : 'No' }}</td>
-                            <td>{{ $brand->extension }}</td>
+                            <td>{{ $brand->hidden ? 'No' : 'Yes' }}</td>
                             <td>{{ $brand->created_at }}</td>
                             <td>{{ $brand->updated_at }}</td>
                             <td class="text-end">

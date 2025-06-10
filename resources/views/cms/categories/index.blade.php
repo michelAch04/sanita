@@ -18,11 +18,11 @@ $canDelete = $permissions && $permissions->delete;
 {{-- Search --}}
 <div class="d-flex justify-content-center w-100 mb-3">
     <form class="search-form d-flex align-items-center w-50"
-          data-search-target="#category-table-body"
-          action="{{ route('categories.index') }}">
+        data-search-target="#category-table-body"
+        action="{{ route('categories.index') }}">
         <input type="text" name="query"
-               class="form-control me-2 search-input rounded-pill shadow-soft"
-               placeholder="Search..." autocomplete="off">
+            class="form-control me-2 search-input rounded-pill shadow-soft"
+            placeholder="Search..." autocomplete="off">
     </form>
 </div>
 
@@ -46,7 +46,7 @@ $canDelete = $permissions && $permissions->delete;
                             <th>ID</th>
                             <th>Image</th>
                             <th>Name</th>
-                            <th>Hidden</th>
+                            <th>Visible</th>
                             <th>Created At</th>
                             <th>Updated At</th>
                             <th class="text-end">Options</th>
@@ -68,7 +68,7 @@ $canDelete = $permissions && $permissions->delete;
                                 @endif
                             </td>
                             <td>{{ $category->name }}</td>
-                            <td>{{ $category->hidden ? 'Yes' : 'No' }}</td>
+                            <td>{{ $category->hidden ? 'No' : 'Yes' }}</td>
                             <td>{{ $category->created_at->format('Y-m-d H:i') }}</td>
                             <td>{{ $category->updated_at->format('Y-m-d H:i') }}</td>
                             <td class="text-end">

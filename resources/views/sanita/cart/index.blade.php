@@ -1,10 +1,10 @@
 @extends('sanita.layout')
 
-@section('title', 'Your Cart')
+@section('title', __('cart.title'))
 
 @section('content')
 <div class="container py-5">
-    <h1 class="mb-4 display-5 text-center">🛒 Your Shopping Cart</h1>
+    <h1 class="mb-4 display-5 text-center">🛒 {{ __('cart.heading') }}</h1>
 
     @if(session('success'))
     <div class="alert alert-success text-center">{{ session('success') }}</div>
@@ -15,12 +15,12 @@
         <table class="table table-hover align-middle mb-4">
             <thead class="table-dark">
                 <tr>
-                    <th scope="col">Product</th>
-                    <th>Description</th>
-                    <th>Unit Price</th>
-                    <th>Quantity</th>
-                    <th>Total</th>
-                    <th class="text-center">Action</th>
+                    <th scope="col">{{ __('cart.product') }}</th>
+                    <th>{{ __('cart.description') }}</th>
+                    <th>{{ __('cart.unit_price') }}</th>
+                    <th>{{ __('cart.quantity') }}</th>
+                    <th>{{ __('cart.total') }}</th>
+                    <th class="text-center">{{ __('cart.action') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -32,14 +32,14 @@
                 @endphp
                 <tr>
                     <td class="fw-semibold text-primary">
-                        {{ $detail->product->name ?? 'Product not found' }}
+                        {{ $detail->product->name ?? __('cart.product_not_found') }}
                     </td>
                     <td class="text-muted">
                         {{ $detail->desc }}
                     </td>
                     <td>${{ number_format($detail->unit_price, 2) }}</td>
                     <td>
-                        <form action="{{ route('cart.update', $detail->id) }}" method="POST" class="d-flex align-items-center gap-1">
+                        <form action="{{ route('cart.update',['locale' => app()->getLocale(),'cart' => $detail->id]) }}" method="POST" class="d-flex align-items-center gap-1">
                             @csrf
                             @method('PUT')
                             <button type="submit" name="action" value="decrease" class="btn btn-sm btn-outline-secondary">−</button>
@@ -49,10 +49,10 @@
                     </td>
                     <td class="fw-bold">${{ number_format($total, 2) }}</td>
                     <td class="text-center">
-                        <form action="{{ route('cart.destroy', $detail->id) }}" method="POST" onsubmit="return confirm('Remove this item?')" class="d-inline">
+                        <form action="{{ route('cart.destroy',['locale' => app()->getLocale(),'cart' => $detail->id]) }}" method="POST" onsubmit="return confirm('{{ __('cart.remove_confirm') }}')" class="d-inline">
                             @csrf
                             @method('DELETE')
-                            <button class="btn btn-outline-danger btn-sm" type="submit" title="Remove">
+                            <button class="btn btn-outline-danger btn-sm" type="submit" title="{{ __('cart.remove') }}">
                                 <i class="fa fa-trash"></i>
                             </button>
                         </form>
@@ -60,7 +60,7 @@
                 </tr>
                 @endforeach
                 <tr class="table-light fw-bold">
-                    <td colspan="4" class="text-end">Cart Total:</td>
+                    <td colspan="4" class="text-end">{{ __('cart.cart_total') }}</td>
                     <td colspan="2">${{ number_format($cartTotal, 2) }}</td>
                 </tr>
             </tbody>
@@ -68,19 +68,19 @@
     </div>
 
     <div class="d-flex justify-content-between align-items-center">
-        <a href="{{ route('sanita.index') }}" class="btn btn-outline-secondary">
-            <i class="fa fa-arrow-left me-1"></i> Continue Shopping
+        <a href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}" class="btn btn-outline-secondary">
+            <i class="fa fa-arrow-left me-1"></i> {{ __('cart.continue_shopping') }}
         </a>
         <a href="#" class="btn btn-success">
-            <i class="fa fa-credit-card me-1"></i> Proceed to Checkout
+            <i class="fa fa-credit-card me-1"></i> {{ __('cart.proceed_checkout') }}
         </a>
     </div>
 
     @else
     <div class="alert alert-info text-center">
-        Your cart is currently empty.
+        {{ __('cart.empty') }}
         <br>
-        <a href="{{ route('sanita.index') }}" class="btn btn-primary mt-3">Browse Products</a>
+        <a href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}" class="btn btn-primary mt-3">{{ __('cart.browse_products') }}</a>
     </div>
     @endif
 </div>

@@ -35,6 +35,40 @@
                     <div class="underline"></div>
                 </div>
 
+                {{-- Visibility Toggle --}}
+                <div class="checkbox-wrapper-8 mb-5">
+                    <label for="visible" class="visible-label">Visible</label>
+                    <input type="checkbox" id="visible" name="visible" class="tgl" value="1"
+                        {{ old('visible', !$subcategory->hidden) ? 'checked' : '' }}>
+                    <label for="visible" class="tgl-btn" data-tg-on="Yes" data-tg-off="No"></label>
+                </div>
+
+                {{-- Upload Image --}}
+                <div class="d-flex align-items-start gap-4 mb-4 flex-wrap upload-container">
+                    <!-- Custom Upload Button -->
+                    <div>
+                        <label for="image" id="imageLabel" class="btn underline-btn">Upload Image</label>
+                        <input type="file" id="image" name="image" accept="image/*" hidden>
+                    </div>
+
+                    <!-- Image Preview -->
+                    <div id="previewContainer" style="display: none;">
+                        <img id="imagePreview" src="#" alt="Selected Image" class="img-thumbnail" style="max-width: 150px;">
+                        <div id="fileName" class="text-muted mt-2 small text-center text-decoration-underline mb-1"></div>
+                    </div>
+
+                    <!-- Existing Image -->
+                    @if ($subcategory->extension)
+                    <div class="d-flex flex-column mt-3">
+                        <img src="{{ asset('storage/subcategories/' . $subcategory->id . '.' . $subcategory->extension) }}"
+                            alt="Current Image"
+                            class="img-thumbnail"
+                            style="max-width: 150px;">
+                        <p class="mb-1 text-muted small text-center text-decoration-underline">Current Image</p>
+                    </div>
+                    @endif
+                </div>
+
                 {{-- Submit & Cancel --}}
                 <div class="d-flex justify-content-end">
                     <a href="{{ route('subcategories.index') }}" class="btn bubbles bubbles-grey me-2">
@@ -66,5 +100,5 @@
     });
 </script>
 @endpush
-@include('cms.partials.select2-style');
+
 @endsection

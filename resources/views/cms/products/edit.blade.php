@@ -51,12 +51,49 @@
                     <div class="underline"></div>
                 </div>
 
+                {{-- Subcategory Select --}}
+                <div class="input-container mb-5 mt-3" style="width: 30%; position: relative; padding-top: 5px;">
+                    <label for="subcategories_id" class="select2-label">Subcategory</label>
+                    <select id="subcategories_id" name="subcategories_id" class="styled-select" required>
+                        @foreach ($subcategories as $subcategory)
+                        <option value="{{ $subcategory->id }}"
+                            {{ old('subcategories_id', $product->subcategories_id) == $subcategory->id ? 'selected' : '' }}>
+                            {{ $subcategory->name }}
+                        </option>
+                        @endforeach
+                    </select>
+                    <div class="underline"></div>
+                </div>
+
+                {{-- Brand Select --}}
+                <div class="input-container mb-5 mt-3" style="width: 30%; position: relative; padding-top: 5px;">
+                    <label for="brands_id" class="select2-label">Brand</label>
+                    <select id="brands_id" name="brands_id" class="styled-select" required>
+                        @foreach ($brands as $brand)
+                        <option value="{{ $brand->id }}"
+                            {{ old('brands_id', $product->brands_id) == $brand->id ? 'selected' : '' }}>
+                            {{ $brand->name }}
+                        </option>
+                        @endforeach
+                    </select>
+                    <div class="underline"></div>
+                </div>
+
+
                 {{-- Visibility Toggle --}}
                 <div class="checkbox-wrapper-8 mb-5">
                     <label for="visible" class="visible-label">Visible</label>
                     <input type="checkbox" id="visible" name="visible" class="tgl" value="1"
                         {{ old('visible', !$product->hidden) ? 'checked' : '' }}>
                     <label for="visible" class="tgl-btn" data-tg-on="Yes" data-tg-off="No"></label>
+                </div>
+
+                {{-- Automatic Hide Toggle --}}
+                <div class="checkbox-wrapper-8 mb-5">
+                    <label for="automatic_hide" class="visible-label">Automatic Hide</label>
+                    <input type="checkbox" id="automatic_hide" name="automatic_hide" class="tgl" value="1"
+                        {{ old('automatic_hide', $product->automatic_hide) ? 'checked' : '' }}>
+                    <label for="automatic_hide" class="tgl-btn" data-tg-on="Yes" data-tg-off="No"></label>
                 </div>
 
                 {{-- Upload Image --}}

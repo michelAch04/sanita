@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('about_us', function (Blueprint $table) {
             $table->id();
-            $table->text('textarea')->nullable();
+            $table->longText('textarea_en')->nullable();
+            $table->longText('textarea_ar')->nullable();
+            $table->longText('textarea_ku')->nullable();
             $table->timestamps();
         });
     }

@@ -24,8 +24,8 @@ class ProductController extends Controller
                 });
             }
 
-            $products = $query->where('cancelled', 0)->get();
-
+            $products = $query->where('cancelled', 0)->with('subcategories')->with('brands')->get();
+            // dd($products);
             if ($request->ajax()) {
                 return view('cms.products.index', compact('products'))->renderSections()['products_list'];
             }
@@ -40,10 +40,9 @@ class ProductController extends Controller
     public function create()
     {
         $brands = Brand::where('cancelled', 0)->get();
-        $categories = Category::where('cancelled', 0)->get();
         $subcategories = Subcategory::where('cancelled', 0)->get();
 
-        return view('cms.products.create', compact('brands', 'categories', 'subcategories'));
+        return view('cms.products.create', compact('brands', 'subcategories'));
     }
 
     public function store(Request $request)
@@ -100,7 +99,9 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        return view('cms.products.edit', compact('product'));
+        $brands = Brand::where('cancelled', 0)->get();
+        $subcategories = Subcategory::where('cancelled', 0)->get();
+        return view('cms.products.edit', compact('product', 'brands', 'subcategories'));
     }
 
     public function update(Request $request, Product $product)

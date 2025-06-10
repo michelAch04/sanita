@@ -1,0 +1,20 @@
+<?php
+return [
+    'title' => 'سەبەتەکەت',
+    'heading' => 'سەبەتی کڕین',
+    'product' => 'کاڵا',
+    'action' => 'کردار',
+    'product_not_found' => 'کاڵا نەدۆزرایەوە',
+    'remove' => 'سڕینەوە',
+    'remove_confirm' => 'ئەم کاڵایە بسڕێتەوە؟',
+    'cart_total' => 'کۆی سەبەتە:',
+    'continue_shopping' => 'بەردەوام بە لە کڕین',
+    'proceed_checkout' => 'بچۆ بۆ پارەدان',
+    'empty' => 'سەبەتەکەت بەتاڵە.',
+    'browse_products' => 'کاڵاکان بگەڕێ',
+    'description' => 'وەسف',
+    'unit_price' => 'نرخی یەکە',
+    'quantity' => 'ژمارە',
+    'total' => 'کۆی گشتی',
+    'add_to_cart' => 'زیادکردن بۆ سەبەتە',
+];

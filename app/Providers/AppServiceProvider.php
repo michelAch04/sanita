@@ -37,7 +37,7 @@ class AppServiceProvider extends ServiceProvider
         view::share('products', Product::where('hidden', 0)->where('cancelled', 0)->get());
 
         View::composer('*', function ($view) {
-            $userId = Auth::id();
+            $userId = Auth::guard('web')->id();
             $permissions = $userId ? PageController::getPages($userId) : collect();
             $view->with('permissions', $permissions);
         });
