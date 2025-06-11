@@ -45,7 +45,7 @@
 <!-- Products Section -->
 <section id="products" class="py-5 bg-light">
     <div class="container">
-        <h2 class="display-5 text-center mb-4">{{__('nav.products')}}</h2>
+        <h2 class="display-5 text-center mb-4">{{ __('nav.products') }}</h2>
         <div class="row">
             @foreach($products as $product)
             <div class="col-md-4 mb-3">
@@ -65,16 +65,23 @@
                         <p class="card-text text-muted mb-2" style="min-height: 3em;">{{ \Illuminate\Support\Str::limit($product->small_description, 80) }}</p>
 
                         <div class="d-flex align-items-center justify-content-between mt-auto">
-                            <span class="fw-bold text-primary">${{ $product->unit_price }}</span>
+                            <span class="fw-bold text-primary">${{ $product->shelf_price }}</span>
+
+                            @if($product->available_quantity > 0)
                             <form action="{{ route('cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="ms-2">
                                 @csrf
                                 <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                <input type="hidden" name="price" value="{{ $product->unit_price }}">
+                                <input type="hidden" name="price" value="{{ $product->shelf_price }}">
                                 <input type="hidden" name="description" value="{{ $product->description }}">
                                 <button type="submit" class="btn btn-primary btn-sm">
-                                    <i class="fa fa-cart-plus me-1"></i> {{__('cart.add_to_cart')}}
+                                    <i class="fa fa-cart-plus me-1"></i> {{ __('cart.add_to_cart') }}
                                 </button>
                             </form>
+                            @elseif($product->automatic_hide == 0 && $product->available_quantity <= 0)
+                                <button class="btn btn-secondary btn-sm" disabled>
+                                {{ __('cart.out_of_stock') ?? 'Out of Stock' }}
+                                </button>
+                                @endif
                         </div>
                     </div>
                 </div>
@@ -83,6 +90,7 @@
         </div>
     </div>
 </section>
+
 @endsection
 
 @section('scripts')

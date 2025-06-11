@@ -26,7 +26,6 @@ class CartController extends Controller
             $cart->cartDetails()->update(['cancelled' => 1]);
             $cart->update(['cancelled' => 1]);
         }
-
         return view('sanita.cart.index', compact('cart'));
     }
 

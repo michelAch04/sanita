@@ -69,29 +69,36 @@
 
                 {{-- Unit Price --}}
                 <div class="input-container mb-5">
-                    <input type="number" step="0.01" id="unit_price" name="unit_price" required placeholder="">
-                    <label for="unit_price" class="label">Unit Price</label>
+                    <input type="number" id="unit_price" name="unit_price" step="0.01" required>
+                    <label for="unit_price" class="label">Price</label>
                     <div class="underline"></div>
+                </div>
+
+                {{-- Tax Toggle --}}
+                <div class="input-container mb-5 mt-3" style="width: 30%; position: relative; padding-top: 5px;">
+                    <label for="tax_id" class="visible-label">Tax</label>
+                    <select name="tax_id" id="tax_id" class="form-select">
+                        <option value="">No VAT</option>
+                        @foreach($taxes as $tax)
+                        <option value="{{ $tax->id }}"
+                            data-rate="{{ $tax->rate }}"
+                            {{ old('tax_id', $product->tax_id ?? '') == $tax->id ? 'selected' : '' }}>
+                            {{ $tax->name }} ({{ $tax->rate }}%)
+                        </option>
+                        @endforeach
+                    </select>
                 </div>
 
                 {{-- Shelf Price --}}
                 <div class="input-container mb-5">
-                    <input type="number" step="0.01" id="shelf_price" name="shelf_price" required placeholder="">
+                    <input type="number" id="shelf_price" name="shelf_price" step="0.01" required readonly>
                     <label for="shelf_price" class="label">Shelf Price</label>
-                    <div class="underline"></div>
                 </div>
 
                 {{-- Threshold --}}
                 <div class="input-container mb-5">
                     <input type="number" id="threshold" name="threshold" required placeholder="">
                     <label for="threshold" class="label">Threshold</label>
-                    <div class="underline"></div>
-                </div>
-
-                {{-- Tax --}}
-                <div class="input-container mb-5">
-                    <input type="number" id="tax" name="tax" required placeholder="">
-                    <label for="tax" class="label">Tax (%)</label>
                     <div class="underline"></div>
                 </div>
 
@@ -165,6 +172,36 @@
             width: '100%'
         });
     });
+    $(document).ready(function() {
+        $('#tax_id').select2({
+            placeholder: 'Select a tax',
+            allowClear: true,
+            width: '100%'
+        });
+
+        function updateShelfPrice() {
+            let unitPrice = parseFloat($('#unit_price').val());
+            let taxRate = parseFloat($('#tax_id option:selected').data('rate')) || 0;
+            let shelfPrice = unitPrice;
+
+            if (taxRate > 0) {
+                shelfPrice = unitPrice + (unitPrice * (taxRate / 100));
+            }
+
+            $('#shelf_price').val(shelfPrice.toFixed(2));
+        }
+
+        // Listen to changes in unit price
+        $('#unit_price').on('input', function() {
+            updateShelfPrice();
+        });
+
+        // Listen to changes in tax select
+        $('#tax_id').on('change', function() {
+            updateShelfPrice();
+        });
+    });
 </script>
+
 @endpush
 @endsection

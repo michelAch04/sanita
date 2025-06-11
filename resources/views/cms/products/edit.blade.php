@@ -37,6 +37,28 @@
                     <div class="underline"></div>
                 </div>
 
+                {{-- Tax Toggle --}}
+                <div class="input-container mb-5 mt-3" style="width: 30%; position: relative; padding-top: 5px;">
+                    <label for="tax_id" class="visible-label">Tax</label>
+                    <select name="tax_id" id="tax_id" class="form-select">
+                        <option value="">No VAT</option>
+                        @foreach($taxes as $tax)
+                        <option value="{{ $tax->id }}"
+                            data-rate="{{ $tax->rate }}"
+                            {{ old('tax_id', $product->tax_id ?? '') == $tax->id ? 'selected' : '' }}>
+                            {{ $tax->name }} ({{ $tax->rate }}%)
+                        </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                {{-- Shelf Price --}}
+                <div class="input-container mb-5">
+                    <input type="number" id="shelf_price" name="shelf_price" step="0.01" value="{{ old('shelf_price', $product->shelf_price) }}" readonly placeholder="">
+                    <label for="shelf_price" class="label">Shelf Price</label>
+
+                </div>
+
                 {{-- Available Quantity --}}
                 <div class="input-container mb-5">
                     <input type="number" id="available_quantity" name="available_quantity" value="{{ old('available_quantity', $product->available_quantity) }}" required>
@@ -132,3 +154,50 @@
     </div>
 </div>
 @endsection
+@push('styles')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@endpush
+@push('scripts')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#tax_id').select2({
+            placeholder: 'Select a brand',
+            allowClear: true,
+            width: '100%'
+        });
+    });
+
+    $(document).ready(function() {
+        $('#tax_id').select2({
+            placeholder: 'Select a tax',
+            allowClear: true,
+            width: '100%'
+        });
+
+        function updateShelfPrice() {
+            let unitPrice = parseFloat($('#unit_price').val());
+            let taxRate = parseFloat($('#tax_id option:selected').data('rate')) || 0;
+            let shelfPrice = unitPrice;
+
+            if (taxRate > 0) {
+                shelfPrice = unitPrice + (unitPrice * (taxRate / 100));
+            }
+
+            $('#shelf_price').val(shelfPrice.toFixed(2));
+        }
+
+        // Listen to changes in unit price
+        $('#unit_price').on('input', function() {
+            updateShelfPrice();
+        });
+
+        // Listen to changes in tax select
+        $('#tax_id').on('change', function() {
+            updateShelfPrice();
+        });
+    });
+</script>
+@endpush

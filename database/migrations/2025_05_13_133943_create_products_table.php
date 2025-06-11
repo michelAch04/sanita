@@ -27,10 +27,10 @@ return new class extends Migration
             $table->string('family_code')->nullable();
             $table->string('family_description')->nullable();
             $table->foreignId('brands_id')->constrained('brands')->onDelete('cascade');
-            $table->tinyInteger('tax')->default('0');
             $table->integer('available_quantity')->default(0);
             $table->tinyInteger('hidden')->default(0);
             $table->tinyInteger('automatic_hide')->default(0);
+            $table->foreignId('tax_id')->nullable()->constrained('taxes')->nullOnDelete();
             $table->tinyInteger('cancelled')->default(0);
             $table->timestamps();
         });
