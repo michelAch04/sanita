@@ -24,7 +24,7 @@ class PagesSeeder extends Seeder
             ['name' => 'Customers', 'url' => 'customers.index', 'icon' => 'bi-person',   'order' => 9, 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Slideshow', 'url' => 'slideshow.index', 'icon' => 'bi-images',   'order' => 10, 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Permissions', 'url' => 'permissions.index', 'icon' => 'bi-shield-lock',  'order' => 11, 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Carts', 'url' => 'carts.index', 'icon' => 'bi-cart4',   'order' => 12, 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Carts', 'url' => 'cart.cmsindex', 'icon' => 'bi-cart4',   'order' => 12, 'created_at' => now(), 'updated_at' => now()],
         ];
 
         DB::table('pages')->insert($pages);
