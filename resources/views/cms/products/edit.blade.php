@@ -15,20 +15,50 @@
                 @csrf
                 @method('PUT')
 
-                {{-- Product Name --}}
+                {{-- Product Name_En --}}
                 <div class="input-container mb-5 mt-3" style="width: 30%;">
-                    <input type="text" id="name" name="name" value="{{ old('name', $product->name) }}" required
-                        style="width: 100%;">
-                    <label for="name" class="label">Product Name</label>
+                    <input type="text" id="name_en" name="name_en" value="{{ old('name_en', $product->name_en) }}" required
+                        style="width: 100%;" placeholder="">
+                    <label for="name_en" class="label">Product Name (English)</label>
                     <div class="underline"></div>
                 </div>
 
-                {{-- Product Description --}}
-                <div class="input-container mb-5" style="width: 60%;">
-                    <textarea id="description" name="description" class="mt-2" required>{{ old('description', $product->description) }}</textarea>
-                    <label for="description" class="label">Description</label>
+                {{-- Product Name_Ar --}}
+                <div class="input-container mb-5 mt-3" style="width: 30%;">
+                    <input type="text" id="name_ar" name="name_ar" value="{{ old('name_ar', $product->name_ar) }}" required
+                        style="width: 100%;" placeholder="">
+                    <label for="name_ar" class="label">Product Name (Arabic)</label>
+                    <div class="underline"></div>
                 </div>
 
+                {{-- Product Name_Ku --}}
+                <div class="input-container mb-5 mt-3" style="width: 30%;">
+                    <input type="text" id="name_ku" name="name_ku" value="{{ old('name_ku', $product->name_ku) }}" required
+                        style="width: 100%;" placeholder="">
+                    <label for="name_ku" class="label">Product Name (Kurdish)</label>
+                    <div class="underline"></div>
+                </div>
+
+                {{-- Small Description_En --}}
+                <div class="input-container mb-5" style="width: 30%;">
+                    <textarea id="small_description_en" name="small_description_en" class="mt-2" placeholder="">{{ old('small_description_en', $product->small_description_en) }}</textarea>
+                    <label for="small_description_en" class="label">Small Description</label>
+                    <div class="underline"></div>
+                </div>
+
+                {{-- Small Description_Ar --}}
+                <div class="input-container mb-5" style="width: 30%;">
+                    <textarea id="small_description_ar" name="small_description_ar" class="mt-2" placeholder="">{{ old('small_description_ar', $product->small_description_ar) }}</textarea>
+                    <label for="small_description_ar" class="label">Small Description</label>
+                    <div class="underline"></div>
+                </div>
+
+                {{-- Small Description_Ku --}}
+                <div class="input-container mb-5" style="width: 30%;">
+                    <textarea id="small_description_ku" name="small_description_ku" class="mt-2" placeholder="">{{ old('small_description_ku', $product->small_description_ku) }}</textarea>
+                    <label for="small_description_ku" class="label">Small Description</label>
+                    <div class="underline"></div>
+                </div>
 
                 {{-- Unit Price --}}
                 <div class="input-container mb-5">
@@ -56,20 +86,19 @@
                 <div class="input-container mb-5">
                     <input type="number" id="shelf_price" name="shelf_price" step="0.01" value="{{ old('shelf_price', $product->shelf_price) }}" readonly placeholder="">
                     <label for="shelf_price" class="label">Shelf Price</label>
+                </div>
 
+                {{-- Old Price --}}
+                <div class="input-container mb-5">
+                    <input type="number" id="old_price" name="old_price" step="0.01" value="{{ old('old_price', $product->old_price) }}" placeholder="">
+                    <label for="old_price" class="label">Old Price</label>
+                    <div class="underline"></div>
                 </div>
 
                 {{-- Available Quantity --}}
                 <div class="input-container mb-5">
                     <input type="number" id="available_quantity" name="available_quantity" value="{{ old('available_quantity', $product->available_quantity) }}" required>
                     <label for="available_quantity" class="label">Stock</label>
-                    <div class="underline"></div>
-                </div>
-
-                {{-- Small Description --}}
-                <div class="input-container mb-5" style="width: 30%;">
-                    <textarea id="small_description" name="small_description" class="mt-2">{{ old('small_description', $product->small_description) }}</textarea>
-                    <label for="small_description" class="label">Small Description</label>
                     <div class="underline"></div>
                 </div>
 

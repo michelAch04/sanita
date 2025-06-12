@@ -23,7 +23,17 @@ class WebsiteController extends Controller
                     ->orWhere('available_quantity', '>', 0);
             })
             ->get();
-        // dd($products);
+
+        $offers = Product::where('hidden', 0)
+            ->where('cancelled', 0)
+            ->where(function ($query) {
+                $query->where('automatic_hide', 0)
+                    ->orWhere('available_quantity', '>', 0);
+            })
+            ->get()
+            ->orderby('order', 'asc');
+        dd($offers);
+
 
         return view('sanita.index', compact('aboutus', 'slideshow', 'categories', 'products'));
     }

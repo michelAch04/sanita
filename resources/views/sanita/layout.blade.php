@@ -48,12 +48,12 @@
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a class="nav-link active" href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}#categories">
-                            {{ __('nav.categories') }}
+                            {{ __('nav.offers') }}
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}#products">
-                            {{ __('nav.products') }}
+                            {{ __('nav.store') }}
                         </a>
                     </li>
                     <li class="nav-item">

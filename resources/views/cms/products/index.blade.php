@@ -67,8 +67,8 @@ $canDelete = $permissions && $permissions->delete;
                                 <span class="text-muted">No Image</span>
                                 @endif
                             </td>
-                            <td>{{ $product->name }}</td>
-                            <td>{{ $product->small_description }}</td>
+                            <td>{{ $product->name_en }}</td>
+                            <td>{{ $product->small_description_en }}</td>
                             <td>${{ $product->unit_price }}</td>
                             <td>${{ $product->shelf_price }}</td>
                             <td>{{ $product->available_quantity }}</td>

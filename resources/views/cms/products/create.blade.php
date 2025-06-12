@@ -15,13 +15,6 @@
             <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
-                {{-- Product Name --}}
-                <div class="input-container mb-5 mt-3" style="width: 30%;">
-                    <input type="text" id="name" name="name" required placeholder="">
-                    <label for="name" class="label">Product Name</label>
-                    <div class="underline"></div>
-                </div>
-
                 {{-- SKU --}}
                 <div class="input-container mb-5" style="width: 30%;">
                     <input type="text" id="sku" name="sku" required placeholder="">
@@ -29,10 +22,43 @@
                     <div class="underline"></div>
                 </div>
 
-                {{-- Description --}}
-                <div class="input-container mb-5" style="width: 60%;">
-                    <textarea id="description" name="description" class="mt-2" required></textarea>
-                    <label for="description" class="label">Description</label>
+                {{-- Product Name_ar --}}
+                <div class="input-container mb-5 mt-3" style="width: 30%;">
+                    <input type="text" id="name_en" name="name_en" required placeholder="">
+                    <label for="name_en" class="label">Product Name (English)</label>
+                    <div class="underline"></div>
+                </div>
+
+                {{-- Product Name_en --}}
+                <div class="input-container mb-5 mt-3" style="width: 30%;">
+                    <input type="text" id="name_ar" name="name_ar" required placeholder="">
+                    <label for="name_ar" class="label">Product Name (Arabic)</label>
+                    <div class="underline"></div>
+                </div>
+
+                {{-- Product Name_ar --}}
+                <div class="input-container mb-5 mt-3" style="width: 30%;">
+                    <input type="text" id="name_ku" name="name_ku" required placeholder="">
+                    <label for="name_ku" class="label">Product Name (Kurdish)</label>
+                    <div class="underline"></div>
+                </div>
+
+                {{-- Small Description_En --}}
+                <div class="input-container mb-5" style="width: 30%;">
+                    <textarea id="small_description_en" name="small_description_en" class="mt-2"></textarea>
+                    <label for="small_description_en" class="label">Small Description (English)</label>
+                </div>
+
+                {{-- Small Description_Ar --}}
+                <div class="input-container mb-5" style="width: 30%;">
+                    <textarea id="small_description_ar" name="small_description_ar" class="mt-2"></textarea>
+                    <label for="small_description_ar" class="label">Small Description (Arabic)</label>
+                </div>
+
+                {{-- Small Description_Ku --}}
+                <div class="input-container mb-5" style="width: 30%;">
+                    <textarea id="small_description_ku" name="small_description_ku" class="mt-2"></textarea>
+                    <label for="small_description_ku" class="label">Small Description (Kurdish)</label>
                 </div>
 
                 {{-- Subcategory Select --}}
@@ -61,12 +87,6 @@
                     <div class="underline"></div>
                 </div>
 
-                {{-- Small Description --}}
-                <div class="input-container mb-5" style="width: 30%;">
-                    <textarea id="small_description" name="small_description" class="mt-2"></textarea>
-                    <label for="small_description" class="label">Small Description (optional)</label>
-                </div>
-
                 {{-- Unit Price --}}
                 <div class="input-container mb-5">
                     <input type="number" id="unit_price" name="unit_price" step="0.01" required>
@@ -93,6 +113,13 @@
                 <div class="input-container mb-5">
                     <input type="number" id="shelf_price" name="shelf_price" step="0.01" required readonly>
                     <label for="shelf_price" class="label">Shelf Price</label>
+                </div>
+
+                {{-- Old Price --}}
+                <div class="input-container mb-5">
+                    <input type="number" id="old_price" name="old_price" step="0.01" placeholder="">
+                    <label for="old_price" class="label">Old Price</label>
+                    <div class="underline"></div>
                 </div>
 
                 {{-- Threshold --}}

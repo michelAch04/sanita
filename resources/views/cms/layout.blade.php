@@ -18,9 +18,6 @@
 
     <link href="{{ asset('css/ui-tools.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/view-styles.css') }}" rel="stylesheet" />
-    <link href="{{ asset('css/select2-style.css') }}" rel="stylesheet" />
-
-
     @stack('styles') <!-- For page-specific CSS -->
 </head>
 

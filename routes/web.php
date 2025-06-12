@@ -38,14 +38,15 @@ Route::get('/', function () {
     $locale = request()->getPreferredLanguage(['en', 'ar', 'ku']) ?? 'en';
     return redirect("/$locale");
 });
+
 Route::get('/login', function () {
     return view('cms/auth/login');
 });
 
 // Admin login and logout routes
-Route::get('/cms/login', [LoginController::class, 'showLoginForm'])->name('admin.login');
-Route::post('/cms/login', [LoginController::class, 'login']);
-Route::post('/cms/logout', [LoginController::class, 'logout'])->name('admin.logout');
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('admin.login');
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/logout', [LoginController::class, 'logout'])->name('admin.logout');
 
 Route::middleware('auth:web')->group(function () {
     Route::get('/cms/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');

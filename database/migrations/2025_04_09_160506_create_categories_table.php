@@ -6,14 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->unsignedInteger('position')->default(9999);
+
+            // Multilingual name
+            $table->string('name_en');
+            $table->string('name_ar');
+            $table->string('name_ku');
+
             $table->string('extension')->nullable();
             $table->tinyInteger('hidden')->default(0);
             $table->tinyInteger('cancelled')->default(0);
@@ -21,9 +24,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('categories');

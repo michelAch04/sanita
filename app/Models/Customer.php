@@ -43,6 +43,6 @@ class Customer extends Authenticatable
     public function sendPasswordResetNotification($token)
     {
         $locale = app()->getLocale(); // Or use $this->locale if you store it per user
-        // $this->notify(new \App\Notifications\ResetPasswordWithLocale($token, $locale));
+        $this->notify(new \App\Notifications\ResetPasswordWithLocale($token, $locale));
     }
 }
