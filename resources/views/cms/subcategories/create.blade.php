@@ -21,13 +21,14 @@
                         <option value="">Select a category</option>
                         @foreach ($categories as $category)
                         <option value="{{ $category->id }}">
-                            {{ $category->name }}
+                            {{ $category->name_en }}
                         </option>
                         @endforeach
                     </select>
                     <div class="underline"></div>
                 </div>
 
+                {{-- Subcategory Name En --}}
                 <div class="input-container mb-5 mt-3" style="width: 30%;">
                     <input type="text" id="name_en" name="name_en" value="{{ old('name_en') }}" 
                     placeholder="" required style="width: 100%;">
@@ -35,7 +36,7 @@
                     <div class="underline"></div>
                 </div>
 
-                {{-- Subcategory Name --}}
+                {{-- Subcategory Name Ar --}}
                 <div class="input-container mb-5 mt-3" style="width: 30%;">
                     <input type="text" id="name_ar" name="name_ar" value="{{ old('name_ar') }}" 
                     placeholder="" required style="width: 100%;">
@@ -43,7 +44,7 @@
                     <div class="underline"></div>
                 </div>
 
-                {{-- Subcategory Name --}}
+                {{-- Subcategory Name Ku --}}
                 <div class="input-container mb-5 mt-3" style="width: 30%;">
                     <input type="text" id="name_ku" name="name_ku" value="{{ old('name_ku') }}" 
                     placeholder="" required style="width: 100%;">

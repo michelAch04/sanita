@@ -21,7 +21,7 @@
     @stack('styles') <!-- For page-specific CSS -->
 </head>
 
-<body>
+<body style="overflow-x: hidden !important;">
 
     <div class="container-fluid">
         <div class="d-flex" id="app-container">
@@ -82,10 +82,12 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <!-- Summernote JS -->
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
+    <!-- SortableJS -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 
     @stack('after-scripts')
 
-
+    @include('cms.partials.change-order')
 
 </body>
 

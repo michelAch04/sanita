@@ -20,6 +20,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\WebsiteController;
 use App\Http\Controllers\TaxController;
+use App\Models\Subcategory;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,6 +64,12 @@ Route::middleware('auth:web')->group(function () {
     Route::resource('/cms/permissions', PermissionController::class);
     Route::resource('tax', TaxController::class);
     Route::get('/cms/cart', [CartController::class, 'cmsindex'])->name('cart.cmsindex');
+
+    //for drag-and-drop reorder
+    Route::post('/cms/products/reorder', [ProductController::class, 'reorder'])->name('products.reorder');
+    Route::post('/cms/categories/reorder', [CategoryController::class, 'reorder'])->name('categories.reorder');
+    Route::post('/cms/subcategories/reorder', [SubcategoryController::class, 'reorder'])->name('subcategories.reorder');
+    Route::post('/cms/slideshow/reorder', [SlideshowController::class, 'reorder'])->name('slideshow.reorder');
 });
 Route::prefix('{locale}')->middleware('localization')->group(function () {
 

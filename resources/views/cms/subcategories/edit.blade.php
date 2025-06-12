@@ -21,31 +21,31 @@
                     <select id="categories_id" name="categories_id" class="styled-select" required>
                         @foreach ($categories as $category)
                         <option value="{{ $category->id }}" {{ old('categories_id', $subcategory->categories_id) == $category->id ? 'selected' : '' }}>
-                            {{ $category->name }}
+                            {{ $category->name_en }}
                         </option>
                         @endforeach
                     </select>
                     <div class="underline"></div>
                 </div>
 
-                {{-- Subcategory Name English --}}
+                {{-- Subcategory Name En --}}
                 <div class="input-container mb-5 mt-3" style="width: 30%;">
                     <input type="text" id="name_en" name="name_en" value="{{ old('name_en', $subcategory->name_en) }}" required style="width: 100%;">
                     <label for="name_en" class="label">Subcategory Name (English)</label>
                     <div class="underline"></div>
                 </div>
 
-                {{-- Subcategory Name --}}
+                {{-- Subcategory Name Ar--}}
                 <div class="input-container mb-5 mt-3" style="width: 30%;">
-                    <input type="text" id="name_ar" name="name_ar" value="{{ old('name_ar', $subcategory->name_en) }}" required style="width: 100%;">
-                    <label for="name_en" class="label">Subcategory Name (Arabic)</label>
+                    <input type="text" id="name_ar" name="name_ar" value="{{ old('name_ar', $subcategory->name_ar) }}" required style="width: 100%;">
+                    <label for="name_ar" class="label">Subcategory Name (Arabic)</label>
                     <div class="underline"></div>
                 </div>
 
-                {{-- Subcategory Name --}}
+                {{-- Subcategory Name Ku--}}
                 <div class="input-container mb-3 mt-3" style="width: 30%;">
-                    <input type="text" id="name_en" name="name_en" value="{{ old('name_en', $subcategory->name_en) }}" required style="width: 100%;">
-                    <label for="name_en" class="label">Subcategory Name</label>
+                    <input type="text" id="name_ku" name="name_ku" value="{{ old('name_ku', $subcategory->name_ku) }}" required style="width: 100%;">
+                    <label for="name_ku" class="label">Subcategory Name</label>
                     <div class="underline"></div>
                 </div>
 

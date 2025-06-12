@@ -39,11 +39,12 @@ $canDelete = $permissions && $permissions->delete;
     {{-- Table --}}
     <div class="card shadow-sm border-0">
         <div class="card-body p-0">
-            <div class="table-responsive rounded-1">
+            <div class="table-responsive rounded-1"
+                data-sortable-table data-reorder-url="{{ route('categories.reorder') }}">
                 <table class="table mb-0">
                     <thead class="bg-grey text-dark opacity-75">
                         <tr>
-                            <th>ID</th>
+                            <th style="width: 50px;"></th> {{-- No text, just an icon --}}
                             <th>Image</th>
                             <th>Name</th>
                             <th>Visible</th>
@@ -55,8 +56,8 @@ $canDelete = $permissions && $permissions->delete;
                     <tbody id="category-table-body">
                         @section('categories_list')
                         @forelse ($categories as $category)
-                        <tr class="bg-hover-light-grey">
-                            <td>{{ $category->id }}</td>
+                        <tr class="bg-hover-light-grey" data-id="{{ $category->id }}">
+                            <td class="handle text-muted text-center"><i class="bi bi-list" style="cursor:grab;"></i></td>
                             <td>
                                 @php
                                 $imagePath = 'storage/categories/' . $category->id . '.' . $category->extension;

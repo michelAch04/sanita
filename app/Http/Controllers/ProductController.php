@@ -27,6 +27,7 @@ class ProductController extends Controller
 
             $products = $query->where('cancelled', 0)
                 ->with(['subcategories', 'brands', 'tax'])
+                ->orderBy('position')
                 ->get();
 
             if ($request->ajax()) {
@@ -170,5 +171,14 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             return redirect()->route('products.index')->with('error', 'Failed to delete product: ' . $e->getMessage());
         }
+    }
+
+    public function reorder(Request $request)
+    {
+        foreach ($request->order as $item) {
+            Product::where('id', $item['id'])->update(['position' => $item['position']]);
+        }
+
+        return response()->json(['success' => true]);
     }
 }

@@ -35,11 +35,12 @@ $canDelete = $permissions && $permissions->delete;
     {{-- Table --}}
     <div class="card shadow-sm border-0">
         <div class="card-body p-0">
-            <div class="table-responsive rounded-1">
+            <div class="table-responsive rounded-1"
+            data-sortable-table data-reorder-url="{{ route('slideshow.reorder') }}">
                 <table class="table mb-0 align-middle text-center">
                     <thead class="bg-grey text-dark opacity-75">
                         <tr>
-                            <th>ID</th>
+                            <th style="width: 50px;"></th> {{-- No text, just an icon --}}
                             <th>Image</th>
                             <th>Name</th>
                             <th>Visible</th>
@@ -51,8 +52,8 @@ $canDelete = $permissions && $permissions->delete;
                     <tbody id="slideshow-table-body">
                         @section('slideshows_list')
                         @forelse ($slideshows as $slide)
-                        <tr class="bg-hover-light-grey">
-                            <td>{{ $slide->id }}</td>
+                        <tr class="bg-hover-light-grey" data-id="{{ $slide->id }}">
+                            <td class="handle text-muted text-center"><i class="bi bi-list" style="cursor:grab;"></i></td>
                             <td>
                                 <img src="{{ asset('storage/slideshow/' . $slide->id . '.' . $slide->extension) }}"
                                     alt="{{ $slide->name }}"
