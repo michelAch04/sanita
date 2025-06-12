@@ -10,7 +10,7 @@ class Category extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'extension', 'hidden', 'cancelled'];
+    protected $fillable = ['name_en', 'name_ar', 'name_ku', 'extension', 'hidden', 'cancelled'];
 
     public function subcategories()
     {

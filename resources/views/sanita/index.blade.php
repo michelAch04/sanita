@@ -17,7 +17,7 @@
     <div class="container">
         <h2 class="display-5 text-center mb-4">{{ __('nav.offers') }}</h2>
         <div class="row">
-            @foreach($products as $product)
+            @foreach($offers as $product)
             <div class="col-md-4 mb-3">
                 <div class="card h-100 border-0 shadow-sm d-flex flex-column">
                     @if($product->extension)
@@ -35,7 +35,12 @@
                         <p class="card-text text-muted mb-2" style="min-height: 3em;">{{ \Illuminate\Support\Str::limit($product->small_description, 80) }}</p>
 
                         <div class="d-flex align-items-center justify-content-between mt-auto">
-                            <span class="fw-bold text-primary">${{ $product->shelf_price }}</span>
+                            <div class="d-flex flex-column text-end">
+                                @if($product->old_price > $product->shelf_price)
+                                <small class="text-muted text-decoration-line-through">${{ number_format($product->old_price, 2) }}</small>
+                                @endif
+                                <span class="fw-bold text-primary">${{ number_format($product->shelf_price, 2) }}</span>
+                            </div>
 
                             @if($product->available_quantity > 0)
                             <form action="{{ route('cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="ms-2">

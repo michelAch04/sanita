@@ -16,8 +16,8 @@
 
                 {{-- Brand Name --}}
                 <div class="input-container mb-5 mt-3">
-                    <input type="text" id="name" name="name" value="{{ old('name') }}" required placeholder="">
-                    <label for="name" class="label">Brand Name</label>
+                    <input type="text" id="name_en" name="name_en" value="{{ old('name_en') }}" required placeholder="">
+                    <label for="name_en" class="label">Brand Name</label>
                     <div class="underline"></div>
                 </div>
 

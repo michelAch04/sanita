@@ -20,8 +20,8 @@ class ProductController extends Controller
                 $search = $request->query('query');
 
                 $query->where(function ($q) use ($search) {
-                    $q->where('name', 'like', "%$search%")
-                        ->orWhere('small_description', 'like', "$search%");
+                    $q->where('name_en', 'like', "%$search%")
+                        ->orWhere('small_description_en', 'like', "$search%");
                 });
             }
 
@@ -52,12 +52,17 @@ class ProductController extends Controller
     {
         try {
             $request->validate([
-                'name' => 'required|string|max:255',
+                'name_en' => 'required|string|max:255',
+                'name_ar' => 'required|string|max:255',
+                'name_ku' => 'required|string|max:255',
+                'small_description_en' => 'nullable|string|max:255',
+                'small_description_ar' => 'nullable|string|max:255',
+                'small_description_ku' => 'nullable|string|max:255',
                 'sku' => 'required|string|max:255|unique:products,sku',
-                'description' => 'nullable|string',
-                'small_description' => 'nullable|string|max:255',
+                'barcode' => 'nullable|string|max:255|unique:products,barcode',
                 'unit_price' => 'required|numeric|min:0',
                 'shelf_price' => 'required|numeric|min:0',
+                'old_price' => 'nullable|numeric|min:0',
                 'threshold' => 'required|integer|min:0',
                 'available_quantity' => 'required|integer|min:0',
                 'subcategories_id' => 'required|exists:subcategories,id',
@@ -69,12 +74,19 @@ class ProductController extends Controller
             ]);
 
             $product = Product::create([
-                'name' => $request->name,
+                'name_en' => $request->name_en,
+                'name_ar' => $request->name_ar,
+                'name_ku' => $request->name_ku,
+                'small_description_en' => $request->small_description_en,
+                'small_description_ar' => $request->small_description_ar,
+                'small_description_ku' => $request->small_description_ku,
+                'barcode' => $request->barcode,
                 'sku' => $request->sku,
                 'description' => $request->description,
                 'small_description' => $request->small_description,
                 'unit_price' => $request->unit_price,
                 'shelf_price' => $request->shelf_price,
+                'old_price' => $request->old_price,
                 'threshold' => $request->threshold,
                 'available_quantity' => $request->available_quantity,
                 'subcategories_id' => $request->subcategories_id,
@@ -112,9 +124,15 @@ class ProductController extends Controller
     {
         try {
             $data = $request->validate([
-                'name' => 'required|string|max:255',
-                'description' => 'nullable|string',
+                'name_en' => 'required|string|max:255',
+                'name_ar' => 'required|string|max:255',
+                'name_ku' => 'required|string|max:255',
+                'small_description_en' => 'nullable|string|max:255',
+                'small_description_ar' => 'nullable|string|max:255',
+                'small_description_ku' => 'nullable|string|max:255',
                 'unit_price' => 'required|numeric|min:0',
+                'shelf_price' => 'required|numeric|min:0',
+                'old_price' => 'nullable|numeric|min:0',
                 'available_quantity' => 'required|integer|min:0',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'small_description' => 'nullable|string|max:255',
@@ -122,11 +140,7 @@ class ProductController extends Controller
                 'automatic_hide' => 'nullable|boolean',
                 'tax_id' => 'nullable|exists:taxes,id',
                 'subcategories_id' => 'required|exists:subcategories,id',
-                'shelf_price' => 'required|numeric|min:0',
             ]);
-
-            $data = $request->all();
-
 
             $data['hidden'] = !$request->boolean('visible');
 

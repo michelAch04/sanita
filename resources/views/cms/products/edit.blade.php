@@ -42,21 +42,21 @@
                 {{-- Small Description_En --}}
                 <div class="input-container mb-5" style="width: 30%;">
                     <textarea id="small_description_en" name="small_description_en" class="mt-2" placeholder="">{{ old('small_description_en', $product->small_description_en) }}</textarea>
-                    <label for="small_description_en" class="label">Small Description</label>
+                    <label for="small_description_en" class="label">Small Description (English)</label>
                     <div class="underline"></div>
                 </div>
 
                 {{-- Small Description_Ar --}}
                 <div class="input-container mb-5" style="width: 30%;">
                     <textarea id="small_description_ar" name="small_description_ar" class="mt-2" placeholder="">{{ old('small_description_ar', $product->small_description_ar) }}</textarea>
-                    <label for="small_description_ar" class="label">Small Description</label>
+                    <label for="small_description_ar" class="label">Small Description (Arabic)</label>
                     <div class="underline"></div>
                 </div>
 
                 {{-- Small Description_Ku --}}
                 <div class="input-container mb-5" style="width: 30%;">
                     <textarea id="small_description_ku" name="small_description_ku" class="mt-2" placeholder="">{{ old('small_description_ku', $product->small_description_ku) }}</textarea>
-                    <label for="small_description_ku" class="label">Small Description</label>
+                    <label for="small_description_ku" class="label">Small Description (kurdish)</label>
                     <div class="underline"></div>
                 </div>
 
