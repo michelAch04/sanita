@@ -204,4 +204,5 @@
 </script>
 
 @endpush
+@include('cms.partials.select2-style')
 @endsection
