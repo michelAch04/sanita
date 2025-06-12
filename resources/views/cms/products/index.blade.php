@@ -22,7 +22,7 @@ $canDelete = $permissions && $permissions->delete;
     </form>
 </div>
 
-<div class="container mt-5">
+<div class="ps-5 mt-5">
     <div class="card-header text-dark d-flex justify-content-between align-items-center m-2 mb-3">
         <h2 class="mb-0">Products</h2>
         @if($canAdd)
@@ -31,10 +31,10 @@ $canDelete = $permissions && $permissions->delete;
         @endif
     </div>
 
-    <div class="card shadow-sm border-0">
+    <div class="card shadow-sm border-0 ">
         <div class="card-body p-0">
             <div class="table-responsive rounded-1">
-                <table class="table mb-0">
+                <table class="table mb-0 mr-0">
                     <thead class="bg-grey text-dark opacity-75">
                         <tr>
                             <th>ID</th>

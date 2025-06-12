@@ -3,7 +3,7 @@
 @section('title', 'Edit User')
 
 @section('content')
-<div class="container mt-3">
+<div class="ps-5 mt-3">
 
     <div class="card-header bg-light d-flex justify-content-between align-items-center">
         <h2 class="mb-3">Edit User</h4>

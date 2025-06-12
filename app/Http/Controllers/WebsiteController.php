@@ -34,10 +34,6 @@ class WebsiteController extends Controller
             ->get()
             ->sortBy('position');
 
-<<<<<<< HEAD
-        return view('sanita.index', compact('aboutus', 'slideshow', 'categories', 'products'));
-=======
         return view('sanita.index', compact('aboutus', 'slideshow', 'categories', 'products', 'offers'));
->>>>>>> cb6509bf353a69ae5cf32a4c70d882aa051bc421
     }
 }

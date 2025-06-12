@@ -22,7 +22,7 @@ $canDelete = $permissions && $permissions->delete;
     </form>
 </div>
 
-<div class="container mt-5">
+<div class="ps-5 mt-5">
     {{-- Header --}}
     <div class="card-header text-dark d-flex justify-content-between align-items-center m-2 mb-3">
         <h2 class="mb-0">Users</h2>

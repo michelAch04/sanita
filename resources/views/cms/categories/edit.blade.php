@@ -3,7 +3,7 @@
 @section('title', 'Edit Category')
 
 @section('content')
-<div class="container mt-3">
+<div class="ps-5 mt-3">
     <div class="card shadow-sm border-0">
         <div class="card-header bg-light text-black">
             <h4 class="mb-0">Edit Category</h4>

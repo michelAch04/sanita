@@ -49,7 +49,7 @@ use App\Models\Permission;
     </button>
 </div>
 
-<div class="container mt-5">
+<div class="ps-5 mt-5">
     {{-- User Name --}}
     <h2 class="mb-4">{{ $user->name }}</h2>
 
