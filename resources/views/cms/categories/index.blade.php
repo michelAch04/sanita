@@ -67,7 +67,7 @@ $canDelete = $permissions && $permissions->delete;
                                 <span class="text-muted">No Image</span>
                                 @endif
                             </td>
-                            <td>{{ $category->name }}</td>
+                            <td>{{ $category->name_en }}</td>
                             <td>{{ $category->hidden ? 'No' : 'Yes' }}</td>
                             <td>{{ $category->created_at->format('Y-m-d H:i') }}</td>
                             <td>{{ $category->updated_at->format('Y-m-d H:i') }}</td>

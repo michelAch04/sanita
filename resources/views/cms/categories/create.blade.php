@@ -14,9 +14,25 @@
 
                 {{-- Name --}}
                 <div class="input-container mb-5 mt-3" style="width: 30%;">
-                    <input type="text" id="name" name="name" required
+                    <input type="text" id="name_en" name="name_en" required
                         style="width: 100%;" placeholder="">
-                    <label for="name" class="label">Category Name</label>
+                    <label for="name_en" class="label">Category Name (English)</label>
+                    <div class="underline"></div>
+                </div>
+
+                {{-- Name --}}
+                <div class="input-container mb-5 mt-3" style="width: 30%;">
+                    <input type="text" id="name_ar" name="name_ar" required
+                        style="width: 100%;" placeholder="">
+                    <label for="name_ar" class="label">Category Name (Arabic)</label>
+                    <div class="underline"></div>
+                </div>
+
+                {{-- Name --}}
+                <div class="input-container mb-5 mt-3" style="width: 30%;">
+                    <input type="text" id="name_ku" name="name_ku" required
+                        style="width: 100%;" placeholder="">
+                    <label for="name_ku" class="label">Category Name (Kurdish)</label>
                     <div class="underline"></div>
                 </div>
 

@@ -16,7 +16,7 @@ class BrandController extends Controller
                 $search = $request->query('query');
 
                 $query->where(function ($q) use ($search) {
-                    $q->where('name', 'like', "%$search%");
+                    $q->where('name_en', 'like', "%$search%");
                 });
             }
 
@@ -41,7 +41,10 @@ class BrandController extends Controller
     {
         // Validate the request
         $request->validate([
-            'name' => 'required|string|max:255|unique:brands,name',
+            'name_en' => 'required|string|max:255|unique:brands,name',
+            'name_ar' => 'required|string|max:255|unique:brands,name',
+            'name_ku' => 'required|string|max:255|unique:brands,name',
+            'visible' => 'nullable|boolean', // visible is the checkbox name in the form
             'image' => 'required|image|mimes:jpeg,png,jpg,gif',
         ]);
 

@@ -60,7 +60,7 @@ $canDelete = $permissions && $permissions->delete;
                                 No Image
                                 @endif
                             </td>
-                            <td>{{ $subcategory->name }}</td>
+                            <td>{{ $subcategory->name_en }}</td>
                             <td>{{ $subcategory->category->name }}</td>
                             <td>{{ $subcategory->hidden ? 'No' : 'Yes' }}</td>
                             <td class="text-end">

@@ -43,6 +43,7 @@ $canDelete = $permissions && $permissions->delete;
                             <th>Small Description</th>
                             <th>Unit Price</th>
                             <th>Shelf Price</th>
+                            <th>Old Price</th>
                             <th>Available Quantity</th>
                             <th>Subcategory</th>
                             <th>Brand</th>
@@ -71,6 +72,7 @@ $canDelete = $permissions && $permissions->delete;
                             <td>{{ $product->small_description_en }}</td>
                             <td>${{ $product->unit_price }}</td>
                             <td>${{ $product->shelf_price }}</td>
+                            <td>${{ $product->old_price}}</td>
                             <td>{{ $product->available_quantity }}</td>
                             <td>{{ $product->subcategories->name ?? 'N/A' }}</td>
                             <td>{{ $product->brands->name ?? 'N/A' }}</td>

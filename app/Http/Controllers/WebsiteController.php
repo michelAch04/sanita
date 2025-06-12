@@ -26,6 +26,7 @@ class WebsiteController extends Controller
 
         $offers = Product::where('hidden', 0)
             ->where('cancelled', 0)
+            ->where('old_price', '>', 0)
             ->where(function ($query) {
                 $query->where('automatic_hide', 0)
                     ->orWhere('available_quantity', '>', 0);
@@ -33,6 +34,10 @@ class WebsiteController extends Controller
             ->get()
             ->sortBy('position');
 
+<<<<<<< HEAD
         return view('sanita.index', compact('aboutus', 'slideshow', 'categories', 'products'));
+=======
+        return view('sanita.index', compact('aboutus', 'slideshow', 'categories', 'products', 'offers'));
+>>>>>>> cb6509bf353a69ae5cf32a4c70d882aa051bc421
     }
 }
