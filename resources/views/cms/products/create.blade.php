@@ -89,14 +89,14 @@
 
                 {{-- Unit Price --}}
                 <div class="input-container mb-5">
-                    <input type="number" id="unit_price" name="unit_price" step="0.01" required>
+                    <input type="number" id="unit_price" name="unit_price" step="0.01" required placeholder="">
                     <label for="unit_price" class="label">Price</label>
                     <div class="underline"></div>
                 </div>
 
                 {{-- Tax Toggle --}}
                 <div class="input-container mb-5 mt-3" style="width: 30%; position: relative; padding-top: 5px;">
-                    <label for="tax_id" class="visible-label">Tax</label>
+                    <label for="tax_id" class="label select2-label">Tax</label>
                     <select name="tax_id" id="tax_id" class="form-select">
                         <option value="">No VAT</option>
                         @foreach($taxes as $tax)

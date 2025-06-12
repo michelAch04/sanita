@@ -28,24 +28,27 @@
                     <div class="underline"></div>
                 </div>
 
-                {{-- Subcategory Name --}}
-                <div class="input-container mb-3 mt-3" style="width: 30%;">
-                    <input type="text" id="name_en" name="name_en" value="{{ old('name_en', $subcategory->name_en) }}" required style="width: 100%;">
-                    <label for="name_en" class="label">Subcategory Name</label>
+                {{-- Subcategory Name English--}}
+                <div class="input-container mb-5 mt-3" style="width: 30%;">
+                    <input type="text" id="name_en" name="name_en" value="{{ old('name_en', $subcategory->name_en) }}" 
+                    required style="width: 100%;" placeholder="">
+                    <label for="name_en" class="label">Subcategory Name (English)</label>
                     <div class="underline"></div>
                 </div>
 
-                {{-- Subcategory Name --}}
-                <div class="input-container mb-3 mt-3" style="width: 30%;">
-                    <input type="text" id="name_en" name="name_en" value="{{ old('name_en', $subcategory->name_en) }}" required style="width: 100%;">
-                    <label for="name_en" class="label">Subcategory Name</label>
+                {{-- Subcategory Name Arabic --}}
+                <div class="input-container mb-5 mt-3" style="width: 30%;">
+                    <input type="text" id="name_ar" name="name_ar" value="{{ old('name_ar', $subcategory->name_ar) }}" 
+                    placeholder="" required style="width: 100%;">
+                    <label for="name_ar" class="label">Subcategory Name (Arabic)</label>
                     <div class="underline"></div>
                 </div>
 
-                {{-- Subcategory Name --}}
-                <div class="input-container mb-3 mt-3" style="width: 30%;">
-                    <input type="text" id="name_en" name="name_en" value="{{ old('name_en', $subcategory->name_en) }}" required style="width: 100%;">
-                    <label for="name_en" class="label">Subcategory Name</label>
+                {{-- Subcategory Name Kurdish --}}
+                <div class="input-container mb-5 mt-3" style="width: 30%;">
+                    <input type="text" id="name_ku" name="name_ku" value="{{ old('name_ku', $subcategory->name_ku) }}" 
+                    placeholder="" required style="width: 100%;">
+                    <label for="name_kur" class="label">Subcategory Name (Kurdish)</label>
                     <div class="underline"></div>
                 </div>
 

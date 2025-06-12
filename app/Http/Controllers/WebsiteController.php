@@ -31,9 +31,7 @@ class WebsiteController extends Controller
                     ->orWhere('available_quantity', '>', 0);
             })
             ->get()
-            ->orderby('order', 'asc');
-        dd($offers);
-
+            ->sortBy('position');
 
         return view('sanita.index', compact('aboutus', 'slideshow', 'categories', 'products'));
     }
