@@ -44,8 +44,8 @@ use App\Models\Permission;
 
 {{-- Back Button --}}
 <div class="mb-3">
-    <button onclick="window.close()" class="btn btn-outline-secondary">
-        <i class="bi bi-arrow-left"></i> Back
+    <button onclick="window.close()" class="btn bubbles bubbles-grey">
+        <span class="text"><i class="bi bi-arrow-left"></i> Back</span>
     </button>
 </div>
 

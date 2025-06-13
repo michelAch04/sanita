@@ -20,6 +20,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\WebsiteController;
 use App\Http\Controllers\TaxController;
+use App\Http\Controllers\ReportController;
 use App\Models\Subcategory;
 
 /*
@@ -70,6 +71,9 @@ Route::middleware('auth:web')->group(function () {
     Route::post('/cms/categories/reorder', [CategoryController::class, 'reorder'])->name('categories.reorder');
     Route::post('/cms/subcategories/reorder', [SubcategoryController::class, 'reorder'])->name('subcategories.reorder');
     Route::post('/cms/slideshow/reorder', [SlideshowController::class, 'reorder'])->name('slideshow.reorder');
+
+    //reports
+    Route::get('/cms/report', [ReportController::class, 'show'])->name('report.show');
 });
 Route::prefix('{locale}')->middleware('localization')->group(function () {
 
