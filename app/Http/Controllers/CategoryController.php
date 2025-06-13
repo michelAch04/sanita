@@ -17,7 +17,7 @@ class CategoryController extends Controller
 
                 $query->where(function ($q) use ($search) {
                     $q->where('id', 'like', "{$search}%")
-                        ->orWhere('name', 'like', "{$search}%");
+                        ->orWhere('name_en', 'like', "{$search}%");
                 });
             }
 
@@ -47,15 +47,21 @@ class CategoryController extends Controller
             $hidden = $request->has('visible') ? 0 : 1;
 
             $validate = $request->validate([
-                'name' => 'required|string|max:255',
+                'name_en' => 'required|string|max:255',
+                'name_ar' => 'required|string|max:255',
+                'name_ku' => 'required|string|max:255',
+                'position' => 'nullable|integer|min:0',
                 'image' => 'nullable|mimes:jpg,jpeg,png,gif,svg|max:2048',
             ]);
 
             $extension = null;
 
             $category = Category::create([
-                'name' => $validate['name'],
-                'extension' => null, // Temporary; will be updated if image is uploaded
+                'name_en' => $validate['name_en'],
+                'name_ar' => $validate['name_ar'],
+                'name_ku' => $validate['name_ku'],
+                'position' => $validate['position'],
+                'extension' => null,
                 'hidden' => $hidden,
                 'cancelled' => 0,
             ]);
@@ -98,12 +104,16 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
+            'name_en' => 'required|string|max:255',
+            'name_ar' => 'required|string|max:255',
+            'name_ku' => 'required|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'visible' => 'required|boolean',
         ]);
 
-        $category->name = $validatedData['name'];
+        $category->name_en = $validatedData['name_en'];
+        $category->name_ar = $validatedData['name_ar'];
+        $category->name_ku = $validatedData['name_ku'];
         $category->hidden = !$validatedData['visible']; // invert visible to store hidden
 
         if ($request->hasFile('image')) {
@@ -118,7 +128,7 @@ class CategoryController extends Controller
 
             $category->extension = $extension;
         }
-
+        dd($category);
         $category->save();
 
         return redirect()->route('categories.index')->with('success', 'Category updated successfully.');

@@ -2,6 +2,8 @@
 return [
     'categories' => 'Categories',
     'products' => 'Products',
+    'offers' => 'Offers',
+    'store' => 'Store',
     'about' => 'About Us',
     'contact' => 'Contact Us',
     'sign_in' => 'Sign In',

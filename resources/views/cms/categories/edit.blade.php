@@ -14,10 +14,24 @@
                 @csrf
                 @method('PUT')
 
-                {{-- Name --}}
+                {{-- Name English --}}
                 <div class="input-container mb-5 mt-3" style="width: 30%;">
-                    <input type="text" id="name" name="name" value="{{ old('name', $category->name) }}" required style="width: 100%;">
-                    <label for="name" class="label">Category Name</label>
+                    <input type="text" id="name_en" name="name_en" value="{{ old('name_en', $category->name_en) }}" required style="width: 100%;">
+                    <label for="name_en" class="label">Category Name (English)</label>
+                    <div class="underline"></div>
+                </div>
+
+                {{-- Name Arabic --}}
+                <div class="input-container mb-5 mt-3" style="width: 30%;">
+                    <input type="text" id="name_ar" name="name_ar" value="{{ old('name_ar', $category->name_ar) }}" required style="width: 100%;">
+                    <label for="name_ar" class="label">Category Name (Arabic)</label>
+                    <div class="underline"></div>
+                </div>
+
+                {{-- Name Kurdish --}}
+                <div class="input-container mb-5 mt-3" style="width: 30%;">
+                    <input type="text" id="name_ku" name="name_ku" value="{{ old('name_ku', $category->name_ku) }}" required style="width: 100%;">
+                    <label for="name_ku" class="label">Category Name (Kurdish)</label>
                     <div class="underline"></div>
                 </div>
 

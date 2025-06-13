@@ -60,7 +60,7 @@ $canDelete = $permissions && $permissions->delete;
                                 No Image
                                 @endif
                             </td>
-                            <td>{{ $brand->name }}</td>
+                            <td>{{ $brand->name_en }}</td>
                             <td>{{ $brand->hidden ? 'No' : 'Yes' }}</td>
                             <td>{{ $brand->created_at }}</td>
                             <td>{{ $brand->updated_at }}</td>

@@ -12,26 +12,51 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
+            // Primary & Position
             $table->id();
-            $table->string('extension')->nullable();
+            $table->unsignedInteger('position')->default(9999);
+
+            // Identifiers
             $table->string('sku')->unique();
-            $table->foreignId('subcategories_id')->constrained('subcategories')->onDelete('cascade');
-            $table->string('name');
-            $table->text('description')->nullable();
-            $table->string('small_description', 255)->nullable();
+            $table->string('barcode')->nullable();
+            $table->string('extension')->nullable();
+
+            // Names (Multilingual)
+            $table->string('name_en');
+            $table->string('name_ar');
+            $table->string('name_ku');
+
+            // Small Descriptions (Multilingual)
+            $table->text('small_description_en')->nullable();
+            $table->text('small_description_ar')->nullable();
+            $table->text('small_description_ku')->nullable();
+
+            // Pricing
             $table->decimal('unit_price', 10, 2)->default(0);
             $table->decimal('shelf_price', 10, 2)->default(0);
+            $table->decimal('old_price', 10, 2)->nullable();
+
+            // Inventory
+            $table->integer('available_quantity')->default(0);
             $table->integer('threshold')->default(0);
+
+            // Classification Codes
             $table->string('product_line_code')->nullable();
             $table->string('product_line_description')->nullable();
             $table->string('family_code')->nullable();
             $table->string('family_description')->nullable();
+
+            // Foreign Keys
+            $table->foreignId('subcategories_id')->constrained('subcategories')->onDelete('cascade');
             $table->foreignId('brands_id')->constrained('brands')->onDelete('cascade');
-            $table->tinyInteger('tax')->default('0');
-            $table->integer('available_quantity')->default(0);
+            $table->foreignId('tax_id')->nullable()->constrained('taxes')->nullOnDelete();
+
+            // Visibility Flags
             $table->tinyInteger('hidden')->default(0);
             $table->tinyInteger('automatic_hide')->default(0);
             $table->tinyInteger('cancelled')->default(0);
+
+            // Timestamps
             $table->timestamps();
         });
     }

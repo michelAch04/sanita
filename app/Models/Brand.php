@@ -10,7 +10,9 @@ class Brand extends Model
     use HasFactory;
     protected $fillable = [
         'id',
-        'name',
+        'name_en',
+        'name_ar',
+        'name_ku',
         'hidden',
         'extension',
         'cancelled',

@@ -12,12 +12,20 @@ class Product extends Model
 
     protected $fillable = [
         'id',
-        'name',
+        'name_en',
+        'name_ar',
+        'name_ku',
+        'small_description_en',
+        'small_description_ar',
+        'small_description_ku',
+        'position',
+        'barcode',
+        'old_price',
         'sku',
         'shelf_price',
         'threshold',
         'automatic_hide',
-        'tax',
+        'tax_id',
         'subcategories_id',
         'brands_id',
         'unit_price',
@@ -36,5 +44,9 @@ class Product extends Model
     public function brands()
     {
         return $this->belongsTo(Brand::class, 'brands_id');
+    }
+    public function tax()
+    {
+        return $this->belongsTo(Tax::class, 'tax_id');
     }
 }

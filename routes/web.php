@@ -18,7 +18,8 @@ use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\App;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
-
+use App\Http\Controllers\WebsiteController;
+use App\Http\Controllers\TaxController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,14 +38,15 @@ Route::get('/', function () {
     $locale = request()->getPreferredLanguage(['en', 'ar', 'ku']) ?? 'en';
     return redirect("/$locale");
 });
+
 Route::get('/login', function () {
     return view('cms/auth/login');
 });
 
 // Admin login and logout routes
-Route::get('/cms/login', [LoginController::class, 'showLoginForm'])->name('admin.login');
-Route::post('/cms/login', [LoginController::class, 'login']);
-Route::post('/cms/logout', [LoginController::class, 'logout'])->name('admin.logout');
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('admin.login');
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/logout', [LoginController::class, 'logout'])->name('admin.logout');
 
 Route::middleware('auth:web')->group(function () {
     Route::get('/cms/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
@@ -59,6 +61,7 @@ Route::middleware('auth:web')->group(function () {
     Route::resource('/cms/orders', OrderController::class);
     Route::resource('/cms/slideshow', SlideshowController::class);
     Route::resource('/cms/permissions', PermissionController::class);
+    Route::resource('tax', TaxController::class);
     Route::get('/cms/cart', [CartController::class, 'cmsindex'])->name('cart.cmsindex');
 });
 Route::prefix('{locale}')->middleware('localization')->group(function () {
@@ -70,9 +73,7 @@ Route::prefix('{locale}')->middleware('localization')->group(function () {
     Route::post('/signup', [AuthController::class, 'signUp']);
     Route::post('/signout', [AuthController::class, 'signOut'])->name('customer.signout');
 
-    Route::get('', function () {
-        return view('/sanita/index');
-    })->name('sanita.index');
+    Route::get('/', [WebsiteController::class, 'index'])->name('sanita.index');
 
     Route::get('/about', [AboutUsController::class, 'show'])->name('about');
 

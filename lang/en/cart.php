@@ -17,4 +17,5 @@ return [
     'quantity' => 'Quantity',
     'total' => 'Total',
     'add_to_cart' => 'Add to Cart',
+    'out_of_stock' => 'Out of Stock',
 ];

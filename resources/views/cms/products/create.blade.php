@@ -15,13 +15,6 @@
             <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
-                {{-- Product Name --}}
-                <div class="input-container mb-5 mt-3" style="width: 30%;">
-                    <input type="text" id="name" name="name" required placeholder="">
-                    <label for="name" class="label">Product Name</label>
-                    <div class="underline"></div>
-                </div>
-
                 {{-- SKU --}}
                 <div class="input-container mb-5" style="width: 30%;">
                     <input type="text" id="sku" name="sku" required placeholder="">
@@ -29,10 +22,43 @@
                     <div class="underline"></div>
                 </div>
 
-                {{-- Description --}}
-                <div class="input-container mb-5" style="width: 60%;">
-                    <textarea id="description" name="description" class="mt-2" required></textarea>
-                    <label for="description" class="label">Description</label>
+                {{-- Product Name_ar --}}
+                <div class="input-container mb-5 mt-3" style="width: 30%;">
+                    <input type="text" id="name_en" name="name_en" required placeholder="">
+                    <label for="name_en" class="label">Product Name (English)</label>
+                    <div class="underline"></div>
+                </div>
+
+                {{-- Product Name_en --}}
+                <div class="input-container mb-5 mt-3" style="width: 30%;">
+                    <input type="text" id="name_ar" name="name_ar" required placeholder="">
+                    <label for="name_ar" class="label">Product Name (Arabic)</label>
+                    <div class="underline"></div>
+                </div>
+
+                {{-- Product Name_ar --}}
+                <div class="input-container mb-5 mt-3" style="width: 30%;">
+                    <input type="text" id="name_ku" name="name_ku" required placeholder="">
+                    <label for="name_ku" class="label">Product Name (Kurdish)</label>
+                    <div class="underline"></div>
+                </div>
+
+                {{-- Small Description_En --}}
+                <div class="input-container mb-5" style="width: 30%;">
+                    <textarea id="small_description_en" name="small_description_en" class="mt-2"></textarea>
+                    <label for="small_description_en" class="label">Small Description (English)</label>
+                </div>
+
+                {{-- Small Description_Ar --}}
+                <div class="input-container mb-5" style="width: 30%;">
+                    <textarea id="small_description_ar" name="small_description_ar" class="mt-2"></textarea>
+                    <label for="small_description_ar" class="label">Small Description (Arabic)</label>
+                </div>
+
+                {{-- Small Description_Ku --}}
+                <div class="input-container mb-5" style="width: 30%;">
+                    <textarea id="small_description_ku" name="small_description_ku" class="mt-2"></textarea>
+                    <label for="small_description_ku" class="label">Small Description (Kurdish)</label>
                 </div>
 
                 {{-- Subcategory Select --}}
@@ -61,23 +87,38 @@
                     <div class="underline"></div>
                 </div>
 
-                {{-- Small Description --}}
-                <div class="input-container mb-5" style="width: 30%;">
-                    <textarea id="small_description" name="small_description" class="mt-2"></textarea>
-                    <label for="small_description" class="label">Small Description (optional)</label>
-                </div>
-
                 {{-- Unit Price --}}
                 <div class="input-container mb-5">
-                    <input type="number" step="0.01" id="unit_price" name="unit_price" required placeholder="">
-                    <label for="unit_price" class="label">Unit Price</label>
+                    <input type="number" id="unit_price" name="unit_price" step="0.01" required placeholder="">
+                    <label for="unit_price" class="label">Price</label>
                     <div class="underline"></div>
+                </div>
+
+                {{-- Tax Toggle --}}
+                <div class="input-container mb-5 mt-3" style="width: 30%; position: relative; padding-top: 5px;">
+                    <label for="tax_id" class="label select2-label">Tax</label>
+                    <select name="tax_id" id="tax_id" class="form-select">
+                        <option value="">No VAT</option>
+                        @foreach($taxes as $tax)
+                        <option value="{{ $tax->id }}"
+                            data-rate="{{ $tax->rate }}"
+                            {{ old('tax_id', $product->tax_id ?? '') == $tax->id ? 'selected' : '' }}>
+                            {{ $tax->name }} ({{ $tax->rate }}%)
+                        </option>
+                        @endforeach
+                    </select>
                 </div>
 
                 {{-- Shelf Price --}}
                 <div class="input-container mb-5">
-                    <input type="number" step="0.01" id="shelf_price" name="shelf_price" required placeholder="">
+                    <input type="number" id="shelf_price" name="shelf_price" step="0.01" required readonly>
                     <label for="shelf_price" class="label">Shelf Price</label>
+                </div>
+
+                {{-- Old Price --}}
+                <div class="input-container mb-5">
+                    <input type="number" id="old_price" name="old_price" step="0.01" placeholder="">
+                    <label for="old_price" class="label">Old Price</label>
                     <div class="underline"></div>
                 </div>
 
@@ -85,13 +126,6 @@
                 <div class="input-container mb-5">
                     <input type="number" id="threshold" name="threshold" required placeholder="">
                     <label for="threshold" class="label">Threshold</label>
-                    <div class="underline"></div>
-                </div>
-
-                {{-- Tax --}}
-                <div class="input-container mb-5">
-                    <input type="number" id="tax" name="tax" required placeholder="">
-                    <label for="tax" class="label">Tax (%)</label>
                     <div class="underline"></div>
                 </div>
 
@@ -165,7 +199,37 @@
             width: '100%'
         });
     });
+    $(document).ready(function() {
+        $('#tax_id').select2({
+            placeholder: 'Select a tax',
+            allowClear: true,
+            width: '100%'
+        });
+
+        function updateShelfPrice() {
+            let unitPrice = parseFloat($('#unit_price').val());
+            let taxRate = parseFloat($('#tax_id option:selected').data('rate')) || 0;
+            let shelfPrice = unitPrice;
+
+            if (taxRate > 0) {
+                shelfPrice = unitPrice + (unitPrice * (taxRate / 100));
+            }
+
+            $('#shelf_price').val(shelfPrice.toFixed(2));
+        }
+
+        // Listen to changes in unit price
+        $('#unit_price').on('input', function() {
+            updateShelfPrice();
+        });
+
+        // Listen to changes in tax select
+        $('#tax_id').on('change', function() {
+            updateShelfPrice();
+        });
+    });
 </script>
+
 @endpush
 @include('cms.partials.select2-style')
 @endsection

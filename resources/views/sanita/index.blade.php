@@ -12,6 +12,61 @@
     @endforeach
 </div>
 
+<!-- Offers & Deals Section -->
+<section id="offers" class="py-5 bg-light">
+    <div class="container">
+        <h2 class="display-5 text-center mb-4">{{ __('nav.offers') }}</h2>
+        <div class="row">
+            @foreach($offers as $product)
+            <div class="col-md-4 mb-3">
+                <div class="card h-100 border-0 shadow-sm d-flex flex-column">
+                    @if($product->extension)
+                    <img src="{{ asset('storage/products/' . $product->id . '.' . $product->extension) }}" class="card-img-top" alt="{{ $product->name }}" style="height:200px;object-fit:cover;">
+                    @else
+                    <img src="{{ asset('images/default-product.jpg') }}" class="card-img-top" alt="Default Image" style="height:200px;object-fit:cover;">
+                    @endif
+
+                    <div class="card-body d-flex flex-column justify-content-between">
+                        <h5 class="card-title mb-2" style="min-height: 2.5em;">
+                            <a href="{{ route('products.show', ['locale' => app()->getLocale(), 'product' => $product->id]) }}">
+                                {{ $product->name }}
+                            </a>
+                        </h5>
+                        <p class="card-text text-muted mb-2" style="min-height: 3em;">{{ \Illuminate\Support\Str::limit($product->small_description, 80) }}</p>
+
+                        <div class="d-flex align-items-center justify-content-between mt-auto">
+                            <div class="d-flex flex-column text-end">
+                                @if($product->old_price > $product->shelf_price)
+                                <small class="text-muted text-decoration-line-through">${{ number_format($product->old_price, 2) }}</small>
+                                @endif
+                                <span class="fw-bold text-primary">${{ number_format($product->shelf_price, 2) }}</span>
+                            </div>
+
+                            @if($product->available_quantity > 0)
+                            <form action="{{ route('cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="ms-2">
+                                @csrf
+                                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                <input type="hidden" name="price" value="{{ $product->shelf_price }}">
+                                <input type="hidden" name="description" value="{{ $product->description }}">
+                                <button type="submit" class="btn btn-primary btn-sm">
+                                    <i class="fa fa-cart-plus me-1"></i> {{ __('cart.add_to_cart') }}
+                                </button>
+                            </form>
+                            @elseif($product->automatic_hide == 0 && $product->available_quantity <= 0)
+                                <button class="btn btn-secondary btn-sm" disabled>
+                                {{ __('cart.out_of_stock') ?? 'Out of Stock' }}
+                                </button>
+                                @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+
+
 <!-- Categories Section -->
 <section id="categories" class="py-5">
     <div class="container text-center">
@@ -45,7 +100,7 @@
 <!-- Products Section -->
 <section id="products" class="py-5 bg-light">
     <div class="container">
-        <h2 class="display-5 text-center mb-4">{{__('nav.products')}}</h2>
+        <h2 class="display-5 text-center mb-4">{{ __('nav.products') }}</h2>
         <div class="row">
             @foreach($products as $product)
             <div class="col-md-4 mb-3">
@@ -65,16 +120,23 @@
                         <p class="card-text text-muted mb-2" style="min-height: 3em;">{{ \Illuminate\Support\Str::limit($product->small_description, 80) }}</p>
 
                         <div class="d-flex align-items-center justify-content-between mt-auto">
-                            <span class="fw-bold text-primary">${{ $product->unit_price }}</span>
+                            <span class="fw-bold text-primary">${{ $product->shelf_price }}</span>
+
+                            @if($product->available_quantity > 0)
                             <form action="{{ route('cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="ms-2">
                                 @csrf
                                 <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                <input type="hidden" name="price" value="{{ $product->unit_price }}">
+                                <input type="hidden" name="price" value="{{ $product->shelf_price }}">
                                 <input type="hidden" name="description" value="{{ $product->description }}">
                                 <button type="submit" class="btn btn-primary btn-sm">
-                                    <i class="fa fa-cart-plus me-1"></i> {{__('cart.add_to_cart')}}
+                                    <i class="fa fa-cart-plus me-1"></i> {{ __('cart.add_to_cart') }}
                                 </button>
                             </form>
+                            @elseif($product->automatic_hide == 0 && $product->available_quantity <= 0)
+                                <button class="btn btn-secondary btn-sm" disabled>
+                                {{ __('cart.out_of_stock') ?? 'Out of Stock' }}
+                                </button>
+                                @endif
                         </div>
                     </div>
                 </div>
@@ -83,6 +145,7 @@
         </div>
     </div>
 </section>
+
 @endsection
 
 @section('scripts')

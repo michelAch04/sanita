@@ -17,8 +17,8 @@ class SubcategoryController extends Controller
                 $search = $request->query('query');
 
                 $query->where(function ($q) use ($search) {
-                    $q->where('name', 'like', "{$search}%")
-                        ->orWhereHas('category', fn($catQ) => $catQ->where('name', 'like', "{$search}%"));
+                    $q->where('name_en', 'like', "{$search}%")
+                        ->orWhereHas('category', fn($catQ) => $catQ->where('name_en', 'like', "{$search}%"));
                 });
             }
 
@@ -45,17 +45,23 @@ class SubcategoryController extends Controller
     {
         $request->validate([
             'categories_id' => 'required|exists:categories,id',
-            'name' => 'required|string|max:255',
-            // hidden is handled manually (not required in validation)
+            'name_en' => 'required|string|max:255',
+            'name_ar' => 'required|string|max:255',
+            'name_ku' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'visible' => 'nullable|boolean',
+            'position' => 'nullable|integer|min:0',
         ]);
 
         // Determine hidden value (if checkbox checked, hidden = 0; else hidden = 1)
-        $hidden = $request->has('hidden') ? 0 : 1;
+        $hidden = $request->has('visible') ? 0 : 1;
 
         // Create the subcategory
         $subcategory = Subcategory::create([
             'categories_id' => $request->categories_id,
-            'name' => $request->name,
+            'name_en' => $request->name_en,
+            'name_ar' => $request->name_ar,
+            'name_ku' => $request->name_ku,
             'hidden' => $hidden,
         ]);
 
@@ -86,11 +92,15 @@ class SubcategoryController extends Controller
     {
         $request->validate([
             'categories_id' => 'required|exists:categories,id',
-            'name' => 'required|string|max:255',
+            'name_en' => 'required|string|max:255',
+            'name_ar' => 'required|string|max:255',
+            'name_ku' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'visible' => 'nullable|boolean',
         ]);
 
         $subcategory->update([
-            'name' => $request->name,
+            'name_en' => $request->name_en,
             'categories_id' => $request->categories_id,
         ]);
 

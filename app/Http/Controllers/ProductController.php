@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Subcategory;
+use App\Models\Tax;
 
 class ProductController extends Controller
 {
@@ -19,13 +20,15 @@ class ProductController extends Controller
                 $search = $request->query('query');
 
                 $query->where(function ($q) use ($search) {
-                    $q->where('name', 'like', "%$search%")
-                        ->orWhere('small_description', 'like', "$search%");
+                    $q->where('name_en', 'like', "%$search%")
+                        ->orWhere('small_description_en', 'like', "$search%");
                 });
             }
 
-            $products = $query->where('cancelled', 0)->with('subcategories')->with('brands')->get();
-            // dd($products);
+            $products = $query->where('cancelled', 0)
+                ->with(['subcategories', 'brands', 'tax'])
+                ->get();
+
             if ($request->ajax()) {
                 return view('cms.products.index', compact('products'))->renderSections()['products_list'];
             }
@@ -41,39 +44,50 @@ class ProductController extends Controller
     {
         $brands = Brand::where('cancelled', 0)->get();
         $subcategories = Subcategory::where('cancelled', 0)->get();
-
-        return view('cms.products.create', compact('brands', 'subcategories'));
+        $taxes = Tax::where('cancelled', 0)->get();
+        return view('cms.products.create', compact('brands', 'subcategories', 'taxes'));
     }
 
     public function store(Request $request)
     {
         try {
             $request->validate([
-                'name' => 'required|string|max:255',
+                'name_en' => 'required|string|max:255',
+                'name_ar' => 'required|string|max:255',
+                'name_ku' => 'required|string|max:255',
+                'small_description_en' => 'nullable|string|max:255',
+                'small_description_ar' => 'nullable|string|max:255',
+                'small_description_ku' => 'nullable|string|max:255',
                 'sku' => 'required|string|max:255|unique:products,sku',
-                'description' => 'nullable|string',
-                'small_description' => 'nullable|string|max:255',
+                'barcode' => 'nullable|string|max:255|unique:products,barcode',
                 'unit_price' => 'required|numeric|min:0',
                 'shelf_price' => 'required|numeric|min:0',
+                'old_price' => 'nullable|numeric|min:0',
                 'threshold' => 'required|integer|min:0',
-                'tax' => 'required|integer|min:0',
                 'available_quantity' => 'required|integer|min:0',
                 'subcategories_id' => 'required|exists:subcategories,id',
                 'brands_id' => 'required|exists:brands,id',
                 'hidden' => 'boolean',
                 'automatic_hide' => 'boolean',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'tax_id' => 'nullable|exists:taxes,id',
             ]);
 
             $product = Product::create([
-                'name' => $request->name,
+                'name_en' => $request->name_en,
+                'name_ar' => $request->name_ar,
+                'name_ku' => $request->name_ku,
+                'small_description_en' => $request->small_description_en,
+                'small_description_ar' => $request->small_description_ar,
+                'small_description_ku' => $request->small_description_ku,
+                'barcode' => $request->barcode,
                 'sku' => $request->sku,
                 'description' => $request->description,
                 'small_description' => $request->small_description,
                 'unit_price' => $request->unit_price,
                 'shelf_price' => $request->shelf_price,
+                'old_price' => $request->old_price,
                 'threshold' => $request->threshold,
-                'tax' => $request->tax,
                 'available_quantity' => $request->available_quantity,
                 'subcategories_id' => $request->subcategories_id,
                 'brands_id' => $request->brands_id,
@@ -81,6 +95,7 @@ class ProductController extends Controller
                 'automatic_hide' => $request->has('automatic_hide') ? 1 : 0,
                 'cancelled' => 0,
                 'extension' => null,
+                'tax_id' => $request->tax_id,
             ]);
 
             if ($request->hasFile('image')) {
@@ -101,32 +116,35 @@ class ProductController extends Controller
     {
         $brands = Brand::where('cancelled', 0)->get();
         $subcategories = Subcategory::where('cancelled', 0)->get();
-        return view('cms.products.edit', compact('product', 'brands', 'subcategories'));
+        $taxes = Tax::where('cancelled', 0)->get();
+        return view('cms.products.edit', compact('product', 'brands', 'subcategories', 'taxes'));
     }
 
     public function update(Request $request, Product $product)
     {
         try {
-            $request->validate([
-                'name' => 'required|string|max:255',
-                'description' => 'nullable|string',
+            $data = $request->validate([
+                'name_en' => 'required|string|max:255',
+                'name_ar' => 'required|string|max:255',
+                'name_ku' => 'required|string|max:255',
+                'small_description_en' => 'nullable|string|max:255',
+                'small_description_ar' => 'nullable|string|max:255',
+                'small_description_ku' => 'nullable|string|max:255',
                 'unit_price' => 'required|numeric|min:0',
+                'shelf_price' => 'required|numeric|min:0',
+                'old_price' => 'nullable|numeric|min:0',
                 'available_quantity' => 'required|integer|min:0',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'small_description' => 'nullable|string|max:255',
-                'visible' => 'nullable|boolean', // visible is the checkbox name in the form
+                'visible' => 'nullable|boolean',
+                'automatic_hide' => 'nullable|boolean',
+                'tax_id' => 'nullable|exists:taxes,id',
+                'subcategories_id' => 'required|exists:subcategories,id',
             ]);
 
-            // Convert 'visible' checkbox to 'hidden' field (inverted logic)
-            $data = $request->only([
-                'name',
-                'description',
-                'unit_price',
-                'available_quantity',
-                'small_description',
-            ]);
+            $data['hidden'] = !$request->boolean('visible');
 
-            $data['hidden'] = !$request->boolean('visible'); // <-- this flips visible to hidden
+            $data['automatic_hide'] = $request->has('automatic_hide') ? 1 : 0;
 
             $product->update($data);
 

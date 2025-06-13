@@ -17,7 +17,7 @@
                 <tr>
                     <th scope="col">{{ __('cart.product') }}</th>
                     <th>{{ __('cart.description') }}</th>
-                    <th>{{ __('cart.unit_price') }}</th>
+                    <th>{{ __('cart.shelf_price') }}</th>
                     <th>{{ __('cart.quantity') }}</th>
                     <th>{{ __('cart.total') }}</th>
                     <th class="text-center">{{ __('cart.action') }}</th>
@@ -27,7 +27,7 @@
                 @php $cartTotal = 0; @endphp
                 @foreach($cart->cartDetails as $detail)
                 @php
-                $total = $detail->unit_price * $detail->quantity;
+                $total = $detail->shelf_price * $detail->quantity;
                 $cartTotal += $total;
                 @endphp
                 <tr>
@@ -37,7 +37,7 @@
                     <td class="text-muted">
                         {{ $detail->desc }}
                     </td>
-                    <td>${{ number_format($detail->unit_price, 2) }}</td>
+                    <td>${{ number_format($detail->shelf_price, 2) }}</td>
                     <td>
                         <form action="{{ route('cart.update',['locale' => app()->getLocale(),'cart' => $detail->id]) }}" method="POST" class="d-flex align-items-center gap-1">
                             @csrf
