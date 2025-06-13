@@ -23,7 +23,7 @@ class SlideshowController extends Controller
             });
         }
 
-        $slideshows = $query->where('cancelled', 0)->get(); // ← Use the filtered query
+        $slideshows = $query->where('cancelled', 0)->orderBy('position')->get(); // ← Use the filtered query
 
         if ($request->ajax()) {
             $view = view('cms.slideshow.index', compact('slideshows'))->renderSections();
@@ -129,5 +129,14 @@ class SlideshowController extends Controller
         $slideshow->update(['cancelled' => 1]);
 
         return redirect()->route('slideshow.index')->with('success', 'Slide deleted successfully.');
+    }
+
+    public function reorder(Request $request)
+    {
+        foreach ($request->order as $item) {
+            Slideshow::where('id', $item['id'])->update(['position' => $item['position']]);
+        }
+
+        return response()->json(['success' => true]);
     }
 }

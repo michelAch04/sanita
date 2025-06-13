@@ -21,11 +21,10 @@
     @stack('styles') <!-- For page-specific CSS -->
 </head>
 
-<body>
+<body style="overflow-x: hidden !important;">
 
     <div class="container-fluid">
         <div class="d-flex" id="app-container">
-
             <!-- Sidebar -->
             <nav id="sidebar" class="sidebar bg-dark text-white sidebar-collapsed">
                 <div class="sidebar-header p-2 fw-bold d-flex align-items-center gap-2">
@@ -43,19 +42,26 @@
                         </a>
                     </li>
                     @endforeach
-                    <li class="nav-item navbar-hover">
-                        <button type="button" class="nav-link text-white border-0 text-start ps-1 pe-2 navbar-hover w-100"
-                            data-bs-toggle="modal" data-bs-target="#logoutModal">
-                            <i class="bi bi-box-arrow-right logout-icon"></i>
-                            <span class="sidebar-label sidebar-logout">Logout</span>
-                        </button>
-                    </li>
+
             </nav>
 
             <!-- Content -->
             <main class="flex-grow-1 bg-light p-4">
                 @yield('content')
             </main>
+
+            <!-- Right Hover Sidebar (Logout) -->
+            <nav id="sidebar-right" class="sidebar-right bg-danger text-white">
+                <ul class="nav flex-column">
+                    <li class="nav-item ">
+                        <button type="button" class="nav-link text-white border-0 text-start ps-1 pe-2 w-100"
+                            data-bs-toggle="modal" data-bs-target="#logoutModal">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span class="sidebar-label">Logout</span>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
     <!-- Bootstrap 5 JS Bundle -->
@@ -76,10 +82,12 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <!-- Summernote JS -->
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
+    <!-- SortableJS -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 
     @stack('after-scripts')
 
-
+    @include('cms.partials.change-order')
 
 </body>
 

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Subcategory;
 use Illuminate\Http\Request;
+use Psy\Readline\Hoa\Console;
+use Symfony\Component\Console\Logger\ConsoleLogger;
 
 class SubcategoryController extends Controller
 {
@@ -22,7 +24,7 @@ class SubcategoryController extends Controller
                 });
             }
 
-            $subcategories = $query->where('cancelled', 0)->get();
+            $subcategories = $query->where('cancelled', 0)->orderBy('position')->get();
 
             if ($request->ajax()) {
                 return view('cms.subcategories.index', compact('subcategories'))->renderSections()['subcategories_list'];
@@ -99,9 +101,12 @@ class SubcategoryController extends Controller
             'visible' => 'nullable|boolean',
         ]);
 
+        $hidden = $request->has('visible') ? 0 : 1;
+
         $subcategory->update([
             'name_en' => $request->name_en,
             'categories_id' => $request->categories_id,
+            'hidden' => $hidden
         ]);
 
         if ($request->hasFile('image')) {
@@ -117,7 +122,6 @@ class SubcategoryController extends Controller
             ]);
         }
 
-
         return redirect()->route('subcategories.index')->with('success', 'Subcategory updated successfully.');
     }
 
@@ -126,7 +130,15 @@ class SubcategoryController extends Controller
     {
         $subcategory->update(['cancelled' => 1]);
 
-
         return redirect()->route('subcategories.index')->with('success', 'Subcategory deleted successfully.');
+    }
+
+    public function reorder(Request $request)
+    {
+        foreach ($request->order as $item) {
+            Subcategory::where('id', $item['id'])->update(['position' => $item['position']]);
+        }
+
+        return response()->json(['success' => true]);
     }
 }

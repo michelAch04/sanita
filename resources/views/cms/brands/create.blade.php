@@ -3,7 +3,7 @@
 @section('title', 'Create Brand')
 
 @section('content')
-<div class="container mt-3">
+<div class="ps-5 mt-3">
 
     <div class="card-header bg-light d-flex justify-content-between align-items-center">
         <h2 class="mb-3">Create Brand</h2>
@@ -17,7 +17,21 @@
                 {{-- Brand Name --}}
                 <div class="input-container mb-5 mt-3">
                     <input type="text" id="name_en" name="name_en" value="{{ old('name_en') }}" required placeholder="">
-                    <label for="name_en" class="label">Brand Name</label>
+                    <label for="name_en" class="label">Brand Name (En)</label>
+                    <div class="underline"></div>
+                </div>
+
+                {{-- Brand Name --}}
+                <div class="input-container mb-5 mt-3">
+                    <input type="text" id="name_ar" name="name_ar" value="{{ old('name_ar') }}" required placeholder="">
+                    <label for="name_ar" class="label">Brand Name (Ar)</label>
+                    <div class="underline"></div>
+                </div>
+
+                {{-- Brand Name --}}
+                <div class="input-container mb-5 mt-3">
+                    <input type="text" id="name_ku" name="name_ku" value="{{ old('name_ku') }}" required placeholder="">
+                    <label for="name_ku" class="label">Brand Name (Ku)</label>
                     <div class="underline"></div>
                 </div>
 
