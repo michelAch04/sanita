@@ -15,6 +15,7 @@
         <table class="table table-hover align-middle mb-4">
             <thead class="table-dark">
                 <tr>
+                    <th>image </th>
                     <th scope="col">{{ __('cart.product') }}</th>
                     <th>{{ __('cart.description') }}</th>
                     <th>{{ __('cart.shelf_price') }}</th>
@@ -27,41 +28,50 @@
                 @php $cartTotal = 0; @endphp
                 @foreach($cart->cartDetails as $detail)
                 @php
-                $total = $detail->shelf_price * $detail->quantity;
+                $total = $detail->unit_price * $detail->quantity;
                 $cartTotal += $total;
                 @endphp
-                <tr>
+                <tr data-id="{{ $detail->id }}">
+                    <td>
+                        <img 
+  class="fw-semibold text-primary" 
+  style="width: 150px; height: auto;" 
+  src="{{ asset('storage/products/'.$detail->product->id.'.'.$detail->product->extension) }}" 
+  alt="Product Image">
+                    </td>
                     <td class="fw-semibold text-primary">
-                        {{ $detail->product->name ?? __('cart.product_not_found') }}
+                         {{ $detail->product->{'name_'.app()->getLocale()} ?? $product->name_en }}
                     </td>
                     <td class="text-muted">
-                        {{ $detail->desc }}
-                    </td>
-                    <td>${{ number_format($detail->shelf_price, 2) }}</td>
+                         {{ $detail->product->{'small_description_'.app()->getLocale()} ?? $product->name_en }}
+                    </td>           
+                    <td>${{ number_format($detail->unit_price, 2) }}</td>
                     <td>
-                        <form action="{{ route('cart.update',['locale' => app()->getLocale(),'cart' => $detail->id]) }}" method="POST" class="d-flex align-items-center gap-1">
+                        {{-- Update quantity form --}}
+                        <form class="update-quantity-form d-inline-flex align-items-center" method="POST" action="{{ route('cart.update', ['locale' => app()->getLocale(), 'cart' => $detail->id]) }}">
                             @csrf
                             @method('PUT')
-                            <button type="submit" name="action" value="decrease" class="btn btn-sm btn-outline-secondary">−</button>
-                            <span class="px-2">{{ $detail->quantity }}</span>
-                            <button type="submit" name="action" value="increase" class="btn btn-sm btn-outline-primary">+</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary btn-decrease">−</button>
+                            <input type="text" name="quantity" class="form-control form-control-sm quantity-input mx-1 text-center" value="{{ $detail->quantity }}" style="width: 50px;">
+                            <button type="button" class="btn btn-sm btn-outline-primary btn-increase">+</button>
                         </form>
                     </td>
-                    <td class="fw-bold">${{ number_format($total, 2) }}</td>
+                    <td class="fw-bold item-total">${{ number_format($total, 2) }}</td>
                     <td class="text-center">
-                        <form action="{{ route('cart.destroy',['locale' => app()->getLocale(),'cart' => $detail->id]) }}" method="POST" onsubmit="return confirm('{{ __('cart.remove_confirm') }}')" class="d-inline">
+                        {{-- Delete form --}}
+                        <form class="delete-item-form" method="POST" action="{{ route('cart.destroy', ['locale' => app()->getLocale(), 'cart' => $detail->id]) }}">
                             @csrf
                             @method('DELETE')
-                            <button class="btn btn-outline-danger btn-sm" type="submit" title="{{ __('cart.remove') }}">
+                            <button type="button" class="btn btn-outline-danger btn-sm btn-delete" title="{{ __('cart.remove') }}">
                                 <i class="fa fa-trash"></i>
                             </button>
                         </form>
                     </td>
                 </tr>
                 @endforeach
-                <tr class="table-light fw-bold">
+                <tr class="table-light fw-bold" id="cart-total-row">
                     <td colspan="4" class="text-end">{{ __('cart.cart_total') }}</td>
-                    <td colspan="2">${{ number_format($cartTotal, 2) }}</td>
+                    <td colspan="2" id="cart-total">${{ number_format($cartTotal, 2) }}</td>
                 </tr>
             </tbody>
         </table>
@@ -84,4 +94,116 @@
     </div>
     @endif
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const csrfToken = '{{ csrf_token() }}';
+
+    // Debounce helper
+    const debounce = (func, delay = 300) => {
+        let timeout;
+        return (...args) => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func(...args), delay);
+        };
+    };
+
+    // Recalculate cart total
+    const recalculateCartTotal = () => {
+        let total = 0;
+        document.querySelectorAll('.item-total').forEach(el => {
+            const val = parseFloat(el.textContent.replace('$', ''));
+            if (!isNaN(val)) total += val;
+        });
+        document.getElementById('cart-total').textContent = `$${total.toFixed(2)}`;
+    };
+
+    // Quantity update
+    document.querySelectorAll('.update-quantity-form').forEach(form => {
+        const input = form.querySelector('.quantity-input');
+        const id = form.closest('tr').dataset.id;
+
+        const updateQuantity = debounce(() => {
+            const quantity = parseInt(input.value) || 1;
+
+            fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({
+                    _method: 'PUT',
+                    quantity: quantity
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    input.value = data.quantity;
+                    document.querySelector(`tr[data-id="${id}"] .item-total`).textContent = `$${parseFloat(data.item_total).toFixed(2)}`;
+                    recalculateCartTotal();
+                } else {
+                    alert(data.error || 'Failed to update cart.');
+                }
+            })
+            .catch(() => alert('Error updating cart.'));
+        }, 300);
+
+        input.addEventListener('input', updateQuantity);
+
+        form.querySelector('.btn-increase')?.addEventListener('click', () => {
+            input.value = parseInt(input.value || 1) + 1;
+            input.dispatchEvent(new Event('input'));
+        });
+
+        form.querySelector('.btn-decrease')?.addEventListener('click', () => {
+            let val = parseInt(input.value || 1);
+            if (val > 1) {
+                input.value = val - 1;
+                input.dispatchEvent(new Event('input'));
+            }
+        });
+    });
+
+    // Delete cart item
+    document.querySelectorAll('.delete-item-form').forEach(form => {
+        const id = form.closest('tr').dataset.id;
+
+        form.querySelector('.btn-delete').addEventListener('click', () => {
+            if (!confirm('{{ __("cart.remove_confirm") }}')) return;
+
+            fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({
+                    _method: 'DELETE'
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    const row = document.querySelector(`tr[data-id="${id}"]`);
+                    row.remove();
+                    recalculateCartTotal();
+
+                    if (document.querySelectorAll('tbody tr').length === 1) {
+                        location.reload(); // Only total row left, reload to show empty message
+                    }
+                } else {
+                    alert(data.message || 'Failed to delete item.');
+                }
+            })
+            .catch(() => alert('Error deleting item.'));
+        });
+    });
+});
+</script>
 @endsection

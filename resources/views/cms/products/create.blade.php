@@ -67,7 +67,7 @@
                     <select id="subcategories_id" name="subcategories_id" class="styled-select" required>
                         @foreach ($subcategories as $subcategory)
                         <option value="{{ $subcategory->id }}">
-                            {{ $subcategory->name }}
+                            {{ $subcategory->name_en }}
                         </option>
                         @endforeach
                     </select>
@@ -80,7 +80,7 @@
                     <select id="brands_id" name="brands_id" class="styled-select" required>
                         @foreach ($brands as $brand)
                         <option value="{{ $brand->id }}">
-                            {{ $brand->name }}
+                            {{ $brand->name_en }}
                         </option>
                         @endforeach
                     </select>
