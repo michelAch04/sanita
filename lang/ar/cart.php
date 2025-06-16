@@ -19,4 +19,6 @@ return [
     'total' => 'الإجمالي',
     'add_to_cart' => 'أضف إلى السلة',
     'out_of_stock' => 'غير متوفر في المخزون',
+    'delivery_charge' => 'رسوم التوصيل',
+    'grand_total' => 'الإجمالي الكلي',
 ];

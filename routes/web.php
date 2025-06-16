@@ -20,6 +20,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\WebsiteController;
 use App\Http\Controllers\TaxController;
+use App\Http\Controllers\WebsiteCartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,7 +63,6 @@ Route::middleware('auth:web')->group(function () {
     Route::resource('/cms/slideshow', SlideshowController::class);
     Route::resource('/cms/permissions', PermissionController::class);
     Route::resource('tax', TaxController::class);
-    Route::get('/cms/cart', [CartController::class, 'cmsindex'])->name('cart.cmsindex');
 });
 Route::prefix('{locale}')->middleware('localization')->group(function () {
 
@@ -80,7 +80,7 @@ Route::prefix('{locale}')->middleware('localization')->group(function () {
     Route::view('/contact', 'sanita.contactus')->name('contact');
 
     Route::middleware('auth:customer')->group(function () {
-        Route::resource('cart', CartController::class)->name('index', 'cart.index');
+        Route::resource('cart', WebsiteCartController::class);
     });
 
     // Password reset routes

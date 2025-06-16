@@ -47,7 +47,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}#categories">
+                        <a class="nav-link active" href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}#offers">
                             {{ __('nav.offers') }}
                         </a>
                     </li>
@@ -112,7 +112,7 @@
 
     <!-- Main Content -->
     @yield('content')
-
+    @stack('scripts')
     <!-- Footer -->
     <footer class="footer text-center bg-dark text-white mt-auto py-4">
         <div class="container">

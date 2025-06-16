@@ -3,6 +3,7 @@
 @section('title', 'Home')
 
 @section('content')
+
 <!-- Hero Section -->
 <div class="hero-carousel">
     @foreach ($slideshow as $image)
@@ -29,10 +30,10 @@
                     <div class="card-body d-flex flex-column justify-content-between">
                         <h5 class="card-title mb-2" style="min-height: 2.5em;">
                             <a href="{{ route('products.show', ['locale' => app()->getLocale(), 'product' => $product->id]) }}">
-                                {{ $product->name }}
+                                {!! $product->{'name_' . app()->getLocale()} !!}
                             </a>
                         </h5>
-                        <p class="card-text text-muted mb-2" style="min-height: 3em;">{{ \Illuminate\Support\Str::limit($product->small_description, 80) }}</p>
+                        <p class="card-text text-muted mb-2" style="min-height: 3em;">{!! $product->{'small_description_' . app()->getLocale()} !!}</p>
 
                         <div class="d-flex align-items-center justify-content-between mt-auto">
                             <div class="d-flex flex-column text-end">
@@ -43,20 +44,21 @@
                             </div>
 
                             @if($product->available_quantity > 0)
-                            <form action="{{ route('cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="ms-2">
+                            <form data-url="{{ route('cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="add-to-cart-form ms-2">
                                 @csrf
                                 <input type="hidden" name="product_id" value="{{ $product->id }}">
                                 <input type="hidden" name="price" value="{{ $product->shelf_price }}">
                                 <input type="hidden" name="description" value="{{ $product->description }}">
+                                <input type="hidden" name="quantity" value="1">
                                 <button type="submit" class="btn btn-primary btn-sm">
                                     <i class="fa fa-cart-plus me-1"></i> {{ __('cart.add_to_cart') }}
                                 </button>
                             </form>
-                            @elseif($product->automatic_hide == 0 && $product->available_quantity <= 0)
-                                <button class="btn btn-secondary btn-sm" disabled>
+                            @else
+                            <button class="btn btn-secondary btn-sm" disabled>
                                 {{ __('cart.out_of_stock') ?? 'Out of Stock' }}
-                                </button>
-                                @endif
+                            </button>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -65,7 +67,6 @@
         </div>
     </div>
 </section>
-
 
 <!-- Categories Section -->
 <section id="categories" class="py-5">
@@ -85,10 +86,9 @@
                         <h5 class="card-title">
                             <a href="{{ route('categories.show', ['locale' => app()->getLocale(), 'category' => $category->id]) }}"
                                 class="text-decoration-none text-dark">
-                                {{ $category->name }}
+                                {!! $category->{'name_' . app()->getLocale()} !!}
                             </a>
                         </h5>
-                        <p class="card-text text-muted">{{ $category->description ?? '' }}</p>
                     </div>
                 </div>
             </div>
@@ -114,29 +114,33 @@
                     <div class="card-body d-flex flex-column justify-content-between">
                         <h5 class="card-title mb-2" style="min-height: 2.5em;">
                             <a href="{{ route('products.show', ['locale' => app()->getLocale(), 'product' => $product->id]) }}">
-                                {{ $product->name }}
+                                {!! $product->{'name_' . app()->getLocale()} !!}
                             </a>
                         </h5>
-                        <p class="card-text text-muted mb-2" style="min-height: 3em;">{{ \Illuminate\Support\Str::limit($product->small_description, 80) }}</p>
+                        <p class="card-text text-muted mb-2" style="min-height: 3em;">{!! $product->{'small_description_' . app()->getLocale()} !!}</p>
 
                         <div class="d-flex align-items-center justify-content-between mt-auto">
                             <span class="fw-bold text-primary">${{ $product->shelf_price }}</span>
 
                             @if($product->available_quantity > 0)
-                            <form action="{{ route('cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="ms-2">
+                            <form
+                                class="ms-2 add-to-cart-form"
+                                data-url="{{ route('cart.store', ['locale' => app()->getLocale()]) }}">
+
                                 @csrf
                                 <input type="hidden" name="product_id" value="{{ $product->id }}">
                                 <input type="hidden" name="price" value="{{ $product->shelf_price }}">
                                 <input type="hidden" name="description" value="{{ $product->description }}">
+                                <input type="hidden" name="quantity" value="1">
                                 <button type="submit" class="btn btn-primary btn-sm">
                                     <i class="fa fa-cart-plus me-1"></i> {{ __('cart.add_to_cart') }}
                                 </button>
                             </form>
-                            @elseif($product->automatic_hide == 0 && $product->available_quantity <= 0)
-                                <button class="btn btn-secondary btn-sm" disabled>
+                            @else
+                            <button class="btn btn-secondary btn-sm" disabled>
                                 {{ __('cart.out_of_stock') ?? 'Out of Stock' }}
-                                </button>
-                                @endif
+                            </button>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -152,6 +156,9 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js" defer></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css" />
+
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         $('.hero-carousel').slick({
@@ -167,30 +174,34 @@
             swipe: true,
         });
 
-        $('.category-carousel').slick({
-            dots: false,
-            infinite: true,
-            speed: 300,
-            slidesToShow: 4,
-            slidesToScroll: 1,
-            arrows: true,
-            responsive: [{},
-                {
-                    breakpoint: 768,
-                    settings: {
-                        slidesToShow: 2
-                    }
-                },
-                {
-                    breakpoint: 576,
-                    settings: {
-                        slidesToShow: 1
-                    }
+        // AJAX: Add to cart
+        $('.add-to-cart-form').on('submit', function(e) {
+            e.preventDefault();
+
+            const $form = $(this);
+            const url = $form.data('url');
+            const data = {
+                _token: '{{ csrf_token() }}',
+                product_id: $form.find('input[name="product_id"]').val(),
+                price: $form.find('input[name="price"]').val(),
+                description: $form.find('input[name="description"]').val(),
+                quantity: $form.find('input[name="quantity"]').val()
+            };
+
+            $.post(url, data, function(response) {
+                if (response.success) {
+                    $('#cart-count').text(response.cart_count);
+                    toastr.success(response.message || 'Added to cart');
+                } else {
+                    toastr.error(response.message || 'Failed to add to cart');
                 }
-            ]
+            }).fail(function(xhr) {
+                toastr.error(xhr.responseJSON?.message || 'Server error. Please try again.');
+            });
         });
     });
 </script>
+
 <style>
     .category-carousel .slick-slide {
         padding: 10px;

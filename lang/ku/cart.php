@@ -18,4 +18,6 @@ return [
     'total' => 'کۆی گشتی',
     'add_to_cart' => 'زیادکردن بۆ سەبەتە',
     'out_of_stock' => 'لە مەخزەندا نییە',
+    'delivery_charge' => 'خەرجی گەیاندن',
+    'grand_total' => 'کۆی گشتی گەورە',
 ];
