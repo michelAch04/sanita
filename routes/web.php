@@ -20,6 +20,10 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\WebsiteController;
 use App\Http\Controllers\TaxController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\WebsiteAddressController;
+use App\Models\Subcategory;
+use App\Http\Controllers\WebsiteCheckoutController;
 use App\Http\Controllers\WebsiteCartController;
 
 /*
@@ -63,6 +67,16 @@ Route::middleware('auth:web')->group(function () {
     Route::resource('/cms/slideshow', SlideshowController::class);
     Route::resource('/cms/permissions', PermissionController::class);
     Route::resource('tax', TaxController::class);
+    Route::get('/cms/cart', [CartController::class, 'cmsindex'])->name('cart.cmsindex');
+
+    //for drag-and-drop reorder
+    Route::post('/cms/products/reorder', [ProductController::class, 'reorder'])->name('products.reorder');
+    Route::post('/cms/categories/reorder', [CategoryController::class, 'reorder'])->name('categories.reorder');
+    Route::post('/cms/subcategories/reorder', [SubcategoryController::class, 'reorder'])->name('subcategories.reorder');
+    Route::post('/cms/slideshow/reorder', [SlideshowController::class, 'reorder'])->name('slideshow.reorder');
+
+    //reports
+    Route::get('/cms/report', [ReportController::class, 'show'])->name('report.show');
 });
 Route::prefix('{locale}')->middleware('localization')->group(function () {
 
@@ -80,8 +94,12 @@ Route::prefix('{locale}')->middleware('localization')->group(function () {
     Route::view('/contact', 'sanita.contactus')->name('contact');
 
     Route::middleware('auth:customer')->group(function () {
+
+
         Route::resource('cart', WebsiteCartController::class);
+        Route::resource('addresses', WebsiteAddressController::class);
     });
+
 
     // Password reset routes
     Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');

@@ -3,34 +3,50 @@
 @section('title', 'Edit Tax')
 
 @section('content')
-<div class="container mt-5">
+<div class="ps-5 mt-3">
+
+    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+        <h2 class="mb-3">Edit Tax</h2>
+    </div>
+
     <div class="card shadow-sm border-0">
-        <div class="card-header text-dark d-flex justify-content-between align-items-center m-2 mb-3">
-            <h2 class="mb-0">Edit Tax</h2>
-        </div>
         <div class="card-body">
             <form action="{{ route('tax.update', $tax->id) }}" method="POST">
                 @csrf
                 @method('PUT')
-                <div class="mb-3">
-                    <label for="name" class="form-label">Tax Name</label>
-                    <input type="text" name="name" id="name" class="form-control" value="{{ old('name', $tax->name) }}" required>
+
+                {{-- Tax Name --}}
+                <div class="input-container mb-5 mt-3" style="width: 30%;">
+                    <input type="text" id="name" name="name" value="{{ old('name', $tax->name) }}" required style="width: 100%;">
+                    <label for="name" class="label">Tax Name</label>
+                    <div class="underline"></div>
                 </div>
 
-                <div class="mb-3">
-                    <label for="rate" class="form-label">Rate (%)</label>
-                    <input type="number" name="rate" id="rate" step="0.01" class="form-control" value="{{ old('rate', $tax->rate) }}" required>
+                {{-- Tax Rate --}}
+                <div class="input-container mb-5 mt-3" style="width: 30%;">
+                    <input type="number" id="rate" name="rate" step="0.01" value="{{ old('rate', $tax->rate) }}" required style="width: 100%;">
+                    <label for="rate" class="label">Rate (%)</label>
+                    <div class="underline"></div>
                 </div>
 
-                <div class="mb-3">
-                    <label for="active" class="form-label">Status</label>
-                    <select name="active" id="active" class="form-select">
-                        <option value="1" {{ old('active', $tax->active) == 1 ? 'selected' : '' }}>Active</option>
-                        <option value="0" {{ old('active', $tax->active) == 0 ? 'selected' : '' }}>Inactive</option>
-                    </select>
+                {{-- Visibility Toggle --}}
+                <div class="checkbox-wrapper-8 mb-5">
+                    <label for="active" class="visible-label">Visible</label>
+                    <input type="checkbox" id="active" name="active" class="tgl" value="1"
+                        {{ old('active', $tax->active) ? 'checked' : '' }}>
+                    <label for="active" class="tgl-btn" data-tg-on="Yes" data-tg-off="No"></label>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Update</button>
+                {{-- Submit & Cancel --}}
+                <div class="d-flex justify-content-end">
+                    <a href="{{ route('tax.index') }}" class="btn bubbles bubbles-grey me-2">
+                        <span class="text">Cancel</span>
+                    </a>
+                    <button type="submit" class="btn bubbles">
+                        <span class="text">Update</span>
+                    </button>
+                </div>
+
             </form>
         </div>
     </div>

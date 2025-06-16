@@ -44,12 +44,12 @@ use App\Models\Permission;
 
 {{-- Back Button --}}
 <div class="mb-3">
-    <button onclick="window.close()" class="btn btn-outline-secondary">
-        <i class="bi bi-arrow-left"></i> Back
+    <button onclick="window.close()" class="btn bubbles bubbles-grey">
+        <span class="text"><i class="bi bi-arrow-left"></i> Back</span>
     </button>
 </div>
 
-<div class="container mt-5">
+<div class="ps-5 mt-5">
     {{-- User Name --}}
     <h2 class="mb-4">{{ $user->name }}</h2>
 

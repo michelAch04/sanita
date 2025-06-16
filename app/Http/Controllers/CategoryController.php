@@ -21,7 +21,7 @@ class CategoryController extends Controller
                 });
             }
 
-            $categories = $query->where('cancelled', 0)->get();
+            $categories = $query->where('cancelled', 0)->orderBy('position')->get();
 
             if ($request->ajax()) {
                 return view('cms.categories.index', compact('categories'))->renderSections()['categories_list'];
@@ -128,6 +128,7 @@ class CategoryController extends Controller
 
             $category->extension = $extension;
         }
+        dd($category);
         $category->save();
 
         return redirect()->route('categories.index')->with('success', 'Category updated successfully.');
@@ -147,5 +148,14 @@ class CategoryController extends Controller
         $category->update(['cancelled' => 1]);
 
         return redirect()->route('categories.index')->with('success', 'categories deleted successfully.');
+    }
+
+    public function reorder(Request $request)
+    {
+        foreach ($request->order as $item) {
+            Category::where('id', $item['id'])->update(['position' => $item['position']]);
+        }
+
+        return response()->json(['success' => true]);
     }
 }

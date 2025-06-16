@@ -21,7 +21,7 @@ $canDelete = $permissions && $permissions->delete;
     </form>
 </div>
 
-<div class="container mt-5">
+<div class="ps-5 mt-5">
     {{-- Header --}}
     <div class="card-header text-dark d-flex justify-content-between align-items-center m-2 mb-3">
         <h2 class="mb-0">Subcategories</h2>
@@ -34,11 +34,12 @@ $canDelete = $permissions && $permissions->delete;
     {{-- Table --}}
     <div class="card shadow-sm border-0">
         <div class="card-body p-0">
-            <div class="table-responsive rounded-1">
+            <div class="table-responsive rounded-1"
+            data-sortable-table data-reorder-url="{{ route('subcategories.reorder') }}">
                 <table class="table mb-0">
                     <thead class="bg-grey text-dark opacity-75">
                         <tr>
-                            <th>ID</th>
+                            <th style="width: 50px;"></th> {{-- No text, just an icon --}}
                             <th>image</th>
                             <th>Name</th>
                             <th>Category</th>
@@ -49,8 +50,8 @@ $canDelete = $permissions && $permissions->delete;
                     <tbody id="subcategory-table-body">
                         @section('subcategories_list')
                         @forelse ($subcategories as $subcategory)
-                        <tr class="bg-hover-light-grey">
-                            <td>{{ $subcategory->id }}</td>
+                        <tr class="bg-hover-light-grey" data-id="{{ $subcategory->id }}">
+                            <td class="handle text-muted text-center"><i class="bi bi-list" style="cursor:grab;"></i></td>
                             <td>
                                 @if ($subcategory->extension)
                                 <a href="{{ asset('storage/subcategories/' . $subcategory->id . '.' . $subcategory->extension) }}" target="_blank">
@@ -65,7 +66,7 @@ $canDelete = $permissions && $permissions->delete;
                             <td>{{ $subcategory->hidden ? 'No' : 'Yes' }}</td>
                             <td class="text-end">
                                 @if($canEdit || $canDelete)
-                                <div class="dropdown">
+                                <div class="dropdown {{ $loop->first ? 'dropstart' : '' }}">
                                     <button class="btn btn-sm text-secondary rounded-circle border-0 bg-hover-teal" type="button" data-bs-toggle="dropdown">
                                         <i class="bi bi-three-dots-vertical"></i>
                                     </button>
@@ -94,7 +95,7 @@ $canDelete = $permissions && $permissions->delete;
                         </tr>
                         @empty
                         <tr class="bg-hover-light-grey">
-                            <td colspan="3" class="text-center text-muted">No subcategories found.</td>
+                            <td colspan="6" class="text-center text-muted">No subcategories found.</td>
                         </tr>
                         @endforelse
                         @endsection

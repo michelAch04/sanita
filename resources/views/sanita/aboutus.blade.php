@@ -8,7 +8,11 @@ $isRtl = app()->getLocale() === 'ar';
     <div class="container">
         <h2 class="text-center mb-4 mt-4">{{ __('about.title') }}</h2>
         <p class="text-center" {{ $isRtl ? 'dir=rtl' : '' }}>
-            {!! $aboutUs->{'textarea_' . app()->getLocale()} !!}
+            @if ($aboutUs)
+                {!! $aboutUs->{'textarea_' . app()->getLocale()} !!}
+            @else
+                <p>About Us information is not available.</p>
+            @endif
         </p>
     </div>
 </section>

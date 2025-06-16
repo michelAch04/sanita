@@ -2,193 +2,165 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Models\CartDetail;
 use App\Models\Product;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class WebsiteCartController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
-        $customerId = auth()->guard('customer')->id();
 
-        // Get active cart
-        $cart = Cart::where('customers_id', $customerId)
+        $expired = Cart::with('cartDetails')
+            ->where('customers_id', auth()->id())
             ->where('purchased', 0)
             ->where('cancelled', 0)
-            ->with(['cartDetails' => function ($query) {
-                $query->where('cancelled', 0)->with('product');
-            }])
+            ->where('expires_at', '<', now())
             ->first();
 
-        // If cart exists but expired
-        if ($cart && $cart->expires_at && $cart->expires_at < now()) {
-            foreach ($cart->cartDetails as $detail) {
-                if (!$detail->cancelled && $detail->product) {
-                    $detail->product->increment('available_quantity', $detail->quantity);
-                    $detail->update(['cancelled' => 1]);
-                }
-            }
-
-            $cart->update(['cancelled' => 1]);
-
-            return view('sanita.cart.index', [
-                'cart' => null,
-                'items' => [],
-                'subtotal' => 0,
-                'grandTotal' => 0,
-            ])->with('error', 'Your cart has expired.');
+        if ($expired) {
+            $expired->update(['cancelled' => 1]);
+            $expired->cartDetails()->update(['cancelled' => 1]);
         }
 
-        if (!$cart) {
-            return view('sanita.cart.index', [
-                'cart' => null,
-                'items' => [],
-                'subtotal' => 0,
-                'grandTotal' => 0,
-            ]);
+        $cart = Cart::with(['cartDetails' => function ($q) {
+            $q->where('cancelled', 0);
+        }])
+            ->where('customers_id', auth()->id())
+            ->where('purchased', 0)
+            ->where('cancelled', 0)
+            ->first();
+
+        foreach ($cart as $prodid) {
+            $product = Product::where('cancelled', 0)->where()->get();
         }
 
-        $items = $cart->cartDetails;
-
-        // ✅ Prevent repeated redirect for out-of-stock
-        if (!session()->pull('out_of_stock_checked')) {
-            foreach ($items as $item) {
-                if ($item->product && $item->product->available_quantity < $item->quantity) {
-                    // Set flag only for next request
-                    session()->put('out_of_stock_checked', true);
-
-                    return redirect()
-                        ->route('cart.index', ['locale' => app()->getLocale()])
-                        ->with('error', 'One or more items in your cart are out of stock.');
-                }
-            }
-        }
-
-        $subtotal = $items->sum(function ($item) {
-            return $item->unit_price * $item->quantity;
-        });
-
-        $grandTotal = $subtotal + $cart->delivery_charge;
-
-        return view('sanita.cart.index', [
-            'cart' => $cart,
-            'items' => $items,
-            'subtotal' => $subtotal,
-            'grandTotal' => $grandTotal,
-        ]);
+        return view('sanita.cart.index', compact('cart'));
     }
-
-
 
     public function store(Request $request)
     {
-
         $request->validate([
             'product_id' => 'required|exists:products,id',
-            'quantity' => 'required|integer|min:1',
+            'price' => 'required|numeric|min:0',
+            'description' => 'nullable|string|max:255',
         ]);
 
-        $customerId = auth()->guard('customer')->id();
-        if (!$customerId) {
-            return response()->json(['success' => false, 'message' => 'You must be logged in to add to cart.'], 403);
+        $product = Product::where('id', $request->product_id)
+            ->where('available_quantity', '>', 0)
+            ->first();
+
+        if (!$product) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Product is out of stock.',
+            ], 422);
         }
 
-        $product = Product::find($request->product_id);
-
-
-        if ($product->available_quantity < $request->quantity) {
-            return response()->json(['success' => false, 'message' => 'Product is out of stock.'], 400);
-        }
+        $customerId = auth()->id();
 
         $cart = Cart::firstOrCreate(
             ['customers_id' => $customerId, 'purchased' => 0, 'cancelled' => 0],
-            ['expires_at' => now()->addHours(2)]
+            ['expires_at' => now()->addYear(1)]
         );
 
-        // If already exists, update qty
-        $existingDetail = $cart->cartDetails()->where('products_id', $product->id)->where('cancelled', 0)->first();
-        if ($existingDetail) {
-            $existingDetail->increment('quantity', $request->quantity);
+        if (!$cart->wasRecentlyCreated) {
+            $cart->update(['expires_at' => now()->addHours(2)]);
+        }
+
+        $cartDetail = $cart->cartDetails()
+            ->where('products_id', $request->product_id)
+            ->where('cancelled', 0)
+            ->first();
+
+        if ($cartDetail) {
+            $cartDetail->quantity += 1;
+            $cartDetail->save();
         } else {
             $cart->cartDetails()->create([
-                'products_id' => $product->id,
-                'quantity' => $request->quantity,
+                'products_id' => $request->product_id,
                 'unit_price' => $request->price,
-                'description' => $request->description,
+                'quantity' => 1,
+                'cancelled' => 0,
             ]);
         }
 
-        // Decrease stock
-        $product->decrement('available_quantity', $request->quantity);
-
-        // Update session cart count
-        $cartCount = $cart->cartDetails()->where('cancelled', 0)->count('id');
-        session(['cart_count' => $cartCount]);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Product added to cart!',
-            'cart_count' => $cartCount
-        ]);
+        return response()->json(['success' => true]);
     }
 
-
-
-    public function update(Request $request, $id)
+    public function update(Request $request, $locale, CartDetail $cart)
     {
-        $cartDetail = CartDetail::with('product')->findOrFail($id);
-
-        if (!$cartDetail->product) {
-            return redirect()->route('cart.index', ['locale' => app()->getLocale()])
-                ->with('error', 'Product not found.');
-        }
-
-        $product = $cartDetail->product;
-
-        if ($request->action === 'increase') {
-            if ($product->available_quantity < 1) {
-                return redirect()->route('cart.index', ['locale' => app()->getLocale()])
-                    ->with('error', 'No more stock available.');
-            }
-
-            $cartDetail->increment('quantity');
-            $product->decrement('available_quantity');
-        } elseif ($request->action === 'decrease' && $cartDetail->quantity > 1) {
-            $cartDetail->decrement('quantity');
-            $product->increment('available_quantity');
-        }
-
-        return redirect()->route('cart.index', ['locale' => app()->getLocale()])
-            ->with('success', 'Cart updated successfully!');
-    }
-
-
-
-    public function destroy(string $id)
-    {
-        $customerId = auth()->guard('customer')->id();
-
-        $cart = Cart::where('customers_id', $customerId)
-            ->where('purchased', false)
-            ->where('cancelled', false)
+        $product = Product::where('id', $cart->products_id)
+            ->where('available_quantity', '>', 0)
             ->first();
 
-        if ($cart) {
-            $cartDetail = $cart->cartDetails()->where('id', $id)->where('cancelled', 0)->first();
-
-            if ($cartDetail && $cartDetail->product) {
-                // Restore quantity
-                $cartDetail->product->increment('available_quantity', $cartDetail->quantity);
-
-                // Cancel item
-                $cartDetail->update(['cancelled' => 1]);
-            }
+        if (!$product) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Product is out of stock.',
+            ], 422);
         }
 
-        return redirect()->route('cart.index', ['locale' => app()->getLocale()])
-            ->with('success', 'Product removed from cart.');
+        $quantity = max(1, (int)$request->input('quantity'));
+
+        if ($quantity > $product->available_quantity) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Not enough stock available.',
+            ], 422);
+        }
+
+        $cart->quantity = $quantity;
+        $cart->save();
+
+        $itemTotal = $cart->unit_price * $quantity;
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'quantity' => $quantity,
+                'item_total' => number_format($itemTotal, 2)
+            ]);
+        }
+
+        return redirect()->back()->with('success', __('cart.updated'));
+    }
+
+    public function destroy(Request $request, $locale, CartDetail $cart)
+    {
+        $carts_id = $cart->carts_id;
+        $products_id = $cart->products_id;
+
+        $remainingItems = CartDetail::where('carts_id', $carts_id)
+            ->where('cancelled', 0)
+            ->where('id', '!=', $cart->id)
+            ->count();
+
+        CartDetail::where('carts_id', $carts_id)
+            ->where('products_id', $products_id)
+            ->update(['cancelled' => 1]);
+
+        Product::where('id', $products_id)
+            ->increment('available_quantity', $cart->quantity);
+
+        if ($remainingItems === 0) {
+            Cart::where('id', $carts_id)->update(['cancelled' => 1]);
+        }
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'carts_id' => $cart->carts_id,
+                    'products_id' => $cart->products_id,
+                ]
+            ]);
+        }
+
+        return redirect()->back()->with('success', __('cart.removed'));
     }
 }

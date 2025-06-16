@@ -22,7 +22,7 @@ $canDelete = $permissions && $permissions->delete;
     </form>
 </div>
 
-<div class="container mt-5">
+<div class="ps-4 mt-5 ms-0 me-0" style="width: 95vw !important;">
     <div class="card-header text-dark d-flex justify-content-between align-items-center m-2 mb-3">
         <h2 class="mb-0">Products</h2>
         @if($canAdd)
@@ -33,11 +33,12 @@ $canDelete = $permissions && $permissions->delete;
 
     <div class="card shadow-sm border-0">
         <div class="card-body p-0">
-            <div class="table-responsive rounded-1">
-                <table class="table mb-0">
+            <div class="table-responsive rounded-1" style="overflow-x: auto !important; width: 100% !important;"
+            data-sortable-table data-reorder-url="{{ route('products.reorder') }}">
+                <table class="table mb-0 mr-0 w-100">
                     <thead class="bg-grey text-dark opacity-75">
                         <tr>
-                            <th>ID</th>
+                            <th style="width: 50px;"></th> {{-- No text, just an icon --}}
                             <th>Image</th>
                             <th>Name</th>
                             <th>Small Description</th>
@@ -58,8 +59,8 @@ $canDelete = $permissions && $permissions->delete;
                     <tbody id="product-table-body">
                         @section('products_list')
                         @forelse ($products as $product)
-                        <tr class="bg-hover-light-grey">
-                            <td>{{ $product->id }}</td>
+                        <tr class="bg-hover-light-grey" data-id="{{ $product->id }}">
+                            <td class="handle text-muted text-center"><i class="bi bi-list" style="cursor:grab;"></i></td>
                             <td>
                                 @if ($product->id)
                                 <img src="{{ asset('storage/products/' . $product->id . '.' . $product->extension) }}"

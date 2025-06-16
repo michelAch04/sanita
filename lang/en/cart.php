@@ -1,25 +1,17 @@
 <?php
-
 return [
-    'title' => 'Your Cart',
+    'title' => 'Shopping Cart',
     'heading' => 'Your Shopping Cart',
     'product' => 'Product',
     'description' => 'Description',
-    'unit_price' => 'Unit Price',
+    'shelf_price' => 'Shelf Price',
     'quantity' => 'Quantity',
     'total' => 'Total',
     'action' => 'Action',
-    'remove' => 'Remove',
-    'remove_confirm' => 'Are you sure you want to remove this item?',
     'cart_total' => 'Cart Total',
     'continue_shopping' => 'Continue Shopping',
     'proceed_checkout' => 'Proceed to Checkout',
     'empty' => 'Your cart is currently empty.',
     'browse_products' => 'Browse Products',
-    'add_to_cart' => 'Add to Cart',
-    'out_of_stock' => 'Out of Stock',
-    'product_not_found' => 'Product not found',
-    'in_cart' => 'In Cart',
-    'delivery_charge' => 'Delivery Charge',
-    'grand_total' => 'Grand Total',
+    'remove_confirm' => 'Are you sure you want to remove this item from the cart?',
 ];

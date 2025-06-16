@@ -13,6 +13,16 @@ return new class extends Migration
     {
         Schema::create('districts', function (Blueprint $table) {
             $table->id();
+            $table->string('name_en');
+            $table->string('name_ar')->nullable();
+            $table->string('name_ku')->nullable();
+
+            // FK to governorates
+            $table->foreignId('governorate_id')->constrained()->onDelete('cascade');
+
+            $table->decimal('lat', 10, 7)->nullable();
+            $table->decimal('long', 10, 7)->nullable();
+            $table->tinyInteger('cancelled')->default(0);
             $table->timestamps();
         });
     }

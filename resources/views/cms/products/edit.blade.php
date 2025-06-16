@@ -3,7 +3,7 @@
 @section('title', 'Edit Product')
 
 @section('content')
-<div class="container mt-3">
+<div class="ps-5 mt-3">
 
     <div class="card-header bg-light d-flex justify-content-between align-items-center">
         <h2 class="mb-3">Edit Product</h2>
@@ -109,7 +109,7 @@
                         @foreach ($subcategories as $subcategory)
                         <option value="{{ $subcategory->id }}"
                             {{ old('subcategories_id', $product->subcategories_id) == $subcategory->id ? 'selected' : '' }}>
-                            {{ $subcategory->name }}
+                            {{ $subcategory->name_en }}
                         </option>
                         @endforeach
                     </select>
@@ -123,7 +123,7 @@
                         @foreach ($brands as $brand)
                         <option value="{{ $brand->id }}"
                             {{ old('brands_id', $product->brands_id) == $brand->id ? 'selected' : '' }}>
-                            {{ $brand->name }}
+                            {{ $brand->name_en }}
                         </option>
                         @endforeach
                     </select>

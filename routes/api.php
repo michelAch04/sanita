@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\ProductApiController;
 use App\Http\Controllers\Api\SubcategoryApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\GovernorateController;
+use App\Http\Controllers\Api\DistrictController;
 
 /*
 |--------------------------------------------------------------------------

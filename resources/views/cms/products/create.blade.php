@@ -3,7 +3,7 @@
 @section('title', 'Create Product')
 
 @section('content')
-<div class="container mt-3">
+<div class="ps-5 mt-3">
 
     <div class="card-header bg-light d-flex justify-content-between align-items-center">
         <h2 class="mb-3">Create Product</h2>
@@ -67,7 +67,7 @@
                     <select id="subcategories_id" name="subcategories_id" class="styled-select" required>
                         @foreach ($subcategories as $subcategory)
                         <option value="{{ $subcategory->id }}">
-                            {{ $subcategory->name }}
+                            {{ $subcategory->name_en }}
                         </option>
                         @endforeach
                     </select>
@@ -80,7 +80,7 @@
                     <select id="brands_id" name="brands_id" class="styled-select" required>
                         @foreach ($brands as $brand)
                         <option value="{{ $brand->id }}">
-                            {{ $brand->name }}
+                            {{ $brand->name_en }}
                         </option>
                         @endforeach
                     </select>
@@ -89,14 +89,14 @@
 
                 {{-- Unit Price --}}
                 <div class="input-container mb-5">
-                    <input type="number" id="unit_price" name="unit_price" step="0.01" required>
+                    <input type="number" id="unit_price" name="unit_price" step="0.01" required placeholder="">
                     <label for="unit_price" class="label">Price</label>
                     <div class="underline"></div>
                 </div>
 
                 {{-- Tax Toggle --}}
                 <div class="input-container mb-5 mt-3" style="width: 30%; position: relative; padding-top: 5px;">
-                    <label for="tax_id" class="visible-label">Tax</label>
+                    <label for="tax_id" class="label select2-label">Tax</label>
                     <select name="tax_id" id="tax_id" class="form-select">
                         <option value="">No VAT</option>
                         @foreach($taxes as $tax)

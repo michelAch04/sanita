@@ -7,10 +7,20 @@ use App\Models\Tax;
 
 class TaxController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Example: fetch all taxes
-        $taxes = Tax::where('cancelled', 0)->get();
+        $query = $request->input('query');
+
+        $taxes = Tax::where('cancelled', 0)
+            ->when($query, function ($q) use ($query) {
+                $q->where('name', 'like', '%' . $query . '%');
+            })
+            ->get();
+
+        if ($request->ajax()) {
+            return view('cms.tax.index', compact('taxes'))->renderSections()['tax_list'];
+        }
+
         return view('cms.tax.index', compact('taxes'));
     }
 
@@ -31,12 +41,13 @@ class TaxController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'rate' => 'required|numeric|between:0,100',
-            'active' => 'required|boolean',
+            'active' => 'nullable|boolean',
         ]);
 
+        $validated['active'] = $request->has('active') ? 1 : 0;
         Tax::create($validated);
 
-        return redirect()->route('tax.index')->with('success', 'تمت إضافة الضريبة بنجاح.');
+        return redirect()->route('tax.index')->with('success', 'Tax created successfully.');
     }
 
 
@@ -45,13 +56,13 @@ class TaxController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'rate' => 'required|numeric|between:0,100',
-            'active' => 'required|boolean',
+            'active' => 'nullable|boolean',
         ]);
 
         $tax = Tax::findOrFail($id);
+        $validated['active'] = $request->has('active') ? 1 : 0;
         $tax->update($validated);
-
-        return redirect()->route('tax.index')->with('success', 'تم تحديث الضريبة بنجاح.');
+        return redirect()->route('tax.index')->with('success','Tax updated successfully.');
     }
 
     public function destroy($id)

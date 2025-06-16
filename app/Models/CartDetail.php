@@ -19,4 +19,5 @@ class CartDetail extends Model
     {
         return $this->belongsTo(Product::class, 'products_id');
     }
+    
 }
