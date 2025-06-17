@@ -109,7 +109,7 @@
                         @foreach ($subcategories as $subcategory)
                         <option value="{{ $subcategory->id }}"
                             {{ old('subcategories_id', $product->subcategories_id) == $subcategory->id ? 'selected' : '' }}>
-                            {{ $subcategory->name }}
+                            {{ $subcategory->name_en }}
                         </option>
                         @endforeach
                     </select>
@@ -123,7 +123,7 @@
                         @foreach ($brands as $brand)
                         <option value="{{ $brand->id }}"
                             {{ old('brands_id', $product->brands_id) == $brand->id ? 'selected' : '' }}>
-                            {{ $brand->name }}
+                            {{ $brand->name_en }}
                         </option>
                         @endforeach
                     </select>

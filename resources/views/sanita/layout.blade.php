@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" style="min-height:100vh;">
+<html lang="{{ app()->getLocale() }}" style="min-height:100vh;">
 
 <head>
     <meta charset="UTF-8">
     <meta name="google" content="notranslate">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sanita</title>
+    <title>@yield('title', 'Sanita')</title>
 
     <!-- CSS Links -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
@@ -27,6 +27,19 @@
         .cart-icon {
             font-size: 1.5rem;
         }
+
+        .nav-item.position-relative {
+            position: relative;
+        }
+
+        #cart-count {
+            font-size: 0.75rem;
+            width: 20px;
+            height: 20px;
+            line-height: 18px;
+            text-align: center;
+            padding: 0;
+        }
     </style>
 </head>
 
@@ -47,7 +60,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}#categories">
+                        <a class="nav-link active" href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}#offers">
                             {{ __('nav.offers') }}
                         </a>
                     </li>
@@ -67,9 +80,12 @@
                         </a>
                     </li>
                     @auth('customer')
-                    <li class="nav-item">
+                    <li class="nav-item position-relative">
                         <a href="{{ route('cart.index', ['locale' => app()->getLocale()]) }}" class="nav-link">
                             <i class="fas fa-shopping-cart cart-icon"></i>
+                            <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                {{ $cartCount }}
+                            </span>
                         </a>
                     </li>
                     @endauth
@@ -89,9 +105,17 @@
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="userDropdown">
                             <li>
+                                <a href="{{ route('addresses.index', ['locale' => app()->getLocale()]) }}" class="dropdown-item">
+                                    <i class="fas fa-map-marker-alt me-2"></i> {{ __('nav.addresses') }}
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
                                 <form action="{{ route('customer.signout', ['locale' => app()->getLocale()]) }}" method="POST">
                                     @csrf
-                                    <button type="submit" class="dropdown-item">{{__('nav.sign_out')}}</button>
+                                    <button type="submit" class="dropdown-item">{{ __('nav.sign_out') }}</button>
                                 </form>
                             </li>
                         </ul>
@@ -112,14 +136,15 @@
 
     <!-- Main Content -->
     @yield('content')
+    @stack('scripts')
 
     <!-- Footer -->
     <footer class="footer text-center bg-dark text-white mt-auto py-4">
         <div class="container">
             <p class="mb-1">{{ __('nav.copyright') }}</p>
             <p>
-                <a href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}#categories" class="text-white text-decoration-none">
-                    {{ __('nav.categories') }}
+                <a href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}#offers" class="text-white text-decoration-none">
+                    {{ __('nav.offers') }}
                 </a> |
                 <a href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}#products" class="text-white text-decoration-none">
                     {{ __('nav.products') }}
@@ -152,8 +177,43 @@
                 draggable: true,
                 swipe: true,
             });
+
+            // AJAX Add to Cart Handler
+            $(document).on('submit', 'form.add-to-cart-form', function(e) {
+                e.preventDefault();
+                let form = $(this);
+                let url = form.attr('action');
+                let data = form.serialize();
+
+                $.ajax({
+                    url: url,
+                    method: 'POST',
+                    data: data,
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            if (response.cart_count !== undefined) {
+                                $('#cart-count').text(response.cart_count);
+                            } else {
+                                let current = parseInt($('#cart-count').text()) || 0;
+                                $('#cart-count').text(current + 1);
+                            }
+                            alert(response.message || 'Added to cart successfully!');
+                            location.reload();
+                        } else {
+                            alert(response.message || 'Failed to add to cart.');
+                        }
+                    },
+                    error: function() {
+                        alert('Error occurred while adding to cart.');
+                    }
+                });
+            });
         });
     </script>
+
 </body>
 
 </html>

@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('districts', function (Blueprint $table) {
+        Schema::create('cities', function (Blueprint $table) {
             $table->id();
             $table->string('name_en');
             $table->string('name_ar')->nullable();
             $table->string('name_ku')->nullable();
 
-            // FK to governorates
-            $table->foreignId('governorate_id')->constrained()->onDelete('cascade');
+            // FK to districts (✅ Make sure this is singular)
+            $table->bigInteger('district_id')->foreignId('district_id')->constrained()->onDelete('cascade');
 
             $table->decimal('lat', 10, 7)->nullable();
             $table->decimal('long', 10, 7)->nullable();
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('districts');
+        Schema::dropIfExists('cities');
     }
 };

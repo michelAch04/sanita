@@ -10,4 +10,6 @@ return [
     'sign_out' => 'Sign Out',
     'cart' => 'Cart',
     'copyright' => '© 2025 Sanita. All rights reserved.',
+    'addresses'  => 'My Addresses',
+
 ];

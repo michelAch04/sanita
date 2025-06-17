@@ -21,7 +21,10 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\WebsiteController;
 use App\Http\Controllers\TaxController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\WebsiteAddressController;
 use App\Models\Subcategory;
+use App\Http\Controllers\WebsiteCheckoutController;
+use App\Http\Controllers\WebsiteCartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -91,8 +94,12 @@ Route::prefix('{locale}')->middleware('localization')->group(function () {
     Route::view('/contact', 'sanita.contactus')->name('contact');
 
     Route::middleware('auth:customer')->group(function () {
-        Route::resource('cart', CartController::class)->name('index', 'cart.index');
+
+
+        Route::resource('cart', WebsiteCartController::class);
+        Route::resource('addresses', WebsiteAddressController::class);
     });
+
 
     // Password reset routes
     Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');

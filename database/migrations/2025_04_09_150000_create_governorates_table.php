@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('slideshows', function (Blueprint $table) {
+        Schema::create('governorates', function (Blueprint $table) {
             $table->id();
-            $table->integer('position')->nullable();
-            $table->string('name');
-            $table->string('extension')->nullable();
-            $table->tinyInteger('hidden')->default(0);
+            $table->string('name_en');
+            $table->string('name_ar')->nullable();
+            $table->string('name_ku')->nullable();
             $table->tinyInteger('cancelled')->default(0);
             $table->timestamps();
         });
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('slideshows');
+        Schema::dropIfExists('governorates_tables');
     }
 };

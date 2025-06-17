@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\Slideshow;
 use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Cart;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,6 +28,19 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         View::composer('*', function ($view) {
+            $customerId = auth()->guard('customer')->id(); // Use the correct guard
+
+            $cart = Cart::with(['cartDetails' => function ($query) {
+                $query->where('cancelled', 0);
+            }])
+                ->where('customers_id', $customerId)
+                ->where('purchased', 0)
+                ->where('cancelled', 0)
+                ->first();
+
+            $cartCount = $cart ? $cart->cartDetails->count() : 0;
+            $view->with('cartCount', $cartCount);
+
             $userId = Auth::guard('web')->id();
             $permissions = $userId ? PageController::getPages($userId) : collect();
             $view->with('permissions', $permissions);

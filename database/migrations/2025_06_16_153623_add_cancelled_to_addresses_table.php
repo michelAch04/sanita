@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cities', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::table('addresses', function (Blueprint $table) {
+            $table->tinyInteger('cancelled')->default(0)->after('is_default');
         });
     }
 
@@ -22,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('cities');
+        Schema::table('addresses', function (Blueprint $table) {
+            $table->dropColumn('cancelled');
+        });
     }
 };

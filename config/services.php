@@ -21,6 +21,10 @@ return [
         'scheme' => 'https',
     ],
 
+    'geonames' => [
+        'username' => env('GEONAMES_USERNAME'),
+    ],
+
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
     ],

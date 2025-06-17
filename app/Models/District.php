@@ -7,5 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class District extends Model
 {
-    use HasFactory;
+    protected $fillable = ['name_en', 'name_ar', 'name_ku', 'governorate_id', 'lat', 'long'];
+
+    public function governorate()
+    {
+        return $this->belongsTo(Governorate::class);
+    }
+    public function cities()
+    {
+        return $this->hasMany(City::class);
+    }
 }
