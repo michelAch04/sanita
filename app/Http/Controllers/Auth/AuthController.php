@@ -24,7 +24,7 @@ class AuthController extends Controller
             $validated = $request->validate([
                 'first_name' => 'required|string|max:255',
                 'last_name' => 'required|string|max:255',
-                'DOB' => 'required|date',
+                'DOB' => 'required|date|before:today',
                 'mobile' => 'required|string|max:15',
                 'gender' => 'required|string',
                 'email' => 'required|email|unique:customers',
@@ -62,7 +62,8 @@ class AuthController extends Controller
         $customer = Customer::where('email', $request->email)->first();
 
         if (!$customer || !Hash::check($request->password, $customer->password)) {
-            return back()->withErrors(['email' => 'Invalid credentials.']);
+            // Return a single error keyed by 'login_error'
+            return back()->withErrors(['login_error' => 'Invalid credentials.'])->withInput();
         }
 
         // Log in the customer

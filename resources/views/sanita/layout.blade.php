@@ -12,9 +12,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
     <link rel="stylesheet" href="{{ asset('css/ui-tools.css') }}">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/login.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
     <style>
         .hero-carousel img {
             width: 100%;
@@ -157,8 +158,8 @@
     @stack('scripts')
 
     <!-- Footer -->
-    <footer class="footer text-center text-white mt-auto py-4" 
-    style="background: linear-gradient(to right, #1E3A5F, #2A4365);     
+    <footer class="footer text-center text-white mt-auto py-4"
+        style="background: linear-gradient(to right, #1E3A5F, #2A4365);     
     box-shadow: 0 4px 12px rgba(30, 58, 95, 0.2);
     transition: background-color 0.4s ease;">
         <div class="container">
@@ -184,6 +185,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
     <script>
         $(document).ready(function() {
             // $('.hero-carousel').slick({
@@ -234,6 +236,7 @@
             });
         });
     </script>
-    
+
 </body>
+
 </html>
