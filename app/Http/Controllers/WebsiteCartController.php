@@ -35,9 +35,7 @@ class WebsiteCartController extends Controller
             ->where('cancelled', 0)
             ->first();
 
-        foreach ($cart as $prodid) {
-            $product = Product::where('cancelled', 0)->where()->get();
-        }
+      
 
         return view('sanita.cart.index', compact('cart'));
     }

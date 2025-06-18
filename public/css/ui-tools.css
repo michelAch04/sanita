@@ -157,6 +157,10 @@
   --c2: #2aa230 !important;
 }
 
+.bubbles-arctic {
+  --c2: #2A4365 !important;
+}
+
 .bubbles {
   --c1: #ffffff;
   --c2: #38B2AC;

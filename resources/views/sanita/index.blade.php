@@ -15,51 +15,67 @@
 
 <!-- Offers & Deals Section -->
 <section id="offers" class="py-5 bg-light">
-    <div class="container">
+    <div class="container gx-0">
         <h2 class="display-5 text-center mb-4">{{ __('nav.offers') }}</h2>
-        <div class="row">
+        <div class="row gx-0">
             @foreach($offers as $product)
-            <div class="col-md-4 mb-3">
-                <div class="card h-100 border-0 shadow-sm d-flex flex-column">
-                    @if($product->extension)
-                    <img src="{{ asset('storage/products/' . $product->id . '.' . $product->extension) }}" class="card-img-top" alt="{{ $product->{'name_'.app()->getLocale()} ?? $product->name_en }}" style="height:200px;object-fit:cover;">
-                    @else
-                    <img src="{{ asset('images/default-product.jpg') }}" class="card-img-top" alt="Default Image" style="height:200px;object-fit:cover;">
-                    @endif
+            <div class="col-md-4 product-card mb-4">
+                <div class="card">
+                    <div class="card__shine"></div>
+                    <div class="card__glow"></div>
+                    <div class="card__content">
+                        <div class="card__badge">{{ __('nav.offer') }}</div>
 
-                    <div class="card-body d-flex flex-column justify-content-between">
-                        <h5 class="card-title mb-2" style="min-height: 2.5em;">
-                            <a href="{{ route('products.show', ['locale' => app()->getLocale(), 'product' => $product->id]) }}">
-                                {{ $product->{'name_'.app()->getLocale()} ?? $product->name_en }}
-                            </a>
-                        </h5>
-                        <p class="card-text text-muted mb-2" style="min-height: 3em;">
-                            {{ \Illuminate\Support\Str::limit($product->{'small_description_'.app()->getLocale()} ?? $product->small_description_en, 80) }}
-                        </p>
+                        <div style="--bg-color: #a78bfa" class="card__image">
+                            @if($product->extension)
+                            <img src="{{ asset('storage/products/' . $product->id . '.' . $product->extension) }}"
+                                alt="{{ $product->{'name_'.app()->getLocale()} ?? $product->name_en }}"
+                                class="img-fluid w-100 h-100 dynamic-fit">
+                            @else
+                            <img src="{{ asset('images/default-product.jpg') }}"
+                                alt="Default Image"
+                                class="img-fluid w-100 h-100" style="object-fit: cover; border-radius: 12px;">
+                            @endif
+                        </div>
 
-                        <div class="d-flex align-items-center justify-content-between mt-auto">
-                            <div class="d-flex flex-column text-end">
+                        <div class="card__text">
+                            <p class="card__title">
+                                <a href="{{ route('products.show', ['locale' => app()->getLocale(), 'product' => $product->id]) }}"
+                                    class="text-decoration-none text-dark">
+                                    {{ $product->{'name_'.app()->getLocale()} ?? $product->name_en }}
+                                </a>
+                            </p>
+                            <p class="card__description">
+                                {{ \Illuminate\Support\Str::limit($product->{'small_description_'.app()->getLocale()} ?? $product->small_description_en, 80) }}
+                            </p>
+                        </div>
+
+                        <div class="card__footer">
+                            <div class="card__price">
                                 @if($product->old_price > $product->shelf_price)
-                                <small class="text-muted text-decoration-line-through">${{ number_format($product->old_price, 2) }}</small>
+                                <small class="text-muted text-decoration-line-through me-1">
+                                    ${{ number_format($product->old_price, 2) }}
+                                </small>
                                 @endif
-                                <span class="fw-bold text-primary">${{ number_format($product->shelf_price, 2) }}</span>
+                                <span>${{ number_format($product->shelf_price, 2) }}</span>
                             </div>
-
-                            @if($product->available_quantity > 0)
-                            <form action="{{ route('cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="add-to-cart-form ms-2">
-                                @csrf
-                                <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                <input type="hidden" name="price" value="{{ $product->shelf_price }}">
-                                <input type="hidden" name="description" value="{{ $product->{'description_'.app()->getLocale()} ?? $product->description }}">
-                                <button type="submit" class="btn btn-primary btn-sm">
-                                    <i class="fa fa-cart-plus me-1"></i> {{ __('cart.add_to_cart') }}
-                                </button>
-                            </form>
-                            @elseif($product->automatic_hide == 0 && $product->available_quantity <= 0)
-                                <button class="btn btn-secondary btn-sm" disabled>
-                                {{ __('cart.out_of_stock') ?: 'Out of Stock' }}
+                            <div class="card__button">
+                                @if($product->available_quantity > 0)
+                                <form action="{{ route('cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="add-to-cart-form m-0">
+                                    @csrf
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                    <input type="hidden" name="price" value="{{ $product->shelf_price }}">
+                                    <input type="hidden" name="description" value="{{ $product->{'description_'.app()->getLocale()} ?? $product->description }}">
+                                    <button type="submit" class="border-0 bg-transparent p-0">
+                                        <i class="fas fa-cart-plus"></i>
+                                    </button>
+                                </form>
+                                @else
+                                <button class="btn btn-sm btn-secondary" disabled>
+                                    {{ __('cart.out_of_stock') ?: 'Out of Stock' }}
                                 </button>
                                 @endif
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -73,23 +89,22 @@
 <section id="categories" class="py-5">
     <div class="container text-center">
         <h2 class="display-5 mb-4">{{ __('nav.categories') }}</h2>
-        <div class="row justify-content-center category-carousel">
-            @foreach($categories->take(5) as $category)
-            <div class="col-md-2 col-6 mb-4">
-                <div class="card h-100 border-0 shadow-sm">
-                    <div class="card-body">
+        <div class="category-carousel mx-auto mb-5">
+            @foreach($categories as $category)
+            <div class="px-2">
+                <div class="category-card">
+                    <div class="category-card-body">
                         @if($category->extension)
                         <img src="{{ asset('storage/categories/' . $category->id . '.' . $category->extension) }}"
                             alt="{{ $category->{'name_'.app()->getLocale()} ?? $category->name_en }}"
-                            class="img-fluid rounded-circle mb-2"
-                            style="width: 100px; height: 100px; object-fit: cover;">
+                            class="img-fluid mb-5">
                         @endif
-                        <h5 class="card-title">
+                        <h4 class="card-title">
                             <a href="{{ route('categories.show', ['locale' => app()->getLocale(), 'category' => $category->id]) }}"
                                 class="text-decoration-none text-dark">
                                 {{ $category->{'name_'.app()->getLocale()} ?? $category->name_en }}
                             </a>
-                        </h5>
+                        </h4>
                         <p class="card-text text-muted">
                             {{ $category->{'description_'.app()->getLocale()} ?? $category->description }}
                         </p>
@@ -98,6 +113,12 @@
             </div>
             @endforeach
         </div>
+
+        <div class="text-center mt-5 mb-0">
+            <a href="{{ route('categories.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic view-categories-btn">
+                <span class="text">{{ __('nav.view_all_categories') ?: 'View All Categories' }}</span>
+            </a>
+        </div>
     </div>
 </section>
 
@@ -105,44 +126,63 @@
 <section id="products" class="py-5 bg-light">
     <div class="container">
         <h2 class="display-5 text-center mb-4">{{ __('nav.products') }}</h2>
-        <div class="row">
+        <div class="row gx-0">
             @foreach($products as $product)
-            <div class="col-md-4 mb-3">
-                <div class="card h-100 border-0 shadow-sm d-flex flex-column">
-                    @if($product->extension)
-                    <img src="{{ asset('storage/products/' . $product->id . '.' . $product->extension) }}" class="card-img-top" alt="{{ $product->{'name_'.app()->getLocale()} ?? $product->name_en }}" style="height:200px;object-fit:cover;">
-                    @else
-                    <img src="{{ asset('images/default-product.jpg') }}" class="card-img-top" alt="Default Image" style="height:200px;object-fit:cover;">
-                    @endif
+            <div class="col-md-4 product-card mb-2">
+                <div class="card">
+                    <div class="card__shine"></div>
+                    <div class="card__glow"></div>
+                    <div class="card__content">
+                        <div style="--bg-color: #38bdf8" class="card__image">
+                            @if($product->extension)
+                            <img src="{{ asset('storage/products/' . $product->id . '.' . $product->extension) }}"
+                                alt="{{ $product->{'name_'.app()->getLocale()} ?? $product->name_en }}"
+                                class="img-fluid w-100 h-100 dynamic-fit" style="border-radius: 12px;">
+                            @else
+                            <img src="{{ asset('images/default-product.jpg') }}"
+                                alt="Default Image"
+                                class="img-fluid w-100 h-100" style=" border-radius: 12px;">
+                            @endif
+                        </div>
 
-                    <div class="card-body d-flex flex-column justify-content-between">
-                        <h5 class="card-title mb-2" style="min-height: 2.5em;">
-                            <a href="{{ route('products.show', ['locale' => app()->getLocale(), 'product' => $product->id]) }}">
-                                {{ $product->{'name_'.app()->getLocale()} ?? $product->name_en }}
-                            </a>
-                        </h5>
-                        <p class="card-text text-muted mb-2" style="min-height: 3em;">
-                            {{ \Illuminate\Support\Str::limit($product->{'small_description_'.app()->getLocale()} ?? $product->small_description_en, 80) }}
-                        </p>
+                        <div class="card__text">
+                            <p class="card__title">
+                                <a href="{{ route('products.show', ['locale' => app()->getLocale(), 'product' => $product->id]) }}"
+                                    class="text-decoration-none text-dark">
+                                    {{ $product->{'name_'.app()->getLocale()} ?? $product->name_en }}
+                                </a>
+                            </p>
+                            <p class="card__description">
+                                {{ \Illuminate\Support\Str::limit($product->{'small_description_'.app()->getLocale()} ?? $product->small_description_en, 80) }}
+                            </p>
+                        </div>
 
-                        <div class="d-flex align-items-center justify-content-between mt-auto">
-                            <span class="fw-bold text-primary">${{ number_format($product->shelf_price, 2) }}</span>
-
-                            @if($product->available_quantity > 0)
-                            <form action="{{ route('cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="add-to-cart-form ms-2">
-                                @csrf
-                                <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                <input type="hidden" name="price" value="{{ $product->shelf_price }}">
-                                <input type="hidden" name="description" value="{{ $product->{'description_'.app()->getLocale()} ?? $product->description }}">
-                                <button type="submit" class="btn btn-primary btn-sm">
-                                    <i class="fa fa-cart-plus me-1"></i> {{ __('cart.add_to_cart') }}
-                                </button>
-                            </form>
-                            @elseif($product->automatic_hide == 0 && $product->available_quantity <= 0)
-                                <button class="btn btn-secondary btn-sm" disabled>
-                                {{ __('cart.out_of_stock') ?: 'Out of Stock' }}
+                        <div class="card__footer">
+                            <div class="card__price">
+                                @if($product->old_price > $product->shelf_price)
+                                <small class="text-muted text-decoration-line-through me-1">
+                                    ${{ number_format($product->old_price, 2) }}
+                                </small>
+                                @endif
+                                <span>${{ number_format($product->shelf_price, 2) }}</span>
+                            </div>
+                            <div class="card__button">
+                                @if($product->available_quantity > 0)
+                                <form action="{{ route('cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="add-to-cart-form m-0">
+                                    @csrf
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                    <input type="hidden" name="price" value="{{ $product->shelf_price }}">
+                                    <input type="hidden" name="description" value="{{ $product->{'description_'.app()->getLocale()} ?? $product->description }}">
+                                    <button type="submit" class="border-0 bg-transparent p-0">
+                                        <i class="fas fa-cart-plus"></i>
+                                    </button>
+                                </form>
+                                @else
+                                <button class="btn btn-sm btn-secondary" disabled>
+                                    {{ __('cart.out_of_stock') ?: 'Out of Stock' }}
                                 </button>
                                 @endif
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -151,93 +191,102 @@
         </div>
     </div>
 </section>
-
-@endsection
-
 @section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-                $('.hero-carousel').slick({
-                    dots: false,
-                    infinite: true,
-                    speed: 500,
-                    slidesToShow: 1,
-                    slidesToScroll: 1,
-                    autoplay: true,
-                    autoplaySpeed: 3000,
-                    arrows: false,
-                    draggable: true,
-                    swipe: true,
-                });
+    $(document).ready(function() {
+        console.log('Initializing Slick Carousels');
+        $('.hero-carousel').slick({
+            dots: false,
+            infinite: true,
+            speed: 500,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            autoplay: true,
+            autoplaySpeed: 3000,
+            arrows: false,
+            draggable: true,
+            swipe: true,
+        });
 
-                $('.category-carousel').slick({
-                    dots: false,
-                    infinite: true,
-                    speed: 300,
-                    slidesToShow: 4,
-                    slidesToScroll: 1,
-                    arrows: true,
-                    responsive: [{
-                            breakpoint: 768,
-                            settings: {
-                                slidesToShow: 2
-                            }
-                        },
-                        {
-                            breakpoint: 576,
-                            settings: {
-                                slidesToShow: 1
-                            }
+        $('.category-carousel').slick({
+            centerMode: true,
+            centerPadding: '0px',
+            dots: false,
+            infinite: true,
+            speed: 300,
+            slidesToShow: 4, // Changed from 3 to 4
+            slidesToScroll: 1,
+            arrows: true,
+            autoplay: true,
+            autoplaySpeed: 2500,
+            prevArrow: '<button type="button" class="slick-prev slick-arrow"><i class="fas fa-chevron-left"></i></button>',
+            nextArrow: '<button type="button" class="slick-next slick-arrow"><i class="fas fa-chevron-right"></i></button>',
+            responsive: [{
+                    breakpoint: 992, // Optional: add for tablets
+                    settings: {
+                        slidesToShow: 3
+                    }
+                },
+                {
+                    breakpoint: 768,
+                    settings: {
+                        slidesToShow: 2
+                    }
+                },
+                {
+                    breakpoint: 576,
+                    settings: {
+                        slidesToShow: 1
+                    }
+                }
+            ]
+        });
+
+        // AJAX Add to Cart
+        $('form.add-to-cart-form').submit(function(e) {
+            e.preventDefault();
+            let form = $(this);
+            let url = form.attr('action');
+            let data = form.serialize();
+
+            $.ajax({
+                url: url,
+                method: 'POST',
+                data: data,
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if (response.success) {
+                        if (response.cart_count !== undefined) {
+                            // Update cart count badge
+                            // $('#cart-count').text(response.cart_count);
                         }
-                    ]
-                });
+                        // alert('{{ __("cart.added_to_cart") }}'); // Optional feedback
+                    } else {
+                        // alert(response.message || 'Failed to add to cart.');
+                    }
+                },
+                error: function(xhr) {
+                    if (xhr.status === 401) {
+                        // Unauthorized - redirect to login page
+                        window.location.href = "{{ route('customer.signin', ['locale' => app()->getLocale()]) }}";
+                    } else {
 
-                // AJAX Add to Cart
-                $('form.add-to-cart-form').submit(function(e) {
-                    e.preventDefault();
-                    let form = $(this);
-                    let url = form.attr('action');
-                    let data = form.serialize();
-
-                    $.ajax({
-                        url: url,
-                        method: 'POST',
-                        data: data,
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        success: function(response) {
-                            if (response.success) {
-                                if (response.cart_count !== undefined) {
-                                    // Update cart count badge
-                                    // $('#cart-count').text(response.cart_count);
-                                }
-                                // alert('{{ __("cart.added_to_cart") }}'); // Optional feedback
-                            } else {
-                                // alert(response.message || 'Failed to add to cart.');
-                            }
-                        },
-                        error: function(xhr) {
-                            if (xhr.status === 401) {
-                                // Unauthorized - redirect to login page
-                                window.location.href = "{{ route('customer.signin', ['locale' => app()->getLocale()]) }}";
-                            } else {
-
-                                console.log(xhr.error);
-                                alert('Error occurred while adding to cart.');
-                            }
-                        }
-                    });
-                });
+                        console.log(xhr.error);
+                        alert('Error occurred while adding to cart.');
+                    }
+                }
+            });
+        });
+    });
 </script>
 
-<style>
-    .category-carousel .slick-slide {
-        padding: 10px;
-    }
-</style>
+@endsection
+@yield('scripts')
 @endsection

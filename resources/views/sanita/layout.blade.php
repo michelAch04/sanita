@@ -12,12 +12,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
-
+    <link rel="stylesheet" href="{{ asset('css/ui-tools.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <style>
-        .hero-carousel {
-            margin-top: 56px;
-        }
-
         .hero-carousel img {
             width: 100%;
             height: 400px;
@@ -46,10 +43,11 @@
 <body class="d-flex flex-column min-vh-100">
 
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow">
+    <nav class="navbar navbar-expand-lg sticky-top shadow">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}">
-                <span>Sanita</span>
+                <!-- <span>Sanita</span> -->
+                <img src="{{ asset('storage/login/sanita.png') }}" alt="Sanita Logo" class="me-2">
             </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -57,7 +55,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="collapse navbar-collapse" id="navbarNav" style="margin-right: -5%;">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a class="nav-link active" href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}#offers">
@@ -81,9 +79,9 @@
                     </li>
                     @auth('customer')
                     <li class="nav-item position-relative">
-                        <a href="{{ route('cart.index', ['locale' => app()->getLocale()]) }}" class="nav-link">
+                        <a href="{{ route('cart.index', ['locale' => app()->getLocale()]) }}" class="nav-link cart-icon-container">
                             <i class="fas fa-shopping-cart cart-icon"></i>
-                            <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="margin-top: 0.3rem !important;">
                                 {{ $cartCount }}
                             </span>
                         </a>
@@ -122,13 +120,32 @@
                     </div>
                     @endguest
 
-                    <form method="GET" action="" class="me-3">
-                        <select class="form-select" style="width:auto;display:inline;" onchange="window.location.href=this.value;">
-                            <option value="{{ route(\Illuminate\Support\Facades\Route::currentRouteName(), array_merge(request()->route()->parameters(), ['locale' => 'en'])) }}" {{ app()->getLocale() == 'en' ? 'selected' : '' }}>English</option>
-                            <option value="{{ route(\Illuminate\Support\Facades\Route::currentRouteName(), array_merge(request()->route()->parameters(), ['locale' => 'ar'])) }}" {{ app()->getLocale() == 'ar' ? 'selected' : '' }}>العربية</option>
-                            <option value="{{ route(\Illuminate\Support\Facades\Route::currentRouteName(), array_merge(request()->route()->parameters(), ['locale' => 'ku'])) }}" {{ app()->getLocale() == 'ku' ? 'selected' : '' }}>کوردی</option>
-                        </select>
-                    </form>
+                    <div class="dropdown me-3">
+                        <button class="btn button-glass dropdown-toggle" type="button" id="localeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-globe"></i> {{ strtoupper(app()->getLocale()) }}
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="localeDropdown">
+                            <li>
+                                <a class="dropdown-item {{ app()->getLocale() == 'en' ? 'active' : '' }}"
+                                    href="{{ route(\Illuminate\Support\Facades\Route::currentRouteName(), array_merge(request()->route()->parameters(), ['locale' => 'en'])) }}">
+                                    EN English
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item {{ app()->getLocale() == 'ar' ? 'active' : '' }}"
+                                    href="{{ route(\Illuminate\Support\Facades\Route::currentRouteName(), array_merge(request()->route()->parameters(), ['locale' => 'ar'])) }}">
+                                    AR العربية
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item {{ app()->getLocale() == 'ku' ? 'active' : '' }}"
+                                    href="{{ route(\Illuminate\Support\Facades\Route::currentRouteName(), array_merge(request()->route()->parameters(), ['locale' => 'ku'])) }}">
+                                    KU کوردی
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -139,7 +156,10 @@
     @stack('scripts')
 
     <!-- Footer -->
-    <footer class="footer text-center bg-dark text-white mt-auto py-4">
+    <footer class="footer text-center text-white mt-auto py-4" 
+    style="background: linear-gradient(to right, #1E3A5F, #2A4365);     
+    box-shadow: 0 4px 12px rgba(30, 58, 95, 0.2);
+    transition: background-color 0.4s ease;">
         <div class="container">
             <p class="mb-1">{{ __('nav.copyright') }}</p>
             <p>
@@ -165,18 +185,18 @@
     <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('.hero-carousel').slick({
-                dots: false,
-                infinite: true,
-                speed: 500,
-                slidesToShow: 1,
-                slidesToScroll: 1,
-                autoplay: true,
-                autoplaySpeed: 3000,
-                arrows: false,
-                draggable: true,
-                swipe: true,
-            });
+            // $('.hero-carousel').slick({
+            //     dots: false,
+            //     infinite: true,
+            //     speed: 500,
+            //     slidesToShow: 1,
+            //     slidesToScroll: 1,
+            //     autoplay: true,
+            //     autoplaySpeed: 3000,
+            //     arrows: false,
+            //     draggable: true,
+            //     swipe: true,
+            // });
 
             // AJAX Add to Cart Handler
             $(document).on('submit', 'form.add-to-cart-form', function(e) {
@@ -213,7 +233,6 @@
             });
         });
     </script>
-
+    
 </body>
-
 </html>

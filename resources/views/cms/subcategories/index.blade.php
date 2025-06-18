@@ -62,7 +62,7 @@ $canDelete = $permissions && $permissions->delete;
                                 @endif
                             </td>
                             <td>{{ $subcategory->name_en }}</td>
-                            <td>{{ $subcategory->category->name }}</td>
+                            <td>{{ $subcategory->category->name_en }}</td>
                             <td>{{ $subcategory->hidden ? 'No' : 'Yes' }}</td>
                             <td class="text-end">
                                 @if($canEdit || $canDelete)
