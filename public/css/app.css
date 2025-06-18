@@ -2,7 +2,7 @@
     --primary-blue: #2A4365;
     --secondary-blue: #1E3A5F;
     --primary-text: #1E293B;
-    --card-width: 17.375rem;
+    --card-width: 17.075rem;
     --card-height: 26.25rem;
     --card-bg: #ffffff;
 }
@@ -43,7 +43,7 @@
 
 /* Logo Size */
 .navbar .navbar-brand img {
-    height: 50px;
+    height: 2.5rem;
     width: auto;
 }
 
@@ -68,7 +68,7 @@
     background: #b5d0e3;
     transition: width 0.3s ease;
     position: absolute;
-    bottom: -1.1rem;
+    bottom: -0.75rem;
     left: 0;
 }
 
@@ -194,12 +194,13 @@ nav .cart-icon-container {
     padding: 0 !important;
 }
 .row {
-    gap: 0.5rem !important;
+    gap: 0.8rem !important;
     justify-content: space-between !important;
 }
 
 .product-card,
 .category-card {
+    margin-top: 0.75rem !important;
     margin-right: 0 !important;
     width: fit-content !important;
 }
@@ -417,8 +418,8 @@ section:nth-of-type(5) {
 }
 
 .card__button {
-    width: 28px;
-    height: 28px;
+    width: 2rem;
+    height: 2rem;
     background: var(--card-accent);
     border-radius: 50%;
     display: flex;
@@ -534,7 +535,7 @@ section:nth-of-type(5) {
 
 /* --------------------------------------- CAROUSEL STYLING ------------------------------------- */
 
-.category-carousel .slick-track {
+.carousel .slick-track {
     display: flex !important;
     justify-content: space-between !important;
     margin: 0 auto !important;
@@ -563,11 +564,11 @@ section:nth-of-type(5) {
 }
 
 .slick-prev {
-    left: -40px;
+    left: -2.5rem;
 }
 
 .slick-next {
-    right: -40px;
+    right: -2.5rem;
 }
 
 .category-card {
@@ -646,7 +647,8 @@ section:nth-of-type(5) {
     object-fit: cover;
 }
 
-.view-categories-btn{
+.view-all-btn{
     padding: 0.5rem 1rem;
     font-size: 1.3rem;
+    --c2: var(--secondary-blue) !important;
 }

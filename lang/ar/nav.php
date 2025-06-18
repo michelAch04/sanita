@@ -13,4 +13,6 @@ return [
     'addresses'  => 'عناويني',
     'copyright' => '© 2025 Sanita. جميع الحقوق محفوظة.',
     'view_all_categories' => '← عرض جميع الفئات',
+    'view_all_products' => '← عرض جميع المنتجات',
+    'view_all_offers' => '← عرض جميع العروض',
 ];

@@ -13,4 +13,6 @@ return [
     'copyright' => '© 2025 Sanita. All rights reserved.',
     'addresses'  => 'My Addresses',
     'view_all_categories' => 'View All Categories →',
+    'view_all_products' => 'View All Products →',
+    'view_all_offers' => 'View All Offers →',
 ];

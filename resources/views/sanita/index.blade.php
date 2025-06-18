@@ -17,9 +17,9 @@
 <section id="offers" class="py-5 bg-light">
     <div class="container gx-0">
         <h2 class="display-5 text-center mb-4">{{ __('nav.offers') }}</h2>
-        <div class="row gx-0">
+        <div class="carousel gx-0">
             @foreach($offers as $product)
-            <div class="col-md-4 product-card mb-4">
+            <div class=" product-card mb-4">
                 <div class="card">
                     <div class="card__shine"></div>
                     <div class="card__glow"></div>
@@ -82,6 +82,11 @@
             </div>
             @endforeach
         </div>
+        <div class="text-center mt-4 mb-0">
+            <a href="{{ route('products.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic view-all-btn">
+                <span class="text">{{ __('nav.view_all_offers') ?: 'View All Offers' }}</span>
+            </a>
+        </div>
     </div>
 </section>
 
@@ -89,7 +94,7 @@
 <section id="categories" class="py-5">
     <div class="container text-center">
         <h2 class="display-5 mb-4">{{ __('nav.categories') }}</h2>
-        <div class="category-carousel mx-auto mb-5">
+        <div class="carousel mx-auto mb-5">
             @foreach($categories as $category)
             <div class="px-2">
                 <div class="category-card">
@@ -115,7 +120,7 @@
         </div>
 
         <div class="text-center mt-5 mb-0">
-            <a href="{{ route('categories.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic view-categories-btn">
+            <a href="{{ route('categories.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic view-all-btn">
                 <span class="text">{{ __('nav.view_all_categories') ?: 'View All Categories' }}</span>
             </a>
         </div>
@@ -126,9 +131,9 @@
 <section id="products" class="py-5 bg-light">
     <div class="container">
         <h2 class="display-5 text-center mb-4">{{ __('nav.products') }}</h2>
-        <div class="row gx-0">
+        <div class="carousel gx-0">
             @foreach($products as $product)
-            <div class="col-md-4 product-card mb-2">
+            <div class="product-card mb-2">
                 <div class="card">
                     <div class="card__shine"></div>
                     <div class="card__glow"></div>
@@ -189,6 +194,11 @@
             </div>
             @endforeach
         </div>
+        <div class="text-center mt-5 mb-0">
+            <a href="{{ route('products.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic view-all-btn">
+                <span class="text">{{ __('nav.view_all_products') ?: 'View All Products' }}</span>
+            </a>
+        </div>
     </div>
 </section>
 @section('scripts')
@@ -213,8 +223,8 @@
             swipe: true,
         });
 
-        $('.category-carousel').slick({
-            centerMode: true,
+        $('.carousel').slick({
+            centerMode: false,
             centerPadding: '0px',
             dots: false,
             infinite: true,
@@ -267,10 +277,8 @@
                             // Update cart count badge
                             // $('#cart-count').text(response.cart_count);
                         }
-                        // alert('{{ __("cart.added_to_cart") }}'); // Optional feedback
-                    } else {
-                        // alert(response.message || 'Failed to add to cart.');
-                    }
+
+                    } else {}
                 },
                 error: function(xhr) {
                     if (xhr.status === 401) {
