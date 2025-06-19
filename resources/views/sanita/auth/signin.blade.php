@@ -3,7 +3,7 @@
 @section('title', 'Sign In')
 
 @section('content')
-@php $isRtl = app()->getLocale() === 'ar'; @endphp
+@php $isRtl = (app()->getLocale() === 'ar' || app()->getLocale() === 'ku'); @endphp
 
 <div class="container mb-4" style="max-width:400px;">
     <h2 class="display-5 login-title text-center mt-4">{{ __('auth.sign_in.title') }}</h2>
@@ -73,33 +73,5 @@
         </form>
     </div>
 </div>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const toast = document.getElementById('toast-error');
-        if (toast) {
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transition = 'opacity 0.5s ease-out';
-                setTimeout(() => toast.remove(), 500);
-            }, 3000);
-        }
-
-        const togglePassword = document.querySelector('.toggle-password');
-        const passwordInput = document.querySelector('#password');
-
-        if (togglePassword && passwordInput) {
-            togglePassword.addEventListener('click', function() {
-                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                passwordInput.setAttribute('type', type);
-                this.classList.toggle('fa-eye');
-                this.classList.toggle('fa-eye-slash');
-            });
-        }
-
-        const firstInvalid = document.querySelector('.is-invalid');
-        if (firstInvalid) {
-            firstInvalid.focus();
-        }
-    });
-</script>
+<script src="{{ asset('js/auth.js') }}"></script>
 @endsection

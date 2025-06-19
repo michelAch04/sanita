@@ -3,7 +3,7 @@
 @section('title', 'Sign Up')
 
 @section('content')
-@php $isRtl = app()->getLocale() === 'ar'; @endphp
+@php $isRtl = (app()->getLocale() === 'ar' || app()->getLocale() === 'ku'); @endphp
 
 <div class="container mb-4 mt-5" style="max-width: 500px;">
     <h2 class="display-5 login-title text-center mb-5">{{ __('auth.sign_up.title') }}</h2>
@@ -92,16 +92,17 @@
             <div class="login-inputForm dob-group @error('DOB') is-invalid @enderror">
                 <i class="fa fa-calendar"></i>
                 <input type="text" name="dob_day" id="dob_day" maxlength="2" placeholder="DD"
-                    class="login-input small-input">
+                    class="login-input small-input" value="{{ old('dob_day') }}">
                 <span class="slash">/</span>
                 <input type="text" name="dob_month" id="dob_month" maxlength="2" placeholder="MM"
-                    class="login-input small-input">
+                    class="login-input small-input" value="{{ old('dob_month') }}">
                 <span class="slash">/</span>
                 <input type="text" name="dob_year" id="dob_year" maxlength="4" placeholder="YYYY"
-                    class="login-input small-input small-input-year">
+                    class="login-input small-input small-input-year" value="{{ old('dob_year') }}">
                 {{-- Hidden final DOB input --}}
                 <input type="hidden" name="DOB" id="DOB">
             </div>
+            <div id="dob-error" class="login-error-message" style="display:none;"></div>
             @error('DOB')
             <div class="login-error-message">{{ $message }}</div>
             @enderror
@@ -122,6 +123,7 @@
                     <i class="fa fa-check-circle"></i>
                 </span>
             </div>
+            <div id="mobile-error" class="login-error-message" style="display:none;"></div>
             @error('mobile')
             <div class="login-error-message">{{ $message }}</div>
             @enderror
@@ -129,14 +131,18 @@
 
         {{-- Gender --}}
         <div class="mb-4">
-            <label for="gender" class="{{ $isRtl ? 'text-end w-100' : '' }}">{{ __('auth.sign_up.gender') }}</label>
-            <div class="login-inputForm" @error('gender') is-invalid @enderror>
+            <label class="{{ $isRtl ? 'text-end w-100' : '' }}">{{ __('auth.sign_up.gender') }}</label>
+            <div class="d-flex align-items-center gap-2 flex-direction-row login-inputForm">
                 <i class="fa fa-venus-mars"></i>
-                <select name="gender" id="gender" class="login-input custom-select">
-                    <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>{{ __('auth.sign_up.gender_male') }}</option>
-                    <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>{{ __('auth.sign_up.gender_female') }}</option>
-                </select>
-                <i class="fa fa-chevron-down dropdown-icon"></i>
+                <div class="glass-radio-group @error('gender') is-invalid @enderror">
+                    <input type="radio" name="gender" id="glass-male" value="male" {{ old('gender') == 'male' ? 'checked' : '' }} />
+                    <label for="glass-male" id="glass-male">{{ __('auth.sign_up.gender_male') }}</label>
+
+                    <input type="radio" name="gender" id="glass-female" value="female" {{ old('gender') == 'female' ? 'checked' : '' }} />
+                    <label for="glass-female" id="glass-female">{{ __('auth.sign_up.gender_female') }}</label>
+
+                    <div class="glass-glider"></div>
+                </div>
             </div>
             @error('gender')
             <div class="login-error-message">{{ $message }}</div>
@@ -147,117 +153,12 @@
             <span class="text">{{ __('auth.sign_up.submit') }}</span>
         </button>
 
-        <p class="login-p text-center mt-3 mb-5">
+        <p class="login-p text-center mt-3 mb-4">
             <a href="{{ route('customer.signin', ['locale' => app()->getLocale()]) }}" class="login-span">
                 {{ __('auth.sign_up.already_account_signin') }}
             </a>
         </p>
     </form>
 </div>
-
-<script>
-    // Handle toast message for errors
-    document.addEventListener('DOMContentLoaded', function() {
-        const toast = document.getElementById('toast-error');
-        if (toast) {
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transition = 'opacity 0.5s ease-out';
-                setTimeout(() => toast.remove(), 500);
-            }, 3000);
-        }
-
-        const togglePassword = document.querySelector('.toggle-password');
-        const passwordInput = document.querySelector('#password');
-
-        if (togglePassword && passwordInput) {
-            togglePassword.addEventListener('click', function() {
-                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                passwordInput.setAttribute('type', type);
-                this.classList.toggle('fa-eye');
-                this.classList.toggle('fa-eye-slash');
-            });
-        }
-
-        const firstInvalid = document.querySelector('.is-invalid');
-        if (firstInvalid) {
-            firstInvalid.focus();
-        }
-    });
-
-    // Handle date input validation
-    // Convert DD / MM / YYYY to ISO format YYYY-MM-DD on form submission
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.querySelector('form');
-        const dayInput = document.getElementById('dob_day');
-        const monthInput = document.getElementById('dob_month');
-        const yearInput = document.getElementById('dob_year');
-        const hiddenDOB = document.getElementById('DOB');
-
-        form.addEventListener('submit', function(e) {
-            const day = dayInput.value.trim().padStart(2, '0');
-            const month = monthInput.value.trim().padStart(2, '0');
-            const year = yearInput.value.trim();
-
-            const iso = `${year}-${month}-${day}`;
-            const testDate = new Date(iso);
-
-            // Validate date
-            if (
-                testDate &&
-                testDate.getFullYear() == year &&
-                testDate.getMonth() + 1 == parseInt(month) &&
-                testDate.getDate() == parseInt(day)
-            ) {
-                hiddenDOB.value = iso;
-            } else {
-                e.preventDefault();
-                alert('Please enter a valid date in DD / MM / YYYY format.');
-            }
-        });
-    });
-
-    // Handle phone number validation using intl-tel-input
-    document.addEventListener('DOMContentLoaded', function() {
-        const phoneInputField = document.querySelector("#mobile");
-        const phoneValidIcon = document.getElementById("phone-valid");
-        const phoneLoadingIcon = document.getElementById("phone-loading");
-
-        const iti = window.intlTelInput(phoneInputField, {
-            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
-            preferredCountries: ["iq", "lb", "eg", "jo", "sa", "ae", "om", "kw", "qa", "bh"],
-            initialCountry: "auto",
-            geoIpLookup: function(callback) {
-                fetch('https://ipapi.co/json')
-                    .then(res => res.json())
-                    .then(data => callback(data.country_code))
-                    .catch(() => callback("us"));
-            }
-        });
-
-        function validatePhoneNumber() {
-            const number = phoneInputField.value.trim();
-            if (number.length === 0) {
-                phoneValidIcon.style.display = "none";
-                phoneLoadingIcon.style.display = "none";
-                return;
-            }
-
-            // Show loading
-            phoneValidIcon.style.display = "none";
-            phoneLoadingIcon.style.display = "inline";
-
-            // Simulate "checking" delay
-            setTimeout(() => {
-                const isValid = iti.isValidNumber();
-                phoneLoadingIcon.style.display = "none";
-                phoneValidIcon.style.display = isValid ? "inline" : "none";
-            }, 400);
-        }
-
-        // Trigger on keyup, change, blur
-        phoneInputField.addEventListener('input', validatePhoneNumber);
-        phoneInputField.addEventListener('blur', validatePhoneNumber);
-    });
-</script>
+<script src="{{ asset('js/auth.js') }}"></script>
 @endsection

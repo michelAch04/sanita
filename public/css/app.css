@@ -1,14 +1,13 @@
 :root {
-    --primary-blue: #2A4365;
-    --secondary-blue: #1E3A5F;
-    --primary-link: #8fb1ca;
-    --link-hover: #d884f2;
-    --primary-text: #1E293B;
-    --card-width: 17.075rem;
-    /*Previously: 17.075rem*/
-    --card-height: 20.25rem;
-    /*Previously: 26.25rem*/
-    --card-bg: #ffffff;
+    --primary-blue: #2A4365;     /*--primary-blue: #3f3790;*/
+    --secondary-blue: #1E3A5F;   /*--secondary-blue: #4b459e;*/
+    --hover-blue: #b5d0e3;       /*--hover-blue: #b5d0e3;*/
+    --link-blue: #8fb1ca;        /*--link-blue: #cda0db;*/
+    --link-hover: #d884f2;       /*--link-hover: #d884f2;*/
+    --primary-text: #1E293B;     /*--primary-text: #241e3b;*/
+    --card-width: 17.075rem;       /*--card-width: 17.075rem;*/
+    --card-height: 20.25rem;       /*--card-height: 26.25rem;*/
+    --card-bg: #ffffff;          /*--card-bg: #ffffff;*/
 }
 
 /* ------------------------------- NAVBAR STYLING ------------------------------------ */
@@ -62,7 +61,7 @@
 }
 
 .navbar-nav .nav-link:hover {
-    color: #b5d0e3 !important;
+    color: var(--hover-blue) !important;
 }
 
 .navbar-nav .nav-link::after {
@@ -70,7 +69,7 @@
     display: block;
     width: 0%;
     height: 4px;
-    background: #b5d0e3;
+    background: var(--hover-blue);
     transition: width 0.3s ease;
     position: absolute;
     bottom: -0.75rem;
@@ -94,24 +93,24 @@
 
 /* Sign In Button */
 .btn-outline-light {
-    border: 1px solid #b5d0e3;
-    color: #b5d0e3;
+    border: 1px solid var(--hover-blue);
+    color: var(--hover-blue);
     font-weight: 500;
     transition: all 0.3s ease;
     font-size: 1.1rem;
 }
 
 .btn-outline-light:hover {
-    background-color: #b5d0e3;
+    background-color: var(--hover-blue);
     color: var(--secondary-blue);
     border-color: var(--secondary-blue);
 }
 
 .btn-outline-light:focus,
 .btn-outline-light:active {
-    border: 1px solid #b5d0e3 !important;
+    border: 1px solid var(--hover-blue) !important;
     background: transparent !important;
-    color: #b5d0e3 !important;
+    color: var(--hover-blue) !important;
     font-weight: 500 !important;
     transition: all 0.3s ease !important;
 }
@@ -127,7 +126,7 @@
 }
 
 .dropdown-toggle:hover {
-    background-color: #b5d0e3;
+    background-color: var(--hover-blue);
     color: var(--secondary-blue);
 }
 
@@ -146,7 +145,7 @@
 
 .dropdown-menu .dropdown-item:hover {
     background-color: var(--primary-blue);
-    color: #b5d0e3;
+    color: var(--hover-blue);
 }
 
 /* Dropdown Menu Styling */
@@ -167,12 +166,12 @@
 
 .dropdown-item:hover {
     background-color: var(--primary-blue);
-    color: #b5d0e3;
+    color: var(--hover-blue);
 }
 
 .dropdown-item.active {
     background-color: var(--primary-blue);
-    color: #b5d0e3;
+    color: var(--hover-blue);
 }
 
 #localeDropdown:focus,
@@ -299,6 +298,7 @@ section:nth-of-type(5) {
     border: 1px solid rgba(255, 255, 255, 0.2);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
         Ubuntu, Cantarell, sans-serif;
+    cursor: pointer;
 }
 
 .card__shine {
@@ -347,6 +347,9 @@ section:nth-of-type(5) {
     opacity: 1;
     z-index: 1;
     transition: all 0.4s ease 0.1s;
+}
+.new-badge {
+    background: var(--link-hover) !important;
 }
 
 .card__image {
@@ -598,6 +601,8 @@ section:nth-of-type(5) {
     right: -2.5rem;
 }
 
+/* ------------------------------ CATEGORY CARD STYLING ----------------------------------------- */
+
 .category-card {
     width: var(--card-width) !important;
     height: var(--card-height);
@@ -615,10 +620,11 @@ section:nth-of-type(5) {
     color: var(--primary-text);
     transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     z-index: 999 !important;
+    cursor: pointer;
 }
 
 .category-card:active {
-    transform: translateY(-5px) scale(0.98);
+    transform: translateY(-5px) scale(0.98) !important;
 }
 
 .category-card:hover {

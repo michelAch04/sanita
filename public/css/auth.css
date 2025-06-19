@@ -72,7 +72,7 @@
 }
 
 .login-inputForm:focus-within {
-  border: 1.5px solid var(--primary-link);
+  border: 1.5px solid var(--link-blue);
 }
 
 .login-flex-row {
@@ -92,7 +92,7 @@
 .login-span {
   font-size: 14px;
   margin-left: 5px;
-  color: var(--primary-link);
+  color: var(--link-blue);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -145,7 +145,7 @@
   scale: 0;
   transition: 400ms cubic-bezier(0.76, 0, 0.24, 1);
 
-  background-color: var(--primary-link); /* White splash */
+  background-color: var(--link-blue); /* White splash */
   border-radius: 50%;
   position: absolute;
   translate: -50% -50%;
@@ -200,7 +200,7 @@
 }
 
 .login-btn:hover {
-  border: 1px solid var(--primary-link);;
+  border: 1px solid var(--link-blue);;
 }
 
 input:-webkit-autofill,
@@ -282,13 +282,13 @@ input:-webkit-autofill:active {
 /* Checked, Indeterminate */
 .cl-checkbox > input:checked,
 .cl-checkbox > input:indeterminate {
- background-color: var(--primary-link);
+ background-color: var(--link-blue);
 }
 
 .cl-checkbox > input:checked + span::before,
 .cl-checkbox > input:indeterminate + span::before {
- border-color: var(--primary-link);
- background-color: var(--primary-link);
+ border-color: var(--link-blue);
+ background-color: var(--link-blue);
 }
 
 .cl-checkbox > input:checked + span::after,
@@ -442,4 +442,41 @@ input:-webkit-autofill:active {
     outline: none;
 }
 
+/* Force intl-tel-input to be RTL friendly */
+.rtl-container .iti.iti--allow-dropdown {
+    direction: ltr !important; /* Required to keep plugin working */
+    width: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+}
 
+/* Align the input text to the right */
+.rtl-container .iti.iti--allow-dropdown input {
+    direction: rtl !important;
+    text-align: right;
+
+}
+
+/* Move the flag container to the right */
+.rtl-container .iti.iti--allow-dropdown .iti__flag-container {
+    order: 2; /* push to right in flexbox */
+    margin-right: 10px;
+    margin-left: 0;
+}
+
+/* Style the selected flag correctly on the right */
+.rtl-container .iti.iti--allow-dropdown .iti__selected-flag {
+    right: 0;
+    left: auto;
+    border-left: none;
+    border-right: 1px solid #ccc;
+}
+
+/* Optional: style dropdown */
+.rtl-container .iti.iti--allow-dropdown .iti__country-list {
+    text-align: right;
+}
+
+.rtl-container #glass-female:checked ~ .glass-glider {
+    transform: translateX(-100%);
+}

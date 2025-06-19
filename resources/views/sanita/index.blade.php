@@ -19,7 +19,7 @@
         <h2 class="display-5 text-center mb-4">{{ __('nav.offers') }}</h2>
         <div class="carousel gx-0">
             @foreach($offers as $product)
-            <div class=" product-card mb-4">
+            <div class="product-card mb-4" data-url="{{ route('products.show', ['locale' => app()->getLocale(), 'product' => $product->id]) }}">
                 <div class="card">
                     <div class="card__shine"></div>
                     <div class="card__glow"></div>
@@ -97,7 +97,7 @@
         <div class="carousel mx-auto mb-5">
             @foreach($categories as $category)
             <div class="px-2">
-                <div class="category-card">
+                <div class="category-card" data-url="{{ route('categories.show', ['locale' => app()->getLocale(), 'category' => $category->id]) }}">
                     <div class="category-card-body">
                         @if($category->extension)
                         <img src="{{ asset('storage/categories/' . $category->id . '.' . $category->extension) }}"
@@ -133,11 +133,16 @@
         <h2 class="display-5 text-center mb-4">{{ __('nav.products') }}</h2>
         <div class="carousel gx-0">
             @foreach($products as $product)
-            <div class="product-card mb-2">
+            <div class="product-card mb-2" data-url="{{ route('products.show', ['locale' => app()->getLocale(), 'product' => $product->id]) }}">
                 <div class="card">
                     <div class="card__shine"></div>
                     <div class="card__glow"></div>
                     <div class="card__content">
+                        @if($product->created_at && $product->created_at->gt(\Illuminate\Support\Carbon::now()->subDays(7)))
+                        <div class="card__badge new-badge">
+                            NEW!
+                        </div>
+                        @endif
                         <div style="--bg-color: #38bdf8" class="card__image">
                             @if($product->extension)
                             <img src="{{ asset('storage/products/' . $product->id . '.' . $product->extension) }}"
@@ -207,93 +212,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 
-<script>
-    $(document).ready(function() {
-        console.log('Initializing Slick Carousels');
-        $('.hero-carousel').slick({
-            dots: false,
-            infinite: true,
-            speed: 500,
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            autoplay: true,
-            autoplaySpeed: 3000,
-            arrows: false,
-            draggable: true,
-            swipe: true,
-        });
-
-        $('.carousel').slick({
-            centerMode: false,
-            centerPadding: '0px',
-            dots: false,
-            infinite: true,
-            speed: 300,
-            slidesToShow: 4, // Changed from 3 to 4
-            slidesToScroll: 1,
-            arrows: true,
-            autoplay: true,
-            autoplaySpeed: 2500,
-            prevArrow: '<button type="button" class="slick-prev slick-arrow"><i class="fas fa-chevron-left"></i></button>',
-            nextArrow: '<button type="button" class="slick-next slick-arrow"><i class="fas fa-chevron-right"></i></button>',
-            responsive: [{
-                    breakpoint: 992, // Optional: add for tablets
-                    settings: {
-                        slidesToShow: 3
-                    }
-                },
-                {
-                    breakpoint: 768,
-                    settings: {
-                        slidesToShow: 2
-                    }
-                },
-                {
-                    breakpoint: 576,
-                    settings: {
-                        slidesToShow: 1
-                    }
-                }
-            ]
-        });
-
-        // AJAX Add to Cart
-        $('form.add-to-cart-form').submit(function(e) {
-            e.preventDefault();
-            let form = $(this);
-            let url = form.attr('action');
-            let data = form.serialize();
-
-            $.ajax({
-                url: url,
-                method: 'POST',
-                data: data,
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    if (response.success) {
-                        if (response.cart_count !== undefined) {
-                            // Update cart count badge
-                            // $('#cart-count').text(response.cart_count);
-                        }
-
-                    } else {}
-                },
-                error: function(xhr) {
-                    if (xhr.status === 401) {
-                        // Unauthorized - redirect to login page
-                        window.location.href = "{{ route('customer.signin', ['locale' => app()->getLocale()]) }}";
-                    } else {
-
-                        console.log(xhr.error);
-                        alert('Error occurred while adding to cart.');
-                    }
-                }
-            });
-        });
-    });
-</script>
+<script src="{{ asset('js/app.js') }}"></script>
 
 @endsection
 @yield('scripts')
