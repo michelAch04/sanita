@@ -41,7 +41,6 @@ $canDelete = $permissions && $permissions->delete;
                             <th style="width: 50px;"></th> {{-- No text, just an icon --}}
                             <th>Image</th>
                             <th>Name</th>
-                            <th>Small Description</th>
                             <th>Unit Price</th>
                             <th>Shelf Price</th>
                             <th>Old Price</th>
@@ -70,7 +69,6 @@ $canDelete = $permissions && $permissions->delete;
                                 @endif
                             </td>
                             <td>{{ $product->name_en }}</td>
-                            <td>{{ $product->small_description_en }}</td>
                             <td>${{ $product->unit_price }}</td>
                             <td>${{ $product->shelf_price }}</td>
                             <td>${{ $product->old_price}}</td>

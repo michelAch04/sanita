@@ -104,12 +104,12 @@
                             alt="{{ $category->{'name_'.app()->getLocale()} ?? $category->name_en }}"
                             class="img-fluid mb-5">
                         @endif
-                        <h4 class="card-title">
+                        <h5 class="card-title">
                             <a href="{{ route('categories.show', ['locale' => app()->getLocale(), 'category' => $category->id]) }}"
                                 class="text-decoration-none text-dark">
                                 {{ $category->{'name_'.app()->getLocale()} ?? $category->name_en }}
                             </a>
-                        </h4>
+                        </h5>
                         <p class="card-text text-muted">
                             {{ $category->{'description_'.app()->getLocale()} ?? $category->description }}
                         </p>
