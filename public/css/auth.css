@@ -480,3 +480,5 @@ input:-webkit-autofill:active {
 .rtl-container #glass-female:checked ~ .glass-glider {
     transform: translateX(-100%);
 }
+
+/* -------------------------------- SEND RESET EMAIL STYLING ------------------------------------------ */

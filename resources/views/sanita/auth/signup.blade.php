@@ -8,13 +8,6 @@
 <div class="container mb-4 mt-5" style="max-width: 500px;">
     <h2 class="display-5 login-title text-center mb-5">{{ __('auth.sign_up.title') }}</h2>
 
-    @if ($errors->has('general'))
-    <div id="toast-error" class="login-toast error-toast {{ $isRtl ? 'rtl-container' : '' }}">
-        <i class="fa fa-times-circle"></i>
-        <span>{{ $errors->first('general') }}</span>
-    </div>
-    @endif
-
     <form method="POST" action="{{ route('customer.signup', ['locale' => app()->getLocale()]) }}" class="{{ $isRtl ? 'rtl-container' : '' }}">
         @csrf
 

@@ -140,7 +140,7 @@
                     <div class="card__content">
                         @if($product->created_at && $product->created_at->gt(\Illuminate\Support\Carbon::now()->subDays(7)))
                         <div class="card__badge new-badge">
-                            NEW!
+                            {{ __('nav.new') }}
                         </div>
                         @endif
                         <div style="--bg-color: #38bdf8" class="card__image">
@@ -206,6 +206,7 @@
         </div>
     </div>
 </section>
+
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

@@ -15,4 +15,11 @@ return [
     'view_all_categories' => '← هەموو پێشکەشەکان',
     'view_all_products' => '← هەموو بەرهەمەکان',
     'view_all_offers' => '← هەموو پێشکەشەکان',
+    'new' => '!نوێ',
+    'best_sellers' => 'بەرهەمەکانی زۆر فرۆشتراو',
+    'featured_products' => 'بەرهەمەکانی تایبەتی',
+    'search' => 'گەڕان',
+    'search_placeholder' => '...گەڕان بۆ بەرهەمەکان، پێشکەشەکان، یان مارکەکان',
+    'no_results' => 'هیچ ئەنجامیەک بۆ گەڕانت نەدۆزرایەوە.',
+    'search_results' => 'ئەنجامی گەڕان',
 ];

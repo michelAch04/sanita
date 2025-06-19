@@ -155,6 +155,10 @@
 
     <!-- Main Content -->
     @yield('content')
+
+    @include('components.toast')
+    @include('components.modal')
+    
     @stack('scripts')
 
     <!-- Footer -->
@@ -186,6 +190,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+    <script src="{{ asset('js/modals.js') }}"></script>
     <script>
         $(document).ready(function() {
             // $('.hero-carousel').slick({
@@ -235,6 +240,7 @@
                 });
             });
         });
+    
     </script>
 
 </body>

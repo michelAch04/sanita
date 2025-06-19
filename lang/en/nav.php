@@ -15,4 +15,11 @@ return [
     'view_all_categories' => 'View All Categories →',
     'view_all_products' => 'View All Products →',
     'view_all_offers' => 'View All Offers →',
+    'new' => 'NEW!',
+    'best_sellers' => 'Best Sellers',
+    'featured_products' => 'Featured Products',
+    'search' => 'Search',
+    'search_placeholder' => 'Search for products, categories, or brands...',
+    'search_results' => 'Search Results',
+    'no_results' => 'No results found for your search.',
 ];
