@@ -94,11 +94,14 @@ Route::prefix('{locale}')->middleware('localization')->group(function () {
     Route::view('/contact', 'sanita.contactus')->name('contact');
 
     Route::middleware('auth:customer')->group(function () {
-
-
         Route::resource('cart', WebsiteCartController::class);
         Route::resource('addresses', WebsiteAddressController::class);
+        Route::get('/checkout', [WebsiteCartController::class, 'checkout'])->name('cart.checkout');
     });
+
+    Route::get('categories', [WebsiteController::class, 'categories'])->name('website.categories.index');
+    Route::get('products', [WebsiteController::class, 'products'])->name('website.products.index');
+    Route::get('offers', [WebsiteController::class, 'offers'])->name('website.offers.index');
 
 
     // Password reset routes

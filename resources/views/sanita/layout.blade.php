@@ -224,7 +224,7 @@
                                 $('#cart-count').text(current + 1);
                             }
                             alert(response.message || 'Added to cart successfully!');
-                            location.reload();
+                            // location.reload();
                         } else {
                             alert(response.message || 'Failed to add to cart.');
                         }
