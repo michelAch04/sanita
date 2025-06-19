@@ -6,15 +6,12 @@ use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Models\CartDetail;
 use App\Models\Product;
+use App\Models\Tax;
 
 class WebsiteCartController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-
         $expired = Cart::with('cartDetails')
             ->where('customers_id', auth()->id())
             ->where('purchased', 0)
@@ -28,14 +25,12 @@ class WebsiteCartController extends Controller
         }
 
         $cart = Cart::with(['cartDetails' => function ($q) {
-            $q->where('cancelled', 0);
+            $q->where('cancelled', 0)->with('product');
         }])
             ->where('customers_id', auth()->id())
             ->where('purchased', 0)
             ->where('cancelled', 0)
             ->first();
-
-      
 
         return view('sanita.cart.index', compact('cart'));
     }
@@ -82,12 +77,17 @@ class WebsiteCartController extends Controller
             $cart->cartDetails()->create([
                 'products_id' => $request->product_id,
                 'unit_price' => $request->price,
+                'old_price' => $product->old_price,
                 'quantity' => 1,
                 'cancelled' => 0,
             ]);
         }
 
-        return response()->json(['success' => true]);
+        return response()->json([
+            'success' => true,
+            'unit_price' => $request->price,
+            'old_price' => $product->old_price,
+        ]);
     }
 
     public function update(Request $request, $locale, CartDetail $cart)
@@ -160,5 +160,42 @@ class WebsiteCartController extends Controller
         }
 
         return redirect()->back()->with('success', __('cart.removed'));
+    }
+
+    public function checkout()
+    {
+        $cart = Cart::with(['cartDetails.product'])
+            ->where('customers_id', auth()->id())
+            ->where('purchased', 0)
+            ->where('cancelled', 0)
+            ->first();
+
+        $addresses = auth()->user()->addresses()->get();
+
+        $subtotal = 0;
+        $totalTax = 0;
+        $total = 0;
+
+        $taxRates = Tax::all()->keyBy('id');
+
+        if ($cart && $cart->cartDetails) {
+            foreach ($cart->cartDetails as $item) {
+                $product = $item->product;
+
+                if (!$product) continue;
+                //check if itemtaxable or not 
+                if ($product->tax_id != null) {
+                    $lineSubtotal = $product->unit_price * $item->quantity;
+                    $lineTotal = $product->shelf_price * $item->quantity;
+
+                    $subtotal += $lineSubtotal;
+                    $total += $lineTotal;
+
+                    $totalTax = $total - $subtotal;
+                }
+            }
+        }
+
+        return view('sanita.cart.checkout', compact('cart', 'addresses', 'subtotal', 'totalTax', 'total'));
     }
 }

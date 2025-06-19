@@ -41,10 +41,12 @@ class Product extends Model
     {
         return $this->belongsTo(Subcategory::class, 'subcategories_id');
     }
+
     public function brands()
     {
         return $this->belongsTo(Brand::class, 'brands_id');
     }
+
     public function tax()
     {
         return $this->belongsTo(Tax::class, 'tax_id');

@@ -21,6 +21,7 @@
                     <th>{{ __('cart.product') }}</th>
                     <th>{{ __('cart.description') }}</th>
                     <th>{{ __('cart.shelf_price') }}</th>
+                    <th>{{ __('cart.old_price') }}</th>
                     <th>{{ __('cart.quantity') }}</th>
                     <th>{{ __('cart.total') }}</th>
                     <th class="text-center">{{ __('cart.action') }}</th>
@@ -38,6 +39,13 @@
                     <td class="fw-semibold text-primary">{{ $detail->product->{'name_'.app()->getLocale()} ?? $detail->product->name_en }}</td>
                     <td class="text-muted">{{ $detail->product->{'small_description_'.app()->getLocale()} ?? $detail->product->name_en }}</td>
                     <td>${{ number_format($detail->unit_price, 2) }}</td>
+                    <td>
+                        @if($detail->old_price && $detail->old_price > $detail->unit_price)
+                        <del class="text-danger">${{ number_format($detail->old_price, 2) }}</del>
+                        @else
+                        —
+                        @endif
+                    </td>
                     <td>
                         <form class="update-quantity-form d-inline-flex align-items-center" method="POST" action="{{ route('cart.update', ['locale' => app()->getLocale(), 'cart' => $detail->id]) }}">
                             @csrf
@@ -58,7 +66,7 @@
                 </tr>
                 @endforeach
                 <tr class="table-light fw-bold" id="cart-total-row">
-                    <td colspan="4" class="text-end">{{ __('cart.cart_total') }}</td>
+                    <td colspan="5" class="text-end">{{ __('cart.cart_total') }}</td>
                     <td colspan="2" id="cart-total">${{ number_format($cartTotal, 2) }}</td>
                 </tr>
             </tbody>
@@ -69,7 +77,7 @@
         <a href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}" class="btn btn-outline-secondary">
             <i class="fa fa-arrow-left me-1"></i> {{ __('cart.continue_shopping') }}
         </a>
-        <a href="" class="btn btn-success">
+        <a href="{{ route('cart.checkout', ['locale' => app()->getLocale()]) }}" class="btn btn-success">
             <i class="fa fa-credit-card me-1"></i> {{ __('cart.proceed_checkout') }}
         </a>
     </div>

@@ -40,6 +40,11 @@ class Customer extends Authenticatable
         'updated_at',
     ];
 
+    public function addresses()
+    {
+        return $this->hasMany(\App\Models\Address::class, 'customer_id');
+    }
+
     public function sendPasswordResetNotification($token)
     {
         $locale = app()->getLocale(); // Or use $this->locale if you store it per user

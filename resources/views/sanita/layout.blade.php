@@ -157,8 +157,8 @@
     @stack('scripts')
 
     <!-- Footer -->
-    <footer class="footer text-center text-white mt-auto py-4" 
-    style="background: linear-gradient(to right, #1E3A5F, #2A4365);     
+    <footer class="footer text-center text-white mt-auto py-4"
+        style="background: linear-gradient(to right, #1E3A5F, #2A4365);     
     box-shadow: 0 4px 12px rgba(30, 58, 95, 0.2);
     transition: background-color 0.4s ease;">
         <div class="container">
@@ -222,7 +222,7 @@
                                 $('#cart-count').text(current + 1);
                             }
                             alert(response.message || 'Added to cart successfully!');
-                            location.reload();
+                            // location.reload();
                         } else {
                             alert(response.message || 'Failed to add to cart.');
                         }
@@ -234,6 +234,7 @@
             });
         });
     </script>
-    
+
 </body>
+
 </html>

@@ -83,7 +83,7 @@
             @endforeach
         </div>
         <div class="text-center mt-4 mb-0">
-            <a href="{{ route('products.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic view-all-btn">
+            <a href="{{ route('website.offers.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic view-all-btn">
                 <span class="text">{{ __('nav.view_all_offers') ?: 'View All Offers' }}</span>
             </a>
         </div>
@@ -120,7 +120,7 @@
         </div>
 
         <div class="text-center mt-5 mb-0">
-            <a href="{{ route('categories.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic view-all-btn">
+            <a href="{{ route('website.categories.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic view-all-btn">
                 <span class="text">{{ __('nav.view_all_categories') ?: 'View All Categories' }}</span>
             </a>
         </div>
@@ -195,7 +195,7 @@
             @endforeach
         </div>
         <div class="text-center mt-5 mb-0">
-            <a href="{{ route('products.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic view-all-btn">
+            <a href="{{ route('website.products.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic view-all-btn">
                 <span class="text">{{ __('nav.view_all_products') ?: 'View All Products' }}</span>
             </a>
         </div>
@@ -264,6 +264,7 @@
             let url = form.attr('action');
             let data = form.serialize();
 
+            console.log(data);
             $.ajax({
                 url: url,
                 method: 'POST',
@@ -273,9 +274,11 @@
                 },
                 success: function(response) {
                     if (response.success) {
+                        console.log(response);
                         if (response.cart_count !== undefined) {
                             // Update cart count badge
                             // $('#cart-count').text(response.cart_count);
+
                         }
 
                     } else {}

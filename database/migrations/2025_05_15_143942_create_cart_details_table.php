@@ -13,8 +13,10 @@ class CreateCartDetailsTable extends Migration
             $table->foreignId('carts_id')->constrained('carts')->onDelete('cascade');
             $table->foreignId('products_id')->constrained()->onDelete('cascade');
             $table->decimal('unit_price');
+            $table->decimal('old_price', 10, 2)->nullable();
             $table->integer('quantity');
             $table->tinyInteger('cancelled')->default(0);
+
             $table->timestamps();
         });
     }
