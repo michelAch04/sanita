@@ -54,7 +54,7 @@ $(document).ready(function () {
         let form = $(this);
         let url = form.attr('action');
         let data = form.serialize();
-
+        
         $.ajax({
             url: url,
             method: 'POST',
@@ -74,13 +74,11 @@ $(document).ready(function () {
                  }
             },
             error: function (xhr) {
+                console.log(error);
                 if (xhr.status === 401) {
                     // Unauthorized - redirect to login page
                     window.location.href = window.signinUrl + '?showToast=1&toastMessage=' + encodeURIComponent('Please sign in to add items to your cart.');
-                } else {
-                    console.log(xhr.error);
-                    alert('Error occurred while adding to cart.');
-                }
+                } 
             }
         });
     });

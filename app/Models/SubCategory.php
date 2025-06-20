@@ -15,4 +15,9 @@ class Subcategory extends Model
     {
         return $this->belongsTo(Category::class, 'categories_id');
     }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'subcategories_id'); // Adjusted foreign key name
+    }
 }

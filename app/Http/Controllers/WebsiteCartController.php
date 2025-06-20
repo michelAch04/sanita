@@ -23,9 +23,10 @@ class WebsiteCartController extends Controller
             $expired->update(['cancelled' => 1]);
             $expired->cartDetails()->update(['cancelled' => 1]);
         }
-
         $cart = Cart::with(['cartDetails' => function ($q) {
-            $q->where('cancelled', 0)->with('product');
+            $q->where('cancelled', 0)->with(['product' => function ($q) {
+                $q->where('cancelled', 0);
+            }]);
         }])
             ->where('customers_id', auth()->id())
             ->where('purchased', 0)
@@ -39,8 +40,6 @@ class WebsiteCartController extends Controller
     {
         $request->validate([
             'product_id' => 'required|exists:products,id',
-            'price' => 'required|numeric|min:0',
-            'description' => 'nullable|string|max:255',
         ]);
 
         $product = Product::where('id', $request->product_id)
@@ -50,7 +49,7 @@ class WebsiteCartController extends Controller
         if (!$product) {
             return response()->json([
                 'success' => false,
-                'message' => 'Product is out of stock.',
+                'message' => $product,
             ], 422);
         }
 
@@ -60,10 +59,6 @@ class WebsiteCartController extends Controller
             ['customers_id' => $customerId, 'purchased' => 0, 'cancelled' => 0],
             ['expires_at' => now()->addYear(1)]
         );
-
-        if (!$cart->wasRecentlyCreated) {
-            $cart->update(['expires_at' => now()->addHours(2)]);
-        }
 
         $cartDetail = $cart->cartDetails()
             ->where('products_id', $request->product_id)
@@ -75,8 +70,8 @@ class WebsiteCartController extends Controller
             $cartDetail->save();
         } else {
             $cart->cartDetails()->create([
-                'products_id' => $request->product_id,
-                'unit_price' => $request->price,
+                'products_id' => $product->product_id,
+                'shelf_price' => $product->shelf_price,
                 'old_price' => $product->old_price,
                 'quantity' => 1,
                 'cancelled' => 0,

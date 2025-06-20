@@ -5,7 +5,7 @@
 @section('content')
 
 <!-- Hero Section -->
-<div class="hero-carousel">
+<div class="hero-carousel mt-1">
     @foreach ($slideshow as $image)
     <div>
         <img src="{{ asset('storage/slideshow/' . $image->id.'.'.$image->extension) }}" alt="Slide" class="img-fluid rounded shadow">
@@ -19,7 +19,7 @@
         <h2 class="display-5 text-center mb-4">{{ __('nav.offers') }}</h2>
         <div class="carousel gx-0">
             @foreach($offers as $product)
-            <div class="product-card mb-4" data-url="{{ route('products.show', ['locale' => app()->getLocale(), 'product' => $product->id]) }}">
+            <div class="product-card mb-4" data-url="{{ route('website.product.index', ['locale' => app()->getLocale(), 'product' => $product->id]) }}">
                 <div class="card">
                     <div class="card__shine"></div>
                     <div class="card__glow"></div>
@@ -97,7 +97,7 @@
         <div class="carousel mx-auto mb-5">
             @foreach($categories as $category)
             <div class="px-2">
-                <div class="category-card" data-url="{{ route('categories.show', ['locale' => app()->getLocale(), 'category' => $category->id]) }}">
+                <div class="category-card" data-url="{{ route('website.category.index', ['locale' => app()->getLocale(), 'category' => $category->id]) }}">
                     <div class="category-card-body">
                         @if($category->extension)
                         <img src="{{ asset('storage/categories/' . $category->id . '.' . $category->extension) }}"
@@ -105,7 +105,7 @@
                             class="img-fluid mb-5">
                         @endif
                         <h5 class="card-title">
-                            <a href="{{ route('categories.show', ['locale' => app()->getLocale(), 'category' => $category->id]) }}"
+                            <a href="{{ route('website.category.index', ['locale' => app()->getLocale(), 'category' => $category->id]) }}"
                                 class="text-decoration-none text-dark">
                                 {{ $category->{'name_'.app()->getLocale()} ?? $category->name_en }}
                             </a>
@@ -133,7 +133,7 @@
         <h2 class="display-5 text-center mb-4">{{ __('nav.products') }}</h2>
         <div class="carousel gx-0">
             @foreach($products as $product)
-            <div class="product-card mb-2" data-url="{{ route('products.show', ['locale' => app()->getLocale(), 'product' => $product->id]) }}">
+            <div class="product-card mb-2" data-url="{{ route('website.product.index', ['locale' => app()->getLocale(), 'product' => $product->id]) }}">
                 <div class="card">
                     <div class="card__shine"></div>
                     <div class="card__glow"></div>
@@ -157,7 +157,7 @@
 
                         <div class="card__text">
                             <p class="card__title">
-                                <a href="{{ route('products.show', ['locale' => app()->getLocale(), 'product' => $product->id]) }}"
+                                <a href="{{ route('website.product.index', ['locale' => app()->getLocale(), 'product' => $product->id]) }}"
                                     class="text-decoration-none text-dark">
                                     {{ $product->{'name_'.app()->getLocale()} ?? $product->name_en }}
                                 </a>
@@ -181,8 +181,6 @@
                                 <form action="{{ route('cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="add-to-cart-form m-0">
                                     @csrf
                                     <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                    <input type="hidden" name="price" value="{{ $product->shelf_price }}">
-                                    <input type="hidden" name="description" value="{{ $product->{'description_'.app()->getLocale()} ?? $product->description }}">
                                     <button type="submit" class="border-0 bg-transparent p-0">
                                         <i class="fas fa-cart-plus"></i>
                                     </button>

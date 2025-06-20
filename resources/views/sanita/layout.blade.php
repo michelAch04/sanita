@@ -158,7 +158,7 @@
 
     @include('components.toast')
     @include('components.modal')
-    
+
     @stack('scripts')
 
     <!-- Footer -->
@@ -234,11 +234,11 @@
                         }
                     },
                     error: function() {
+
                     }
                 });
             });
         });
-    
     </script>
 
 </body>

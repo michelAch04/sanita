@@ -50,7 +50,6 @@ class CategoryController extends Controller
                 'name_en' => 'required|string|max:255',
                 'name_ar' => 'required|string|max:255',
                 'name_ku' => 'required|string|max:255',
-                'position' => 'nullable|integer|min:0',
                 'image' => 'nullable|mimes:jpg,jpeg,png,gif,svg|max:2048',
             ]);
 
@@ -60,7 +59,7 @@ class CategoryController extends Controller
                 'name_en' => $validate['name_en'],
                 'name_ar' => $validate['name_ar'],
                 'name_ku' => $validate['name_ku'],
-                'position' => $validate['position'],
+                'position' => 999,
                 'extension' => null,
                 'hidden' => $hidden,
                 'cancelled' => 0,

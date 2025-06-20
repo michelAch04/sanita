@@ -78,4 +78,31 @@ class WebsiteController extends Controller
 
         return view('sanita.offers.index', compact('offers'));
     }
+
+    public function category(Request $request)
+    {
+        $category_id = $request->category;
+
+        // Fetch category by ID and eager load subcategories and their related products
+        $category = Category::with(['subcategories.products'])  // Eager load subcategories and their products
+            ->where('id', $category_id)
+            ->first();
+
+        if ($category) {
+            // Pass the category with subcategories and their products to the view
+            return view('sanita.category.index', compact('category'));
+        } else {
+            // Handle case where category is not found
+            return redirect()->back()->with('error', 'Category not found');
+        }
+    }
+
+
+
+    public function product(Request $request)
+    {
+        $product_id = $request->product;
+        $product = Product::where('id', $product_id)->first();
+        return view('sanita.product.index', compact('product'));
+    }
 }
