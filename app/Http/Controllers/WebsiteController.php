@@ -36,7 +36,7 @@ class WebsiteController extends Controller
             })
             ->get()
             ->sortBy('position');
-
+        
         return view('sanita.index', compact('aboutus', 'slideshow', 'categories', 'products', 'offers'));
     }
 
@@ -74,7 +74,7 @@ class WebsiteController extends Controller
                     ->orWhere('available_quantity', '>', 0);
             })
             ->orderBy('position')
-            ->get();
+            ->paginate(20);
 
         return view('sanita.offers.index', compact('offers'));
     }

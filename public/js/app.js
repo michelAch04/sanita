@@ -20,7 +20,7 @@ $(document).ready(function () {
         dots: false,
         infinite: true,
         speed: 300,
-        slidesToShow: 4, // Changed from 3 to 4
+        slidesToShow: 5,
         slidesToScroll: 1,
         arrows: true,
         autoplay: true,
