@@ -60,7 +60,7 @@ $(document).ready(function () {
             method: 'POST',
             data: data,
             headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                'X-CSRF-TOKEN': window.csrfToken
             },
             success: function (response) {
                 if (response.success) {
@@ -69,14 +69,15 @@ $(document).ready(function () {
                         // $('#cart-count').text(response.cart_count);
                     }
 
-                } else { }
+                } else {
+                    alert('hi');
+                 }
             },
             error: function (xhr) {
                 if (xhr.status === 401) {
                     // Unauthorized - redirect to login page
-                    window.location.href = "{{ route('customer.signin', ['locale' => app()->getLocale()]) }}";
+                    window.location.href = window.signinUrl + '?showToast=1&toastMessage=' + encodeURIComponent('Please sign in to add items to your cart.');
                 } else {
-
                     console.log(xhr.error);
                     alert('Error occurred while adding to cart.');
                 }

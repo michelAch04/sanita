@@ -51,7 +51,12 @@ document.addEventListener('DOMContentLoaded', function () {
     // ----------------------------
     const phoneInputField = document.querySelector("#mobile");
     const phoneValidIcon = document.getElementById("phone-valid");
+    const phoneInvalidIcon = document.getElementById("phone-invalid");
     const phoneLoadingIcon = document.getElementById("phone-loading");
+
+    if(!phoneInputField){
+        return;
+    }
 
     const iti = window.intlTelInput(phoneInputField, {
         utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
@@ -70,16 +75,19 @@ document.addEventListener('DOMContentLoaded', function () {
         if (number.length === 0) {
             phoneValidIcon.style.display = "none";
             phoneLoadingIcon.style.display = "none";
+            phoneInvalidIcon.style.display = "none";
             return;
         }
 
         phoneValidIcon.style.display = "none";
+        phoneInvalidIcon.style.display = "none";
         phoneLoadingIcon.style.display = "inline";
 
         setTimeout(() => {
             const isValid = iti.isValidNumber();
             phoneLoadingIcon.style.display = "none";
             phoneValidIcon.style.display = isValid ? "inline" : "none";
+            phoneInvalidIcon.style.display = isValid ? "none" : "inline" ;
         }, 400);
     }
 

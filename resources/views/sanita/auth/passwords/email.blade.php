@@ -17,11 +17,8 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
             <div class="login-inputForm">
                 <i class="fa fa-envelope"></i>
                 <input type="email" id="email" name="email" placeholder="{{ __('auth.passwords.email') }}"
-                    required autofocus class="@error('email') is-invalid @enderror login-input">
+                    required autofocus class="login-input">
             </div>
-            @error('email')
-                <div class="login-error-message">{{ $message }}</div>
-            @enderror
 
             <button type="submit" class="login-button-submit bubbles">
                 <span class="text">{{ __('auth.passwords.send_link') }}</span>

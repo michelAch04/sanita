@@ -228,14 +228,12 @@
                                 let current = parseInt($('#cart-count').text()) || 0;
                                 $('#cart-count').text(current + 1);
                             }
-                            alert(response.message || 'Added to cart successfully!');
                             // location.reload();
                         } else {
                             alert(response.message || 'Failed to add to cart.');
                         }
                     },
                     error: function() {
-                        alert('Error occurred while adding to cart.');
                     }
                 });
             });

@@ -66,5 +66,13 @@
         </form>
     </div>
 </div>
+<style>
+    .error-toast {
+        display: none !important;
+    }
+    .login-input {
+        width: 85% !important;
+    }
+</style>
 <script src="{{ asset('js/auth.js') }}"></script>
 @endsection

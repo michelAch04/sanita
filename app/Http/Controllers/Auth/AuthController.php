@@ -46,8 +46,14 @@ class AuthController extends Controller
     }
 
     // Show sign in page
-    public function showSignIn()
+    public function showSignIn(Request $request)
     {
+        if ($request->has('showToast') && $request->has('toastMessage')) {
+            session()->flash('info', $request->get('toastMessage'));
+        }
+        else{
+            session()->forget('info');
+        }
         return view('sanita.auth.signin');
     }
 

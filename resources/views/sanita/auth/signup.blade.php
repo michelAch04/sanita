@@ -115,6 +115,9 @@
                 <span id="phone-valid" class="phone-status-icon text-success" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); display: none;">
                     <i class="fa fa-check-circle"></i>
                 </span>
+                <span id="phone-invalid" class="phone-status-icon text-danger" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); display: none;">
+                    <i class="fa fa-xmark-circle"></i>
+                </span>
             </div>
             <div id="mobile-error" class="login-error-message" style="display:none;"></div>
             @error('mobile')
@@ -153,5 +156,10 @@
         </p>
     </form>
 </div>
+<style>
+    .error-toast {
+        display: none !important;
+    }
+</style>
 <script src="{{ asset('js/auth.js') }}"></script>
 @endsection
