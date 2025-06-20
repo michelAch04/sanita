@@ -60,7 +60,7 @@ class CategoryController extends Controller
                 'name_en' => $validate['name_en'],
                 'name_ar' => $validate['name_ar'],
                 'name_ku' => $validate['name_ku'],
-                'position' => $validate['position'],
+                'position' => 999,
                 'extension' => null,
                 'hidden' => $hidden,
                 'cancelled' => 0,

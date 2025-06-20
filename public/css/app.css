@@ -5,8 +5,10 @@
     --link-blue: #8fb1ca;        /*--link-blue: #cda0db;*/
     --link-hover: #d884f2;       /*--link-hover: #d884f2;*/
     --primary-text: #1E293B;     /*--primary-text: #241e3b;*/
-    --card-width: 17.075rem;       /*--card-width: 17.075rem;*/
-    --card-height: 20.25rem;       /*--card-height: 26.25rem;*/
+    --card-width: 14.075rem;       /*--card-width: 17.075rem;*/
+    --card-height: 18.25rem;       /*--card-height: 20.25rem;*/
+    --card-title: 1rem;           /*--card-title: 1.2em;*/
+    --card-description: 0.6rem;    /*--card-description: 0.9em;*/
     --card-bg: #ffffff;          /*--card-bg: #ffffff;*/
 }
 
@@ -324,7 +326,7 @@ section:nth-of-type(5) {
 }
 
 .card__content {
-    padding: 1.25em;
+    padding: 0.5em 0.75em;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -335,8 +337,8 @@ section:nth-of-type(5) {
 
 .card__badge {
     position: absolute;
-    top: 12px;
-    right: 12px;
+    top: 0.4rem;
+    right: 0.4rem;
     background: #10b981;
     color: white;
     padding: 0.25em 0.5em;
@@ -395,7 +397,7 @@ section:nth-of-type(5) {
 
 .card__title {
     color: var(--card-text);
-    font-size: 1rem;
+    font-size: var(--card-title);
     /*Previously: 1.1em*/
     margin: 0;
     font-weight: 700;
@@ -459,7 +461,7 @@ section:nth-of-type(5) {
 
 .card__button i {
     color: #fff !important;
-    font-size: 15px;
+    font-size: 1rem;
     padding: 5px;
 }
 
@@ -485,10 +487,6 @@ section:nth-of-type(5) {
     transform: scale(1.2);
 }
 
-.card:hover .card__image {
-    transform: translateY(-5px) scale(1.03);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-}
 
 .card:hover .card__title {
     color: var(--card-accent);
@@ -604,7 +602,7 @@ section:nth-of-type(5) {
 /* ------------------------------ CATEGORY CARD STYLING ----------------------------------------- */
 
 .category-card {
-    width: var(--card-width) !important;
+    width: calc(var(--card-width) - 0.15rem) !important;
     height: var(--card-height);
     background: var(--card-bg);
     position: relative;
@@ -674,12 +672,19 @@ section:nth-of-type(5) {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    height: 75%; /* or a consistent value */
 }
 
 .category-card-body img {
-    width: 160px;
-    height: 160px;
+    width: calc(var(--card-width) - 5rem);
+    height: fit-content;
     object-fit: cover;
+    margin-top: auto;
+}
+.category-card-body .card-title {
+    margin-top: auto;
+    text-align: center;
+    width: 100%;
 }
 
 .view-all-btn {

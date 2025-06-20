@@ -11,6 +11,7 @@ use App\Models\Slideshow;
 use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Cart;
+use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Paginator::useBootstrapFive(); // or Paginator::useBootstrapFour();
         View::composer('*', function ($view) {
             $customerId = auth()->guard('customer')->id(); // Use the correct guard
 

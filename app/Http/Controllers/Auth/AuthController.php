@@ -35,7 +35,8 @@ class AuthController extends Controller
             $customer = Customer::create($validated);
             Auth::guard('customer')->login($customer);
 
-            return redirect('/')->with('success', 'Registration successful! You are now logged in.');
+        return redirect()->route('sanita.index', ['locale' => app()->getLocale()])
+            ->with('success', 'Registration successful! You are now logged in.');
         } catch (ValidationException $e) {
             throw $e;
         } catch (\Exception $e) {
@@ -49,10 +50,9 @@ class AuthController extends Controller
     public function showSignIn(Request $request)
     {
         if ($request->has('showToast') && $request->has('toastMessage')) {
-            session()->flash('info', $request->get('toastMessage'));
-        }
-        else{
-            session()->forget('info');
+            return redirect()
+                ->route('customer.signin', ['locale' => app()->getLocale()])
+                ->with('info', $request->get('toastMessage'));
         }
         return view('sanita.auth.signin');
     }
@@ -75,7 +75,8 @@ class AuthController extends Controller
         // Log in the customer
         Auth::guard('customer')->login($customer);
 
-        return redirect('/')->with('success', 'Signed in successfully!');
+        return redirect()->route('sanita.index', ['locale' => app()->getLocale()])
+            ->with('success', 'Signed in successfully!');
     }
 
     // Handle customer logout
