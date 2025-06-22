@@ -161,124 +161,98 @@ section {
     letter-spacing: 0.5px;
 }
 
-/* ------------------------------- CHECKOUT STYLING ------------------------------------------------ */
-/* --- Checkout Section Styling --- */
+/* ----------------------------------- CHECKOUT STYLING ------------------------------------------ */
+.row {
+  justify-content: center !important;
+}
+.checkout-wrapper {
+    max-width: 1300px;
+    margin: auto;
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+.checkout-card {
+    border: 1px solid #eaeaea;
+    border-radius: 1rem;
+    background-color: #fff;
+}
+.checkout-card h5 {
+    font-size: 1.05rem;
+    color: #333;
+}
+
+.section-divider.small-divider {
+    height: 1px;
+    background: #ddd;
+    opacity: 0.3;
+    margin: 1rem 0;
+}
+
 .section-divider {
-  border: 0;
-  height: 3px;
-  background-color: var(--primary-blue, #105652);
-  opacity: 0.3;
-  margin: 1.5rem 0;
+    border: none;
+    height: 2px;
+    background: linear-gradient(to right, var(--primary-blue), transparent);
+    opacity: 0.4;
 }
 
-/* Cart Item Box */
-.cart-item {
-  border: 1px solid #ddd;
-  background-color: #fffefc;
-  transition: all 0.3s ease;
-  border-radius: 1rem;
+.sticky-lg-top {
+    position: sticky !important;
+    top: 4.2rem !important;
+    z-index: 100 !important;
 }
 
-.cart-item:hover {
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.07);
-  transform: translateY(-2px);
-}
-
-/* Cart Image */
 .cart-item-img {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 0.75rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    width: 12.5rem;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-/* Section Titles */
-h3.fw-bold {
-  font-size: 1.6rem;
-  color: var(--primary-text, #333);
-}
-
-/* Form Inputs */
 .input_field,
 .form-select {
-  border: 2px solid var(--primary-blue, #105652);
-  border-radius: 0.75rem;
-  background-color: #fdfaf5;
-  font-size: 1rem;
-  padding: 0.6rem 1rem;
+    border: 2px solid var(--primary-blue, #105652);
+    border-radius: 0.75rem;
+    background-color: #fdfaf5;
+    font-size: 1rem;
+    padding: 0.6rem 1rem;
 }
 
 .input_field:focus,
 .form-select:focus {
-  outline: none;
-  border-color: var(--link-hover, #0d6efd);
-  background-color: #fffefb;
-  box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.2);
+    outline: none;
+    border-color: var(--link-hover, #0d6efd);
+    background-color: #fffefb;
+    box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.2);
 }
 
-/* Promo code layout */
-.promo form {
-  display: flex;
-  gap: 0.75rem;
+.totals-row {
+  background: rgb(81, 155, 81) !important;
+  opacity: 0.9;
+  color: #fff; 
 }
 
-/* Totals Block */
-.payments .details {
-  font-size: 1rem;
-  font-weight: 500;
-  background-color: #fbfbfb;
-  border: 1px solid #eee;
-  border-radius: 1rem;
-  padding: 1rem;
+.totals-row a, .totals-row button {
+  --c2: #d0eacd;
+  --c1: rgb(81, 155, 81);
 }
 
-.payments .details > div {
-  padding: 0.3rem 0;
+
+.totals-left, .totals-right {
+    font-size: 1rem;
+    font-weight: 500;
 }
 
-.total-price {
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: var(--primary-text);
+.totals-right {
+    text-align: right;
 }
 
-/* Checkout Button */
-.btn-success {
-  background-color: #519b51;
-  border: 2px solid #519b51;
-  border-radius: 2rem;
-  font-size: 1.1rem;
-  padding: 0.75rem 2rem;
-}
-
-.btn-success:hover {
-  background-color: #408340;
-  border-color: #408340;
-}
-
-.price {
-  position: relative;
-  font-size: 22px;
-  color: #c7e0c4;
-  font-weight: 900;
-}
-
-.checkout .checkout-btn {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  width: 150px;
-  height: 36px;
-  background: rgba(16, 86, 82, .55);
-  box-shadow: 0px 0.5px 0.5px rgba(16, 86, 82, .75), 0px 1px 0.5px rgba(16, 86, 82, .75);
-  ;
-  border-radius: 7px;
-  border: 1px solid rgb(16, 86, 82);
-  ;
-  color: #000000;
-  font-size: 13px;
-  font-weight: 600;
-  transition: all 0.3s cubic-bezier(0.15, 0.83, 0.66, 1);
+@media (max-width: 767px) {
+    .sticky-lg-top {
+        position: static;
+    }
+    .totals-right {
+        text-align: left;
+    }
 }

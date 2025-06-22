@@ -1,5 +1,7 @@
 @extends('sanita.layout')
-
+@php
+$isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
+@endphp
 @section('title', 'Sign In')
 
 @section('content')

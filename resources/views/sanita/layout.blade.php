@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}" style="min-height:100vh;">
 @php
-$isRtl = (app()->getLocale() === 'ar' || app()->getLocale() === 'ku');
+$isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
 @endphp
-
 <head>
+    
     <meta charset="UTF-8">
     <meta name="google" content="notranslate">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
