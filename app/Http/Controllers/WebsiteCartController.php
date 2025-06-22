@@ -38,51 +38,68 @@ class WebsiteCartController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'product_id' => 'required|exists:products,id',
-        ]);
+        try {
+            if (!auth()->check()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'You must be signed in to add to cart.'
+                ], 401);
+            }
 
-        $product = Product::where('id', $request->product_id)
-            ->where('available_quantity', '>', 0)
-            ->first();
+            $request->validate([
+                'product_id' => 'required|exists:products,id',
+            ]);
 
-        if (!$product) {
+            $product = Product::where('id', $request->product_id)
+                ->where('available_quantity', '>', 0)
+                ->first();
+
+            if (!$product) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Product not found or out of stock.',
+                ], 422);
+            }
+
+            $customerId = auth()->id();
+
+            $cart = Cart::firstOrCreate(
+                ['customers_id' => $customerId, 'purchased' => 0, 'cancelled' => 0],
+                ['expires_at' => now()->addYear(1)]
+            );
+
+            $cartDetail = $cart->cartDetails()
+                ->where('products_id', $request->product_id)
+                ->where('cancelled', 0)
+                ->first();
+
+            $quantity = max(1, (int)$request->input('quantity', 1)); // Always at least 1
+
+            if ($cartDetail) {
+                $cartDetail->quantity += $quantity;
+                $cartDetail->save();
+            } else {
+                $cart->cartDetails()->create([
+                    'products_id' => $product->id,
+                    'shelf_price' => $product->shelf_price,
+                    'old_price' => $product->old_price,
+                    'quantity' => $quantity, // <-- use requested quantity
+                    'cancelled' => 0,
+                ]);
+            }
+
+            return response()->json([
+                'success' => true,
+                'shelf_price' => $request->price,
+                'old_price' => $product->old_price,
+            ]);
+        } catch (\Exception $e) {
+            \Log::error($e);
             return response()->json([
                 'success' => false,
-                'message' => $product,
-            ], 422);
+                'message' => 'Server error: ' . $e->getMessage(),
+            ], 500);
         }
-
-        $customerId = auth()->id();
-
-        $cart = Cart::firstOrCreate(
-            ['customers_id' => $customerId, 'purchased' => 0, 'cancelled' => 0],
-            ['expires_at' => now()->addYear(1)]
-        );
-
-        $cartDetail = $cart->cartDetails()
-            ->where('products_id', $request->product_id)
-            ->where('cancelled', 0)
-            ->first();
-
-        if ($cartDetail) {
-            $cartDetail->quantity += 1;
-            $cartDetail->save();
-        } else {
-            $cart->cartDetails()->create([
-                'products_id' => $product->product_id,
-                'shelf_price' => $product->shelf_price,
-                'old_price' => $product->old_price,
-                'quantity' => 1,
-                'cancelled' => 0,
-            ]);
-        }
-
-        return response()->json([
-            'success' => true,
-            'unit_price' => $request->price,
-            'old_price' => $product->old_price,
-        ]);
     }
 
     public function update(Request $request, $locale, CartDetail $cart)
@@ -110,13 +127,13 @@ class WebsiteCartController extends Controller
         $cart->quantity = $quantity;
         $cart->save();
 
-        $itemTotal = $cart->unit_price * $quantity;
+        $itemTotal = $cart->shelf_price * $quantity;
 
         if ($request->ajax()) {
             return response()->json([
                 'success' => true,
                 'quantity' => $quantity,
-                'item_total' => number_format($itemTotal, 2)
+                'item_total' => round($itemTotal, 2)
             ]);
         }
 
@@ -180,7 +197,7 @@ class WebsiteCartController extends Controller
                 if (!$product) continue;
                 //check if itemtaxable or not 
                 if ($product->tax_id != null) {
-                    $lineSubtotal = $product->unit_price * $item->quantity;
+                    $lineSubtotal = $product->shelf_price * $item->quantity;
                     $lineTotal = $product->shelf_price * $item->quantity;
 
                     $subtotal += $lineSubtotal;

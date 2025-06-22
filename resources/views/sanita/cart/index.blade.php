@@ -3,199 +3,115 @@
 @section('title', __('cart.title'))
 
 @section('content')
-<div class="container py-5">
-    <h1 class="mb-4 display-5 text-center">🛒 {{ __('cart.heading') }}</h1>
+<section id="cart" class="pt-5 bg-light">
+    <div class="container px-5 mb-5">
+        <h2 class="display-5 text-center mb-5">🛒 {{ __('cart.heading') }}</h2>
 
-    <div id="cart-message" class="text-center fw-semibold mb-3"></div>
+        @if($cart && $cart->cartDetails->count() > 0)
+        <div class="d-flex flex-wrap justify-content-center gap-2">
+            @php $cartTotal = 0; @endphp
 
-    @if(session('success'))
-    <div class="alert alert-success text-center">{{ session('success') }}</div>
-    @endif
+            @foreach($cart->cartDetails as $detail)
+            @php
+            $total = $detail->shelf_price * $detail->quantity;
+            $cartTotal += $total;
+            @endphp
 
-    @if($cart && $cart->cartDetails->count() > 0)
-    <div class="table-responsive shadow rounded">
-        <table class="table table-hover align-middle mb-4">
-            <thead class="table-dark">
-                <tr>
-                    <th>image</th>
-                    <th>{{ __('cart.product') }}</th>
-                    <th>{{ __('cart.description') }}</th>
-                    <th>{{ __('cart.shelf_price') }}</th>
-                    <th>{{ __('cart.old_price') }}</th>
-                    <th>{{ __('cart.quantity') }}</th>
-                    <th>{{ __('cart.total') }}</th>
-                    <th class="text-center">{{ __('cart.action') }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                @php $cartTotal = 0; @endphp
-                @foreach($cart->cartDetails as $detail)
-                @php
-                $total = $detail->unit_price * $detail->quantity;
-                $cartTotal += $total;
-                @endphp
-                <tr data-id="{{ $detail->id }}">
-                    <td><img style="width: 150px;" src="{{ asset('storage/products/'.$detail->product->id.'.'.$detail->product->extension) }}" alt="Product Image"></td>
-                    <td class="fw-semibold text-primary">{{ $detail->product->{'name_'.app()->getLocale()} ?? $detail->product->name_en }}</td>
-                    <td class="text-muted">{{ $detail->product->{'small_description_'.app()->getLocale()} ?? $detail->product->name_en }}</td>
-                    <td>${{ number_format($detail->unit_price, 2) }}</td>
-                    <td>
-                        @if($detail->old_price && $detail->old_price > $detail->unit_price)
-                        <del class="text-danger">${{ number_format($detail->old_price, 2) }}</del>
-                        @else
-                        —
+            <div class="cart-item d-flex flex-row gap-1 p-3 bg-white rounded shadow-sm align-items-center flex-wrap w-100" data-id="{{ $detail->id }}">
+                <img src="{{ asset('storage/products/' . $detail->product->id . '.' . $detail->product->extension) }}"
+                    alt="{{ $detail->product->{'name_'.app()->getLocale()} ?? $detail->product->name_en }}"
+                    class="cart-item-img rounded" style="width: 20%; height: 80%; object-fit: cover;">
+
+                <div class="flex-grow-1 ms-2 mt-3 d-flex flex-column h-100">
+
+                    <div class="d-flex align-items-center justify-content-between">
+                        <h5 class="mb-1">
+                            {{ $detail->product->{'name_'.app()->getLocale()} ?? $detail->product->name_en }}
+                        </h5>
+                        <div class="fw-bold text-secondary total-price">${{ number_format($total, 2) }}</div>
+                    </div>
+
+                    <p class="text-muted small mb-2">
+                        {{ \Illuminate\Support\Str::limit($detail->product->{'small_description_'.app()->getLocale()} ?? $detail->product->small_description_en, 80) }}
+                    </p>
+
+                    <div>
+                        @if($detail->old_price && $detail->old_price > $detail->shelf_price)
+                        <small class="text-decoration-line-through text-muted me-2">${{ number_format($detail->old_price, 2) }}</small>
                         @endif
-                    </td>
-                    <td>
-                        <form class="update-quantity-form d-inline-flex align-items-center" method="POST" action="{{ route('cart.update', ['locale' => app()->getLocale(), 'cart' => $detail->id]) }}">
+                        <span class="fw-semibold text-dark">${{ number_format($detail->shelf_price, 2) }}</span>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-between">
+                        <form class="update-quantity-form  d-flex align-items-center gap-2 mt-4 mb-2" method="POST" action="{{ route('cart.update', ['locale' => app()->getLocale(), 'cart' => $detail->id]) }}">
                             @csrf
                             @method('PUT')
-                            <button type="button" class="btn btn-sm btn-outline-secondary btn-decrease">−</button>
-                            <input type="text" name="quantity" class="form-control form-control-sm quantity-input mx-1 text-center" value="{{ $detail->quantity }}" style="width: 50px;">
-                            <button type="button" class="btn btn-sm btn-outline-primary btn-increase">+</button>
+                            <button type="button" class="btn btn-sm btn-decrease"><i class="fa fa-minus"></i></button>
+                            <input type="text" name="quantity" class="quantity-input" value="{{ $detail->quantity }}">
+                            <button type="button" class="btn btn-sm btn-increase"><i class="fa fa-plus"></i></button>
                         </form>
-                    </td>
-                    <td class="fw-bold item-total">${{ number_format($total, 2) }}</td>
-                    <td class="text-center">
-                        <form class="delete-item-form" method="POST" action="{{ route('cart.destroy', ['locale' => app()->getLocale(), 'cart' => $detail->id]) }}">
+                        <form class="delete-item-form mt-2" method="POST" action="{{ route('cart.destroy', ['locale' => app()->getLocale(), 'cart' => $detail->id]) }}">
                             @csrf
                             @method('DELETE')
-                            <button type="button" class="btn btn-outline-danger btn-sm btn-delete"><i class="fa fa-trash"></i></button>
+                            <button type="button" class="delete-item-btn" aria-label="Remove item"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg" viewBox="0 0 24 24">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+                                    <path d="M10 11v6"></path>
+                                    <path d="M14 11v6"></path>
+                                    <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path>
+                                </svg>
+                            </button>
                         </form>
-                    </td>
-                </tr>
-                @endforeach
-                <tr class="table-light fw-bold" id="cart-total-row">
-                    <td colspan="5" class="text-end">{{ __('cart.cart_total') }}</td>
-                    <td colspan="2" id="cart-total">${{ number_format($cartTotal, 2) }}</td>
-                </tr>
-            </tbody>
-        </table>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+        @else
+        <div class="empty-cart-alert text-center py-5 px-4 my-5 rounded-4 shadow-sm" style="background: #f9f9f9; border: 2px dashed var(--primary-blue); max-width: 500px; margin: 0 auto;">
+            <div style="font-size: 3rem; color: var(--primary-blue); margin-bottom: 0.5rem;">
+                🛒
+            </div>
+            <div class="fs-4 fw-semibold mb-2" style="color: var(--primary-blue);">
+                {{ __('cart.empty') }}
+            </div>
+            <a href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic mt-3 px-4 py-2 fs-6 shadow-sm" style="border-radius: 2rem;">
+                <span class="text"><i class="fa fa-arrow-left me-2"></i> {{ __('cart.browse_products') }}</span>
+            </a>
+        </div>
+        @endif
     </div>
 
-    <div class="d-flex justify-content-between align-items-center">
-        <a href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}" class="btn btn-outline-secondary">
-            <i class="fa fa-arrow-left me-1"></i> {{ __('cart.continue_shopping') }}
+    @if($cart && $cart->cartDetails->count() > 0)
+    <!-- Sticky Bottom Checkout Bar -->
+    <div class="sticky-checkout-bar bg-white border-top shadow-sm py-3 px-4 d-flex justify-content-between align-items-center mb-0">
+        <a href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles me-2">
+            <span class="text"><i class="fa fa-arrow-left me-1"></i> {{ __('cart.continue_shopping') }}</span>
         </a>
-        <a href="{{ route('cart.checkout', ['locale' => app()->getLocale()]) }}" class="btn btn-success">
-            <i class="fa fa-credit-card me-1"></i> {{ __('cart.proceed_checkout') }}
-        </a>
-    </div>
-    @else
-    <div class="alert alert-info text-center">
-        {{ __('cart.empty') }}<br>
-        <a href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}" class="btn btn-primary mt-3">{{ __('cart.browse_products') }}</a>
+        <div class="d-flex align-items-center flex-direction-row gap-4">
+            <h5 class="mb-0 fw-bold text-light">{{ __('cart.cart_total') }}: <span id="cart-total">${{ number_format($cartTotal, 2) }}</span></h5>
+            <a href="{{ route('cart.checkout', ['locale' => app()->getLocale()]) }}" class="btn bubbles fw-semibold">
+                <span class="text"><i class="fa fa-credit-card me-1"></i> {{ __('cart.proceed_checkout') }}</span>
+            </a>
+        </div>
     </div>
     @endif
-</div>
 
+</section>
+
+<link href="{{ asset('css/cart.css') }}" rel="stylesheet" />
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const csrfToken = '{{ csrf_token() }}';
-
-        function displayCartMessage(message, isSuccess = false) {
-            const box = document.getElementById('cart-message');
-            box.textContent = message;
-            box.className = isSuccess ? 'alert alert-success text-center' : 'alert alert-danger text-center';
-            setTimeout(() => {
-                box.textContent = '';
-                box.className = '';
-            }, 3000);
-        }
-
-        const recalculateCartTotal = () => {
-            let total = 0;
-            document.querySelectorAll('.item-total').forEach(el => {
-                const val = parseFloat(el.textContent.replace('$', ''));
-                if (!isNaN(val)) total += val;
-            });
-            document.getElementById('cart-total').textContent = `$${total.toFixed(2)}`;
-        };
-
-        document.querySelectorAll('.update-quantity-form').forEach(form => {
-            const input = form.querySelector('.quantity-input');
-            const id = form.closest('tr').dataset.id;
-
-            const sendQuantityUpdate = (quantity) => {
-                fetch(form.action, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken,
-                            'X-Requested-With': 'XMLHttpRequest'
-                        },
-                        body: JSON.stringify({
-                            _method: 'PUT',
-                            quantity
-                        })
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.success) {
-                            input.value = data.quantity;
-                            document.querySelector(`tr[data-id="${id}"] .item-total`).textContent = `$${parseFloat(data.item_total).toFixed(2)}`;
-                            recalculateCartTotal();
-                            displayCartMessage('Cart updated successfully.', true);
-                        } else {
-                            displayCartMessage(data.message || 'Failed to update cart.');
-                        }
-                    })
-                    .catch(() => displayCartMessage('Error updating cart.'));
-            };
-
-            form.querySelector('.btn-increase')?.addEventListener('click', () => {
-                const newQty = parseInt(input.value || 1) + 1;
-                sendQuantityUpdate(newQty);
-            });
-
-            form.querySelector('.btn-decrease')?.addEventListener('click', () => {
-                const currentVal = parseInt(input.value || 1);
-                if (currentVal > 1) {
-                    sendQuantityUpdate(currentVal - 1);
-                }
-            });
-
-            input.addEventListener('input', () => {
-                const newQty = parseInt(input.value || 1);
-                if (!isNaN(newQty) && newQty > 0) {
-                    sendQuantityUpdate(newQty);
-                }
-            });
-        });
-
-        document.querySelectorAll('.delete-item-form').forEach(form => {
-            const id = form.closest('tr').dataset.id;
-            form.querySelector('.btn-delete').addEventListener('click', () => {
-                if (!confirm('{{ __("cart.remove_confirm") }}')) return;
-
-                fetch(form.action, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken,
-                            'X-Requested-With': 'XMLHttpRequest'
-                        },
-                        body: JSON.stringify({
-                            _method: 'DELETE'
-                        })
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.success) {
-                            document.querySelector(`tr[data-id="${id}"]`).remove();
-                            recalculateCartTotal();
-                            if (document.querySelectorAll('tbody tr').length === 1) {
-                                location.reload();
-                            } else {
-                                displayCartMessage('Item removed from cart.', true);
-                            }
-                        } else {
-                            displayCartMessage(data.message || 'Failed to delete item.');
-                        }
-                    })
-                    .catch(() => displayCartMessage('Error deleting item.'));
-            });
-        });
-    });
+    window.cartMessages = {
+        csrfToken: '{{ csrf_token() }}',
+        updateSuccess: '{{ __("cart.update_success") }}',
+        updateFailed: '{{ __("cart.update_failed") }}',
+        updateError: '{{ __("cart.update_error") }}',
+        removeConfirm: '{{ __("cart.remove_confirm") }}',
+        removeSuccess: '{{ __("cart.remove_success") }}',
+        removeFailed: '{{ __("cart.remove_failed") }}',
+        removeError: '{{ __("cart.remove_error") }}'
+    };
 </script>
+
+<script src="{{ asset('js/cart.js') }}"></script>
 @endsection

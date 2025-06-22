@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}" style="min-height:100vh;">
+@php
+$isRtl = (app()->getLocale() === 'ar' || app()->getLocale() === 'ku');
+@endphp
 
 <head>
     <meta charset="UTF-8">
@@ -190,57 +193,15 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
-    <script src="{{ asset('js/modals.js') }}"></script>
+
     <script>
-        $(document).ready(function() {
-            // $('.hero-carousel').slick({
-            //     dots: false,
-            //     infinite: true,
-            //     speed: 500,
-            //     slidesToShow: 1,
-            //     slidesToScroll: 1,
-            //     autoplay: true,
-            //     autoplaySpeed: 3000,
-            //     arrows: false,
-            //     draggable: true,
-            //     swipe: true,
-            // });
-
-            // AJAX Add to Cart Handler
-            $(document).on('submit', 'form.add-to-cart-form', function(e) {
-                e.preventDefault();
-                let form = $(this);
-                let url = form.attr('action');
-                let data = form.serialize();
-
-                $.ajax({
-                    url: url,
-                    method: 'POST',
-                    data: data,
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            if (response.cart_count !== undefined) {
-                                $('#cart-count').text(response.cart_count);
-                            } else {
-                                let current = parseInt($('#cart-count').text()) || 0;
-                                $('#cart-count').text(current + 1);
-                            }
-                            // location.reload();
-                        } else {
-                            alert(response.message || 'Failed to add to cart.');
-                        }
-                    },
-                    error: function() {
-
-                    }
-                });
-            });
-        });
+        window.success = "{{ __('nav.success ') }}";
+        window.failed = "{{ __('nav.failed ') }}";
+        window.error = "{{ __('nav.error ') }}";
+        window.isRtl = '{{ $isRtl }}';
     </script>
-
+    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/modals.js') }}"></script>
 </body>
 
 </html>

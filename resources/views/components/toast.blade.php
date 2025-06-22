@@ -1,8 +1,13 @@
+@php
+    if (str_starts_with(request()->path(), 'cms')) {
+        $isRtl = 0;
+    }
+@endphp
 {{-- Global Toasts --}}
 @if (session('success') || session('error') || $errors->any() || session('info') || session('warning'))
 <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 9999;">
   @if (session('success'))
-  <div class="toast success-toast show border-0 p-0" role="alert" aria-live="assertive" aria-atomic="true">
+  <div class="toast success-toast show border-0 p-0 {{ $isRtl ? 'rtl-container' : 'not-rtl' }}" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="custom-toast-card bg-white">
       <svg class="wave" viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg">
         <path
@@ -21,7 +26,7 @@
   @endif
 
   @if (session('error') || $errors->any())
-  <div class="toast error-toast show border-0 p-0" role="alert" aria-live="assertive" aria-atomic="true">
+  <div class="toast error-toast show border-0 p-0 {{ $isRtl ? 'rtl-container' : '' }}" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="custom-toast-card bg-white" style="--toast-color: #dc3545; --toast-bg: #dc354533;">
       <svg class="wave" viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg">
         <path
@@ -30,7 +35,7 @@
       </svg>
 
       <div class="icon-container" style="background-color: var(--toast-bg);">
-        <i class="fa-regular fa-circle-xmark text-danger"></i>
+        <i class="fas fa-circle-xmark text-danger"></i>
       </div>
       <div class="message-text-container">
         <p class="message-text" style="color: var(--toast-color);">Oh no!</p>
@@ -47,7 +52,7 @@
   </div>
   @endif
   @if (session('info'))
-  <div class="toast info-toast show border-0 p-0" role="alert" aria-live="assertive" aria-atomic="true">
+  <div class="toast info-toast show border-0 p-0 {{ $isRtl ? 'rtl-container' : '' }}" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="custom-toast-card bg-white" style="--toast-color: #0d6efd; --toast-bg: #0d6efd33;">
       <svg class="wave" viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg">
         <path
@@ -67,6 +72,7 @@
   </div>
   @endif
 </div>
+@endif
 <style>
   .custom-toast-card {
     width: auto;
@@ -104,6 +110,9 @@
     font-size: 18px;
   }
 
+  .error-toast .custom-toast-card .icon-container {
+    width: 2.5rem !important;
+  }
   .custom-toast-card .message-text-container {
     display: flex;
     flex-direction: column;
@@ -129,4 +138,3 @@
     color: #555;
   }
 </style>
-@endif

@@ -10,6 +10,7 @@ return [
     'sign_in' => 'Sign In',
     'sign_out' => 'Sign Out',
     'cart' => 'Cart',
+    'cart_add_success' => 'Product added to cart!',
     'copyright' => '© 2025 Sanita. All rights reserved.',
     'addresses'  => 'My Addresses',
     'view_all_categories' => 'View All Categories →',
@@ -22,4 +23,8 @@ return [
     'search_placeholder' => 'Search for products, categories, or brands...',
     'search_results' => 'Search Results',
     'no_results' => 'No results found for your search.',
+    'success' => 'Success!',
+    'failed' => 'Failed!',
+    'error' => 'Error',
+    'cancel' => 'Cancel',
 ];

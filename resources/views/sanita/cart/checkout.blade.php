@@ -3,100 +3,112 @@
 @section('title', __('Checkout'))
 
 @section('content')
-<div class="container py-5">
-    <h2 class="text-center fw-bold mb-4">{{ __('cart.checkout') }}</h2>
+<div class="py-5 w-100 px-5">
+    {{-- Main Checkout Form --}}
+    <form method="POST" action="">
+        @csrf
+        <h2 class="display-5 login-title text-center mb-4 mt-4">{{ __('cart.checkout') }}</h2>
 
-    {{-- All content in one block --}}
-    <div>
+        {{-- Cart Items Section --}}
+        <h3 class="fw-bold mb-3">{{ __('cart.your_items') }}</h3>
+        <hr class="section-divider">
+        <div class="row g-4 mb-5 w-100">
+            @forelse($cart->cartDetails as $item)
+            <div class="col-md-4">
+                <div class="cart-item d-flex flex-row gap-3 p-3 rounded shadow-sm align-items-start h-100">
+                    <img src="{{ asset('storage/products/' . $item->product->id . '.' . $item->product->extension) }}" alt="product" class="cart-item-img rounded">
+                    <div class="flex-grow-1">
+                        <h5 class="fw-semibold mb-1">{{ $item->product->{'name_' . app()->getLocale()} }}</h5>
+                        <p class="text-muted small mb-2">{{ $item->product->{'small_description_' . app()->getLocale()} }}</p>
+                        <p class="mb-1">
+                            @if ($item->old_price && $item->old_price > $item->shelf_price)
+                            <span class="text-decoration-line-through text-muted me-2">${{ number_format($item->old_price, 2) }}</span>
+                            @endif
+                            <span class="fw-semibold">${{ number_format($item->shelf_price, 2) }}</span>
+                        </p>
+                        <p class="mb-0"><small>{{ __('cart.quantity') }}: {{ $item->quantity }}</small></p>
+                        <p><small>{{ __('cart.total') }}: ${{ number_format($item->shelf_price * $item->quantity, 2) }}</small></p>
+                    </div>
+                </div>
+            </div>
+            @empty
+            <p>{{ __('cart.no_items') }}</p>
+            @endforelse
+        </div>
 
         {{-- Shipping Address --}}
-        <h4>{{ __('cart.shipping_address') }}</h4>
-        @if($addresses->isNotEmpty())
-        @foreach($addresses as $address)
-        <div class="mb-2">
-            <input type="radio" name="address_id" id="address{{ $address->id }}" value="{{ $address->id }}" {{ $address->is_default ? 'checked' : '' }}>
-            <label for="address{{ $address->id }}">
-                🏠 {{ $address->title }} —
-                {{ $address->street }}, {{ $address->building }}, {{ $address->floor }}
-                @if($address->notes)
-                ({{ $address->notes }})
-                @endif
-            </label>
-        </div>
-        @endforeach
-        @else
-        <p>{{ __('cart.no_address_found') }}</p>
-        <a href="{{ route('customer.address.create', app()->getLocale()) }}">{{ __('cart.add_address') }}</a>
-        @endif
-
-        <hr>
-
-        {{-- Cart Items --}}
-        <h4>{{ __('cart.your_items') }}</h4>
-        @forelse($cart->cartDetails as $item)
-        <div class="mb-3 d-flex gap-3 align-items-start">
-            <div>
-                <img src="{{ asset('storage/products/' . $item->product->image) }}" alt="product" width="80">
+        <h3 class="fw-bold mb-3">{{ __('cart.shipping_address') }}</h3>
+        <hr class="section-divider">
+        <div class="mb-4">
+            <div class="input-container" style="max-width: 400px; position: relative;">
+                <label for="address_id" class="form-label fw-semibold">{{ __('cart.shipping_address') }}</label>
+                <select id="address_id" name="address_id" class="form-select styled-select" required>
+                    <option value="">{{ __('cart.select_address') }}</option>
+                    @foreach($addresses as $address)
+                    <option value="{{ $address->id }}" {{ $address->is_default ? 'selected' : '' }}>
+                        {{ $address->title }} — {{ $address->street }}, {{ $address->building }}, {{ $address->floor }}
+                    </option>
+                    @endforeach
+                </select>
             </div>
-            <div>
-                <strong>{{ $item->product->{'name_' . app()->getLocale()} }}</strong><br>
-                {{ $item->product->{'small_description_' . app()->getLocale()} }}<br>
-                {{ __('cart.price') }}: {{ number_format($item->unit_price, 2) }} {{ __('cart.currency') }}<br>
-
-                @if ($item->old_price && $item->old_price > $item->unit_price)
-                {{ __('cart.old_price') }}:
-                <del class="text-danger">{{ number_format($item->old_price, 2) }} {{ __('cart.currency') }}</del><br>
-                @endif
-
-                {{ __('cart.quantity') }}: {{ $item->quantity }}<br>
-                {{ __('cart.total') }}: {{ number_format($item->unit_price * $item->quantity, 2) }} {{ __('cart.currency') }}
-            </div>
+            <button type="button" onclick="window.location='{{ route('addresses.create', app()->getLocale()) }}'" class="btn btn-outline-primary mt-3">
+                + {{ __('cart.add_address') }}
+            </button>
         </div>
-        @empty
-        <p>{{ __('cart.no_items') }}</p>
-        @endforelse
 
-        <hr>
+        {{-- Payment Method --}}
+        <h3 class="fw-bold mb-3">{{ __('cart.payment_method') }}</h3>
+        <hr class="section-divider">
+        <p class="mb-5">{{ __('cart.cod') }}</p>
 
         {{-- Promo Code --}}
-        <h4>{{ __('cart.promo_code') }}</h4>
-        <form class="mb-3">
-            <input type="text" name="promo_code" placeholder="{{ __('cart.enter_promo_code') }}">
-            <button type="submit">{{ __('cart.apply') }}</button>
-        </form>
-
-        <hr>
-
-        {{-- Summary and Purchase --}}
-        <div>
-            <p>{{ __('cart.subtotal') }}: <strong>{{ number_format($subtotal, 2) }} {{ __('cart.currency') }}</strong></p>
-            <p>{{ __('cart.vat') }}: <strong>{{ number_format($totalTax, 2) }} {{ __('cart.currency') }}</strong></p>
-            <p>{{ __('cart.total') }}: <strong>{{ number_format($total, 2) }} {{ __('cart.currency') }}</strong></p>
-
-            <form action="" method="POST">
+        <h3 class="fw-bold mb-3">{{ __('cart.promo_code') }}</h3>
+        <hr class="section-divider">
+        <div class="promo mb-5">
+            <form method="POST" action="" class="row g-2 align-items-center">
                 @csrf
-                <input type="hidden" name="address_id" id="selected-address">
-                <button type="submit">{{ __('cart.place_order') }}</button>
+                <div class="col">
+                    <input type="text" name="promo_code" placeholder="{{ __('cart.enter_promo_code') }}" class="form-control input_field">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">{{ __('cart.apply') }}</button>
+                </div>
             </form>
         </div>
 
-    </div>
+        {{-- Totals --}}
+        <h3 class="fw-bold mb-3">{{ __('cart.payment') }}</h3>
+        <hr class="section-divider">
+        <div class="payments mb-5">
+            <div class="details">
+                <div class="d-flex justify-content-between"><span>{{ __('cart.subtotal') }}:</span><span>${{ number_format($subtotal, 2) }}</span></div>
+                <div class="d-flex justify-content-between"><span>{{ __('cart.vat') }}:</span><span>${{ number_format($totalTax, 2) }}</span></div>
+                <div class="d-flex justify-content-between total-price"><span>{{ __('cart.total') }}:</span><span>${{ number_format($total, 2) }}</span></div>
+            </div>
+        </div>
 </div>
+{{-- Checkout Footer --}}
+<div class="sticky-checkout-bar checkout bg-white border-top shadow-sm py-3 px-4 d-flex justify-content-between align-items-center mb-0">
+    <label class="price">{{ number_format($total, 2) }} {{ __('cart.currency') }}</label>
+    <button type="submit" class="btn bubbles fw-semibold fs-6"><span class="text">{{ __('cart.place_order') }}</span></button>
+</div>
+</form>
 
+{{-- Styles --}}
+<link href="{{ asset('css/cart.css') }}" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+{{-- Scripts --}}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js" defer></script>
 <script>
-    // Handle address selection
-    document.querySelectorAll('input[name="address_id"]').forEach(radio => {
-        radio.addEventListener('change', function() {
-            document.getElementById('selected-address').value = this.value;
+    $(document).ready(function() {
+        $('#address_id').select2({
+            placeholder: "{{ __('cart.select_address') }}",
+            allowClear: true,
+            width: '100%'
         });
     });
-
-    // Set default address on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        const checked = document.querySelector('input[name="address_id"]:checked');
-        if (checked) {
-            document.getElementById('selected-address').value = checked.value;
-        }
-    });
 </script>
+@include('sanita.partials.select2-style')
 @endsection

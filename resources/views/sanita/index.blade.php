@@ -65,7 +65,7 @@
                                     @csrf
                                     <input type="hidden" name="product_id" value="{{ $product->id }}">
                                     <input type="hidden" name="price" value="{{ $product->shelf_price }}">
-                                    <input type="hidden" name="description" value="{{ $product->{'description_'.app()->getLocale()} ?? $product->description }}">
+                                    <input type="hidden" name="description" value="{{ \Illuminate\Support\Str::limit($product->{'small_description_'.app()->getLocale()} ?? $product->small_description_en, 80) }}">
                                     <button type="submit" class="border-0 bg-transparent p-0">
                                         <i class="fas fa-cart-plus"></i>
                                     </button>
@@ -213,6 +213,11 @@
 <script>
     window.signinUrl = "{{ route('customer.signin', ['locale' => app()->getLocale()]) }}";
     window.csrfToken = "{{ csrf_token() }}";
+    window.cartMessages = {
+        addSuccess: "{{ __('nav.cart_add_success') }}",
+        addFail: "{{ __('nav.cart_add_failed') }}",
+        addError: "{{ __('nav.cart_add_error') }}"
+    };
 </script>
 <script src="{{ asset('js/app.js') }}"></script>
 

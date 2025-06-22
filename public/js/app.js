@@ -48,13 +48,47 @@ $(document).ready(function () {
         ]
     });
 
-    // AJAX Add to Cart
-    $('form.add-to-cart-form').submit(function (e) {
+    // Intercept add-to-cart button click to show modal
+    $('form.add-to-cart-form').off('submit').on('submit', function (e) {
         e.preventDefault();
         let form = $(this);
-        let url = form.attr('action');
-        let data = form.serialize();
+        let productName = form.closest('.card').find('.card__title, .card-title').text().trim();
+        let productId = form.find('input[name="product_id"]').val();
+        let productPrice = form.find('input[name="price"]').val();
+        let productDescription = form.find('input[name="description"]').val();
+
+        // Set modal fields
+        $('#addToCartModalLabel').text(productName);
+        $('#modalProductId').val(productId);
+        $('#modalProductPrice').val(productPrice);
+        $('#modalProductDescription').val(productDescription);
+        $('#modalProductQuantity').val(1);
+
+        // Show price and description in the modal
+        $('#modalProductPriceDisplay').text('Price: $' + productPrice);
+        $('#modalProductDescriptionDisplay').text(productDescription);
         
+        // Show modal
+        var modal = new bootstrap.Modal(document.getElementById('addToCartModal'));
+        modal.show();
+    });
+
+    // Handle modal form submit
+    $('#addToCartForm').off('submit').on('submit', function (e) {
+        e.preventDefault();
+        let form = $(this);
+        let button = form.find('button[type="submit"]');
+        button.prop('disabled', true);
+
+        let url = $('form.add-to-cart-form').first().attr('action'); // Use the action from any add-to-cart form
+        let data = {
+            product_id: $('#modalProductId').val(),
+            price: $('#modalProductPrice').val(),
+            description: $('#modalProductDescription').val(),
+            quantity: $('#modalProductQuantity').val(),
+            _token: window.csrfToken
+        };
+
         $.ajax({
             url: url,
             method: 'POST',
@@ -63,22 +97,23 @@ $(document).ready(function () {
                 'X-CSRF-TOKEN': window.csrfToken
             },
             success: function (response) {
-                if (response.success) {
-                    if (response.cart_count !== undefined) {
-                        // Update cart count badge
-                        // $('#cart-count').text(response.cart_count);
-                    }
+                button.prop('disabled', false);
+                bootstrap.Modal.getInstance(document.getElementById('addToCartModal')).hide();
 
+                // Update cart count badge
+                if (response.cart_count !== undefined) {
+                    $('#cart-count').text(response.cart_count);
                 } else {
-                    alert('hi');
-                 }
+                    let current = parseInt($('#cart-count').text()) || 0;
+                    $('#cart-count').text(current + 1);
+                }
+                showAjaxToast('success', window.cartMessages.addSuccess);
             },
             error: function (xhr) {
-                console.log(error);
+                button.prop('disabled', false);
                 if (xhr.status === 401) {
-                    // Unauthorized - redirect to login page
                     window.location.href = window.signinUrl + '?showToast=1&toastMessage=' + encodeURIComponent('Please sign in to add items to your cart.');
-                } 
+                }
             }
         });
     });

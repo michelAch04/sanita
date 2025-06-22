@@ -10,6 +10,7 @@ return [
     'sign_in' => 'تسجيل الدخول',
     'sign_out' => 'تسجيل الخروج',
     'cart' => 'عربة التسوق',
+    'cart_add_success' => '!تمت إضافة المنتج إلى السلة', 
     'addresses'  => 'عناويني',
     'copyright' => '© 2025 Sanita. جميع الحقوق محفوظة.',
     'view_all_categories' => '← عرض جميع الفئات',
@@ -22,4 +23,9 @@ return [
     'search_placeholder' =>'...ابحث عن المنتجات أو الفئات أو العلامات التجارية',
     'search_results' => 'نتائج البحث',
     'no_results' => 'لا توجد نتائج لبحثك.',
+    'success' => '!نجاح',
+    'failed' => '!فشل',
+    'error' => 'خطأ',
+    'cancel' => 'إلغاء',
+    ''
 ];

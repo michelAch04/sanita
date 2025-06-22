@@ -3,7 +3,6 @@
 @section('title', 'Sign In')
 
 @section('content')
-@php $isRtl = (app()->getLocale() === 'ar' || app()->getLocale() === 'ku'); @endphp
 
 <div class="container mb-4" style="max-width:400px;">
     <h2 class="display-5 login-title text-center mt-4">{{ __('auth.sign_in.title') }}</h2>
