@@ -32,4 +32,8 @@ return [
     'old_price' => 'Old Price',
     'subtotal' => 'Subtotal',
     'vat' => 'VAT',
+    'shipping_info' => 'Shipping Information',
+    'select_address' => 'Select Address',
+    'payment_method' => 'Payment Method',
+    'cod' => 'Cash on Delivery',
 ];

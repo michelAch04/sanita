@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\ProductApiController;
 use App\Http\Controllers\Api\SubcategoryApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Models\Product;
 use App\Http\Controllers\Api\GovernorateController;
 use App\Http\Controllers\Api\DistrictController;
 
@@ -29,4 +30,22 @@ Route::middleware('api.key')->group(function () {
     Route::apiResource('categories', CategoryApiController::class);
     Route::apiResource('subcategories', SubcategoryApiController::class);
     Route::apiResource('brands', BrandApiController::class);
+});
+
+use App\Models\Tax;
+
+Route::get('/recalculate-shelf-prices', function () {
+    // Step 1: Set tax_id = 1 for all products
+    Product::query()->update(['tax_id' => 1]);
+
+    // Step 2: Re-fetch products with tax relationship (now all have tax_id = 1)
+    $products = Product::with('tax')->get();
+
+    foreach ($products as $product) {
+        $taxRate = $product->tax->rate ?? 0;
+        $product->shelf_price = $product->unit_price + ($product->unit_price * $taxRate / 100);
+        $product->save();
+    }
+
+    return 'All products updated with tax_id = 1 and shelf prices recalculated.';
 });

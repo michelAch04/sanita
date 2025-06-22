@@ -7,7 +7,8 @@ use App\Models\Cart;
 use App\Models\CartDetail;
 use App\Models\Product;
 use App\Models\Tax;
-
+use App\Models\Address;
+use App\Models\Customer;
 class WebsiteCartController extends Controller
 {
     public function index()
@@ -174,39 +175,49 @@ class WebsiteCartController extends Controller
         return redirect()->back()->with('success', __('cart.removed'));
     }
 
-    public function checkout()
-    {
-        $cart = Cart::with(['cartDetails.product'])
-            ->where('customers_id', auth()->id())
-            ->where('purchased', 0)
-            ->where('cancelled', 0)
-            ->first();
+   public function checkout()
+{
+    $cart = Cart::with(['cartDetails.product'])
+        ->where('customers_id', auth()->id())
+        ->where('purchased', 0)
+        ->where('cancelled', 0)
+        ->first();
 
-        $addresses = auth()->user()->addresses()->get();
+    $customerId = auth()->id();
+    $addresses = Address::where('customer_id', $customerId)->get();
 
-        $subtotal = 0;
-        $totalTax = 0;
-        $total = 0;
+    $subtotal = 0;
+    $totalTax = 0;
+    $total = 0;
 
-        $taxRates = Tax::all()->keyBy('id');
+    if ($cart && $cart->cartDetails) {
+        foreach ($cart->cartDetails->product as $item) {
+           
+            // dd($product);
+            // $product = Product::where('id',$product)->get();
 
-        if ($cart && $cart->cartDetails) {
-            foreach ($cart->cartDetails as $item) {
-                $product = $item->product;
+            // Only calculate tax if shelf_price > unit_price
+            if ($item['shelf_price'] > $item['unit_price']) {
+                $lineUnitPrice = $item['unit_price'] * $item['quantity'];
+                $lineShelfPrice = $item['shelf_price'] * $item['quantity'];
 
-                if (!$product) continue;
-                //check if itemtaxable or not 
-                if ($product->tax_id != null) {
-                    $lineSubtotal = $product->shelf_price * $item->quantity;
-                    $lineTotal = $product->shelf_price * $item->quantity;
+                $lineTax = $lineShelfPrice - $lineUnitPrice;
 
-                    $subtotal += $lineSubtotal;
-                    $total += $lineTotal;
+                $subtotal += $lineUnitPrice;
+                $total += $lineShelfPrice;
+                $totalTax += $lineTax;
+            } else {
+                // No tax applied, treat shelf = unit
+                $linePrice = $item->unit_price * $item->quantity;
 
-                    $totalTax = $total - $subtotal;
-                }
+                $subtotal += $linePrice;
+                $total += $linePrice;
+                // $totalTax += 0; // Not necessary to add zero
             }
         }
+        dd($item);
+    }
+   
 
         return view('sanita.cart.checkout', compact('cart', 'addresses', 'subtotal', 'totalTax', 'total'));
     }
