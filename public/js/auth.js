@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const phoneInvalidIcon = document.getElementById("phone-invalid");
     const phoneLoadingIcon = document.getElementById("phone-loading");
 
-    if(!phoneInputField){
+    if (!phoneInputField) {
         return;
     }
 
@@ -69,6 +69,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 .catch(() => callback("us"));
         }
     });
+
+    // Restore previous phone value and flag after reload
+    const oldPhone = phoneInputField.getAttribute('data-old');
+    if (oldPhone) {
+        iti.setNumber(oldPhone);
+    }
+
+    function updateCountryCode() {
+        document.getElementById('country_code').value = iti.getSelectedCountryData().dialCode;
+    }
+    phoneInputField.addEventListener('countrychange', updateCountryCode);
+    phoneInputField.addEventListener('input', updateCountryCode);
+    // Call once on load
+    updateCountryCode();
 
     function validatePhoneNumber() {
         const number = phoneInputField.value.trim();
@@ -87,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const isValid = iti.isValidNumber();
             phoneLoadingIcon.style.display = "none";
             phoneValidIcon.style.display = isValid ? "inline" : "none";
-            phoneInvalidIcon.style.display = isValid ? "none" : "inline" ;
+            phoneInvalidIcon.style.display = isValid ? "none" : "inline";
         }, 400);
     }
 
@@ -156,6 +170,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // ----------------------------------------- SIGN IN LOGIC ----------------------------------------------- //
 document.addEventListener('DOMContentLoaded', function () {
+    const countryCodeInput = document.getElementById('country_code');
     // ----------------------------
     // 1. Toast auto-dismiss
     // ----------------------------

@@ -16,10 +16,10 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->date('DOB')->nullable();
-            $table->string('mobile')->nullable();
-            $table->string('email')->unique();
+            $table->string('mobile')->unique();
+            $table->string('email')->nullable()->unique();
             $table->enum('gender', ['male', 'female', 'other'])->nullable();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->timestamp('verified_at')->nullable();
             $table->string('password');
             $table->string('token')->nullable();
             $table->tinyInteger('locked')->default(0);
