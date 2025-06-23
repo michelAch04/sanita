@@ -87,7 +87,7 @@
 
     @stack('after-scripts')
 
-    {{-- @include('cms.partials.change-order') --}}
+    @include('cms.partials.change-order')
 
 </body>
 

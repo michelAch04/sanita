@@ -32,7 +32,6 @@ Route::middleware('api.key')->group(function () {
     Route::apiResource('brands', BrandApiController::class);
 });
 
-use App\Models\Tax;
 
 Route::get('/recalculate-shelf-prices', function () {
     // Step 1: Set tax_id = 1 for all products
