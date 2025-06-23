@@ -74,7 +74,7 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                     <h5 class="fw-semibold mb-3">{{ __('cart.promo_code') }}</h5>
                     <div class="promo mb-4 d-flex gap-3 align-items-center flex-direction-row">
                         <div class="input-container" style="width: 40%;">
-                            <input type="text" id="promo_code" name="promo_code" required style="width: 100%;" placeholder="">
+                            <input type="text" id="promo_code" name="promo_code" style="width: 100%;" placeholder="">
                             <label for="promo_code" class="label">{{ __('cart.enter_promo_code') }}</label>
                             <div class="underline"></div>
                         </div>

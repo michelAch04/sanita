@@ -195,9 +195,9 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
 
     <script>
-        window.success = "{{ __('nav.success ') }}";
-        window.failed = "{{ __('nav.failed ') }}";
-        window.error = "{{ __('nav.error ') }}";
+        window.success = "{{ __('nav.success') }}";
+        window.failed = "{{ __('nav.failed') }}";
+        window.error = "{{ __('nav.error') }}";
         window.isRtl = '{{ $isRtl }}';
     </script>
     <script src="{{ asset('js/app.js') }}"></script>
