@@ -10,21 +10,32 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
     <h2 class="display-5 login-title text-center mt-4">{{ __('auth.sign_in.title') }}</h2>
 
     <div class="{{ $isRtl ? 'rtl-container' : '' }}">
-        <form method="POST" action="{{ route('customer.signin', ['locale' => app()->getLocale()]) }}" class="login-form">
+        <form method="POST" action="{{ route('customer.signin', ['locale' => app()->getLocale()]) }}" 
+        onsubmit="console.log(phoneInputField.value, countryCodeInput.value)" class="login-form">
             @csrf
 
             <div class="login-flex-column">
-                <label for="email" class="{{ $isRtl ? 'text-end w-100' : '' }}">{{ __('auth.sign_in.email') }}</label>
+                <label for="mobile" class="{{ $isRtl ? 'text-end w-100' : '' }}">{{ __('auth.sign_up.mobile') }}</label>
             </div>
-            <div class="login-inputForm">
-                <i class="fa fa-envelope"></i>
-                <input type="email"
-                    name="email"
-                    id="email"
+            <div class="login-inputForm phone-group @error('mobile') is-invalid @enderror" style="position: relative;">
+                <i class="fa fa-phone"></i>
+                <input type="hidden" name="country_code" id="country_code">
+                <input id="mobile" type="tel" name="mobile"
                     class="login-input"
-                    value="{{ old('email') }}"
-                    placeholder="{{ __('auth.sign_in.email') }}">
+                    value="{{ old('mobile') }}"
+                    data-old="{{ old('country_code') ? '+' . old('country_code') . old('mobile') : '' }}"
+                    placeholder="{{ __('auth.sign_up.mobile') }}" required> 
+                <span id="phone-loading" class="phone-status-icon" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); display: none;">
+                    <i class="fa fa-spinner fa-spin"></i>
+                </span>
+                <span id="phone-valid" class="phone-status-icon text-success" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); display: none;">
+                    <i class="fa fa-check-circle"></i>
+                </span>
+                <span id="phone-invalid" class="phone-status-icon text-danger" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); display: none;">
+                    <i class="fa fa-xmark-circle"></i>
+                </span>
             </div>
+            <div id="mobile-error" class="login-error-message" style="display:none;"></div>
 
             <div class="login-flex-column">
                 <label for="password" class="{{ $isRtl ? 'text-end w-100' : '' }}">{{ __('auth.sign_in.password') }}</label>
@@ -71,6 +82,7 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
     .error-toast {
         display: none !important;
     }
+
     .login-input {
         width: 85% !important;
     }

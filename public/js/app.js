@@ -1,6 +1,6 @@
 // ---------------------------------- INDEX HANDLING ---------------------------------- //
 $(document).ready(function () {
-    console.log('Initializing Slick Carousels');
+    console.log(document.querySelectorAll('.hero-carousel'));
     $('.hero-carousel').slick({
         dots: false,
         infinite: true,
@@ -19,6 +19,8 @@ $(document).ready(function () {
         centerPadding: '0px',
         dots: false,
         infinite: true,
+        draggable: true,
+        swipe: true,
         speed: 300,
         slidesToShow: 5,
         slidesToScroll: 1,

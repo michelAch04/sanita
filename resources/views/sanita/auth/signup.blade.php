@@ -39,16 +39,29 @@
             </div>
         </div>
 
-        {{-- Email --}}
+        {{-- Mobile --}}
         <div class="mb-3">
-            <label for="email" class="{{ $isRtl ? 'text-end w-100' : '' }}">{{ __('auth.sign_up.email') }}</label>
-            <div class="login-inputForm @error('email') is-invalid @enderror">
-                <i class="fa fa-envelope"></i>
-                <input type="email" name="email" id="email"
+            <label for="mobile" class="{{ $isRtl ? 'text-end w-100' : '' }}">{{ __('auth.sign_up.mobile') }}</label>
+            <div class="login-inputForm phone-group @error('mobile') is-invalid @enderror" style="position: relative;">
+                <i class="fa fa-phone"></i>
+                <input type="hidden" name="country_code" id="country_code">
+                <input id="mobile" type="tel" name="mobile"
                     class="login-input"
-                    value="{{ old('email') }}" placeholder="{{ __('auth.sign_up.email') }}">
+                    value="{{ old('mobile') }}"
+                    data-old="{{ old('country_code') ? '+' . old('country_code') . old('mobile') : old('mobile') }}"
+                    placeholder="{{ __('auth.sign_up.mobile') }}" required>
+                <span id="phone-loading" class="phone-status-icon" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); display: none;">
+                    <i class="fa fa-spinner fa-spin"></i>
+                </span>
+                <span id="phone-valid" class="phone-status-icon text-success" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); display: none;">
+                    <i class="fa fa-check-circle"></i>
+                </span>
+                <span id="phone-invalid" class="phone-status-icon text-danger" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); display: none;">
+                    <i class="fa fa-xmark-circle"></i>
+                </span>
             </div>
-            @error('email')
+            <div id="mobile-error" class="login-error-message" style="display:none;"></div>
+            @error('mobile')
             <div class="login-error-message">{{ $message }}</div>
             @enderror
         </div>
@@ -79,6 +92,20 @@
             </div>
         </div>
 
+        {{-- Email --}}
+        <div class="mb-3">
+            <label for="email" class="{{ $isRtl ? 'text-end w-100' : '' }}">{{ __('auth.sign_up.email') }}</label>
+            <div class="login-inputForm @error('email') is-invalid @enderror">
+                <i class="fa fa-envelope"></i>
+                <input type="email" name="email" id="email"
+                    class="login-input"
+                    value="{{ old('email') }}" placeholder="{{ __('auth.sign_up.email') }}">
+            </div>
+            @error('email')
+            <div class="login-error-message">{{ $message }}</div>
+            @enderror
+        </div>
+
         {{-- DOB --}}
         <div class="mb-3">
             <label for="dob_day" class="{{ $isRtl ? 'text-end w-100' : '' }}">{{ __('auth.sign_up.dob') }}</label>
@@ -97,30 +124,6 @@
             </div>
             <div id="dob-error" class="login-error-message" style="display:none;"></div>
             @error('DOB')
-            <div class="login-error-message">{{ $message }}</div>
-            @enderror
-        </div>
-
-        {{-- Mobile --}}
-        <div class="mb-3">
-            <label for="mobile" class="{{ $isRtl ? 'text-end w-100' : '' }}">{{ __('auth.sign_up.mobile') }}</label>
-            <div class="login-inputForm phone-group @error('mobile') is-invalid @enderror" style="position: relative;">
-                <i class="fa fa-phone"></i>
-                <input id="mobile" type="tel" name="mobile"
-                    class="login-input"
-                    value="{{ old('mobile') }}" placeholder="{{ __('auth.sign_up.mobile') }}">
-                <span id="phone-loading" class="phone-status-icon" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); display: none;">
-                    <i class="fa fa-spinner fa-spin"></i>
-                </span>
-                <span id="phone-valid" class="phone-status-icon text-success" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); display: none;">
-                    <i class="fa fa-check-circle"></i>
-                </span>
-                <span id="phone-invalid" class="phone-status-icon text-danger" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); display: none;">
-                    <i class="fa fa-xmark-circle"></i>
-                </span>
-            </div>
-            <div id="mobile-error" class="login-error-message" style="display:none;"></div>
-            @error('mobile')
             <div class="login-error-message">{{ $message }}</div>
             @enderror
         </div>
@@ -157,9 +160,9 @@
     </form>
 </div>
 <style>
-    .error-toast {
+    /* .error-toast {
         display: none !important;
-    }
+    } */
 </style>
 <script src="{{ asset('js/auth.js') }}"></script>
 @endsection

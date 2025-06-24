@@ -11,6 +11,13 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
+    private function cleanPhoneNumber($number)
+    {
+        $number = preg_replace('/\s+/', '', $number); // remove all spaces
+        $number = ltrim($number, '0');               // remove leading zeros
+        return $number;
+    }
+
     // Show sign up page
     public function showSignUp()
     {
@@ -20,12 +27,16 @@ class AuthController extends Controller
     // Handle customer sign up
     public function signUp(Request $request)
     {
+        $request->merge([
+            'mobile' => $this->cleanPhoneNumber($request->mobile),
+        ]);
         try {
             $validated = $request->validate([
                 'first_name' => 'required|string|max:255',
                 'last_name' => 'required|string|max:255',
                 'DOB' => 'required|date|before:today',
                 'mobile' => ['required', 'string', 'max:20', 'regex:/^\+?[0-9\s\-\(\)]+$/', 'unique:customers'],
+                'country_code' => 'required|string|max:10',
                 'gender' => 'required|in:male,female',
                 'email' => 'nullable|email|unique:customers',
                 'password' => 'required|string|min:8|confirmed',
@@ -41,7 +52,7 @@ class AuthController extends Controller
             throw $e;
         } catch (\Exception $e) {
             return back()
-                ->withErrors(['general' => 'Something went wrong. Please try again.'])
+                ->withErrors(['general' => $e->getMessage()])
                 ->withInput();
         }
     }
@@ -60,12 +71,16 @@ class AuthController extends Controller
     // Handle customer sign in
     public function signIn(Request $request)
     {
+        $request->merge([
+            'mobile' => $this->cleanPhoneNumber($request->mobile),
+        ]);
         $request->validate([
-            'email' => 'required|email',
+            'mobile' => ['required', 'string', 'max:20', 'regex:/^\+?[0-9\s\-\(\)]+$/'],
+            'country_code' => 'required|string|max:10',
             'password' => 'required|string',
         ]);
 
-        $customer = Customer::where('email', $request->email)->first();
+        $customer = Customer::where('mobile', $request->mobile)->first();
 
         if (!$customer || !Hash::check($request->password, $customer->password)) {
             // Return a single error keyed by 'login_error'

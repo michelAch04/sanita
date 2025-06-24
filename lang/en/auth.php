@@ -18,7 +18,7 @@ return [
 
     'sign_in' => [
         'title' => 'Sign In',
-        'email' => 'Email',
+        'email' => 'Email (optional)',
         'password' => 'Password',
         'remember_me' => 'Remember Me',
         'forgot_password' => 'Forgot Your Password?',
@@ -34,7 +34,7 @@ return [
         'gender' => 'Gender',
         'gender_male' => 'Male',
         'gender_female' => 'Female',
-        'email' => 'Email',
+        'email' => 'Email (optional)',
         'password' => 'Password',
         'password_confirmation' => 'Confirm Password',
         'submit' => 'Sign Up',
