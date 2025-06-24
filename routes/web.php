@@ -85,6 +85,11 @@ Route::prefix('{locale}')->middleware('localization')->group(function () {
     Route::post('/signin', [AuthController::class, 'signIn']);
     Route::get('/signup', [AuthController::class, 'showSignUp'])->name('customer.signup');
     Route::post('/signup', [AuthController::class, 'signUp']);
+    Route::get('/signup', [AuthController::class, 'showSignUp'])->name('customer.signup');
+    Route::post('/signup', [AuthController::class, 'signUp']);
+    Route::get('/verifyotp', [AuthController::class, 'showVerifyOtp'])->name('customer.verifyotp');
+    Route::post('/verifyotp', [AuthController::class, 'verifyOtp'])->name('customer.verifyOtp');
+    Route::get('/resend-otp', [AuthController::class, 'resendOtp'])->name('customer.resendOtp');
     Route::post('/signout', [AuthController::class, 'signOut'])->name('customer.signout');
 
     Route::get('/', [WebsiteController::class, 'index'])->name('sanita.index');

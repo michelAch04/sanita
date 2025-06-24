@@ -18,24 +18,25 @@ class WebsiteController extends Controller
         $slideshow = Slideshow::where('hidden', 0)->where('cancelled', 0)->get()->sortBy('position');
         $categories = Category::where('hidden', 0)->where('cancelled', 0)->get()->sortBy('position');
 
-        $products = Product::where('hidden', 0)
-            ->where('cancelled', 0)
-            ->where(function ($query) {
-                $query->where('automatic_hide', 0)
-                    ->orWhere('available_quantity', '>', 0);
-            })
-            ->get()
-            ->sortBy('position');
-
-        $offers = Product::where('hidden', 0)
-            ->where('cancelled', 0)
-            ->where('old_price', '>', 0)
-            ->where(function ($query) {
-                $query->where('automatic_hide', 0)
-                    ->orWhere('available_quantity', '>', 0);
-            })
-            ->get()
-            ->sortBy('position');
+        // $products = Product::where('hidden', 0)
+        //     ->where('cancelled', 0)
+        //     ->where(function ($query) {
+        //         $query->where('automatic_hide', 0)
+        //             ->orWhere('available_quantity', '>', 0);
+        //     })
+        //     ->get()
+        //     ->sortBy('position');
+        $products = [];
+        $offers = [];
+        // $offers = Product::where('hidden', 0)
+        //     ->where('cancelled', 0)
+        //     ->where('old_price', '>', 0)
+        //     ->where(function ($query) {
+        //         $query->where('automatic_hide', 0)
+        //             ->orWhere('available_quantity', '>', 0);
+        //     })
+        //     ->get()
+        //     ->sortBy('position');
 
         return view('sanita.index', compact('aboutus', 'slideshow', 'categories', 'products', 'offers'));
     }
