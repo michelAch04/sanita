@@ -25,6 +25,7 @@ class WebsiteCartController extends Controller
             $expired->update(['cancelled' => 1]);
             $expired->cartDetails()->update(['cancelled' => 1]);
         }
+
         $cart = Cart::with(['cartDetails' => function ($q) {
             $q->where('cancelled', 0)->with(['product' => function ($q) {
                 $q->where('cancelled', 0);

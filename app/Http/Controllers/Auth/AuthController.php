@@ -27,7 +27,7 @@ class AuthController extends Controller
                 'DOB' => 'required|date|before:today',
                 'mobile' => ['required', 'string', 'max:20', 'regex:/^\+?[0-9\s\-\(\)]+$/', 'unique:customers'],
                 'gender' => 'required|in:male,female',
-                'email' => 'required|email|unique:customers',
+                'email' => 'nullable|email|unique:customers',
                 'password' => 'required|string|min:8|confirmed',
             ]);
 
@@ -35,8 +35,8 @@ class AuthController extends Controller
             $customer = Customer::create($validated);
             Auth::guard('customer')->login($customer);
 
-        return redirect()->route('sanita.index', ['locale' => app()->getLocale()])
-            ->with('success', 'Registration successful! You are now logged in.');
+            return redirect()->route('sanita.index', ['locale' => app()->getLocale()])
+                ->with('success', 'Registration successful! You are now logged in.');
         } catch (ValidationException $e) {
             throw $e;
         } catch (\Exception $e) {

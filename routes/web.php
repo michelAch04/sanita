@@ -66,8 +66,8 @@ Route::middleware('auth:web')->group(function () {
     Route::resource('/cms/orders', OrderController::class);
     Route::resource('/cms/slideshow', SlideshowController::class);
     Route::resource('/cms/permissions', PermissionController::class);
-    Route::resource('tax', TaxController::class);
-    Route::get('/cms/cart', [CartController::class, 'cmsindex'])->name('cart.cmsindex');
+    Route::resource('/cms/tax', TaxController::class);
+    Route::resource('/cms/cart', CartController::class);
 
     //for drag-and-drop reorder
     Route::post('/cms/products/reorder', [ProductController::class, 'reorder'])->name('products.reorder');
@@ -94,7 +94,15 @@ Route::prefix('{locale}')->middleware('localization')->group(function () {
     Route::view('/contact', 'sanita.contactus')->name('contact');
 
     Route::middleware('auth:customer')->group(function () {
-        Route::resource('cart', WebsiteCartController::class);
+        Route::resource('cart', WebsiteCartController::class)->names([
+            'index' => 'website.cart.index',
+            'create' => 'website.cart.create',
+            'store' => 'website.cart.store',
+            'show' => 'website.cart.show',
+            'edit' => 'website.cart.edit',
+            'update' => 'website.cart.update',
+            'destroy' => 'website.cart.destroy',
+        ]);
         Route::resource('addresses', WebsiteAddressController::class);
         Route::get('checkout', [WebsiteCartController::class, 'checkout'])->name('cart.checkout');
     });

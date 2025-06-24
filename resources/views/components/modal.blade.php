@@ -1,7 +1,8 @@
 @php
-    if (str_starts_with(request()->path(), 'cms')) {
-        $isRtl = 0;
-    }
+if (str_starts_with(request()->path(), 'cms')) {
+$isRtl = 0;
+}
+
 @endphp
 {{-- Global Delete Confirmation Modal --}}
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -89,90 +90,90 @@
 
 <style>
     /* Update Quantity Form Styling*/
-.update-quantity-form .btn,
-.update-quantity-form .quantity-input {
-  position: relative;
-  overflow: hidden;
-  font-size: 1;
-  border-radius: 0.5rem;
-  background: none;
-  border: none;
-  color: var(--primary-text);
-  transition: color 0.3s;
-}
+    .update-quantity-form .btn,
+    .update-quantity-form .quantity-input {
+        position: relative;
+        overflow: hidden;
+        font-size: 1;
+        border-radius: 0.5rem;
+        background: none;
+        border: none;
+        color: var(--primary-text);
+        transition: color 0.3s;
+    }
 
-.update-quantity-form {
-  width: fit-content;
-  padding: 0 1rem;
-    display: inline-block;
-}
+    .update-quantity-form {
+        width: fit-content;
+        padding: 0 1rem;
+        display: inline-block;
+    }
 
-/* Remove default button focus outlines */
-.update-quantity-form .btn:focus,
-.update-quantity-form .btn:active {
-  box-shadow: none;
-  outline: none;
-}
+    /* Remove default button focus outlines */
+    .update-quantity-form .btn:focus,
+    .update-quantity-form .btn:active {
+        box-shadow: none;
+        outline: none;
+    }
 
-.update-quantity-form .btn {
-    padding: 0;
-}
+    .update-quantity-form .btn {
+        padding: 0;
+    }
 
-.update-quantity-form .btn:hover {
-  color: var(--link-hover);
-}
+    .update-quantity-form .btn:hover {
+        color: var(--link-hover);
+    }
 
-/* For input underline effect on focus */
-.update-quantity-form .quantity-input {
-  border: none;
-  border-radius: 0.5rem;
-  border-bottom: 2px solid var(--primary-text);
-  text-align: center;
-  font-weight: 500;
-  color: var(--primary-text);
-  padding: 0.25rem 0.5rem;
-  width: calc(var(--card-width)*0.25);
-  transition: border-color 0.3s, color 0.3s;
-}
+    /* For input underline effect on focus */
+    .update-quantity-form .quantity-input {
+        border: none;
+        border-radius: 0.5rem;
+        border-bottom: 2px solid var(--primary-text);
+        text-align: center;
+        font-weight: 500;
+        color: var(--primary-text);
+        padding: 0.25rem 0.5rem;
+        width: calc(var(--card-width)*0.25);
+        transition: border-color 0.3s, color 0.3s;
+    }
 
-.update-quantity-form .quantity-input:focus {
-  outline: none;
-  border-color: var(--link-hover);
-  color: var(--link-hover);
-}
-.update-quantity-form .quantity-input:active {
-  outline: none;
-  border-color: var(--link-hover);
-  color: var(--link-hover);
-}
+    .update-quantity-form .quantity-input:focus {
+        outline: none;
+        border-color: var(--link-hover);
+        color: var(--link-hover);
+    }
 
+    .update-quantity-form .quantity-input:active {
+        outline: none;
+        border-color: var(--link-hover);
+        color: var(--link-hover);
+    }
 </style>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-    const modal = document.getElementById('addToCartModal');
-    if (!modal) return;
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('addToCartModal');
+        if (!modal) return;
 
-    const quantityInput = modal.querySelector('.quantity-input');
-    const btnIncrease = modal.querySelector('.btn-increase');
-    const btnDecrease = modal.querySelector('.btn-decrease');
+        const quantityInput = modal.querySelector('.quantity-input');
+        const btnIncrease = modal.querySelector('.btn-increase');
+        const btnDecrease = modal.querySelector('.btn-decrease');
 
-    if (!quantityInput || !btnIncrease || !btnDecrease) return;
+        if (!quantityInput || !btnIncrease || !btnDecrease) return;
 
-    btnIncrease.addEventListener('click', function () {
-        let val = parseInt(quantityInput.value) || 1;
-        quantityInput.value = val + 1;
+        btnIncrease.addEventListener('click', function() {
+            let val = parseInt(quantityInput.value) || 1;
+            quantityInput.value = val + 1;
+        });
+
+        btnDecrease.addEventListener('click', function() {
+            let val = parseInt(quantityInput.value) || 1;
+            if (val > 1) quantityInput.value = val - 1;
+        });
+
+        // Optional: Prevent non-numeric input
+        quantityInput.addEventListener('input', function() {
+            let val = parseInt(quantityInput.value) || 1;
+            if (val < 1) val = 1;
+            quantityInput.value = val;
+        });
     });
-
-    btnDecrease.addEventListener('click', function () {
-        let val = parseInt(quantityInput.value) || 1;
-        if (val > 1) quantityInput.value = val - 1;
-    });
-
-    // Optional: Prevent non-numeric input
-    quantityInput.addEventListener('input', function () {
-        let val = parseInt(quantityInput.value) || 1;
-        if (val < 1) val = 1;
-        quantityInput.value = val;
-    });
-});
 </script>

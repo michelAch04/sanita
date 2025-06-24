@@ -5,7 +5,7 @@
 @section('content')
 
 <!-- Hero Section -->
-<div class="hero-carousel mt-1">
+<div class="hero-carousel">
     @foreach ($slideshow as $image)
     <div>
         <img src="{{ asset('storage/slideshow/' . $image->id.'.'.$image->extension) }}" alt="Slide" class="img-fluid rounded shadow">
@@ -31,16 +31,12 @@
                             <img src="{{ asset('storage/products/' . $product->id . '.' . $product->extension) }}"
                                 alt="{{ $product->{'name_'.app()->getLocale()} ?? $product->name_en }}"
                                 class="img-fluid w-100 h-100 dynamic-fit">
-                            @else
-                            <img src="{{ asset('images/default-product.jpg') }}"
-                                alt="Default Image"
-                                class="img-fluid w-100 h-100" style="object-fit: cover; border-radius: 12px;">
                             @endif
                         </div>
 
                         <div class="card__text">
                             <p class="card__title">
-                                <a href="{{ route('products.show', ['locale' => app()->getLocale(), 'product' => $product->id]) }}"
+                                <a href="{{ route('website.product.index', ['locale' => app()->getLocale(), 'product' => $product->id]) }}"
                                     class="text-decoration-none text-dark">
                                     {{ $product->{'name_'.app()->getLocale()} ?? $product->name_en }}
                                 </a>
@@ -61,7 +57,7 @@
                             </div>
                             <div class="card__button">
                                 @if($product->available_quantity > 0)
-                                <form action="{{ route('cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="add-to-cart-form m-0">
+                                <form action="{{ route('website.cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="add-to-cart-form m-0">
                                     @csrf
                                     <input type="hidden" name="product_id" value="{{ $product->id }}">
                                     <input type="hidden" name="price" value="{{ $product->shelf_price }}">
@@ -148,10 +144,6 @@
                             <img src="{{ asset('storage/products/' . $product->id . '.' . $product->extension) }}"
                                 alt="{{ $product->{'name_'.app()->getLocale()} ?? $product->name_en }}"
                                 class="img-fluid w-100 h-100 dynamic-fit" style="border-radius: 12px;">
-                            @else
-                            <img src="{{ asset('images/default-product.jpg') }}"
-                                alt="Default Image"
-                                class="img-fluid w-100 h-100" style=" border-radius: 12px;">
                             @endif
                         </div>
 
@@ -178,7 +170,7 @@
                             </div>
                             <div class="card__button">
                                 @if($product->available_quantity > 0)
-                                <form action="{{ route('cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="add-to-cart-form m-0">
+                                <form action="{{ route('website.cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="add-to-cart-form m-0">
                                     @csrf
                                     <input type="hidden" name="product_id" value="{{ $product->id }}">
                                     <button type="submit" class="border-0 bg-transparent p-0">

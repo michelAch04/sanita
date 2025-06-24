@@ -20,7 +20,7 @@ $canDelete = $permissions && $permissions->delete;
 <div class="d-flex justify-content-center w-100 mb-3">
     <form class="search-form d-flex align-items-center w-50"
         data-search-target="#cart-table-body"
-        action="{{ route('cart.cmsindex') }}">
+        action="{{ route('cart.index') }}">
         <input type="text" name="query"
             class="form-control me-2 search-input rounded-pill shadow-soft"
             placeholder="Search..." autocomplete="off">
@@ -33,7 +33,7 @@ $canDelete = $permissions && $permissions->delete;
     <div class="card-header text-dark d-flex justify-content-between align-items-center m-2 mb-3">
         <h2 class="mb-0">Carts</h2>
         @if($canAdd)
-            <a href="{{ route('cart.create') }}" class="btn bubbles fw-medium"><span class="text">+ Create Category</span></a>
+        <a href="{{ route('cart.create',['locale' => app()->getLocale()]) }}" class="btn bubbles fw-medium"><span class="text">+ Create Category</span></a>
         @endif
     </div>
 
@@ -76,7 +76,7 @@ $canDelete = $permissions && $permissions->delete;
                                     <ul class="dropdown-menu {{ $loop->first ? '' : 'dropdown-menu-end' }}">
                                         @if($canEdit)
                                         <li>
-                                            <a class="dropdown-item bg-hover-light-grey" href="{{ route('cart.edit', $cart->id) }}">
+                                            <a class="dropdown-item bg-hover-light-grey" href="{{ route('cart.edit',   [$cart->id ,'locale' => app()->getLocale()]) }}">
                                                 <i class="bi bi-pencil-square me-2"></i>Edit
                                             </a>
                                         </li>
@@ -84,7 +84,7 @@ $canDelete = $permissions && $permissions->delete;
                                         @if($canDelete)
                                         <li>
                                             <button type="button" class="dropdown-item text-danger bg-hover-light-grey"
-                                                onclick="confirmDelete('{{ route('cart.destroy', $cart->id) }}')">
+                                                onclick="confirmDelete('{{ route('cart.destroy',  [$cart->id ,'locale' => app()->getLocale()]) }}')">
                                                 <i class="bi bi-trash3 me-2"></i>Delete
                                             </button>
                                         </li>

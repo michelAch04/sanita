@@ -8,12 +8,11 @@
         <!-- Product Image -->
         <div class="col-md-6">
             <div class="card shadow-sm border-0">
-                <img src="{{ asset('storage/products/' . ($product->image_url ?? 'default.jpg')) }}"
+                <img src="{{ asset('storage/products/' .$product->id .'.' .  $product->extension ) }}"
                     alt="{{ $product->{'name_' . app()->getLocale()} }}"
                     class="img-fluid rounded-start w-100">
             </div>
         </div>
-
         <!-- Product Details -->
         <div class="col-md-6">
             <h2 class="mb-3">{{ $product->{'name_' . app()->getLocale()} }}</h2>
