@@ -15,8 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('first_name');
             $table->string('last_name');
+            $table->enum('type', ['b2b', 'b2c'])->nullable();
+            $table->integer('OTP');
+            $table->string('OTP_expiry');
             $table->date('DOB')->nullable();
             $table->string('mobile')->nullable();
+            $table->string('country_code', 10)->nullable();
             $table->string('email')->unique();
             $table->enum('gender', ['male', 'female', 'other'])->nullable();
             $table->timestamp('verified_at')->nullable();

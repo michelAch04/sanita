@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('floor')->nullable();
             $table->text('notes')->nullable();
             $table->boolean('is_default')->default(false);
+            $table->tinyInteger('cancelled')->default(0);
             $table->timestamps();
 
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');

@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('customers_id')->constrained('customers')->onDelete('cascade');
+            $table->foreignId('distributors_id')->constrained('distributors')->onDelete('cascade');
+            $table->foreignId('addresses_id')->constrained('addresses')->onDelete('cascade');
             $table->decimal('total_amount', 10, 2)->default(0);
             $table->tinyInteger('cancelled')->default(0);
-
             $table->timestamps();
         });
     }
