@@ -66,8 +66,8 @@ Route::middleware('auth:web')->group(function () {
     Route::resource('/cms/orders', OrderController::class);
     Route::resource('/cms/slideshow', SlideshowController::class);
     Route::resource('/cms/permissions', PermissionController::class);
-    Route::resource('tax', TaxController::class);
-    Route::get('/cms/cart', [CartController::class, 'cmsindex'])->name('cart.cmsindex');
+    Route::resource('/cms/tax', TaxController::class);
+    Route::resource('/cms/cart', CartController::class);
 
     //for drag-and-drop reorder
     Route::post('/cms/products/reorder', [ProductController::class, 'reorder'])->name('products.reorder');
@@ -85,6 +85,11 @@ Route::prefix('{locale}')->middleware('localization')->group(function () {
     Route::post('/signin', [AuthController::class, 'signIn']);
     Route::get('/signup', [AuthController::class, 'showSignUp'])->name('customer.signup');
     Route::post('/signup', [AuthController::class, 'signUp']);
+    Route::get('/signup', [AuthController::class, 'showSignUp'])->name('customer.signup');
+    Route::post('/signup', [AuthController::class, 'signUp']);
+    Route::get('/verifyotp', [AuthController::class, 'showVerifyOtp'])->name('customer.verifyotp');
+    Route::post('/verifyotp', [AuthController::class, 'verifyOtp'])->name('customer.verifyOtp');
+    Route::get('/resend-otp', [AuthController::class, 'resendOtp'])->name('customer.resendOtp');
     Route::post('/signout', [AuthController::class, 'signOut'])->name('customer.signout');
 
     Route::get('/', [WebsiteController::class, 'index'])->name('sanita.index');
@@ -94,7 +99,15 @@ Route::prefix('{locale}')->middleware('localization')->group(function () {
     Route::view('/contact', 'sanita.contactus')->name('contact');
 
     Route::middleware('auth:customer')->group(function () {
-        Route::resource('cart', WebsiteCartController::class);
+        Route::resource('cart', WebsiteCartController::class)->names([
+            'index' => 'website.cart.index',
+            'create' => 'website.cart.create',
+            'store' => 'website.cart.store',
+            'show' => 'website.cart.show',
+            'edit' => 'website.cart.edit',
+            'update' => 'website.cart.update',
+            'destroy' => 'website.cart.destroy',
+        ]);
         Route::resource('addresses', WebsiteAddressController::class);
         //address routes
         Route::post('/addresses/{address}/set-default', [WebsiteAddressController::class, 'setDefault'])->name('addresses.setDefault');

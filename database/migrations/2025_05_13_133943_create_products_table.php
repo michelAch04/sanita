@@ -31,14 +31,8 @@ return new class extends Migration
             $table->text('small_description_ar')->nullable();
             $table->text('small_description_ku')->nullable();
 
-            // Pricing
-            $table->decimal('unit_price', 10, 2)->default(0);
-            $table->decimal('shelf_price', 10, 2)->default(0);
-            $table->decimal('old_price', 10, 2)->nullable();
-
-            // Inventory
-            $table->integer('available_quantity')->default(0);
-            $table->integer('threshold')->default(0);
+            $table->integer('EA-CA');
+            $table->integer('EA-PA');
 
             // Classification Codes
             $table->string('product_line_code')->nullable();

@@ -11,6 +11,14 @@ return [
     | these language lines according to your application's requirements.
     |
     */
+    // lang/en/auth.php
+    'verify_otp' => [
+        'title' => 'Verify OTP',
+        'mobile' => 'Mobile Number',
+        'otp' => 'OTP Code',
+        'submit' => 'Verify',
+        'no_account_register' => 'Don\'t have an account? Register',
+    ],
 
     'failed' => 'These credentials do not match our records.',
     'password' => 'The provided password is incorrect.',

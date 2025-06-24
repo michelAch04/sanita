@@ -43,14 +43,14 @@
                     </div>
 
                     <div class="d-flex align-items-center justify-content-between">
-                        <form class="update-quantity-form  d-flex align-items-center gap-2 mt-4 mb-2" method="POST" action="{{ route('cart.update', ['locale' => app()->getLocale(), 'cart' => $detail->id]) }}">
+                        <form class="update-quantity-form  d-flex align-items-center gap-2 mt-4 mb-2" method="POST" action="{{ route('website.cart.update', ['locale' => app()->getLocale(), 'cart' => $detail->id]) }}">
                             @csrf
                             @method('PUT')
                             <button type="button" class="btn btn-sm btn-decrease"><i class="fa fa-minus"></i></button>
                             <input type="text" name="quantity" class="quantity-input" value="{{ $detail->quantity }}">
                             <button type="button" class="btn btn-sm btn-increase"><i class="fa fa-plus"></i></button>
                         </form>
-                        <form class="delete-item-form mt-2" method="POST" action="{{ route('cart.destroy', ['locale' => app()->getLocale(), 'cart' => $detail->id]) }}">
+                        <form class="delete-item-form mt-2" method="POST" action="{{ route('website.cart.destroy', ['locale' => app()->getLocale(), 'cart' => $detail->id]) }}">
                             @csrf
                             @method('DELETE')
                             <button type="button" class="delete-item-btn" aria-label="Remove item"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg" viewBox="0 0 24 24">

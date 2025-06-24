@@ -104,7 +104,7 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
 
                     @auth('customer')
                     <li class="nav-item position-relative">
-                        <a href="{{ route('cart.index', ['locale' => app()->getLocale()]) }}" class="nav-link cart-icon-container">
+                        <a href="{{ route('website.cart.index', ['locale' => app()->getLocale()]) }}" class="nav-link cart-icon-container">
                             <i class="fas fa-shopping-cart cart-icon"></i>
                             <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="margin-top: 0.3rem !important;">
                                 {{ $cartCount }}

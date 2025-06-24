@@ -26,6 +26,10 @@ class Customer extends Authenticatable
         'cancelled',
         'device_id',
         'password',
+        'otp',
+        'otp_expires_at',
+        'type',
+        'verified',
     ];
 
     protected $hidden = [
@@ -48,7 +52,7 @@ class Customer extends Authenticatable
 
     public function sendPasswordResetNotification($token)
     {
-        $locale = app()->getLocale(); // Or use $this->locale if you store it per user
+        $locale = app()->getLocale();
         $this->notify(new \App\Notifications\ResetPasswordWithLocale($token, $locale));
     }
 }
