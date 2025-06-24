@@ -85,7 +85,7 @@
         @endif
     </div>
 </section>
-
+@include('sanita.partials.contact-us')
 <style>
     .offer-card {
         flex: 0 0 auto;

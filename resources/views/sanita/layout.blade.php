@@ -3,8 +3,9 @@
 @php
 $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
 @endphp
+
 <head>
-    
+
     <meta charset="UTF-8">
     <meta name="google" content="notranslate">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -62,6 +63,7 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
 
             <div class="collapse navbar-collapse" id="navbarNav" style="margin-right: -5%;">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+
                     <li class="nav-item">
                         <a class="nav-link active" href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}#offers">
                             {{ __('nav.offers') }}
@@ -77,11 +79,29 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                             {{ __('nav.about') }}
                         </a>
                     </li>
+                                        @auth('customer')
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('contact', ['locale' => app()->getLocale()]) }}">
-                            {{ __('nav.contact') }}
+                        @php
+                        $defaultAddress = \App\Models\Address::with(['city', 'district'])
+                        ->where('customer_id', auth('customer')->id())
+                        ->where('is_default', true)
+                        ->where('cancelled', false)
+                        ->first();
+                        @endphp
+
+                        @if($defaultAddress)
+                        <a href="{{ route('addresses.index', ['locale' => app()->getLocale()]) }}" class="nav-link me-2" title="{{ __('nav.addresses') }}">
+                            <i class="fa-solid fa-location-dot me-1"></i>
+                            {{ $defaultAddress->city->name_en ?? '' }}, {{ $defaultAddress->district->name_en ?? '' }} 
                         </a>
+                        @else
+                        <a href="{{ route('addresses.index', ['locale' => app()->getLocale()]) }}" class="btn btn-outline me-2" title="{{ __('nav.addresses') }}">
+                            <i class="fa-solid fa-location-dot me-2"></i> {{ __('nav.addresses') }}
+                        </a>
+                        @endif
                     </li>
+                    @endauth
+
                     @auth('customer')
                     <li class="nav-item position-relative">
                         <a href="{{ route('cart.index', ['locale' => app()->getLocale()]) }}" class="nav-link cart-icon-container">
@@ -100,10 +120,10 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                         {{ __('nav.sign_in') }}
                     </a>
                     @else
-                    <div class="dropdown">
+                    <div class="dropdown pe-2">
                         <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-user me-2"></i>
+                            <i class="fas fa-user me-1"></i>
                             {{ Auth::guard('customer')->user()->first_name }}
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="userDropdown">

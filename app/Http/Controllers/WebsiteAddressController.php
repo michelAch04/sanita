@@ -14,7 +14,10 @@ class WebsiteAddressController extends Controller
     public function index()
     {
         $addresses = Address::where('customer_id', auth('customer')->id())->where('cancelled', 0)->get();
-        return view('sanita.addresses.index', compact('addresses'));
+        $governorates = Governorate::all();
+        $districts = District::all();
+        $cities = City::all();
+        return view('sanita.addresses.index', compact('addresses', 'governorates', 'districts', 'cities'));
     }
 
     public function create()
@@ -27,7 +30,6 @@ class WebsiteAddressController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->all());
         $request->validate([
             'title' => 'nullable|string|max:255',
             'governorate' => 'required|exists:governorates,id',
@@ -37,15 +39,16 @@ class WebsiteAddressController extends Controller
             'building' => 'required|string',
             'floor' => 'nullable|string',
             'notes' => 'nullable|string',
-            'is_default' => 'boolean',
+            // 'is_default' => 'boolean', // REMOVE THIS LINE
         ]);
 
-        if ($request->is_default) {
-            Address::where('customer_id', auth('customer')->id())->update(['is_default' => false]);
-        }
+        $customerId = auth('customer')->id();
 
-        Address::create([
-            'customer_id' => auth('customer')->id(),
+        // Check if this is the user's first address
+        $isFirst = !Address::where('customer_id', $customerId)->where('cancelled', 0)->exists();
+
+        $address = Address::create([
+            'customer_id' => $customerId,
             'title' => $request->title,
             'governorate_id' => $request->governorate,
             'district_id' => $request->district,
@@ -54,7 +57,7 @@ class WebsiteAddressController extends Controller
             'building' => $request->building,
             'floor' => $request->floor,
             'notes' => $request->notes,
-            'is_default' => $request->is_default ?? false,
+            'is_default' => $isFirst, // Set to true if first address, otherwise false
         ]);
 
         return redirect()->route('addresses.index', app()->getLocale())->with('success', __('Address saved.'));
@@ -81,7 +84,6 @@ class WebsiteAddressController extends Controller
             'building' => 'required|string',
             'floor' => 'nullable|string',
             'notes' => 'nullable|string',
-            'is_default' => 'boolean',
         ]);
 
         if ($request->is_default) {
@@ -97,16 +99,38 @@ class WebsiteAddressController extends Controller
             'building' => $request->building,
             'floor' => $request->floor,
             'notes' => $request->notes,
-            'is_default' => $request->is_default ?? false,
         ]);
 
         return redirect()->route('addresses.index', app()->getLocale())->with('success', __('Address updated.'));
     }
+
+    public function setDefault($locale, Address $address)
+    {
+        $user = auth()->user();
+
+        // Reset all to non-default
+        $user->addresses()->update(['is_default' => 0]);
+
+        // Set current one to default
+        $address->update(['is_default' => 1]);
+
+        return back()->with('success', __('Default address updated.'));
+    }
+
 
     public function destroy($locale, Address $address)
     {
         $address->where('id', $address->id)->update(['cancelled' => 1]);
 
         return redirect()->route('addresses.index', $locale)->with('success', __('Address deleted.'));
+    }
+    public function getDistricts(Request $request)
+    {
+        return District::where('governorate_id', $request->governorate_id)->get();
+    }
+
+    public function getCities(Request $request)
+    {
+        return City::where('district_id', $request->district_id)->get();
     }
 }

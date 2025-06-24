@@ -86,6 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function validatePhoneNumber() {
         const number = phoneInputField.value.trim();
+
         if (number.length === 0) {
             phoneValidIcon.style.display = "none";
             phoneLoadingIcon.style.display = "none";
@@ -99,9 +100,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
         setTimeout(() => {
             const isValid = iti.isValidNumber();
+            const numberType = iti.getNumberType();
             phoneLoadingIcon.style.display = "none";
-            phoneValidIcon.style.display = isValid ? "inline" : "none";
-            phoneInvalidIcon.style.display = isValid ? "none" : "inline";
+
+            if (isValid && numberType === intlTelInputUtils.numberType.MOBILE) {
+                phoneValidIcon.style.display = "inline";
+                phoneInvalidIcon.style.display = "none";
+            } else {
+                phoneValidIcon.style.display = "none";
+                phoneInvalidIcon.style.display = "inline";
+            }
         }, 400);
     }
 
@@ -126,9 +134,9 @@ document.addEventListener('DOMContentLoaded', function () {
         mobileErrorDiv.textContent = '';
         mobileDiv.classList.remove('is-invalid');
 
-        if (!iti.isValidNumber()) {
+        if (!iti.isValidNumber() || numberType !== intlTelInputUtils.numberType.MOBILE) {
             e.preventDefault();
-            mobileErrorDiv.textContent = 'Please enter a valid phone number.';
+            mobileErrorDiv.textContent = 'Please enter a valid mobile number.';
             mobileErrorDiv.style.display = 'block';
             mobileDiv.classList.add('is-invalid');
             phoneInputField.focus();

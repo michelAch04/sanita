@@ -25,13 +25,13 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                     value="{{ old('mobile') }}"
                     data-old="{{ old('country_code') ? '+' . old('country_code') . old('mobile') : '' }}"
                     placeholder="{{ __('auth.sign_up.mobile') }}" required> 
-                <span id="phone-loading" class="phone-status-icon" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); display: none;">
+                <span id="phone-loading" class="phone-status-icon d-none" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); display: none;">
                     <i class="fa fa-spinner fa-spin"></i>
                 </span>
-                <span id="phone-valid" class="phone-status-icon text-success" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); display: none;">
+                <span id="phone-valid" class="phone-status-icon text-success d-none" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); display: none;">
                     <i class="fa fa-check-circle"></i>
                 </span>
-                <span id="phone-invalid" class="phone-status-icon text-danger" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); display: none;">
+                <span id="phone-invalid" class="phone-status-icon text-danger d-none" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); display: none;">
                     <i class="fa fa-xmark-circle"></i>
                 </span>
             </div>

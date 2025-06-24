@@ -96,6 +96,11 @@ Route::prefix('{locale}')->middleware('localization')->group(function () {
     Route::middleware('auth:customer')->group(function () {
         Route::resource('cart', WebsiteCartController::class);
         Route::resource('addresses', WebsiteAddressController::class);
+        //address routes
+        Route::post('/addresses/{address}/set-default', [WebsiteAddressController::class, 'setDefault'])->name('addresses.setDefault');
+        Route::get('/get-districts', [WebsiteAddressController::class, 'getDistricts']);
+        Route::get('/get-cities', [WebsiteAddressController::class, 'getCities']);
+
         Route::get('checkout', [WebsiteCartController::class, 'checkout'])->name('cart.checkout');
     });
 
