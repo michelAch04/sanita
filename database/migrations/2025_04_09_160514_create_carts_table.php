@@ -11,6 +11,9 @@ return new class extends Migration
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('customers_id')->constrained('customers')->onDelete('cascade');
+            $table->decimal('total_amount'); //with vat 
+            $table->decimal('subtotal_amount'); //without vat 
+            $table->decimal('tax_amount'); // tax amount
             $table->timestamps();
         });
     }
