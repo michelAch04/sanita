@@ -203,19 +203,21 @@
         });
 
         const locale = '{{ app()->getLocale() }}';
-        const baseUrl = '{{ url(' / ') }}';
+        const baseUrl = '{{ url("") }}';
+        const url = `${baseUrl}/${locale}/get-cities`;
+        console.log(url);
+
 
         $('#governorate').on('change', function() {
             console.log('changed')
             const governorateId = $(this).val();
-            console.log(governorateId);
             $('#district').html('<option value="">{{ __("Loading...") }}</option>');
-            $('#city').html('<option value="">{{ __("Select City") }}</option>'); // Clear city
+            $('#city').html('<option value="">{{ __("Select City") }}</option>');
 
             $.ajax({
                 url: `${baseUrl}/${locale}/get-districts`,
                 data: {
-                    governorate_id: governorateId
+                    governorates_id: governorateId
                 },
                 success: function(data) {
                     $('#districtsInput').removeClass('d-none');
@@ -235,7 +237,7 @@
             $.ajax({
                 url: `${baseUrl}/${locale}/get-cities`,
                 data: {
-                    district_id: districtId
+                    districts_id: districtId
                 },
                 success: function(data) {
                     $('#citiesInput').removeClass('d-none');
