@@ -5,7 +5,7 @@
         /* 16px */
         right: 1rem;
         /* 16px */
-        z-index: 9999;
+        z-index: 9;
         background-color: var(--primary-blue);
         color: white;
         border-radius: 50%;

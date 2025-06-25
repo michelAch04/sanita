@@ -216,8 +216,8 @@
         });
 
         const locale = '{{ app()->getLocale() }}';
-        const baseUrl = '{{ url("") }}';
-
+        const baseUrl = '{{ url('') }}';
+        console.log(baseUrl)
 
         $('#governorate').on('change', function() {
             const governorateId = $(this).val();
@@ -230,7 +230,7 @@
                     governorates_id: governorateId
                 },
                 success: function(data) {
-                    $('#districtsInput').removeClass('o-50');
+                    $disIn.removeClass('o-50');
                     $('#district').html('<option value="">{{ __("Select District") }}</option>');
                     data.forEach(d => {
                         $('#district').append(`<option value="${d.id}">${d.name_en}</option>`);
@@ -250,7 +250,7 @@
                     districts_id: districtId
                 },
                 success: function(data) {
-                    $('#citiesInput').removeClass('o-50');
+                    $citIn.removeClass('o-50');
                     $('#city').html('<option value="">{{ __("Select City") }}</option>');
                     data.forEach(c => {
                         $('#city').append(`<option value="${c.id}">${c.name_en}</option>`);

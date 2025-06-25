@@ -70,10 +70,14 @@ class WebsiteAddressController extends Controller
                 'is_default' => $isFirst, // Set to true if first address, otherwise false
             ]);
 
-            return redirect()->route('addresses.index', app()->getLocale())->with('success', __('Address saved.'));
+            if (session('force_address_modal')) {
+                session()->forget('force_address_modal');
+                return redirect()->route('sanita.index', app()->getLocale())->with('success', __('Address saved.'));
+            } else
+                return redirect()->route('addresses.index', app()->getLocale())->with('success', __('Address saved.'));
         } catch (\Exception $e) {
-            \Log::error('Error in WebsiteAddressController@destroy', ['exception' => $e]);
-            return back()->with('error', __('An error occurred while deleting the address.'));
+            \Log::error('Error in WebsiteAddressController@store', ['exception' => $e]);
+            return back()->with('error', __('An error occurred while saving the address.'));
         }
     }
 

@@ -43,14 +43,16 @@
                 {{ __('auth.verify_otp.resend_otp') ?? 'Resend OTP' }}
             </a>
         </div>
-
-        <p class="login-p text-center mt-3 mb-4">
-            <a href="{{ route('customer.signup', ['locale' => app()->getLocale()]) }}" class="login-span">
-                {{ __('auth.verify_otp.no_account_register') }}
-            </a>
-        </p>
     </form>
 </div>
 
 <script src="{{ asset('js/auth.js') }}"></script>
+<style>
+    .navbar {
+        display: none !important;
+    }
+    .footer {
+        display: none !important;
+    }
+</style>
 @endsection

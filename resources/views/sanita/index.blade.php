@@ -3,6 +3,9 @@
 @section('title', 'Home')
 
 @section('content')
+@if(session('force_address_modal'))
+    @include('sanita.partials.address-on-sign-up')
+@endif
 
 <!-- Hero Section -->
 <div class="hero-carousel">

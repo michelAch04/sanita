@@ -1,5 +1,7 @@
 <?php
 return [
+    'add_first_address' => 'أضف عنوانك',
+    'add_address_required' => ".يخصص موقعنا المنتجات وتوفر المخزون حسب موقعك لتقديم تجربة تسوق أكثر ملاءمة لك",
     'categories' => 'الفئات',
     'products' => 'المنتجات',
     'offers' => 'العروض',
