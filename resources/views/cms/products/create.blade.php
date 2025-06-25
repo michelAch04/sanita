@@ -61,6 +61,20 @@
                     <label for="small_description_ku" class="label">Small Description (Kurdish)</label>
                 </div>
 
+                {{-- EA/CA --}}
+                <div class="input-container mb-5" style="width: 30%;">
+                    <input type="number" id="ea_ca" name="ea_ca" required>
+                    <label for="ea_ca" class="label">EA/CA</label>
+                    <div class="underline"></div>
+                </div>
+
+                {{-- EA/PA --}}
+                <div class="input-container mb-5" style="width: 30%;">
+                    <input type="number" id="ea_pa" name="ea_pa" required>
+                    <label for="ea_pa" class="label">EA/PA</label>
+                    <div class="underline"></div>
+                </div>
+
                 {{-- Subcategory Select --}}
                 <div class="input-container mb-5 mt-3" style="width: 30%; position: relative; padding-top: 5px;">
                     <label for="subcategories_id" class="select2-label">Subcategory</label>
@@ -87,13 +101,6 @@
                     <div class="underline"></div>
                 </div>
 
-                {{-- Unit Price --}}
-                <div class="input-container mb-5">
-                    <input type="number" id="unit_price" name="unit_price" step="0.01" required placeholder="">
-                    <label for="unit_price" class="label">Price</label>
-                    <div class="underline"></div>
-                </div>
-
                 {{-- Tax Toggle --}}
                 <div class="input-container mb-5 mt-3" style="width: 30%; position: relative; padding-top: 5px;">
                     <label for="tax_id" class="label select2-label">Tax</label>
@@ -108,48 +115,6 @@
                         @endforeach
                     </select>
                 </div>
-
-                {{-- Shelf Price --}}
-                <div class="input-container mb-5">
-                    <input type="number" id="shelf_price" name="shelf_price" step="0.01" required readonly>
-                    <label for="shelf_price" class="label">Shelf Price</label>
-                </div>
-
-                {{-- Old Price --}}
-                <div class="input-container mb-5">
-                    <input type="number" id="old_price" name="old_price" step="0.01" placeholder="">
-                    <label for="old_price" class="label">Old Price</label>
-                    <div class="underline"></div>
-                </div>
-
-                {{-- Threshold --}}
-                <div class="input-container mb-5">
-                    <input type="number" id="threshold" name="threshold" required placeholder="">
-                    <label for="threshold" class="label">Threshold</label>
-                    <div class="underline"></div>
-                </div>
-
-                {{-- Available Quantity --}}
-                <div class="input-container mb-5">
-                    <input type="number" id="available_quantity" name="available_quantity" required placeholder="">
-                    <label for="available_quantity" class="label">Stock</label>
-                    <div class="underline"></div>
-                </div>
-
-                {{-- Visibility Toggle --}}
-                <div class="checkbox-wrapper-8 mb-5">
-                    <label for="visible" class="visible-label">Visible</label>
-                    <input type="checkbox" id="visible" name="visible" class="tgl" value="1">
-                    <label for="visible" class="tgl-btn" data-tg-on="Yes" data-tg-off="No"></label>
-                </div>
-
-                {{-- Automatic Hide Toggle --}}
-                <div class="checkbox-wrapper-8 mb-5">
-                    <label for="automatic_hide" class="visible-label">Automatic Hide</label>
-                    <input type="checkbox" id="automatic_hide" name="automatic_hide" class="tgl" value="1">
-                    <label for="automatic_hide" class="tgl-btn" data-tg-on="Yes" data-tg-off="No"></label>
-                </div>
-
 
                 {{-- Upload Image --}}
                 <div class="d-flex align-items-start gap-4 mb-4 flex-wrap upload-container">

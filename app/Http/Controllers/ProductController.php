@@ -25,8 +25,7 @@ class ProductController extends Controller
                 });
             }
 
-            $products = $query->where('cancelled', 0)
-                ->with(['subcategories', 'brands', 'tax'])
+            $products = $query->with(['subcategories', 'brands', 'tax'])
                 ->orderBy('position')
                 ->get();
 
