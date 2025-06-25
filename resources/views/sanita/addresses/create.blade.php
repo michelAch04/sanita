@@ -214,7 +214,11 @@
         });
 
         const locale = '{{ app()->getLocale() }}';
+<<<<<<< HEAD
         const baseUrl = '{{ url(' / ') }}';
+=======
+        const baseUrl = '{{ url('') }}';
+>>>>>>> 51cee7137e6361cb9998fd76a55b42eebcbb39f0
 
         $('#governorate').on('change', function() {
             const governorateId = $(this).val();
