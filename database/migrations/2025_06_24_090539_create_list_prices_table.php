@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('list_price', function (Blueprint $table) {
+        Schema::create('list_prices', function (Blueprint $table) {
             $table->id();
             $table->foreignId('products_id')->constrained('products')->onDelete('cascade');
             $table->enum('type', ['b2b', 'b2c'])->nullable();
@@ -26,10 +26,8 @@ return new class extends Migration
             $table->tinyInteger('EA')->default(0);
             $table->tinyInteger('CA')->default(0);
             $table->tinyInteger('PL')->default(0);
-            // Visibility Flags
             $table->tinyInteger('hidden')->default(0);
             $table->tinyInteger('automatic_hide')->default(0);
-            $table->tinyInteger('cancelled')->default(0);
             $table->timestamps();
         });
     }

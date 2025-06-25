@@ -8,6 +8,9 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Subcategory;
 use App\Models\Tax;
+use App\Models\ListPrice;
+use Illuminate\Support\Facades\DB;
+
 
 class ProductController extends Controller
 {
@@ -50,66 +53,121 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        try {
-            $request->validate([
-                'name_en' => 'required|string|max:255',
-                'name_ar' => 'required|string|max:255',
-                'name_ku' => 'required|string|max:255',
-                'small_description_en' => 'nullable|string|max:255',
-                'small_description_ar' => 'nullable|string|max:255',
-                'small_description_ku' => 'nullable|string|max:255',
-                'sku' => 'required|string|max:255|unique:products,sku',
-                'barcode' => 'nullable|string|max:255|unique:products,barcode',
-                'unit_price' => 'required|numeric|min:0',
-                'shelf_price' => 'required|numeric|min:0',
-                'old_price' => 'nullable|numeric|min:0',
-                'threshold' => 'required|integer|min:0',
-                'available_quantity' => 'required|integer|min:0',
-                'subcategories_id' => 'required|exists:subcategories,id',
-                'brands_id' => 'required|exists:brands,id',
-                'hidden' => 'boolean',
-                'automatic_hide' => 'boolean',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'tax_id' => 'nullable|exists:taxes,id',
-            ]);
+        // Validate the input
+        $validated = $request->validate([
+            'sku' => 'required|string|max:255|unique:products,sku',
+            'name_en' => 'required|string|max:255',
+            'name_ar' => 'required|string|max:255',
+            'name_ku' => 'required|string|max:255',
+            'small_description_en' => 'nullable|string',
+            'small_description_ar' => 'nullable|string',
+            'small_description_ku' => 'nullable|string',
+            'ea_ca' => 'required|numeric',
+            'ea_pa' => 'required|numeric',
+            'subcategories_id' => 'required|exists:subcategories,id',
+            'brands_id' => 'required|exists:brands,id',
+            'tax_id' => 'nullable|exists:taxes,id',
+            'image' => 'nullable|image|max:2048',
 
+            // B2B
+            'b2b_unit_price' => 'required|numeric|min:0',
+            'b2b_old_price' => 'nullable|numeric|min:0',
+            'b2b_min_quantity_to_order' => 'nullable|integer|min:0',
+            'b2b_max_quantity_to_order' => 'nullable|integer|min:0',
+            'b2b_trade_loader' => 'nullable|numeric|min:0',
+            'b2b_trade_loader_quantity' => 'nullable|integer|min:0',
+            'b2b_UOM' => 'nullable|string|max:50',
+
+            // B2C
+            'b2c_unit_price' => 'required|numeric|min:0',
+            'b2c_old_price' => 'nullable|numeric|min:0',
+            'b2c_min_quantity_to_order' => 'nullable|integer|min:0',
+            'b2c_max_quantity_to_order' => 'nullable|integer|min:0',
+            'b2c_trade_loader' => 'nullable|numeric|min:0',
+            'b2c_trade_loader_quantity' => 'nullable|integer|min:0',
+            'b2c_UOM' => 'nullable|string|max:50',
+        ]);
+
+        DB::transaction(function () use ($request, $validated) {
+
+            $extension = 'png';
+            // Create product
             $product = Product::create([
-                'name_en' => $request->name_en,
-                'name_ar' => $request->name_ar,
-                'name_ku' => $request->name_ku,
-                'small_description_en' => $request->small_description_en,
-                'small_description_ar' => $request->small_description_ar,
-                'small_description_ku' => $request->small_description_ku,
-                'barcode' => $request->barcode,
-                'sku' => $request->sku,
-                'description' => $request->description,
-                'small_description' => $request->small_description,
-                'unit_price' => $request->unit_price,
-                'shelf_price' => $request->shelf_price,
-                'old_price' => $request->old_price,
-                'threshold' => $request->threshold,
-                'available_quantity' => $request->available_quantity,
-                'subcategories_id' => $request->subcategories_id,
-                'brands_id' => $request->brands_id,
-                'hidden' => $request->has('hidden') ? 1 : 0,
-                'automatic_hide' => $request->has('automatic_hide') ? 1 : 0,
-                'cancelled' => 0,
-                'extension' => null,
-                'tax_id' => $request->tax_id,
+                'sku' => $validated['sku'],
+                'name_en' => $validated['name_en'],
+                'name_ar' => $validated['name_ar'],
+                'name_ku' => $validated['name_ku'],
+                'small_description_en' => $validated['small_description_en'],
+                'small_description_ar' => $validated['small_description_ar'],
+                'small_description_ku' => $validated['small_description_ku'],
+                'ea_ca' => $validated['ea_ca'],
+                'ea_pa' => $validated['ea_pa'],
+                'subcategories_id' => $validated['subcategories_id'],
+                'brands_id' => $validated['brands_id'],
+                'tax_id' => $validated['tax_id'] ?? null,
+                'extension' => $extension,
             ]);
 
+            $imagePath = null;
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $extension = $image->getClientOriginalExtension();
-                $imageName = $product->id . '.' . $extension;
-                $image->storeAs('products', $imageName, 'public');
+
+                $tempPath = $image->store('products', 'public');
+                $newFileName = $product->id . '.' . $extension;
+                $newPath = 'products/' . $newFileName;
+
+                \Storage::disk('public')->move($tempPath, $newPath);
+
                 $product->update(['extension' => $extension]);
             }
 
-            return redirect()->route('products.index')->with('success', 'Product created successfully.');
-        } catch (\Exception $e) {
-            return redirect()->route('products.create')->with('error', 'Failed to create product: ' . $e->getMessage());
+
+
+            // Insert B2B price
+            ListPrice::create([
+                'products_id' => $product->id,
+                'type' => 'b2b',
+                'unit_price' => $validated['b2b_unit_price'],
+                'shelf_price' => $this->calculateShelfPrice($validated['b2b_unit_price'], $product->tax?->rate),
+                'old_price' => $validated['b2b_old_price'],
+                'min_quantity_to_order' => 0,
+                'max_quantity_to_order' => $validated['b2b_max_quantity_to_order'],
+                'trade_loader' => $validated['b2b_trade_loader'],
+                'trade_loader_quantity' => $validated['b2b_trade_loader_quantity'],
+                'UOM' => $validated['b2b_UOM'],
+                'hidden' => $request->has('b2b_hidden'),
+                'automatic_hide' => $request->has('b2b_automatic_hide'),
+                'cancelled' => $request->has('b2b_cancelled'),
+            ]);
+
+            // Insert B2C price
+            ListPrice::create([
+                'products_id' => $product->id,
+                'type' => 'b2c',
+                'unit_price' => $validated['b2c_unit_price'],
+                'shelf_price' => $this->calculateShelfPrice($validated['b2c_unit_price'], $product->tax?->rate),
+                'old_price' => $validated['b2c_old_price'],
+                'min_quantity_to_order' => 0,
+                'max_quantity_to_order' => $validated['b2c_max_quantity_to_order'],
+                'trade_loader' => $validated['b2c_trade_loader'],
+                'trade_loader_quantity' => $validated['b2c_trade_loader_quantity'],
+                'UOM' => $validated['b2c_UOM'],
+                'hidden' => $request->has('b2c_hidden'),
+                'automatic_hide' => $request->has('b2c_automatic_hide'),
+                'cancelled' => $request->has('b2c_cancelled'),
+            ]);
+        });
+
+        return redirect()->route('products.index')->with('success', 'Product created successfully!');
+    }
+
+    private function calculateShelfPrice($unitPrice, $taxRate)
+    {
+        if ($taxRate) {
+            return round($unitPrice * (1 + $taxRate / 100), 2);
         }
+        return $unitPrice;
     }
 
     public function edit(Product $product)
