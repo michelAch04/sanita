@@ -3,23 +3,44 @@
 @section('title', __('Categories'))
 
 @section('content')
-<div class="container py-5">
-    <h1 class="mb-4 text-center">{{ __('All Categories') }}</h1>
+<section id="categories" class="py-3 bg-light">
+    <div class="p-5 gx-0 w-100">
+        <h2 class="display-5 text-center mb-4">{{ __('nav.categories') }}</h2>
 
-    @if($categories->isEmpty())
-    <p class="text-center">{{ __('No categories found.') }}</p>
-    @else
-    <div class="row">
-        @foreach($categories as $category)
-        <div class="col-md-4 mb-3">
-            <div class="card h-100">
-                <div class="card-body d-flex flex-column justify-content-center align-items-center">
-                    <h5 class="card-title">{{ $category->name_en }}</h5>
+        @if($categories->isEmpty())
+        <p class="text-center">{{ __('No categories found.') }}</p>
+        @else
+        <div class="d-flex flex-wrap justify-content-center gap-2">
+            @foreach($categories as $category)
+            <div class="category-card" data-url="{{ route('website.category.index', ['locale' => app()->getLocale(), 'category' => $category->id]) }}">
+                <div class="category-card-body">
+                    @if($category->extension)
+                    <img src="{{ asset('storage/categories/' . $category->id . '.' . $category->extension) }}"
+                        alt="{{ $category->{'name_'.app()->getLocale()} ?? $category->name_en }}"
+                        class="img-fluid mb-4">
+                    @endif
+                    <h5 class="card-title">
+                        <a href="{{ route('website.category.index', ['locale' => app()->getLocale(), 'category' => $category->id]) }}"
+                            class="text-decoration-none text-dark">
+                            {{ $category->{'name_'.app()->getLocale()} ?? $category->name_en }}
+                        </a>
+                    </h5>
+                    @if(!empty($category->description))
+                    <p class="card-text text-muted text-center small">
+                        {{ $category->{'description_'.app()->getLocale()} ?? $category->description }}
+                    </p>
+                    @endif
                 </div>
             </div>
+            @endforeach
         </div>
-        @endforeach
+
+        <!-- Pagination -->
+        <div class="d-flex justify-content-center mt-4">
+            {{ $categories->withQueryString()->links('pagination::bootstrap-5') }}
+        </div>
+        @endif
     </div>
-    @endif
-</div>
+</section>
+@include('sanita.partials.contact-us')
 @endsection

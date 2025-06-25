@@ -614,8 +614,6 @@ section:nth-of-type(5) {
     right: -2.5rem;
 }
 
-/* ------------------------------ CATEGORY CARD STYLING ----------------------------------------- */
-
 .category-card {
     width: calc(var(--card-width) - 0.15rem) !important;
     height: var(--card-height);
@@ -632,8 +630,8 @@ section:nth-of-type(5) {
         Ubuntu, Cantarell, sans-serif;
     color: var(--primary-text);
     transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 999 !important;
     cursor: pointer;
+    z-index: 1;
 }
 
 .category-card:active {
@@ -648,54 +646,52 @@ section:nth-of-type(5) {
     border-color: rgba(42, 67, 101, 0.2);
 }
 
+/* Animated gradient on hover */
 .category-card::before {
     content: '';
     position: absolute;
-    width: 100px;
-    background-image: linear-gradient(180deg, #3e6192, rgb(199, 42, 199));
-    height: 130%;
-    animation: rotBGimg 5s linear infinite;
-    transition: all 0.2s linear;
+    top: 0;
+    left: -100%;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(120deg, #3e6192, rgb(199, 42, 199));
+    transition: left 0.5s ease, opacity 0.2s ease-in-out;
+    z-index: 0;
+    opacity: 0; /* Hide before hover */
 }
 
-@keyframes rotBGimg {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
+.category-card:hover::before {
+    left: 0;
+    opacity: 1; /* Fade in with movement */
 }
 
+
+/* Inner white layer above the animated bg */
 .category-card::after {
     content: '';
     position: absolute;
     background: #ffffff;
     inset: 5px;
     border-radius: 15px;
+    z-index: 1;
 }
 
-/* .category-card:hover:before {
-  background-image: linear-gradient(180deg, rgb(81, 255, 0), purple);
-  animation: rotBGimg 3.5s linear infinite;
-} */
-
 .category-card-body {
-    z-index: 999 !important;
+    z-index: 2;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 75%; /* or a consistent value */
+    height: 75%;
 }
 
 .category-card-body img {
     width: calc(var(--card-width) - 5rem);
-    height: fit-content;
+    height: auto;
     object-fit: cover;
     margin-top: auto;
 }
+
 .category-card-body .card-title {
     margin-top: auto;
     text-align: center;

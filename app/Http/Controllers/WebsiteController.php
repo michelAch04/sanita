@@ -54,7 +54,7 @@ class WebsiteController extends Controller
         $categories = Category::where('hidden', 0)
             ->where('cancelled', 0)
             ->orderBy('position')
-            ->get();
+            ->paginate(20);
 
         return view('sanita.categories.index', compact('categories'));
     }
@@ -92,21 +92,48 @@ class WebsiteController extends Controller
     {
         $category_id = $request->category;
 
-        // Fetch category by ID and eager load subcategories and their related products
-        $category = Category::with(['subcategories.products'])  // Eager load subcategories and their products
-            ->where('id', $category_id)
-            ->first();
+        $category = Category::with('subcategories')->find($category_id);
 
-        if ($category) {
-            // Pass the category with subcategories and their products to the view
-            return view('sanita.category.index', compact('category'));
-        } else {
-            // Handle case where category is not found
+        if (!$category) {
             return redirect()->back()->with('error', 'Category not found');
         }
+
+        // Only include visible subcategories (not hidden or cancelled)
+        $validSubcategories = $category->subcategories->filter(function ($sub) {
+            return !$sub->hidden && !$sub->cancelled;
+        });
+
+        $productsBySubcategory = [];
+        $products = null;
+
+        if ($validSubcategories->count() > 1) {
+            // Multiple subcategories: get products paginated per subcategory
+            foreach ($validSubcategories as $subcategory) {
+                $productsBySubcategory[$subcategory->id] = Product::where('subcategories_id', $subcategory->id)
+                    ->where('hidden', 0)
+                    ->where('cancelled', 0)
+                    ->orderBy('position')
+                    ->paginate(20, ['*'], 'page_sub_' . $subcategory->id);
+            }
+        } elseif ($validSubcategories->count() === 1) {
+            // Exactly one subcategory: show products of that subcategory without tabs
+            $subcategory = $validSubcategories->first();
+            $products = Product::where('subcategories_id', $subcategory->id)
+                ->where('hidden', 0)
+                ->where('cancelled', 0)
+                ->orderBy('position')
+                ->paginate(20);
+        } else {
+            // No subcategories = no products
+            $products = collect(); // empty collection, or you could keep null
+        }
+
+        return view('sanita.category.index', [
+            'category' => $category,
+            'productsBySubcategory' => $productsBySubcategory ?: null,
+            'products' => $products,
+        ]);
     }
-
-
 
     public function product(Request $request)
     {

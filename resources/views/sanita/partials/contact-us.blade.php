@@ -29,8 +29,8 @@
     }
 
     .floating-contact i {
-        font-size: 1.75rem;
-        /* 20px */
+        font-size: 2.25rem;
+        /* 36px */
     }
 
     @media (max-width: 768px) {
@@ -77,8 +77,8 @@
     }
 </style>
 
-<a href="{{ route('contact', ['locale' => app()->getLocale()]) }}" class="floating-contact" title="{{ __('nav.contact') }}">
-    <i class="fa-solid fa-phone"></i>
+<a href="https://wa.me/96171999874?text=Hello%20Sanita%20Iraq" class="floating-contact" title="{{ __('nav.contact') }}">
+    <i class="fab fa-whatsapp"></i>
 </a>
 
 <script>
