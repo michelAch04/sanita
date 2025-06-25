@@ -45,14 +45,14 @@ class WebsiteAddressController extends Controller
         $customerId = auth('customer')->id();
 
         // Check if this is the user's first address
-        $isFirst = !Address::where('customer_id', $customerId)->where('cancelled', 0)->exists();
+        $isFirst = !Address::where('customers_id', $customerId)->where('cancelled', 0)->exists();
 
         $address = Address::create([
-            'customer_id' => $customerId,
+            'customers_id' => $customerId,
             'title' => $request->title,
-            'governorate_id' => $request->governorate,
-            'district_id' => $request->district,
-            'city_id' => $request->city,
+            'governorates_id' => $request->governorate,
+            'districts_id' => $request->district,
+            'cities_id' => $request->city,
             'street' => $request->street,
             'building' => $request->building,
             'floor' => $request->floor,

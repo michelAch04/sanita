@@ -47,7 +47,7 @@ class Customer extends Authenticatable
 
     public function addresses()
     {
-        return $this->hasMany(\App\Models\Address::class, 'customer_id');
+        return $this->hasMany(\App\Models\Address::class, 'customers_id');
     }
 
     public function sendPasswordResetNotification($token)

@@ -34,7 +34,7 @@
         </div>
 
         {{-- District --}}
-        <div id="districtsInput" class="mb-3 d-none">
+        <div id="districtsInput" class="mb-3 o-50" style="transition: opacity 0.3s ease;">
             <label for="district" class="{{ $isRtl ? 'text-end w-100' : '' }}">{{ __('District') }}</label>
             <div class="login-inputForm @error('district') is-invalid @enderror {{ $isRtl ? 'text-end w-100' : '' }}">
                 <i class="fa-solid fa-map-marker-alt "></i>
@@ -48,7 +48,7 @@
         </div>
 
         {{-- City --}}
-        <div id="citiesInput" class="mb-3 d-none">
+        <div id="citiesInput" class="mb-3 o-50" style="transition: opacity 0.3s ease;">
             <label for="city" class="{{ $isRtl ? 'text-end w-100' : '' }}">{{ __('City') }}</label>
             <div class="login-inputForm @error('city') is-invalid @enderror {{ $isRtl ? 'text-end w-100' : '' }}">
                 <i class="fa fa-city"></i>
@@ -150,6 +150,9 @@
         color: #767676;
     }
 
+    .select2-container--default .select2-selection--single:focus-visible {
+        border: none !important;
+    }
     .select2-container--default .select2-selection--single:hover,
     .select2-container--default.select2-container--open .select2-selection--single {
         border-color: rgb(65, 75, 152);
@@ -166,6 +169,13 @@
     .select2-container--open {
         z-index: 9999 !important;
     }
+    .select2-container--default.select2-container--disabled .select2-selection--single {
+        background: transparent !important;
+    }
+    .o-50 {
+        opacity: 0.5;
+    }
+
 </style>
 
 {{-- Scripts --}}
@@ -190,7 +200,8 @@
             allowClear: true,
             width: '95%',
             minimumResultsForSearch: 4,
-            dropdownParent: $disIn
+            dropdownParent: $disIn,
+            disabled: true
         });
 
         $('#city').select2({
@@ -198,19 +209,19 @@
             allowClear: true,
             width: '95%',
             minimumResultsForSearch: 4,
-            dropdownParent: $citIn
-
+            dropdownParent: $citIn,
+            disabled: true
         });
 
         const locale = '{{ app()->getLocale() }}';
-        const baseUrl = '{{ url(' / ') }}';
+        const baseUrl = '{{ url('') }}';
+        console.log(baseUrl);
 
         $('#governorate').on('change', function() {
-            console.log('changed')
             const governorateId = $(this).val();
             console.log(governorateId);
             $('#district').html('<option value="">{{ __("Loading...") }}</option>');
-            $('#city').html('<option value="">{{ __("Select City") }}</option>'); // Clear city
+            $('#city').html('<option value="">{{ __("Select City") }}</option>');
 
             $.ajax({
                 url: `${baseUrl}/${locale}/get-districts`,
@@ -218,19 +229,19 @@
                     governorate_id: governorateId
                 },
                 success: function(data) {
-                    $('#districtsInput').removeClass('d-none');
+                    $('#districtsInput').removeClass('o-50');
                     $('#district').html('<option value="">{{ __("Select District") }}</option>');
-                    console.log(data);
                     data.forEach(d => {
                         $('#district').append(`<option value="${d.id}">${d.name_en}</option>`);
                     });
+                    $('#district').prop('disabled', false); // Re-enable after loading
                 }
             });
         });
 
         $('#district').on('change', function() {
             const districtId = $(this).val();
-            $('#city').html('<option value="">{{ __("Loading...") }}</option>');
+            $('#city').html('<option value="">{{ __("Loading...") }}</option>')
 
             $.ajax({
                 url: `${baseUrl}/${locale}/get-cities`,
@@ -238,11 +249,12 @@
                     district_id: districtId
                 },
                 success: function(data) {
-                    $('#citiesInput').removeClass('d-none');
+                    $('#citiesInput').removeClass('o-50');
                     $('#city').html('<option value="">{{ __("Select City") }}</option>');
                     data.forEach(c => {
                         $('#city').append(`<option value="${c.id}">${c.name_en}</option>`);
                     });
+                    $('#city').prop('disabled', false); // Re-enable after loading
                 }
             });
         });
