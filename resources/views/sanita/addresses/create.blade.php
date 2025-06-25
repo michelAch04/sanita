@@ -153,6 +153,7 @@
     .select2-container--default .select2-selection--single:focus-visible {
         border: none !important;
     }
+
     .select2-container--default .select2-selection--single:hover,
     .select2-container--default.select2-container--open .select2-selection--single {
         border-color: rgb(65, 75, 152);
@@ -169,13 +170,14 @@
     .select2-container--open {
         z-index: 9999 !important;
     }
+
     .select2-container--default.select2-container--disabled .select2-selection--single {
         background: transparent !important;
     }
+
     .o-50 {
         opacity: 0.5;
     }
-
 </style>
 
 {{-- Scripts --}}
@@ -214,11 +216,8 @@
         });
 
         const locale = '{{ app()->getLocale() }}';
-<<<<<<< HEAD
-        const baseUrl = '{{ url(' / ') }}';
-=======
-        const baseUrl = '{{ url('') }}';
->>>>>>> 51cee7137e6361cb9998fd76a55b42eebcbb39f0
+        const baseUrl = '{{ url("") }}';
+
 
         $('#governorate').on('change', function() {
             const governorateId = $(this).val();
