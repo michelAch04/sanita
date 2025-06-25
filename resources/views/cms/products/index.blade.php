@@ -34,22 +34,16 @@ $canDelete = $permissions && $permissions->delete;
     <div class="card shadow-sm border-0">
         <div class="card-body p-0">
             <div class="table-responsive rounded-1" style="overflow-x: auto !important; width: 100% !important;"
-            data-sortable-table data-reorder-url="{{ route('products.reorder') }}">
+                data-sortable-table data-reorder-url="{{ route('products.reorder') }}">
                 <table class="table mb-0 mr-0 w-100">
                     <thead class="bg-grey text-dark opacity-75">
                         <tr>
                             <th style="width: 50px;"></th> {{-- No text, just an icon --}}
                             <th>Image</th>
                             <th>Name</th>
-                            <th>Unit Price</th>
-                            <th>Shelf Price</th>
-                            <th>Old Price</th>
-                            <th>Available Quantity</th>
                             <th>Subcategory</th>
                             <th>Brand</th>
-                            <th>Visible</th>
                             <th>tax</th>
-                            <th>Automatic Hide</th>
                             <th>Created At</th>
                             <th>Updated At</th>
                             <th class="text-end">Options</th>
@@ -69,15 +63,9 @@ $canDelete = $permissions && $permissions->delete;
                                 @endif
                             </td>
                             <td>{{ $product->name_en }}</td>
-                            <td>${{ $product->unit_price }}</td>
-                            <td>${{ $product->shelf_price }}</td>
-                            <td>${{ $product->old_price}}</td>
-                            <td>{{ $product->available_quantity }}</td>
-                            <td>{{ $product->subcategories->name ?? 'N/A' }}</td>
-                            <td>{{ $product->brands->name ?? 'N/A' }}</td>
-                            <td>{{ $product->hidden ? 'No' : 'Yes' }}</td>
+                            <td>{{ $product->subcategories->name_en ?? 'N/A' }}</td>
+                            <td>{{ $product->brands->name_en ?? 'N/A' }}</td>
                             <td>{{ $product->tax->name ?? 'N/A' }}-{{ $product->tax->rate ?? 'N/A'}}</td>
-                            <td>{{ $product->automatic_hide ? 'Yes' : 'No' }}</td>
                             <td>{{ $product->created_at }}</td>
                             <td>{{ $product->updated_at }}</td>
                             <td class="text-end">

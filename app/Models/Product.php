@@ -30,7 +30,6 @@ class Product extends Model
         'subcategories_id',
         'brands_id',
         'tax_id',
-        'hidden',
         'cancelled',
     ];
 
