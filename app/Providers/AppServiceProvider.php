@@ -32,12 +32,8 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             $customerId = auth()->guard('customer')->id(); // Use the correct guard
 
-            $cart = Cart::with(['cartDetails' => function ($query) {
-                $query->where('cancelled', 0);
-            }])
+            $cart = Cart::with('cartDetails')
                 ->where('customers_id', $customerId)
-                ->where('purchased', 0)
-                ->where('cancelled', 0)
                 ->first();
 
             $cartCount = $cart ? $cart->cartDetails->count() : 0;

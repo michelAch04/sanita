@@ -153,6 +153,7 @@
     .select2-container--default .select2-selection--single:focus-visible {
         border: none !important;
     }
+
     .select2-container--default .select2-selection--single:hover,
     .select2-container--default.select2-container--open .select2-selection--single {
         border-color: rgb(65, 75, 152);
@@ -169,13 +170,14 @@
     .select2-container--open {
         z-index: 9999 !important;
     }
+
     .select2-container--default.select2-container--disabled .select2-selection--single {
         background: transparent !important;
     }
+
     .o-50 {
         opacity: 0.5;
     }
-
 </style>
 
 {{-- Scripts --}}
@@ -219,14 +221,13 @@
 
         $('#governorate').on('change', function() {
             const governorateId = $(this).val();
-            console.log(governorateId);
             $('#district').html('<option value="">{{ __("Loading...") }}</option>');
             $('#city').html('<option value="">{{ __("Select City") }}</option>');
 
             $.ajax({
                 url: `${baseUrl}/${locale}/get-districts`,
                 data: {
-                    governorate_id: governorateId
+                    governorates_id: governorateId
                 },
                 success: function(data) {
                     $disIn.removeClass('o-50');
@@ -246,7 +247,7 @@
             $.ajax({
                 url: `${baseUrl}/${locale}/get-cities`,
                 data: {
-                    district_id: districtId
+                    districts_id: districtId
                 },
                 success: function(data) {
                     $citIn.removeClass('o-50');

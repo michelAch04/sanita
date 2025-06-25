@@ -31,8 +31,8 @@ return new class extends Migration
             $table->text('small_description_ar')->nullable();
             $table->text('small_description_ku')->nullable();
 
-            $table->integer('EA-CA');
-            $table->integer('EA-PA');
+            $table->integer('ea_ca');
+            $table->integer('ea_pa');
 
             // Classification Codes
             $table->string('product_line_code')->nullable();
@@ -45,10 +45,6 @@ return new class extends Migration
             $table->foreignId('brands_id')->constrained('brands')->onDelete('cascade');
             $table->foreignId('tax_id')->nullable()->constrained('taxes')->nullOnDelete();
 
-            // Visibility Flags
-            $table->tinyInteger('hidden')->default(0);
-            $table->tinyInteger('automatic_hide')->default(0);
-            $table->tinyInteger('cancelled')->default(0);
 
             // Timestamps
             $table->timestamps();

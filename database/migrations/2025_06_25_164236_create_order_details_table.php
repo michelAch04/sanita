@@ -20,7 +20,7 @@ return new class extends Migration
             $table->decimal('old_price', 10, 2);
             $table->string('UOM');
             $table->decimal('amount', 10, 2);
-            $table->integer('quantity');
+            $table->integer('quantity_ea');
             $table->timestamps();
         });
     }

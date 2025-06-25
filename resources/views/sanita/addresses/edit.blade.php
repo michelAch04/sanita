@@ -125,7 +125,7 @@
 <script>
     $(document).ready(function() {
         const locale = '{{ app()->getLocale() }}';
-        const baseUrl = '{{ url('') }}';
+        const baseUrl = '{{ url("") }}';
         const $govIn = $('#edit_governoratesInput');
         const $disIn = $('#edit_districtsInput');
         const $citIn = $('#edit_citiesInput');
@@ -163,7 +163,7 @@
             $.ajax({
                 url: `${baseUrl}/${locale}/get-districts`,
                 data: {
-                    governorate_id: governorateId
+                    governorates_id: governorateId
                 },
                 success: function(data) {
                     $('#edit_district').html('<option value="">{{ __("Select District") }}</option>');
@@ -184,7 +184,7 @@
             $.ajax({
                 url: `${baseUrl}/${locale}/get-cities`,
                 data: {
-                    district_id: districtId
+                    districts_id: districtId
                 },
                 success: function(data) {
                     $citIn.removeClass('o-50');
