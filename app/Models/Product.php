@@ -11,30 +11,27 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = [
-        'id',
+        'sku',
+        'barcode',
+        'extension',
+        'position',
         'name_en',
         'name_ar',
         'name_ku',
         'small_description_en',
         'small_description_ar',
         'small_description_ku',
-        'position',
-        'barcode',
-        'old_price',
-        'sku',
-        'shelf_price',
-        'threshold',
-        'automatic_hide',
-        'tax_id',
+        'ea_ca',
+        'ea_pa',
+        'product_line_code',
+        'product_line_description',
+        'family_code',
+        'family_description',
         'subcategories_id',
         'brands_id',
-        'unit_price',
-        'available_quantity',
-        'description',
-        'small_description',
-        'extension',
-        'cancelled',
+        'tax_id',
         'hidden',
+        'cancelled',
     ];
 
     public function subcategories()
@@ -43,6 +40,22 @@ class Product extends Model
     }
 
     public function brands()
+    {
+        return $this->belongsTo(Brand::class, 'brands_id');
+    }
+
+    public function listPrices()
+    {
+        return $this->hasMany(ListPrice::class, 'products_id');
+    }
+
+    public function distributorStocks()
+    {
+        return $this->hasMany(DistributorStock::class, 'products_id');
+    }
+
+
+    public function brand()
     {
         return $this->belongsTo(Brand::class, 'brands_id');
     }
