@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('mobile')->nullable();
             $table->string('location');
-            $table->foreignId('addresses_id')->constrained('addresses')->onDelete('cascade');
             $table->timestamps();
         });
     }
