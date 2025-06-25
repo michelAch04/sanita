@@ -45,10 +45,6 @@ return new class extends Migration
             $table->foreignId('brands_id')->constrained('brands')->onDelete('cascade');
             $table->foreignId('tax_id')->nullable()->constrained('taxes')->nullOnDelete();
 
-            // Visibility Flags
-            $table->tinyInteger('hidden')->default(0);
-            $table->tinyInteger('automatic_hide')->default(0);
-            $table->tinyInteger('cancelled')->default(0);
 
             // Timestamps
             $table->timestamps();

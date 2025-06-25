@@ -26,6 +26,9 @@ return new class extends Migration
             $table->tinyInteger('EA')->default(0);
             $table->tinyInteger('CA')->default(0);
             $table->tinyInteger('PL')->default(0);
+            // Visibility Flags
+            $table->tinyInteger('hidden')->default(0);
+            $table->tinyInteger('automatic_hide')->default(0);
             $table->tinyInteger('cancelled')->default(0);
             $table->timestamps();
         });
