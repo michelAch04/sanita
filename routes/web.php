@@ -6,7 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BrandController;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CMS\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SubcategoryController;
 use App\Http\Controllers\CustomerController;
@@ -109,7 +109,7 @@ Route::prefix('{locale}')->middleware(['localization', 'force.address.modal'])->
             'destroy' => 'website.cart.destroy',
         ]);
         Route::resource('addresses', WebsiteAddressController::class);
-        
+
         //address routes
         Route::post('/addresses/{address}/set-default', [WebsiteAddressController::class, 'setDefault'])->name('addresses.setDefault');
         Route::get('/get-districts', [WebsiteAddressController::class, 'getDistricts']);

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\CMS;
 
+use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\Brand;
@@ -28,7 +29,7 @@ class ProductController extends Controller
                 });
             }
 
-            $products = $query->with(['subcategories', 'brands', 'tax', 'listPrices'])
+            $products = $query->where('cancelled', 0)->with(['subcategories', 'brands', 'tax', 'listPrices'])
                 ->orderBy('position')
                 ->get();
             // dd($products);
@@ -302,5 +303,14 @@ class ProductController extends Controller
             return round($unitPrice * (1 + $taxRate / 100), 2);
         }
         return $unitPrice;
+    }
+
+    public function reorder(Request $request)
+    {
+        foreach ($request->order as $item) {
+            Product::where('id', $item['id'])->update(['position' => $item['position']]);
+        }
+
+        return response()->json(['success' => true]);
     }
 }
