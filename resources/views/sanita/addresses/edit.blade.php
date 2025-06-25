@@ -124,6 +124,8 @@
 
 <script>
     $(document).ready(function() {
+        const locale = '{{ app()->getLocale() }}';
+        const baseUrl = '{{ url('') }}';
         const $govIn = $('#edit_governoratesInput');
         const $disIn = $('#edit_districtsInput');
         const $citIn = $('#edit_citiesInput');

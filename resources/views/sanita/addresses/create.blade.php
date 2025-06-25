@@ -215,7 +215,6 @@
 
         const locale = '{{ app()->getLocale() }}';
         const baseUrl = '{{ url('') }}';
-        console.log(baseUrl);
 
         $('#governorate').on('change', function() {
             const governorateId = $(this).val();
