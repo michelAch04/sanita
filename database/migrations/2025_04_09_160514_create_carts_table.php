@@ -11,11 +11,6 @@ return new class extends Migration
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('customers_id')->constrained('customers')->onDelete('cascade');
-            $table->decimal('delivery_charge', 10, 2)->default(0);
-            $table->string('promocode')->nullable();
-            $table->tinyInteger('purchased')->default(0);
-            $table->tinyInteger('cancelled')->default(0);
-            $table->timestamp('expires_at')->nullable();
             $table->timestamps();
         });
     }
