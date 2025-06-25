@@ -78,7 +78,7 @@ Route::middleware('auth:web')->group(function () {
     //reports
     Route::get('/cms/report', [ReportController::class, 'show'])->name('report.show');
 });
-Route::prefix('{locale}')->middleware('localization')->group(function () {
+Route::prefix('{locale}')->middleware(['localization', 'force.address.modal'])->group(function () {
 
     // Customer signin and signout and signup routes
     Route::get('/signin', [AuthController::class, 'showSignIn'])->name('customer.signin');
@@ -109,6 +109,7 @@ Route::prefix('{locale}')->middleware('localization')->group(function () {
             'destroy' => 'website.cart.destroy',
         ]);
         Route::resource('addresses', WebsiteAddressController::class);
+        
         //address routes
         Route::post('/addresses/{address}/set-default', [WebsiteAddressController::class, 'setDefault'])->name('addresses.setDefault');
         Route::get('/get-districts', [WebsiteAddressController::class, 'getDistricts']);

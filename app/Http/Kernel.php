@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'api.key' => \App\Http\Middleware\ApiKeyAuth::class,
         'localization' => \App\Http\Middleware\Localization::class,
+        'force.address.modal' => \App\Http\Middleware\ForceAddressModal::class,
     ];
 }

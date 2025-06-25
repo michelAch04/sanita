@@ -15,6 +15,7 @@ class WebsiteController extends Controller
     public function index()
     {
         $aboutus = AboutUs::first();
+        $governorates = \App\Models\Governorate::all();
         $slideshow = Slideshow::where('hidden', 0)->where('cancelled', 0)->get()->sortBy('position');
         $categories = Category::where('hidden', 0)->where('cancelled', 0)->get()->sortBy('position');
 
@@ -38,7 +39,14 @@ class WebsiteController extends Controller
         //     ->get()
         //     ->sortBy('position');
 
-        return view('sanita.index', compact('aboutus', 'slideshow', 'categories', 'products', 'offers'));
+        return view('sanita.index', compact(
+            'aboutus',
+            'slideshow',
+            'categories',
+            'products',
+            'offers',
+            'governorates'
+        ));
     }
 
     public function categories()

@@ -60,7 +60,12 @@ class WebsiteAddressController extends Controller
             'is_default' => $isFirst, // Set to true if first address, otherwise false
         ]);
 
-        return redirect()->route('addresses.index', app()->getLocale())->with('success', __('Address saved.'));
+        if (session('force_address_modal')) {
+            session()->forget('force_address_modal');
+            return redirect()->route('sanita.index', app()->getLocale())->with('success', __('Address saved.'));
+        }
+        else
+            return redirect()->route('addresses.index', app()->getLocale())->with('success', __('Address saved.'));
     }
 
     public function edit($locale, Address $address)

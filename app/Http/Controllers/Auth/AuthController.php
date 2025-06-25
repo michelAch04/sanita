@@ -121,7 +121,8 @@ class AuthController extends Controller
             Auth::guard('customer')->login($customer);
 
             return redirect()->route('sanita.index', ['locale' => app()->getLocale()])
-                ->with('success', 'Your mobile number has been verified and you are now logged in.');
+                ->with('success', 'Your mobile number has been verified and you are now logged in.')
+                ->with('force_address_modal', true);
         } catch (\Exception $e) {
             \Log::error('Unexpected error during OTP verification', ['message' => $e->getMessage()]);
             return back()->withErrors(['general' => 'An error occurred during OTP verification.'])->withInput();

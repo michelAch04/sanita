@@ -156,8 +156,9 @@
 
         $('#edit_governorate').on('change', function() {
             const governorateId = $(this).val();
-            $('#edit_district').html('<option value="">{{ __("Loading...") }}</option>');
-            $('#edit_city').html('<option value="">{{ __("Select City") }}</option>');
+            $disIn.addClass('o-50');
+            $('#edit_district').html('<option value="">{{ __("Loading...") }}</option>').prop('disabled', true);
+            $('#edit_city').html('<option value="">{{ __("Select City") }}</option>').prop('disabled', true);
 
             $.ajax({
                 url: `${baseUrl}/${locale}/get-districts`,
@@ -165,18 +166,20 @@
                     governorate_id: governorateId
                 },
                 success: function(data) {
-                    $disIn.removeClass('d-none');
                     $('#edit_district').html('<option value="">{{ __("Select District") }}</option>');
                     data.forEach(d => {
                         $('#edit_district').append(`<option value="${d.id}">${d.name_en}</option>`);
                     });
+                    $disIn.removeClass('o-50');
+                    $('#edit_district').prop('disabled', false);
                 }
             });
         });
 
         $('#edit_district').on('change', function() {
             const districtId = $(this).val();
-            $('#edit_city').html('<option value="">{{ __("Loading...") }}</option>');
+            $('#edit_city').html('<option value="">{{ __("Loading...") }}</option>').prop('disabled', true);
+            $citIn.addClass('o-50');
 
             $.ajax({
                 url: `${baseUrl}/${locale}/get-cities`,
@@ -184,11 +187,13 @@
                     district_id: districtId
                 },
                 success: function(data) {
-                    $citIn.removeClass('d-none');
+                    $citIn.removeClass('o-50');
                     $('#edit_city').html('<option value="">{{ __("Select City") }}</option>');
                     data.forEach(c => {
                         $('#edit_city').append(`<option value="${c.id}">${c.name_en}</option>`);
                     });
+                    $citIn.removeClass('o-50');
+                    $('#edit_city').prop('disabled', false);
                 }
             });
         });
