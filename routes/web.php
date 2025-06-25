@@ -6,7 +6,6 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BrandController;
-use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SubcategoryController;
 use App\Http\Controllers\CustomerController;
@@ -25,6 +24,9 @@ use App\Http\Controllers\WebsiteAddressController;
 use App\Models\Subcategory;
 use App\Http\Controllers\WebsiteCheckoutController;
 use App\Http\Controllers\WebsiteCartController;
+use App\Http\Controllers\CMS\DistributorController;
+use App\Http\Controllers\CMS\ProductController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -60,6 +62,7 @@ Route::middleware('auth:web')->group(function () {
     Route::resource('/cms/users', UserController::class);
     Route::resource('/cms/brands', BrandController::class);
     Route::resource('/cms/products', ProductController::class);
+    Route::resource('/cms/distributor', DistributorController::class);
     Route::resource('/cms/categories', CategoryController::class);
     Route::resource('/cms/subcategories', SubcategoryController::class);
     Route::resource('/cms/customers', CustomerController::class);
@@ -109,7 +112,7 @@ Route::prefix('{locale}')->middleware(['localization', 'force.address.modal'])->
             'destroy' => 'website.cart.destroy',
         ]);
         Route::resource('addresses', WebsiteAddressController::class);
-        
+
         //address routes
         Route::post('/addresses/{address}/set-default', [WebsiteAddressController::class, 'setDefault'])->name('addresses.setDefault');
         Route::get('/get-districts', [WebsiteAddressController::class, 'getDistricts']);
