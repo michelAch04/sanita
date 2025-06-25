@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call(TaxesSeeder::class);
 
-        //     $this->call(ProductsSeeder::class);
+        $this->call(ProductsSeeder::class);
 
         $this->call(PagesSeeder::class);
 
