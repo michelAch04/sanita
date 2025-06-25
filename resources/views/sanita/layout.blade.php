@@ -79,11 +79,11 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                             {{ __('nav.about') }}
                         </a>
                     </li>
-                                        @auth('customer')
+                    @auth('customer')
                     <li class="nav-item">
                         @php
                         $defaultAddress = \App\Models\Address::with(['city', 'district'])
-                        ->where('customer_id', auth('customer')->id())
+                        ->where('customers_id', auth('customer')->id())
                         ->where('is_default', true)
                         ->where('cancelled', false)
                         ->first();
@@ -92,7 +92,7 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                         @if($defaultAddress)
                         <a href="{{ route('addresses.index', ['locale' => app()->getLocale()]) }}" class="nav-link me-2" title="{{ __('nav.addresses') }}">
                             <i class="fa-solid fa-location-dot me-1"></i>
-                            {{ $defaultAddress->city->name_en ?? '' }}, {{ $defaultAddress->district->name_en ?? '' }} 
+                            {{ $defaultAddress->city->name_en ?? '' }}, {{ $defaultAddress->district->name_en ?? '' }}
                         </a>
                         @else
                         <a href="{{ route('addresses.index', ['locale' => app()->getLocale()]) }}" class="btn btn-outline me-2" title="{{ __('nav.addresses') }}">

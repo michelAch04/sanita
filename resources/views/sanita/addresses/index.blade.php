@@ -1,21 +1,22 @@
 @extends('sanita.layout')
 
 @section('title', __('Your Addresses'))
-
+@php
+$sortedAddresses = $addresses->sortByDesc('is_default');
+@endphp
 @section('content')
 <section id="addresses" class="pt-5 bg-light">
     <div class="container px-5 mb-5">
         <h2 class="display-5 text-center mb-5">📍 {{ __('Your Addresses') }}</h2>
-
+        @if($sortedAddresses->count() != 0)
         <div class="d-flex justify-content-center mb-4">
             <button data-bs-toggle="modal" data-bs-target="#addAddressModal" class="btn bubbles bubbles-arctic px-4 py-2" style="border-radius: 2rem;">
                 <span class="text"><i class="fa fa-plus me-2"></i>{{ __('Add Address') }}</span>
             </button>
         </div>
+        @endif
 
-        @php
-        $sortedAddresses = $addresses->sortByDesc('is_default');
-        @endphp
+
 
         @if ($sortedAddresses->count() > 0)
         <div class="d-flex flex-column gap-2">
@@ -83,9 +84,11 @@
             <div class="fs-4 fw-semibold mb-2" style="color: var(--primary-blue);">
                 {{ __('No addresses found.') }}
             </div>
-            <a href="{{ route('addresses.create', app()->getLocale()) }}" class="btn bubbles bubbles-arctic mt-3 px-4 py-2 fs-6 shadow-sm" style="border-radius: 2rem;">
-                <span class="text"><i class="fa fa-plus me-2"></i> {{ __('Add Address') }}</span>
-            </a>
+            <div class="d-flex justify-content-center mb-4">
+                <button data-bs-toggle="modal" data-bs-target="#addAddressModal" class="btn bubbles bubbles-arctic px-4 py-2" style="border-radius: 2rem;">
+                    <span class="text"><i class="fa fa-plus me-2"></i>{{ __('Add Address') }}</span>
+                </button>
+            </div>
         </div>
         @endif
     </div>

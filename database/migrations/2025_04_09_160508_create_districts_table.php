@@ -17,8 +17,7 @@ return new class extends Migration
             $table->string('name_ar')->nullable();
             $table->string('name_ku')->nullable();
 
-            // FK to governorates
-            $table->foreignId('governorate_id')->constrained()->onDelete('cascade');
+            $table->foreignId('governorates_id')->constrained('governorates')->onDelete('cascade');
 
             $table->decimal('lat', 10, 7)->nullable();
             $table->decimal('long', 10, 7)->nullable();

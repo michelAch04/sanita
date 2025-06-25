@@ -30,6 +30,18 @@ class AuthController extends Controller
             $request->merge([
                 'mobile' => $this->cleanPhoneNumber($request->mobile),
             ]);
+            // Build DOB string
+            if ($request->filled('dob_day') && $request->filled('dob_month') && $request->filled('dob_year')) {
+                $dob = sprintf(
+                    '%04d-%02d-%02d',
+                    $request->dob_year,
+                    $request->dob_month,
+                    $request->dob_day
+                );
+
+                // Merge into request so validation can check DOB
+                $request->merge(['DOB' => $dob]);
+            }
 
             $validated = $request->validate([
                 'first_name' => 'required|string|max:255',

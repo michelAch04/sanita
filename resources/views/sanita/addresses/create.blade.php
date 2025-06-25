@@ -173,7 +173,7 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js" defer></script>
 <script>
     $(document).ready(function() {
-        var $govIn = $('#governoratesInput');        
+        var $govIn = $('#governoratesInput');
         var $disIn = $('#districtsInput');
         var $citIn = $('#citiesInput');
 
@@ -203,11 +203,12 @@
         });
 
         const locale = '{{ app()->getLocale() }}';
-        const baseUrl = '{{ url('/') }}';
+        const baseUrl = '{{ url(' / ') }}';
 
         $('#governorate').on('change', function() {
             console.log('changed')
             const governorateId = $(this).val();
+            console.log(governorateId);
             $('#district').html('<option value="">{{ __("Loading...") }}</option>');
             $('#city').html('<option value="">{{ __("Select City") }}</option>'); // Clear city
 
@@ -219,6 +220,7 @@
                 success: function(data) {
                     $('#districtsInput').removeClass('d-none');
                     $('#district').html('<option value="">{{ __("Select District") }}</option>');
+                    console.log(data);
                     data.forEach(d => {
                         $('#district').append(`<option value="${d.id}">${d.name_en}</option>`);
                     });

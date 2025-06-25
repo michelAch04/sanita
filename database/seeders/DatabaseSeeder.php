@@ -8,11 +8,11 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        //     $this->call([
-        //         GovernorateSeeder::class,
-        //         DistrictSeeder::class,
-        //         CitySeeder::class,
-        //     ]);
+        $this->call([
+            GovernorateSeeder::class,
+            DistrictSeeder::class,
+            CitySeeder::class,
+        ]);
         //     $this->call(CategoriesSeeder::class);
 
         //     $this->call(BrandsSeeder::class);
@@ -23,10 +23,10 @@ class DatabaseSeeder extends Seeder
 
         //     $this->call(ProductsSeeder::class);
 
-        $this->call(PagesSeeder::class);
+        // $this->call(PagesSeeder::class);
 
-        $this->call(UserSeeder::class);
+        // $this->call(UserSeeder::class);
 
-        $this->call(PermissionSeeder::class);
+        // $this->call(PermissionSeeder::class);
     }
 }

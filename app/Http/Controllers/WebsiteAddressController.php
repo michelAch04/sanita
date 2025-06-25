@@ -13,7 +13,7 @@ class WebsiteAddressController extends Controller
 {
     public function index()
     {
-        $addresses = Address::where('customer_id', auth('customer')->id())->where('cancelled', 0)->get();
+        $addresses = Address::where('customers_id', auth('customer')->id())->where('cancelled', 0)->get();
         $governorates = Governorate::all();
         $districts = District::all();
         $cities = City::all();
@@ -66,8 +66,8 @@ class WebsiteAddressController extends Controller
     public function edit($locale, Address $address)
     {
         $governorates = Governorate::all();
-        $districts = District::where('governorate_id', $address->governorate_id)->get();
-        $cities = City::where('district_id', $address->district_id)->get();
+        $districts = District::where('governorates_id', $address->governorates_id)->get();
+        $cities = City::where('districts_id', $address->districts_id)->get();
 
         return view('sanita.addresses.edit', compact('address', 'governorates', 'districts', 'cities'));
     }
@@ -87,14 +87,14 @@ class WebsiteAddressController extends Controller
         ]);
 
         if ($request->is_default) {
-            Address::where('customer_id', auth('customer')->id())->update(['is_default' => false]);
+            Address::where('customers_id', auth('customer')->id())->update(['is_default' => false]);
         }
 
         $address->update([
             'title' => $request->title,
-            'governorate_id' => $request->governorate,
-            'district_id' => $request->district,
-            'city_id' => $request->city,
+            'governorates_id' => $request->governorate,
+            'districts_id' => $request->district,
+            'cities_id' => $request->city,
             'street' => $request->street,
             'building' => $request->building,
             'floor' => $request->floor,
@@ -124,13 +124,14 @@ class WebsiteAddressController extends Controller
 
         return redirect()->route('addresses.index', $locale)->with('success', __('Address deleted.'));
     }
+
     public function getDistricts(Request $request)
     {
-        return District::where('governorate_id', $request->governorate_id)->get();
+        return District::where('governorates_id', $request->governorate_id)->get();
     }
 
     public function getCities(Request $request)
     {
-        return City::where('district_id', $request->district_id)->get();
+        return City::where('districts_id', $request->district_id)->get();
     }
 }

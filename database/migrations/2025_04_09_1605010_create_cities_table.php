@@ -17,8 +17,7 @@ return new class extends Migration
             $table->string('name_ar')->nullable();
             $table->string('name_ku')->nullable();
 
-            // FK to districts (✅ Make sure this is singular)
-            $table->bigInteger('district_id')->foreignId('district_id')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('districts_id')->foreignId('districts_id')->constrained('districts')->onDelete('cascade');
 
             $table->decimal('lat', 10, 7)->nullable();
             $table->decimal('long', 10, 7)->nullable();
