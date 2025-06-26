@@ -1,7 +1,9 @@
 @extends('sanita.layout')
 
 @section('title', 'Home')
-
+@php
+$isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
+@endphp
 @section('content')
 @if(session('force_address_modal'))
     @include('sanita.partials.address-on-sign-up')
@@ -83,7 +85,9 @@
         </div>
         <div class="text-center mt-4 mb-0">
             <a href="{{ route('website.offers.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic view-all-btn">
-                <span class="text">{{ __('nav.view_all_offers') ?: 'View All Offers' }}</span>
+                <span class="text">{{ __('nav.view_all_offers') ?: 'View All Offers' }}
+                    <i class="fa-solid fa-arrow-right me-1 {{ $isRtl ? 'd-none' : '' }}"></i>
+                </span>
             </a>
         </div>
     </div>
@@ -120,7 +124,10 @@
 
         <div class="text-center mt-5 mb-0">
             <a href="{{ route('website.categories.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic view-all-btn">
-                <span class="text">{{ __('nav.view_all_categories') ?: 'View All Categories' }}</span>
+                <span class="text">
+                {{ __('nav.view_all_categories') ?: 'View All Categories' }}
+                <i class="fa-solid fa-arrow-right me-1 {{ $isRtl ? 'd-none' : '' }}"></i>
+            </span>
             </a>
         </div>
     </div>
@@ -194,7 +201,10 @@
         </div>
         <div class="text-center mt-5 mb-0">
             <a href="{{ route('website.products.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic view-all-btn">
-                <span class="text">{{ __('nav.view_all_products') ?: 'View All Products' }}</span>
+                <span class="text">
+                {{ __('nav.view_all_products') ?: 'View All Products' }}
+                <i class="fa-solid fa-arrow-right me-1 {{ $isRtl ? 'd-none' : '' }}"></i>
+            </span>
             </a>
         </div>
     </div>
