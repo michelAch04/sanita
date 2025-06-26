@@ -7,37 +7,38 @@ use App\Models\AboutUs;
 use App\Models\Slideshow;
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\Cart;
-use App\Models\CartDetail;
+use App\Models\DistributorStock;
+use App\Models\DistributorAddress;
+use App\Models\Address;
+use App\Models\Governorate;
 
 class WebsiteController extends Controller
 {
     public function index()
     {
         $aboutus = AboutUs::first();
-        $governorates = \App\Models\Governorate::all();
+        $governorates = Governorate::all();
         $slideshow = Slideshow::where('hidden', 0)->where('cancelled', 0)->get()->sortBy('position');
         $categories = Category::where('hidden', 0)->where('cancelled', 0)->get()->sortBy('position');
 
-        // $products = Product::where('hidden', 0)
-        //     ->where('cancelled', 0)
-        //     ->where(function ($query) {
-        //         $query->where('automatic_hide', 0)
-        //             ->orWhere('available_quantity', '>', 0);
-        //     })
-        //     ->get()
-        //     ->sortBy('position');
-        $products = [];
-        $offers = [];
-        // $offers = Product::where('hidden', 0)
-        //     ->where('cancelled', 0)
-        //     ->where('old_price', '>', 0)
-        //     ->where(function ($query) {
-        //         $query->where('automatic_hide', 0)
-        //             ->orWhere('available_quantity', '>', 0);
-        //     })
-        //     ->get()
-        //     ->sortBy('position');
+        if (auth('customer')->check()) {
+            $customer = auth('customer')->user();
+            $customerid = $customer->id;
+            $type = $customer->type;
+
+            if ($type == 'b2c') {
+                $products = $this->productsForCustomer($customerid, 'b2c');
+                // dd($products);
+            } elseif ($type == 'b2b') {
+                $products = $this->productsForCustomer($customerid, 'b2b');
+            }
+        } else {
+            $products = $this->allProducts();
+            // dd($products);
+        }
+        // dd($products);
+        $offers = $this->getOffers($products);
+        // dd($offers); 
 
         return view('sanita.index', compact(
             'aboutus',
@@ -48,7 +49,6 @@ class WebsiteController extends Controller
             'governorates'
         ));
     }
-
     public function categories()
     {
         $categories = Category::where('hidden', 0)
@@ -140,5 +140,58 @@ class WebsiteController extends Controller
         $product_id = $request->product;
         $product = Product::where('id', $product_id)->first();
         return view('sanita.product.index', compact('product'));
+    }
+
+    public function productsForCustomer($customerId, $type)
+    {
+        // Get all city IDs for the customer's addresses
+        $cityIds = Address::where('customers_id', $customerId)->pluck('cities_id');
+
+        // Get all distributor IDs serving those cities
+        $distributorIds = DistributorAddress::whereIn('cities_id', $cityIds)->pluck('distributors_id');
+
+        // Get products with their list prices and distributor stocks for those distributors
+        $products = Product::with([
+            'listPrices' => function ($q) use ($type) {
+                $q->where('type', $type);
+            },
+            'distributorStocks' => function ($q) use ($distributorIds) {
+                $q->whereIn('distributors_id', $distributorIds);
+            }
+        ])
+            ->where('cancelled', 0)
+            ->whereHas('distributorStocks', function ($q) use ($distributorIds) {
+                $q->whereIn('distributors_id', $distributorIds);
+            })
+            ->get();
+
+        return $products;
+    }
+
+    public function allProducts()
+    {
+        $products = Product::with([
+            'listPrices' => function ($q) {
+                $q->select()->where('type', 'b2c');
+            },
+            'distributorStocks'
+        ])
+            ->where('cancelled', 0)
+            ->get();
+        // dd($products);
+
+        return $products;
+    }
+
+    protected function getOffers($products)
+    {
+        foreach ($products as $product) {
+            $prices = $product->listPrices->first();
+            if ($prices->old_price > 0 && $prices->old_price > $prices->shelf_price) {
+                $offers[] = $product;
+            }
+        }
+
+        return $offers;
     }
 }

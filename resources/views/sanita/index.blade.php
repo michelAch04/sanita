@@ -4,21 +4,22 @@
 @php
 $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
 @endphp
+
 @section('content')
 @if(session('force_address_modal'))
-    @include('sanita.partials.address-on-sign-up')
+@include('sanita.partials.address-on-sign-up')
 @endif
 
 <!-- Hero Section -->
 <div class="hero-carousel">
     @foreach ($slideshow as $image)
     <div>
-        <img src="{{ asset('storage/slideshow/' . $image->id.'.'.$image->extension) }}" alt="Slide" class="img-fluid rounded shadow">
+        <img src="{{ asset('storage/slideshow/' . $image->id . '.' . $image->extension) }}" alt="Slide" class="img-fluid rounded shadow">
     </div>
     @endforeach
 </div>
 
-<!-- Offers & Deals Section -->
+<!-- Offers Section -->
 <section id="offers" class="py-5 bg-light">
     <div class="container gx-0">
         <h2 class="display-5 text-center mb-4">{{ __('nav.offers') }}</h2>
@@ -30,7 +31,6 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                     <div class="card__glow"></div>
                     <div class="card__content">
                         <div class="card__badge">{{ __('nav.offer') }}</div>
-
                         <div style="--bg-color: #a78bfa" class="card__image">
                             @if($product->extension)
                             <img src="{{ asset('storage/products/' . $product->id . '.' . $product->extension) }}"
@@ -38,7 +38,6 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                                 class="img-fluid w-100 h-100 dynamic-fit">
                             @endif
                         </div>
-
                         <div class="card__text">
                             <p class="card__title">
                                 <a href="{{ route('website.product.index', ['locale' => app()->getLocale(), 'product' => $product->id]) }}"
@@ -50,23 +49,30 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                                 {{ \Illuminate\Support\Str::limit($product->{'small_description_'.app()->getLocale()} ?? $product->small_description_en, 80) }}
                             </p>
                         </div>
-
                         <div class="card__footer">
+                            @php
+                            $price = $product->listPrices->where('type', 'b2c')->first();
+                            @endphp
                             <div class="card__price">
-                                @if($product->old_price > $product->shelf_price)
+                                @if($price)
+                                @if($price->old_price > $price->shelf_price)
                                 <small class="text-muted text-decoration-line-through me-1">
-                                    ${{ number_format($product->old_price, 2) }}
+                                    ${{ number_format($price->old_price, 2) }}
                                 </small>
                                 @endif
-                                <span>${{ number_format($product->shelf_price, 2) }}</span>
+                                <span>${{ number_format($price->shelf_price, 2) }}</span>
+                                @else
+                                <span>{{ __('product.no_price') }}</span>
+                                @endif
                             </div>
+                            @php
+                            $totalStock = $product->distributorStocks?->sum('stock') ?? 0;
+                            @endphp
                             <div class="card__button">
-                                @if($product->available_quantity > 0)
+                                @if($totalStock > 0)
                                 <form action="{{ route('website.cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="add-to-cart-form m-0">
                                     @csrf
                                     <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                    <input type="hidden" name="price" value="{{ $product->shelf_price }}">
-                                    <input type="hidden" name="description" value="{{ \Illuminate\Support\Str::limit($product->{'small_description_'.app()->getLocale()} ?? $product->small_description_en, 80) }}">
                                     <button type="submit" class="border-0 bg-transparent p-0">
                                         <i class="fas fa-cart-plus"></i>
                                     </button>
@@ -85,7 +91,7 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
         </div>
         <div class="text-center mt-4 mb-0">
             <a href="{{ route('website.offers.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic view-all-btn">
-                <span class="text">{{ __('nav.view_all_offers') ?: 'View All Offers' }}
+                <span class="text">{{ __('nav.view_all_offers') }}
                     <i class="fa-solid fa-arrow-right me-1 {{ $isRtl ? 'd-none' : '' }}"></i>
                 </span>
             </a>
@@ -121,13 +127,12 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
             </div>
             @endforeach
         </div>
-
         <div class="text-center mt-5 mb-0">
             <a href="{{ route('website.categories.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic view-all-btn">
                 <span class="text">
-                {{ __('nav.view_all_categories') ?: 'View All Categories' }}
-                <i class="fa-solid fa-arrow-right me-1 {{ $isRtl ? 'd-none' : '' }}"></i>
-            </span>
+                    {{ __('nav.view_all_categories') }}
+                    <i class="fa-solid fa-arrow-right me-1 {{ $isRtl ? 'd-none' : '' }}"></i>
+                </span>
             </a>
         </div>
     </div>
@@ -156,7 +161,6 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                                 class="img-fluid w-100 h-100 dynamic-fit" style="border-radius: 12px;">
                             @endif
                         </div>
-
                         <div class="card__text">
                             <p class="card__title">
                                 <a href="{{ route('website.product.index', ['locale' => app()->getLocale(), 'product' => $product->id]) }}"
@@ -168,18 +172,27 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                                 {{ \Illuminate\Support\Str::limit($product->{'small_description_'.app()->getLocale()} ?? $product->small_description_en, 80) }}
                             </p>
                         </div>
-
                         <div class="card__footer">
+                            @php
+                            $price = $product->listPrices->where('type', 'b2c')->first();
+                            @endphp
                             <div class="card__price">
-                                @if($product->old_price > $product->shelf_price)
+                                @if($price)
+                                @if($price->old_price > $price->shelf_price)
                                 <small class="text-muted text-decoration-line-through me-1">
-                                    ${{ number_format($product->old_price, 2) }}
+                                    ${{ number_format($price->old_price, 2) }}
                                 </small>
                                 @endif
-                                <span>${{ number_format($product->shelf_price, 2) }}</span>
+                                <span>${{ number_format($price->shelf_price, 2) }}</span>
+                                @else
+                                <span>{{ __('product.no_price') }}</span>
+                                @endif
                             </div>
+                            @php
+                            $totalStock = $product->distributorStocks?->sum('stock') ?? 0;
+                            @endphp
                             <div class="card__button">
-                                @if($product->available_quantity > 0)
+                                @if($totalStock > 0)
                                 <form action="{{ route('website.cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="add-to-cart-form m-0">
                                     @csrf
                                     <input type="hidden" name="product_id" value="{{ $product->id }}">
@@ -202,19 +215,19 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
         <div class="text-center mt-5 mb-0">
             <a href="{{ route('website.products.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic view-all-btn">
                 <span class="text">
-                {{ __('nav.view_all_products') ?: 'View All Products' }}
-                <i class="fa-solid fa-arrow-right me-1 {{ $isRtl ? 'd-none' : '' }}"></i>
-            </span>
+                    {{ __('nav.view_all_products') }}
+                    <i class="fa-solid fa-arrow-right me-1 {{ $isRtl ? 'd-none' : '' }}"></i>
+                </span>
             </a>
         </div>
     </div>
 </section>
-    @include('sanita.partials.contact-us')
+
+@include('sanita.partials.contact-us')
 
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 <script>
     window.signinUrl = "{{ route('customer.signin', ['locale' => app()->getLocale()]) }}";
@@ -226,7 +239,6 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
     };
 </script>
 <script src="{{ asset('js/app.js') }}"></script>
-
 @endsection
 @yield('scripts')
 @endsection
