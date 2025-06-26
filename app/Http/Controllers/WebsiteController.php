@@ -23,19 +23,7 @@ class WebsiteController extends Controller
         $slideshow = Slideshow::where('hidden', 0)->where('cancelled', 0)->get()->sortBy('position');
         $categories = Category::where('hidden', 0)->where('cancelled', 0)->get()->sortBy('position');
 
-        if (auth('customer')->check()) {
-            $customer = auth('customer')->user();
-            $customerid = $customer->id;
-            $type = $customer->type;
-
-            if ($type == 'b2c') {
-                $products = $this->productsForCustomer($customerid, 'b2c');
-            } elseif ($type == 'b2b') {
-                $products = $this->productsForCustomer($customerid, 'b2b');
-            }
-        } else {
-            $products = $this->allProducts();
-        }
+        $products = $this->getAvailableProducts();
         $offers = $this->getOffers($products);
 
         return view('sanita.index', compact(
@@ -59,15 +47,14 @@ class WebsiteController extends Controller
 
     public function products()
     {
-        $products = $this->allProducts();
+        $products = $this->getAvailableProducts();
         $products = $this->paginateCollection($products, 20, 'products_page');
-
         return view('sanita.products.index', compact('products'));
     }
 
     public function offers()
     {
-        $products = $this->allProducts();
+        $products = $this->getAvailableProducts();
         $offers = $this->getOffers($products);
         $offers = $this->paginateCollection($offers, 20, 'offers_page');
 
@@ -77,7 +64,6 @@ class WebsiteController extends Controller
     public function category(Request $request)
     {
         $category_id = $request->category;
-
         $category = Category::with('subcategories')->find($category_id);
 
         if (!$category) {
@@ -90,37 +76,36 @@ class WebsiteController extends Controller
         });
 
         $productsBySubcategory = [];
-        $products = null;
+        $products = collect();
 
         if ($validSubcategories->count() > 1) {
             // Multiple subcategories: get products paginated per subcategory
+            $products = $this->getAvailableProducts();
             foreach ($validSubcategories as $subcategory) {
-                $productsBySubcategory[$subcategory->id] = Product::where('subcategories_id', $subcategory->id)
-                    ->where('cancelled', 0)
-                    ->whereHas('listPrices', function ($q) {
-                        $q->where('hidden', 0);
-                    })
-                    ->orderBy('position')
-                    ->paginate(20, ['*'], 'page_sub_' . $subcategory->id);
+                $filtered = $products->filter(function ($product) use ($subcategory) {
+                    return $product->subcategories_id == $subcategory->id
+                        && $product->listPrices->where('hidden', 0)->count() > 0;
+                })->values();
+                $productsBySubcategory[$subcategory->id] = $this->paginateCollection($filtered, 20, 'page_sub_' . $subcategory->id);
             }
         } elseif ($validSubcategories->count() === 1) {
             // Exactly one subcategory: show products of that subcategory without tabs
             $subcategory = $validSubcategories->first();
-            $products = Product::where('subcategories_id', $subcategory->id)
-                ->whereHas('listPrices', function ($q) {
-                    $q->where('hidden', 0);
-                })
-                ->where('cancelled', 0)
-                ->orderBy('position')
-                ->paginate(20);
+            $products = $this->getAvailableProducts();
+            $filtered = $products->filter(function ($product) use ($subcategory) {
+                return $product->subcategories_id == $subcategory->id
+                    && $product->listPrices->where('hidden', 0)->count() > 0;
+            })->values();
+            $productsBySubcategory[$subcategory->id] = $this->paginateCollection($filtered, 20, 'page_sub_' . $subcategory->id);
         } else {
             // No subcategories = no products
-            $products = collect(); // empty collection, or you could keep null
+            $products = collect();
+            $productsBySubcategory = [];
         }
 
         return view('sanita.category.index', [
             'category' => $category,
-            'productsBySubcategory' => $productsBySubcategory ?: null,
+            'productsBySubcategory' => $productsBySubcategory,
             'products' => $products,
         ]);
     }
@@ -143,7 +128,7 @@ class WebsiteController extends Controller
         // Get products with their list prices and distributor stocks for those distributors
         $products = Product::with([
             'listPrices' => function ($q) use ($type) {
-                $q->where('type', $type);
+                $q->where('type', $type)->where('hidden', 0);
             },
             'distributorStocks' => function ($q) use ($distributorIds) {
                 $q->whereIn('distributors_id', $distributorIds);
@@ -162,7 +147,7 @@ class WebsiteController extends Controller
     {
         $products = Product::with([
             'listPrices' => function ($q) {
-                $q->select()->where('type', 'b2c');
+                $q->select()->where('type', 'b2c')->where('hidden', 0);
             },
             'distributorStocks'
         ])
@@ -174,13 +159,13 @@ class WebsiteController extends Controller
 
     protected function getOffers($products)
     {
+        $offers = [];
         foreach ($products as $product) {
-            $prices = $product->listPrices->first();
-            if ($prices->old_price > 0 && $prices->old_price > $prices->shelf_price) {
+            $prices = $product->listPrices ? $product->listPrices->first() : null;
+            if ($prices && $prices->old_price > 0 && $prices->old_price > $prices->shelf_price) {
                 $offers[] = $product;
             }
         }
-
         return $offers;
     }
 
@@ -201,5 +186,21 @@ class WebsiteController extends Controller
                 'pageName' => $pageName,
             ]
         );
+    }
+
+    public function getAvailableProducts()
+    {
+        if (auth('customer')->check()) {
+            $customer = auth('customer')->user();
+            $customerid = $customer->id;
+            $type = $customer->type;
+
+            if ($type == 'b2c') {
+                return $this->productsForCustomer($customerid, 'b2c');
+            } elseif ($type == 'b2b') {
+                return $this->productsForCustomer($customerid, 'b2b');
+            }
+        }
+        return $this->allProducts();
     }
 }

@@ -8,7 +8,7 @@
                 @php
                 $price = $product->listPrices->first();
                 @endphp
-                @if($price->shelf_price > 0 )
+                @if($price && $price->shelf_price > 0 )
                 <div style="--bg-color: #a78bfa" class="card__image">
                     @if($product->extension)
                     <img src="{{ asset('storage/products/' . $product->id . '.' . $product->extension) }}"

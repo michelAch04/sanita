@@ -150,7 +150,7 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
             @php
             $price = $product->listPrices->first();
             @endphp
-            @if($price->shelf_price > 0 )
+            @if($price && $price->shelf_price > 0 )
             <div class="product-card mb-2" data-url="{{ route('website.product.index', ['locale' => app()->getLocale(), 'product' => $product->id]) }}">
                 <div class="card">
                     <div class="card__shine"></div>
