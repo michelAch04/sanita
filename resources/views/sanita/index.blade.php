@@ -25,6 +25,10 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
         <h2 class="display-5 text-center mb-4">{{ __('nav.offers') }}</h2>
         <div class="carousel gx-0">
             @foreach($offers as $product)
+            @php
+            $price = $product->listPrices->first();
+            @endphp
+            @if($price->shelf_price > 0 )
             <div class="product-card mb-4" data-url="{{ route('website.product.index', ['locale' => app()->getLocale(), 'product' => $product->id]) }}">
                 <div class="card">
                     <div class="card__shine"></div>
@@ -50,9 +54,7 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                             </p>
                         </div>
                         <div class="card__footer">
-                            @php
-                            $price = $product->listPrices->where('type', 'b2c')->first();
-                            @endphp
+
                             <div class="card__price">
                                 @if($price)
                                 @if($price->old_price > $price->shelf_price)
@@ -87,6 +89,7 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                     </div>
                 </div>
             </div>
+            @endif
             @endforeach
         </div>
         <div class="text-center mt-4 mb-0">
@@ -144,6 +147,10 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
         <h2 class="display-5 text-center mb-4">{{ __('nav.products') }}</h2>
         <div class="carousel gx-0">
             @foreach($products as $product)
+            @php
+            $price = $product->listPrices->first();
+            @endphp
+            @if($price->shelf_price > 0 )
             <div class="product-card mb-2" data-url="{{ route('website.product.index', ['locale' => app()->getLocale(), 'product' => $product->id]) }}">
                 <div class="card">
                     <div class="card__shine"></div>
@@ -173,9 +180,6 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                             </p>
                         </div>
                         <div class="card__footer">
-                            @php
-                            $price = $product->listPrices->where('type', 'b2c')->first();
-                            @endphp
                             <div class="card__price">
                                 @if($price)
                                 @if($price->old_price > $price->shelf_price)
@@ -210,6 +214,7 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                     </div>
                 </div>
             </div>
+            @endif
             @endforeach
         </div>
         <div class="text-center mt-5 mb-0">

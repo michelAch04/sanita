@@ -11,6 +11,8 @@ use App\Models\DistributorStock;
 use App\Models\DistributorAddress;
 use App\Models\Address;
 use App\Models\Governorate;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 class WebsiteController extends Controller
 {
@@ -28,17 +30,13 @@ class WebsiteController extends Controller
 
             if ($type == 'b2c') {
                 $products = $this->productsForCustomer($customerid, 'b2c');
-                // dd($products);
             } elseif ($type == 'b2b') {
                 $products = $this->productsForCustomer($customerid, 'b2b');
             }
         } else {
             $products = $this->allProducts();
-            // dd($products);
         }
-        // dd($products);
         $offers = $this->getOffers($products);
-        // dd($offers); 
 
         return view('sanita.index', compact(
             'aboutus',
@@ -61,29 +59,17 @@ class WebsiteController extends Controller
 
     public function products()
     {
-        $products = Product::where('hidden', 0)
-            ->where('cancelled', 0)
-            ->where(function ($query) {
-                $query->where('automatic_hide', 0)
-                    ->orWhere('available_quantity', '>', 0);
-            })
-            ->orderBy('position')
-            ->get();
+        $products = $this->allProducts();
+        $products = $this->paginateCollection($products, 20, 'products_page');
 
         return view('sanita.products.index', compact('products'));
     }
 
     public function offers()
     {
-        $offers = Product::where('hidden', 0)
-            ->where('cancelled', 0)
-            ->where('old_price', '>', 0)
-            ->where(function ($query) {
-                $query->where('automatic_hide', 0)
-                    ->orWhere('available_quantity', '>', 0);
-            })
-            ->orderBy('position')
-            ->paginate(20);
+        $products = $this->allProducts();
+        $offers = $this->getOffers($products);
+        $offers = $this->paginateCollection($offers, 20, 'offers_page');
 
         return view('sanita.offers.index', compact('offers'));
     }
@@ -110,8 +96,10 @@ class WebsiteController extends Controller
             // Multiple subcategories: get products paginated per subcategory
             foreach ($validSubcategories as $subcategory) {
                 $productsBySubcategory[$subcategory->id] = Product::where('subcategories_id', $subcategory->id)
-                    ->where('hidden', 0)
                     ->where('cancelled', 0)
+                    ->whereHas('listPrices', function ($q) {
+                        $q->where('hidden', 0);
+                    })
                     ->orderBy('position')
                     ->paginate(20, ['*'], 'page_sub_' . $subcategory->id);
             }
@@ -119,7 +107,9 @@ class WebsiteController extends Controller
             // Exactly one subcategory: show products of that subcategory without tabs
             $subcategory = $validSubcategories->first();
             $products = Product::where('subcategories_id', $subcategory->id)
-                ->where('hidden', 0)
+                ->whereHas('listPrices', function ($q) {
+                    $q->where('hidden', 0);
+                })
                 ->where('cancelled', 0)
                 ->orderBy('position')
                 ->paginate(20);
@@ -178,7 +168,6 @@ class WebsiteController extends Controller
         ])
             ->where('cancelled', 0)
             ->get();
-        // dd($products);
 
         return $products;
     }
@@ -193,5 +182,24 @@ class WebsiteController extends Controller
         }
 
         return $offers;
+    }
+
+    protected function paginateCollection($items, $perPage = 20, $pageName = 'page')
+    {
+        $page = LengthAwarePaginator::resolveCurrentPage($pageName);
+        $items = $items instanceof Collection ? $items : collect($items);
+        $currentItems = $items->slice(($page - 1) * $perPage, $perPage)->values();
+
+        return new LengthAwarePaginator(
+            $currentItems,
+            $items->count(),
+            $perPage,
+            $page,
+            [
+                'path' => request()->url(),
+                'query' => request()->query(),
+                'pageName' => $pageName,
+            ]
+        );
     }
 }

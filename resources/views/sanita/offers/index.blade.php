@@ -12,7 +12,7 @@
         @else
         <div class="d-flex flex-wrap justify-content-center gap-3">
             @foreach($offers as $product)
-                @include('sanita.partials.product-card')
+            @include('sanita.partials.product-card')
             @endforeach
         </div>
 
