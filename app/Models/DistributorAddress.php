@@ -13,4 +13,9 @@ class DistributorAddress extends Model
         'cities_id',
         'distributors_id',
     ];
+
+    public function city()
+    {
+        return $this->belongsTo(City::class, 'cities_id');
+    }
 }

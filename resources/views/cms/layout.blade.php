@@ -42,6 +42,7 @@
                         </a>
                     </li>
                     @endforeach
+                </ul>
 
             </nav>
 

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\CMS;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Tax;
 
@@ -62,7 +63,7 @@ class TaxController extends Controller
         $tax = Tax::findOrFail($id);
         $validated['active'] = $request->has('active') ? 1 : 0;
         $tax->update($validated);
-        return redirect()->route('tax.index')->with('success','Tax updated successfully.');
+        return redirect()->route('tax.index')->with('success', 'Tax updated successfully.');
     }
 
     public function destroy($id)

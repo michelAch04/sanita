@@ -4,11 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
-use App\Models\AboutUs;
-use App\Http\Controllers\PageController;
-use App\Models\Product;
-use App\Models\Slideshow;
-use App\Models\Category;
+use App\Http\Controllers\CMS\PageController;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Cart;
 use Illuminate\Pagination\Paginator;

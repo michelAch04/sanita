@@ -36,15 +36,30 @@
     </div>
 
     <div class="col-md-3 d-flex align-items-center">
-        <div class="form-check me-2">
+        <div class="form-check me-0">
             <input class="form-check-input" type="checkbox" name="{{ $prefix }}_hidden" value="1"
                 {{ old($prefix.'_hidden', $data->hidden ?? false) ? 'checked' : '' }}>
             <label class="form-check-label">Hidden</label>
         </div>
-        <div class="form-check me-2">
+        <div class="form-check me-1">
             <input class="form-check-input" type="checkbox" name="{{ $prefix }}_automatic_hide" value="1"
                 {{ old($prefix.'_automatic_hide', $data->automatic_hide ?? false) ? 'checked' : '' }}>
             <label class="form-check-label">Auto Hide</label>
+        </div>
+        <div class="form-check me-1">
+            <input class="form-check-input" type="checkbox" name="{{ $prefix }}_EA" value="1"
+                {{ old($prefix.'_EA', $data->EA ?? false) ? 'checked' : '' }}>
+            <label class="form-check-label">EA</label>
+        </div>
+        <div class="form-check me-1">
+            <input class="form-check-input" type="checkbox" name="{{ $prefix }}_CA" value="1"
+                {{ old($prefix.'_CA', $data->CA ?? false) ? 'checked' : '' }}>
+            <label class="form-check-label">CA</label>
+        </div>
+        <div class="form-check me-1">
+            <input class="form-check-input" type="checkbox" name="{{ $prefix }}_PL" value="1"
+                {{ old($prefix.'_PL', $data->PL ?? false) ? 'checked' : '' }}>
+            <label class="form-check-label">PL</label>
         </div>
     </div>
 </div>

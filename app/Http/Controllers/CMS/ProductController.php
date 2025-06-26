@@ -141,6 +141,9 @@ class ProductController extends Controller
                     'UOM' => $validated['b2b_UOM'],
                     'hidden' => $request->has('b2b_hidden'),
                     'automatic_hide' => $request->has('b2b_automatic_hide'),
+                    'EA' => $request->has('b2b_EA'),
+                    'CA'    => $request->has('b2b_CA'),
+                    'PL' => $request->has('b2b_PL'),
                 ]);
 
                 // Insert B2C price

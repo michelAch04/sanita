@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\CMS;
+
+use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\Models\AboutUs;
@@ -13,6 +15,7 @@ class AboutUsController extends Controller
 
         return view('sanita.aboutus', compact('aboutUs'));
     }
+
     public function edit()
     {
         // Fetch the current "About Us" content from the database
@@ -20,6 +23,7 @@ class AboutUsController extends Controller
 
         return view('cms.aboutus', compact('aboutUs'));
     }
+
     public function update(Request $request)
     {
         $request->validate([

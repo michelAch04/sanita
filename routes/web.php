@@ -2,30 +2,32 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\AboutUsController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\BrandController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\SubcategoryController;
-use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\SlideshowController;
-use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\CartController;
-use Illuminate\Support\Facades\App;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Auth\AuthController;
+
 use App\Http\Controllers\WebsiteController;
-use App\Http\Controllers\TaxController;
-use App\Http\Controllers\ReportController;
 use App\Http\Controllers\WebsiteAddressController;
-use App\Models\Subcategory;
-use App\Http\Controllers\WebsiteCheckoutController;
 use App\Http\Controllers\WebsiteCartController;
+
 use App\Http\Controllers\CMS\DistributorController;
 use App\Http\Controllers\CMS\ProductController;
+use App\Http\Controllers\CMS\TaxController;
+use App\Http\Controllers\CMS\SlideshowController;
+use App\Http\Controllers\CMS\PermissionController;
+use App\Http\Controllers\CMS\DashboardController;
+use App\Http\Controllers\CMS\AboutUsController;
+use App\Http\Controllers\CMS\UserController;
+use App\Http\Controllers\CMS\BrandController;
+use App\Http\Controllers\CMS\CategoryController;
+use App\Http\Controllers\CMS\ReportController;
+use App\Http\Controllers\CMS\SubcategoryController;
+use App\Http\Controllers\CMS\CustomerController;
+use App\Http\Controllers\CMS\OrderController;
+use App\Http\Controllers\CMS\CartController;
+
+
+
 
 
 /*
@@ -56,13 +58,15 @@ Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('admin.logout');
 
 Route::middleware('auth:web')->group(function () {
+    //dashboard
     Route::get('/cms/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    //about us 
     Route::get('/cms/aboutus', [AboutUsController::class, 'edit'])->name('aboutus.edit');
     Route::put('/cms/aboutus', [AboutUsController::class, 'update'])->name('aboutus.update');
+    // CMS routes
     Route::resource('/cms/users', UserController::class);
     Route::resource('/cms/brands', BrandController::class);
     Route::resource('/cms/products', ProductController::class);
-    Route::resource('/cms/distributor', DistributorController::class);
     Route::resource('/cms/categories', CategoryController::class);
     Route::resource('/cms/subcategories', SubcategoryController::class);
     Route::resource('/cms/customers', CustomerController::class);
@@ -71,28 +75,32 @@ Route::middleware('auth:web')->group(function () {
     Route::resource('/cms/permissions', PermissionController::class);
     Route::resource('/cms/tax', TaxController::class);
     Route::resource('/cms/cart', CartController::class);
-
+    //distributor
+    Route::resource('/cms/distributor', DistributorController::class);
+    Route::get('cms/distributor/{distributor}/add-address', [DistributorController::class, 'addAddress'])->name('distributor.addAddress');
+    Route::post('cms/distributor/{distributor}/store-address', [DistributorController::class, 'storeAddress'])->name('distributor.storeAddress');
+    Route::get('cms/distributor/{id}/stocks', [DistributorController::class, 'stocks'])->name('distributor.stocks');
+    Route::post('cms/distributor/{id}/stocks', [DistributorController::class, 'storeStock'])->name('distributor.storeStock');
     //for drag-and-drop reorder
     Route::post('/cms/products/reorder', [ProductController::class, 'reorder'])->name('products.reorder');
     Route::post('/cms/categories/reorder', [CategoryController::class, 'reorder'])->name('categories.reorder');
     Route::post('/cms/subcategories/reorder', [SubcategoryController::class, 'reorder'])->name('subcategories.reorder');
     Route::post('/cms/slideshow/reorder', [SlideshowController::class, 'reorder'])->name('slideshow.reorder');
-
     //reports
     Route::get('/cms/report', [ReportController::class, 'show'])->name('report.show');
 });
 Route::prefix('{locale}')->middleware(['localization', 'force.address.modal'])->group(function () {
-
-    // Customer signin and signout and signup routes
+    // Authentication routes
     Route::get('/signin', [AuthController::class, 'showSignIn'])->name('customer.signin');
     Route::post('/signin', [AuthController::class, 'signIn']);
+    // signup routes
     Route::get('/signup', [AuthController::class, 'showSignUp'])->name('customer.signup');
     Route::post('/signup', [AuthController::class, 'signUp']);
-    Route::get('/signup', [AuthController::class, 'showSignUp'])->name('customer.signup');
-    Route::post('/signup', [AuthController::class, 'signUp']);
+    // OTP verification routes
     Route::get('/verifyotp', [AuthController::class, 'showVerifyOtp'])->name('customer.verifyotp');
     Route::post('/verifyotp', [AuthController::class, 'verifyOtp'])->name('customer.verifyOtp');
     Route::get('/resend-otp', [AuthController::class, 'resendOtp'])->name('customer.resendOtp');
+    // Sign out route
     Route::post('/signout', [AuthController::class, 'signOut'])->name('customer.signout');
 
     Route::get('/', [WebsiteController::class, 'index'])->name('sanita.index');
