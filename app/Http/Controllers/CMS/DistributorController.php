@@ -84,7 +84,7 @@ class DistributorController extends Controller
 
     public function addAddress($id)
     {
-        $distributor = Distributor::with(['addresses.city'])->findOrFail($id);
+        $distributor = Distributor::with(['addresses.city.districts.governorate'])->findOrFail($id);
 
         // Get IDs of cities already assigned to any distributor
         $assignedCityIds = DistributorAddress::pluck('cities_id')->toArray();
