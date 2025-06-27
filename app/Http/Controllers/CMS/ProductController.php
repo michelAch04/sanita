@@ -25,7 +25,15 @@ class ProductController extends Controller
 
                 $query->where(function ($q) use ($search) {
                     $q->where('name_en', 'like', "%$search%")
-                        ->orWhere('small_description_en', 'like', "$search%");
+                        ->orWhere('small_description_en', 'like', "%$search%")
+                        // Search subcategory name
+                        ->orWhereHas('subcategories', function ($sub) use ($search) {
+                            $sub->where('name_en', 'like', "%$search%");
+                        })
+                        // Search brand name
+                        ->orWhereHas('brands', function ($brand) use ($search) {
+                            $brand->where('name_en', 'like', "%$search%");
+                        });
                 });
             }
 
@@ -265,9 +273,6 @@ class ProductController extends Controller
                         'UOM' => $validated['b2b_UOM'],
                         'hidden' => $request->has('b2b_hidden'),
                         'automatic_hide' => $request->has('b2b_automatic_hide'),
-                        'EA' => $request->has('b2b_EA'),
-                        'CA'    => $request->has('b2b_CA'),
-                        'PL' => $request->has('b2b_PL'),
                     ]
                 );
 
@@ -285,9 +290,6 @@ class ProductController extends Controller
                         'UOM' => $validated['b2c_UOM'],
                         'hidden' => $request->has('b2c_hidden'),
                         'automatic_hide' => $request->has('b2c_automatic_hide'),
-                        'EA' => $request->has('b2c_EA'),
-                        'CA'    => $request->has('b2c_CA'),
-                        'PL' => $request->has('b2c_PL'),
                     ]
                 );
             });

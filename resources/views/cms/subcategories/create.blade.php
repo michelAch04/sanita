@@ -28,23 +28,24 @@
                     <div class="underline"></div>
                 </div>
 
+                {{-- Subcategory Name EN --}}
                 <div class="input-container mb-5 mt-3" style="width: 30%;">
-                    <input type="text" id="name_en" name="name_en" required style="width: 100%;">
-                    <label for="name_en" class="label">Subcategory Name</label>
+                    <input type="text" id="name_en" name="name_en" required style="width: 100%;" placeholder="">
+                    <label for="name_en" class="label">Subcategory Name (EN)</label>
                     <div class="underline"></div>
                 </div>
 
-                {{-- Subcategory Name --}}
+                {{-- Subcategory Name AR --}}
                 <div class="input-container mb-5 mt-3" style="width: 30%;">
-                    <input type="text" id="name_ar" name="name_ar"  required style="width: 100%;">
-                    <label for="name_ar" class="label">Subcategory Name</label>
+                    <input type="text" id="name_ar" name="name_ar"  required style="width: 100%;" placeholder="">
+                    <label for="name_ar" class="label">Subcategory Name (AR)</label>
                     <div class="underline"></div>
                 </div>
 
-                {{-- Subcategory Name --}}
+                {{-- Subcategory Name KU --}}
                 <div class="input-container mb-4 mt-3" style="width: 30%;">
-                    <input type="text" id="name_ku" name="name_ku"  required style="width: 100%;">
-                    <label for="name_ku" class="label">Subcategory Name</label>
+                    <input type="text" id="name_ku" name="name_ku"  required style="width: 100%;" placeholder="">
+                    <label for="name_ku" class="label">Subcategory Name (KU)</label>
                     <div class="underline"></div>
                 </div>
 

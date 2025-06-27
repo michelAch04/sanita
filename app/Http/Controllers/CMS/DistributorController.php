@@ -12,10 +12,36 @@ use App\Models\Product;
 
 class DistributorController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $distributors = Distributor::with(['stocks', 'addresses'])->get();
-        return view('cms.distributors.index', compact('distributors'));
+        try {
+            $query = Distributor::with(['stocks', 'addresses.city']);
+
+            if ($request->filled('query')) {
+                $search = $request->input('query');
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "$search%")
+                        ->orWhere('email', 'like', "$search%")
+                        ->orWhere('mobile', 'like', "$search%")
+                        ->orWhere('location', 'like', "$search%")
+                        // Search related city name through addresses
+                        ->orWhereHas('addresses.city', function ($city) use ($search) {
+                            $city->where('name_en', 'like', "$search%");
+                        });
+                });
+            }
+
+            $distributors = $query->get();
+
+            if ($request->ajax()) {
+                // Make sure your Blade has a @section('distributors_list') for this to work
+                return view('cms.distributors.index', compact('distributors'))->renderSections()['distributors_list'];
+            }
+
+            return view('cms.distributors.index', compact('distributors'));
+        } catch (\Exception $e) {
+            return redirect()->route('distributor.index')->with('error', 'Failed to fetch distributors: ' . $e->getMessage());
+        }
     }
 
     public function create()
@@ -90,6 +116,21 @@ class DistributorController extends Controller
         return redirect()->back()->with('success', 'City assigned to distributor!');
     }
 
+    public function removeAddress($distributorId, $addressId)
+    {
+        try {
+            $address = DistributorAddress::where('id', $addressId)
+                ->where('distributors_id', $distributorId)
+                ->firstOrFail();
+
+            $address->delete();
+
+            return redirect()->back()->with('success', 'City removed from distributor.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to remove city: ' . $e->getMessage());
+        }
+    }
+
     public function stocks($id)
     {
         $distributor = Distributor::with('stocks.product')->findOrFail($id);
@@ -115,5 +156,18 @@ class DistributorController extends Controller
         );
 
         return redirect()->back()->with('success', 'Stock updated!');
+    }
+
+    public function removeStock($distributorId, $productId)
+    {
+        try {
+            DistributorStock::where('distributors_id', $distributorId)
+                ->where('products_id', $productId)
+                ->delete();
+
+            return redirect()->back()->with('success', 'Stock entry deleted.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to delete stock: ' . $e->getMessage());
+        }
     }
 }

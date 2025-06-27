@@ -139,7 +139,7 @@
     width: fit-content;
 }
 
-.img-thumbnail{
+.img-thumbnail {
     border: 0 !important;
 }
 
@@ -149,18 +149,21 @@
     top: 0;
     right: 0;
     height: fit-content;
-    max-width: 35px; /* collapsed */
+    max-width: 35px;
+    /* collapsed */
     transition: all 0.3s ease;
     overflow: hidden;
     z-index: 1040;
     border-bottom-left-radius: 8px;
-    white-space: nowrap; /* 🔐 Prevents line breaks */
+    white-space: nowrap;
+    /* 🔐 Prevents line breaks */
 }
 
 /* Expand on hover */
 #sidebar-right:hover {
     height: auto;
-    max-width: 220px; /* enough to fit button + label */
+    max-width: 220px;
+    /* enough to fit button + label */
 }
 
 /* Logout label hidden initially */
@@ -182,4 +185,24 @@
     font-size: 1.25rem;
     margin-left: 0.3rem;
     margin-bottom: -0.3rem !important;
+}
+
+.nav-tabs .nav-item .nav-link.active {
+    background-color: #38B2AC !important;
+    color: #fff !important;
+    border: none !important;
+}
+
+.nav-tabs .nav-item .nav-link {
+    background: transparent !important;
+    color: #38B2AC !important;
+}
+
+.nav-tabs .nav-link {
+    margin-bottom: -0.2rem !important;
+
+}
+
+.nav-tabs {
+    border-bottom: 2px solid #38B2AC !important;
 }
