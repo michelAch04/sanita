@@ -231,9 +231,6 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
 @include('sanita.partials.contact-us')
 
 @section('scripts')
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 <script>
     window.signinUrl = "{{ route('customer.signin', ['locale' => app()->getLocale()]) }}";
     window.csrfToken = "{{ csrf_token() }}";
@@ -243,7 +240,6 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
         addError: "{{ __('nav.cart_add_error') }}"
     };
 </script>
-<script src="{{ asset('js/app.js') }}"></script>
 @endsection
 @yield('scripts')
 @endsection

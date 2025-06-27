@@ -13,7 +13,7 @@ $(document).ready(function () {
         draggable: true,
         swipe: true,
     });
-
+ console.log(document.querySelectorAll('.carousel'));
     $('.carousel').slick({
         centerMode: false,
         centerPadding: '0px',

@@ -60,6 +60,10 @@ class AuthController extends Controller
             $validated['verified'] = 0;
             $validated['type'] = 'b2c';
             $validated['token'] = Str::random(60);
+            $deviceId = $request->input('device_id'); // or header('device_id')
+            if ($deviceId) {
+                $validated['device_id'] = $deviceId;
+            }
 
             session(['pending_mobile' => $validated['mobile']]);
 
@@ -180,7 +184,10 @@ class AuthController extends Controller
                 'country_code' => 'required|string|max:10',
                 'password' => 'required|string',
             ]);
-
+            $deviceId = $request->input('device_id'); // or header('device_id')
+            if ($deviceId) {
+                $validated['device_id'] = $deviceId;
+            }
             $customer = Customer::where('mobile', $request->mobile)->first();
 
             if (!$customer || !Hash::check($request->password, $customer->password)) {

@@ -198,8 +198,6 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
     @include('components.toast')
     @include('components.modal')
 
-    @stack('scripts')
-
     <!-- Footer -->
     <footer class="footer text-center text-white mt-auto py-4"
         style="background: linear-gradient(to right, #1E3A5F, #2A4365);     
@@ -223,21 +221,28 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
             </p>
         </div>
     </footer>
-
-    <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
-
-    <script>
-        window.success = "{{ __('nav.success') }}";
-        window.failed = "{{ __('nav.failed') }}";
-        window.error = "{{ __('nav.error') }}";
-        window.isRtl = '{{ $isRtl }}';
-    </script>
-    <script src="{{ asset('js/app.js') }}"></script>
-    <script src="{{ asset('js/modals.js') }}"></script>
 </body>
+<!-- Core Libraries -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Optional: Your JS Plugins -->
+<script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+
+<!-- Laravel Assets -->
+<script src="{{ asset('js/app.js') }}"></script>
+<script src="{{ asset('js/modals.js') }}"></script>
+
+<!-- Global Toast Config -->
+<script>
+    window.success = "{{ __('nav.success') }}";
+    window.failed = "{{ __('nav.failed') }}";
+    window.error = "{{ __('nav.error') }}";
+    window.isRtl = '{{ $isRtl }}';
+</script>
+
+<!-- Per-page Scripts -->
+@stack('scripts')
 
 </html>
