@@ -273,9 +273,6 @@ class ProductController extends Controller
                         'UOM' => $validated['b2b_UOM'],
                         'hidden' => $request->has('b2b_hidden'),
                         'automatic_hide' => $request->has('b2b_automatic_hide'),
-                        'EA' => $request->has('b2b_EA'),
-                        'CA' => $request->has('b2b_CA'),
-                        'PL' => $request->has('b2b_PL'),
                     ]
                 );
 
@@ -293,9 +290,6 @@ class ProductController extends Controller
                         'UOM' => $validated['b2c_UOM'],
                         'hidden' => $request->has('b2c_hidden'),
                         'automatic_hide' => $request->has('b2c_automatic_hide'),
-                        'EA' => $request->has('b2c_EA'),
-                        'CA' => $request->has('b2c_CA'),
-                        'PL' => $request->has('b2c_PL'),
                     ]
                 );
             });

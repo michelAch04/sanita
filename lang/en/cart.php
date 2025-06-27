@@ -36,4 +36,6 @@ return [
     'select_address' => 'Select Address',
     'payment_method' => 'Payment Method',
     'cod' => 'Cash on Delivery',
+    'out_of_stock' => 'Out of Stock',
+    'in_stock' => 'In Stock',
 ];
