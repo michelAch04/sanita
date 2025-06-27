@@ -79,8 +79,10 @@ Route::middleware('auth:web')->group(function () {
     Route::resource('/cms/distributor', DistributorController::class);
     Route::get('cms/distributor/{distributor}/add-address', [DistributorController::class, 'addAddress'])->name('distributor.addAddress');
     Route::post('cms/distributor/{distributor}/store-address', [DistributorController::class, 'storeAddress'])->name('distributor.storeAddress');
+    Route::delete('cms/distributor/{distributor}/address/{address}', [DistributorController::class, 'removeAddress'])->name('distributor.removeAddress');
     Route::get('cms/distributor/{id}/stocks', [DistributorController::class, 'stocks'])->name('distributor.stocks');
     Route::post('cms/distributor/{id}/stocks', [DistributorController::class, 'storeStock'])->name('distributor.storeStock');
+    Route::delete('cms/distributor/{distributor}/remove-stock/{product}', [DistributorController::class, 'removeStock'])->name('distributor.removeStock');
     //for drag-and-drop reorder
     Route::post('/cms/products/reorder', [ProductController::class, 'reorder'])->name('products.reorder');
     Route::post('/cms/categories/reorder', [CategoryController::class, 'reorder'])->name('categories.reorder');

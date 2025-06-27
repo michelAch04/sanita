@@ -4,120 +4,138 @@
 
 @section('content')
 <div class="ps-5 mt-3">
+    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+        <h2 class="mb-3">Create Product</h2>
+    </div>
     <div class="card shadow-sm border-0">
-        <div class="card-header bg-light d-flex justify-content-between align-items-center">
-            <h2 class="mb-0">Create Product</h2>
-        </div>
-
         <div class="card-body">
+            <ul class="nav nav-tabs mb-4" id="productTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="info-tab" data-bs-toggle="tab" data-bs-target="#info" type="button">Product Info</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="b2b-tab" data-bs-toggle="tab" data-bs-target="#b2b" type="button">B2B</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="b2c-tab" data-bs-toggle="tab" data-bs-target="#b2c" type="button">B2C</button>
+                </li>
+            </ul>
+
             <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
+                <div class="tab-content" id="productTabsContent">
+                    {{-- Product Info Tab --}}
+                    <div class="tab-pane fade show active" id="info" role="tabpanel">
+                        <h5 class="mb-5">Product Information</h5>
 
-                <div class="row">
-                    <div class="col-md-4 mb-4">
-                        <label class="form-label">SKU</label>
-                        <input type="text" class="form-control" name="sku" value="{{ old('sku') }}" required>
+                        <div class="input-container mb-5 mt-3" style="width: 30%;">
+                            <input type="text" name="sku" value="{{ old('sku') }}" required style="width: 100%;" placeholder="">
+                            <label class="label">SKU</label>
+                            <div class="underline"></div>
+                        </div>
+
+                        @foreach ([
+                        'name_en' => 'Product Name (English)',
+                        'name_ar' => 'Product Name (Arabic)',
+                        'name_ku' => 'Product Name (Kurdish)'
+                        ] as $field => $label)
+                        <div class="input-container mb-5 mt-3" style="width: 30%;">
+                            <input type="text" name="{{ $field }}" value="{{ old($field) }}" required style="width: 100%;" placeholder="">
+                            <label class="label">{{ $label }}</label>
+                            <div class="underline"></div>
+                        </div>
+                        @endforeach
+
+                        @foreach ([
+                        'small_description_en' => 'Small Description (EN)',
+                        'small_description_ar' => 'Small Description (AR)',
+                        'small_description_ku' => 'Small Description (KU)'
+                        ] as $field => $label)
+                        <div class="input-container mb-5 mt-3" style="width: 30%;">
+                            <textarea name="{{ $field }}" rows="2" style="width: 100%;">{{ old($field) }}</textarea>
+                            <label class="label" style="top: -25px;">{{ $label }}</label>
+                            <div class="underline"></div>
+                        </div>
+                        @endforeach
+
+                        <div class="input-container mb-5 mt-3" style="width: 30%;">
+                            <input type="number" name="ea_ca" value="{{ old('ea_ca') }}" required style="width: 100%;" placeholder="">
+                            <label class="label">EA/CA</label>
+                            <div class="underline"></div>
+                        </div>
+
+                        <div class="input-container mb-5 mt-3" style="width: 30%;">
+                            <input type="number" name="ea_pa" value="{{ old('ea_pa') }}" required style="width: 100%;" placeholder="">
+                            <label class="label">EA/PA</label>
+                            <div class="underline"></div>
+                        </div>
+
+                        {{-- Select2 Dropdowns --}}
+                        @php
+                        $selectFields = [
+                        'subcategories_id' => ['Subcategory', $subcategories],
+                        'brands_id' => ['Brand', $brands],
+                        'tax_id' => ['Tax', $taxes]
+                        ];
+                        @endphp
+                        @foreach ($selectFields as $name => [$labelText, $options])
+                        <div class="input-container mb-5 mt-3" style="width: 30%; position: relative; padding-top: 5px;">
+                            <label for="{{ $name }}" class="label select2-label">{{ $labelText }}</label>
+                            <select id="{{ $name }}" name="{{ $name }}" class="styled-select select2" required>
+                                <option value="" disabled selected hidden>Select {{ $labelText }}</option>
+                                @foreach ($options as $option)
+                                <option value="{{ $option->id }}" {{ old($name) == $option->id ? 'selected' : '' }}>
+                                    {{ $option->name_en ?? $option->name }}
+                                </option>
+                                @endforeach
+                            </select>
+                            <div class="underline"></div>
+                        </div>
+                        @endforeach
+
+
+                        {{-- Image Upload --}}
+                        <div class="d-flex align-items-start gap-4 mb-4 flex-wrap upload-container">
+                            <div>
+                                <label for="image" id="imageLabel" class="btn underline-btn">Upload Image</label>
+                                <input type="file" id="image" name="image" accept="image/*" hidden required>
+                                @error('image')
+                                <div class="text-danger small mt-2">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div id="previewContainer" style="display: none;">
+                                <img id="imagePreview" src="#" alt="Selected Image" class="img-thumbnail" style="max-width: 150px;">
+                                <div id="fileName" class="text-muted mt-2 small text-center text-decoration-underline mb-1"></div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="col-md-4 mb-4">
-                        <label class="form-label">Product Name (English)</label>
-                        <input type="text" class="form-control" name="name_en" value="{{ old('name_en') }}" required>
+                    {{-- B2B Tab --}}
+                    <div class="tab-pane fade" id="b2b" role="tabpanel">
+                        <h5 class="mb-5">B2B Price</h5>
+                        @include('cms.partials.price_fields', ['prefix' => 'b2b', 'data' => null])
                     </div>
 
-                    <div class="col-md-4 mb-4">
-                        <label class="form-label">Product Name (Arabic)</label>
-                        <input type="text" class="form-control" name="name_ar" value="{{ old('name_ar') }}" required>
-                    </div>
-
-                    <div class="col-md-4 mb-4">
-                        <label class="form-label">Product Name (Kurdish)</label>
-                        <input type="text" class="form-control" name="name_ku" value="{{ old('name_ku') }}" required>
-                    </div>
-
-                    <div class="col-md-4 mb-4">
-                        <label class="form-label">Small Description (English)</label>
-                        <textarea class="form-control" name="small_description_en">{{ old('small_description_en') }}</textarea>
-                    </div>
-
-                    <div class="col-md-4 mb-4">
-                        <label class="form-label">Small Description (Arabic)</label>
-                        <textarea class="form-control" name="small_description_ar">{{ old('small_description_ar') }}</textarea>
-                    </div>
-
-                    <div class="col-md-4 mb-4">
-                        <label class="form-label">Small Description (Kurdish)</label>
-                        <textarea class="form-control" name="small_description_ku">{{ old('small_description_ku') }}</textarea>
-                    </div>
-
-                    <div class="col-md-2 mb-4">
-                        <label class="form-label">EA/CA</label>
-                        <input type="number" class="form-control" name="ea_ca" value="{{ old('ea_ca') }}" required>
-                    </div>
-
-                    <div class="col-md-2 mb-4">
-                        <label class="form-label">EA/PA</label>
-                        <input type="number" class="form-control" name="ea_pa" value="{{ old('ea_pa') }}" required>
-                    </div>
-
-                    <div class="col-md-4 mb-4">
-                        <label class="form-label">Subcategory</label>
-                        <select name="subcategories_id" class="form-select select2" required>
-                            <option value="">Select Subcategory</option>
-                            @foreach ($subcategories as $subcategory)
-                            <option value="{{ $subcategory->id }}" {{ old('subcategories_id') == $subcategory->id ? 'selected' : '' }}>
-                                {{ $subcategory->name_en }}
-                            </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="col-md-4 mb-4">
-                        <label class="form-label">Brand</label>
-                        <select name="brands_id" class="form-select select2" required>
-                            <option value="">Select Brand</option>
-                            @foreach ($brands as $brand)
-                            <option value="{{ $brand->id }}" {{ old('brands_id') == $brand->id ? 'selected' : '' }}>
-                                {{ $brand->name_en }}
-                            </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="col-md-4 mb-4">
-                        <label class="form-label">Tax</label>
-                        <select name="tax_id" class="form-select select2">
-                            <option value="">No VAT</option>
-                            @foreach ($taxes as $tax)
-                            <option value="{{ $tax->id }}" data-rate="{{ $tax->rate }}" {{ old('tax_id') == $tax->id ? 'selected' : '' }}>
-                                {{ $tax->name }} ({{ $tax->rate }}%)
-                            </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="col-md-12 mb-4">
-                        <label class="form-label">Upload Image</label>
-                        <input type="file" class="form-control" name="image" accept="image/*">
+                    {{-- B2C Tab --}}
+                    <div class="tab-pane fade" id="b2c" role="tabpanel">
+                        <h5 class="mb-5">B2C Price</h5>
+                        @include('cms.partials.price_fields', ['prefix' => 'b2c', 'data' => null])
                     </div>
                 </div>
 
-                <hr>
-                <h5>B2B Price</h5>
-                @include('cms.partials.price_fields', ['prefix' => 'b2b', 'data' => null])
-
-                <hr>
-                <h5>B2C Price</h5>
-                @include('cms.partials.price_fields', ['prefix' => 'b2c', 'data' => null])
-
                 <div class="mt-4 text-end">
-                    <a href="{{ route('products.index') }}" class="btn btn-secondary">Cancel</a>
-                    <button type="submit" class="btn btn-primary">Create</button>
+                    <a href="{{ route('products.index') }}" class="btn bubbles bubbles-grey me-2">
+                        <span class="text">Cancel</span>
+                    </a>
+                    <button type="submit" class="btn bubbles">
+                        <span class="text">Create</span>
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-@endsection
 
 @push('styles')
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -129,8 +147,11 @@
 <script>
     $(document).ready(function() {
         $('.select2').select2({
+            placeholder: 'Select an option',
             width: '100%'
         });
     });
 </script>
 @endpush
+@include('cms.partials.select2-style')
+@endsection
