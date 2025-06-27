@@ -81,12 +81,12 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}#offers">
+                        <a class="nav-link active" href="{{ route('website.offers.index', ['locale' => app()->getLocale()]) }}#offers">
                             {{ __('nav.offers') }}
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}#products">
+                        <a class="nav-link active" href="{{ route('website.products.index', ['locale' => app()->getLocale()]) }}#products">
                             {{ __('nav.store') }}
                         </a>
                     </li>

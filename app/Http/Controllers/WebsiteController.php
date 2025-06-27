@@ -145,6 +145,7 @@ class WebsiteController extends Controller
 
     public function allProducts()
     {
+        //automatic hide
         $products = Product::with([
             'listPrices' => function ($q) {
                 $q->select()->where('type', 'b2c')->where('hidden', 0);

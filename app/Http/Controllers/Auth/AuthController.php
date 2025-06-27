@@ -184,10 +184,7 @@ class AuthController extends Controller
                 'country_code' => 'required|string|max:10',
                 'password' => 'required|string',
             ]);
-            $deviceId = $request->input('device_id'); // or header('device_id')
-            if ($deviceId) {
-                $validated['device_id'] = $deviceId;
-            }
+
             $customer = Customer::where('mobile', $request->mobile)->first();
 
             if (!$customer || !Hash::check($request->password, $customer->password)) {
