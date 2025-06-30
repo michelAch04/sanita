@@ -73,7 +73,6 @@ $isRtl = 0;
                             <input type="text" id="modalProductQuantity" name="quantity" class="quantity-input" value="1">
                             <button type="button" class="btn btn-sm btn-increase"><i class="fa fa-plus"></i></button>
                             <select name="UOM" id="modalProductUOM" class="form-select ms-2" style="width: 120px;">
-                                <!-- Options will be injected dynamically -->
                             </select>
                         </div>
                     </div>
@@ -84,6 +83,7 @@ $isRtl = 0;
                         <span class="text"> <i class="fas fa-cart-plus me-2"></i>{{ __('cart.add_to_cart') }}</span>
                     </button>
                 </div>
+                <input type="hidden" id="modalProductUOM" name="UOM">
                 <input type="hidden" id="modalProductId" name="product_id">
                 <input type="hidden" id="modalProductShelfPrice" name="shelf_price">
                 <input type="hidden" id="modalProductUnitPrice" name="unit_price">
@@ -96,6 +96,8 @@ $isRtl = 0;
                 <input type="hidden" id="modalProductEa" name="ea">
                 <input type="hidden" id="modalProductCa" name="ca">
                 <input type="hidden" id="modalProductPl" name="pl">
+                <input type="hidden" id="modalProductMinQuantity" name="min_quantity">
+                <input type="hidden" id="modalProductMaxQuantity" name="max_quantity">
             </form>
         </div>
     </div>
@@ -173,20 +175,44 @@ $isRtl = 0;
         if (!quantityInput || !btnIncrease || !btnDecrease) return;
 
         btnIncrease.addEventListener('click', function() {
-            let val = parseInt(quantityInput.value) || 1;
-            quantityInput.value = val + 1;
+            let minqty = parseInt(document.getElementById('modalProductMinQuantity').value) || 1;
+            let maxqty = parseInt(document.getElementById('modalProductMaxQuantity').value) || 0;
+            let val = parseInt(quantityInput.value) || minqty;
+            console.log("Current value:", val, "Min quantity:", minqty, "Max quantity:", maxqty);
+            if (maxqty && val + 1 > maxqty) {
+                quantityInput.value = maxqty;
+                console.log("Cannot decrease below minimum quantity:", minqty);
+            } else {
+                quantityInput.value = val + 1;
+            }
         });
 
         btnDecrease.addEventListener('click', function() {
-            let val = parseInt(quantityInput.value) || 1;
-            if (val > 1) quantityInput.value = val - 1;
+            let minqty = parseInt(document.getElementById('modalProductMinQuantity').value) || 1;
+            let val = parseInt(quantityInput.value) || minqty;
+            console.log("Current value:", val, "Min quantity:", minqty);
+            if (val - 1 < minqty) {
+                quantityInput.value = minqty;
+                console.log("Cannot decrease below minimum quantity:", minqty);
+            } else {
+                quantityInput.value = val - 1;
+            }
         });
 
-        // Optional: Prevent non-numeric input
+        // Prevent non-numeric and out-of-bounds input
         quantityInput.addEventListener('input', function() {
-            let val = parseInt(quantityInput.value) || 1;
-            if (val < 1) val = 1;
-            quantityInput.value = val;
+            let minqty = parseInt(document.getElementById('modalProductMinQuantity').value) || 1;
+            let maxqty = parseInt(document.getElementById('modalProductMaxQuantity').value) || 0;
+            let val = parseInt(quantityInput.value) || minqty;
+            if (val < minqty) {
+                quantityInput.value = minqty;
+                console.log("Cannot decrease below minimum quantity:", minqty);
+            } else if (maxqty && val > maxqty) {
+                quantityInput.value = maxqty;
+                console.log("Cannot decrease below minimum quantity:", minqty);
+            } else {
+                quantityInput.value = val;
+            }
         });
     });
 </script>
