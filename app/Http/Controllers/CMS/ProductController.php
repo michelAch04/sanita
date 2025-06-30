@@ -82,7 +82,7 @@ class ProductController extends Controller
 
             foreach (['b2b', 'b2c'] as $prefix) {
                 foreach (['ea', 'ca', 'pl'] as $uom) {
-                    $rules["{$prefix}_{$uom}_unit_price"] = 'required|numeric|min:0';
+                    $rules["{$prefix}_{$uom}_unit_price"] = 'nullable|numeric|min:0';
                     $rules["{$prefix}_{$uom}_old_price"] = 'nullable|numeric|min:0';
                     $rules["{$prefix}_{$uom}_min_quantity_to_order"] = 'nullable|integer|min:0';
                     $rules["{$prefix}_{$uom}_max_quantity_to_order"] = 'nullable|integer|min:0';
@@ -128,6 +128,11 @@ class ProductController extends Controller
 
                 foreach (['b2b', 'b2c'] as $prefix) {
                     foreach (['ea', 'ca', 'pl'] as $uom) {
+                        $unitPrice = $validated["{$prefix}_{$uom}_unit_price"] ?? null;
+
+                        if (!$unitPrice || $unitPrice <= 0) {
+                            continue;
+                        }
                         ListPrice::create([
                             'products_id' => $product->id,
                             'type' => $prefix,
@@ -216,7 +221,7 @@ class ProductController extends Controller
 
             foreach (['b2b', 'b2c'] as $prefix) {
                 foreach (['ea', 'ca', 'pl'] as $uom) {
-                    $rules["{$prefix}_{$uom}_unit_price"] = 'required|numeric|min:0';
+                    $rules["{$prefix}_{$uom}_unit_price"] = 'nullable|numeric|min:0';
                     $rules["{$prefix}_{$uom}_old_price"] = 'nullable|numeric|min:0';
                     $rules["{$prefix}_{$uom}_min_quantity_to_order"] = 'nullable|integer|min:0';
                     $rules["{$prefix}_{$uom}_max_quantity_to_order"] = 'nullable|integer|min:0';
@@ -257,6 +262,16 @@ class ProductController extends Controller
 
                 foreach (['b2b', 'b2c'] as $prefix) {
                     foreach (['ea', 'ca', 'pl'] as $uom) {
+                        $unitPrice = $validated["{$prefix}_{$uom}_unit_price"] ?? null;
+
+                        $existing = $product->listPrices()->where('type', $prefix)->where('UOM', strtoupper($uom));
+
+                        // Delete if empty or 0
+                        if (!$unitPrice || $unitPrice <= 0) {
+                            $existing->delete();
+                            continue;
+                        }
+                        
                         $product->listPrices()->updateOrCreate(
                             ['type' => $prefix, 'UOM' => strtoupper($uom)],
                             [
