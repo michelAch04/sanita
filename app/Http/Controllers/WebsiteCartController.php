@@ -91,7 +91,13 @@ class WebsiteCartController extends Controller
             $shelfPrice = $request->input('shelf_price');
             $oldPrice = $request->input('old_price', 0);
 
-          
+            $extendedPrice = $shelfPrice * $requestedQuantityEA;
+            $unitPrice = $unitPrice * $requestedQuantityEA;
+            $cart->total_amount += $extendedPrice;
+            $cart->subtotal_amount += $unitPrice;
+            $cart->tax_amount += ($shelfPrice - $unitPrice) * $requestedQuantityEA;
+            $cart->save();
+            
             CartDetail::create([
                 'carts_id' => $cart->id,
                 'products_id' => $product->id,
@@ -100,6 +106,7 @@ class WebsiteCartController extends Controller
                 'unit_price' => $unitPrice,
                 'shelf_price' => $shelfPrice,
                 'old_price' => $oldPrice,
+                'extended_price' => $extendedPrice,
                 'description' => $request->input('description'),
             ]);
 

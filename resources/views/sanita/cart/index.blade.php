@@ -12,11 +12,6 @@
             @php $cartTotal = 0; @endphp
 
             @foreach($cart->cartDetails as $detail)
-            @php
-            $total = $detail->shelf_price * $detail->quantity;
-            $cartTotal += $total;
-            @endphp
-
             <div class="cart-item d-flex flex-row gap-1 p-3 bg-white rounded shadow-sm align-items-center flex-wrap w-100" data-id="{{ $detail->id }}">
                 <img src="{{ asset('storage/products/' . $detail->product->id . '.' . $detail->product->extension) }}"
                     alt="{{ $detail->product->{'name_'.app()->getLocale()} ?? $detail->product->name_en }}"
@@ -28,7 +23,7 @@
                         <h5 class="mb-1">
                             {{ $detail->product->{'name_'.app()->getLocale()} ?? $detail->product->name_en }}
                         </h5>
-                        <div class="fw-bold text-secondary total-price">${{ number_format($total, 2) }}</div>
+                        <div class="fw-bold text-secondary total-price">${{ number_format($detail->extended_price, 2) }}</div>
                     </div>
 
                     <p class="text-muted small mb-2">

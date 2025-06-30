@@ -15,6 +15,7 @@ class CreateCartDetailsTable extends Migration
             $table->decimal('unit_price');
             $table->decimal('shelf_price');
             $table->decimal('old_price', 10, 2)->nullable();
+            $table->decimal('extended_price');
             $table->integer('quantity_ea');
             $table->string('UOM');
             $table->timestamps();

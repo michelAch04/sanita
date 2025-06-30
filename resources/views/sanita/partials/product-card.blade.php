@@ -63,6 +63,7 @@
                             <input type="hidden" name="ea" value="{{ $price->EA }}">
                             <input type="hidden" name="ca" value="{{ $price->CA }}">
                             <input type="hidden" name="pl" value="{{ $price->PL }}">
+                            
                             <button type="submit" class="border-0 bg-transparent p-0">
                                 <i class="fas fa-cart-plus"></i>
                             </button>

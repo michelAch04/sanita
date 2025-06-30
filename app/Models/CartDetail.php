@@ -13,6 +13,7 @@ class CartDetail extends Model
         'UOM',
         'shelf_price',
         'old_price',
+        'extended_price',
         'quantity_ea',
         'canceled',
     ];
