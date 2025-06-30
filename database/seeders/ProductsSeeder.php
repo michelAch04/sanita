@@ -17,6 +17,8 @@ class ProductsSeeder extends Seeder
         $subcategory = Subcategory::first() ?? Subcategory::factory()->create();
         $tax = Tax::first();
 
+        $uoms = ['EA', 'CA', 'PL'];
+
         for ($i = 1; $i <= 24; $i++) {
             $product = Product::create([
                 'sku' => 'SKU' . str_pad($i, 4, '0', STR_PAD_LEFT),
@@ -35,37 +37,25 @@ class ProductsSeeder extends Seeder
                 'cancelled' => 0,
             ]);
 
-            // B2B Price
-            ListPrice::create([
-                'products_id' => $product->id,
-                'type' => 'b2b',
-                'unit_price' => $unitPriceB2B = rand(50, 100),
-                'shelf_price' => $this->calcShelf($unitPriceB2B, $tax?->rate),
-                'old_price' => $unitPriceB2B + rand(5, 20),
-                'min_quantity_to_order' => 1,
-                'max_quantity_to_order' => 100,
-                'trade_loader' => rand(1, 5),
-                'trade_loader_quantity' => rand(10, 50),
-                'UOM' => 'CTN',
-                'hidden' => false,
-                'automatic_hide' => false,
-            ]);
-
-            // B2C Price
-            ListPrice::create([
-                'products_id' => $product->id,
-                'type' => 'b2c',
-                'unit_price' => $unitPriceB2C = rand(60, 120),
-                'shelf_price' => $this->calcShelf($unitPriceB2C, $tax?->rate),
-                'old_price' => $unitPriceB2C + rand(5, 15),
-                'min_quantity_to_order' => 1,
-                'max_quantity_to_order' => 10,
-                'trade_loader' => rand(0, 3),
-                'trade_loader_quantity' => rand(1, 10),
-                'UOM' => 'PCS',
-                'hidden' => false,
-                'automatic_hide' => false,
-            ]);
+            foreach (['b2b', 'b2c'] as $type) {
+                foreach ($uoms as $uom) {
+                    $unitPrice = rand(40, 120);
+                    ListPrice::create([
+                        'products_id' => $product->id,
+                        'type' => $type,
+                        'unit_price' => $unitPrice,
+                        'shelf_price' => $this->calcShelf($unitPrice, $tax?->rate),
+                        'old_price' => $unitPrice + rand(5, 20),
+                        'min_quantity_to_order' => rand(1, 5),
+                        'max_quantity_to_order' => rand(10, 50),
+                        'trade_loader' => rand(0, 5),
+                        'trade_loader_quantity' => rand(1, 20),
+                        'UOM' => $uom,
+                        'hidden' => false,
+                        'automatic_hide' => false,
+                    ]);
+                }
+            }
         }
     }
 

@@ -1,61 +1,57 @@
 @php
+$types = ['EA' => 'Each', 'CA' => 'Case', 'PL' => 'Pallet'];
 $fields = [
-    ['label' => 'Unit Price', 'name' => 'unit_price', 'type' => 'number', 'step' => '0.01', 'required' => true],
-    ['label' => 'Old Price', 'name' => 'old_price', 'type' => 'number', 'step' => '0.01'],
-    ['label' => 'Min Quantity', 'name' => 'min_quantity_to_order', 'type' => 'number'],
-    ['label' => 'Max Quantity', 'name' => 'max_quantity_to_order', 'type' => 'number'],
-    ['label' => 'Trade Loader', 'name' => 'trade_loader', 'type' => 'number'],
-    ['label' => 'Trade Loader Qty', 'name' => 'trade_loader_quantity', 'type' => 'number'],
-    ['label' => 'UOM', 'name' => 'UOM', 'type' => 'text'],
+['label' => 'Unit Price', 'name' => 'unit_price', 'type' => 'number', 'step' => '0.01', 'required' => true],
+['label' => 'Old Price', 'name' => 'old_price', 'type' => 'number', 'step' => '0.01'],
+['label' => 'Shelf Price', 'name' => 'shelf_price', 'type' => 'number', 'step' => '0.01' , 'readonly' => true],
+['label' => 'Min Quantity', 'name' => 'min_quantity_to_order', 'type' => 'number'],
+['label' => 'Max Quantity', 'name' => 'max_quantity_to_order', 'type' => 'number'],
+['label' => 'Trade Loader', 'name' => 'trade_loader', 'type' => 'number'],
+['label' => 'Trade Loader Qty', 'name' => 'trade_loader_quantity', 'type' => 'number'],
 ];
 @endphp
 
-@foreach ($fields as $field)
-<div class="input-container mb-5 mt-3" style="width: 30%;">
-    <input
-        type="{{ $field['type'] }}"
-        name="{{ $prefix }}_{{ $field['name'] }}"
-        id="{{ $prefix }}_{{ $field['name'] }}"
-        step="{{ $field['step'] ?? 'any' }}"
-        value="{{ old($prefix.'_'.$field['name'], $data->{$field['name']} ?? '') }}"
-        {{ $field['required'] ?? false ? 'required' : '' }}
-        style="width: 100%;"
-        placeholder=""
-    >
-    <label for="{{ $prefix }}_{{ $field['name'] }}" class="label">{{ $field['label'] }}</label>
-    <div class="underline"></div>
-</div>
-@endforeach
+<ul class="nav nav-tabs mb-3" id="{{ $prefix }}PackagingTabs" role="tablist" style="width: fit-content;">
+    @foreach ($types as $key => $label)
+    <li class="nav-item" role="presentation">
+        <button class="nav-link @if($loop->first) active @endif"
+            id="{{ $prefix }}_tab_{{ $key }}"
+            data-bs-toggle="tab"
+            data-bs-target="#{{ $prefix }}_panel_{{ $key }}"
+            type="button" role="tab">
+            {{ $label }}
+        </button>
+    </li>
+    @endforeach
+</ul>
 
-{{-- Checkboxes --}}
-<div class="d-flex flex-wrap gap-3 mt-4">
-    @php
-        $checkboxes = [
-            'hidden' => 'Hidden',
-            'automatic_hide' => 'Auto Hide',
-            'EA' => 'EA',
-            'CA' => 'CA',
-            'PL' => 'PL',
-        ];
-    @endphp
-    @foreach ($checkboxes as $name => $label)
-        <div class="d-flex align-items-center gap-1">
-            <label class="ios-checkbox teal">
-                <input
-                    type="checkbox"
-                    id="{{ $prefix }}_{{ $name }}"
-                    name="{{ $prefix }}_{{ $name }}"
-                    value="1"
-                    {{ old($prefix.'_'.$name, $data->{$name} ?? false) ? 'checked' : '' }}
-                >
-                <div class="checkbox-wrapper">
-                    <div class="checkbox-bg"></div>
-                    <svg fill="none" viewBox="0 0 24 24" class="checkbox-icon">
-                        <path stroke-linejoin="round" stroke-linecap="round" stroke-width="3" stroke="currentColor" d="M4 12L10 18L20 6" class="check-path"></path>
-                    </svg>
-                </div>
-            </label>
-            <label class="form-check-label" for="{{ $prefix }}_{{ $name }}">{{ $label }}</label>
+<div class="tab-content" id="{{ $prefix }}TabContent">
+    @foreach ($types as $key => $label)
+    <div class="tab-pane fade @if($loop->first) show active @endif"
+        id="{{ $prefix }}_panel_{{ $key }}"
+        role="tabpanel">
+        <h6 class="mt-3 mb-4">{{ $label }} Pricing</h6>
+
+        {{-- Inject hidden UOM field --}}
+        <input type="hidden" name="{{ $prefix }}_{{ strtolower($key) }}_UOM" value="{{ $key }}">
+
+        @foreach ($fields as $field)
+        <div class="input-container mb-5 mt-3" style="width: 30%;">
+            <input
+                type="{{ $field['type'] }}"
+                name="{{ $prefix }}_{{ strtolower($key) }}_{{ $field['name'] }}"
+                id="{{ $prefix }}_{{ strtolower($key) }}_{{ $field['name'] }}"
+                step="{{ $field['step'] ?? 'any' }}"
+                value="{{ old("{$prefix}_" . strtolower($key) . "_{$field['name']}", $data->{$prefix . '_' . strtolower($key) . '_' . $field['name']} ?? '') }}"
+                {{ $field['required'] ?? false ? 'required' : '' }}
+                {{ $field['readonly'] ?? false ? 'readonly' : '' }}
+                style="width: 100%;"
+                placeholder="">
+            <label for="{{ $prefix }}_{{ strtolower($key) }}_{{ $field['name'] }}" class="label">{{ $field['label'] }}</label>
+            <div class="underline"></div>
         </div>
+        @endforeach
+
+    </div>
     @endforeach
 </div>
