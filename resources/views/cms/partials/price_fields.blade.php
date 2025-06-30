@@ -1,7 +1,7 @@
 @php
 $types = ['EA' => 'Each', 'CA' => 'Case', 'PL' => 'Pallet'];
 $fields = [
-['label' => 'Unit Price', 'name' => 'unit_price', 'type' => 'number', 'step' => '0.01', 'required' => true],
+['label' => 'Unit Price', 'name' => 'unit_price', 'type' => 'number', 'step' => '0.01'],
 ['label' => 'Shelf Price', 'name' => 'shelf_price', 'type' => 'number', 'step' => '0.01', 'readonly' => true],
 ['label' => 'Old Price', 'name' => 'old_price', 'type' => 'number', 'step' => '0.01'],
 ['label' => 'Min Quantity', 'name' => 'min_quantity_to_order', 'type' => 'number'],
@@ -43,7 +43,6 @@ $fields = [
                 id="{{ $prefix }}_{{ strtolower($key) }}_{{ $field['name'] }}"
                 step="{{ $field['step'] ?? 'any' }}"
                 value="{{ old("{$prefix}_" . strtolower($key) . "_{$field['name']}", $data->{$prefix . '_' . strtolower($key) . '_' . $field['name']} ?? '') }}"
-                {{ $field['required'] ?? false ? 'required' : '' }}
                 {{ $field['readonly'] ?? false ? 'readonly' : '' }}
                 style="width: 100%;"
                 placeholder="">
