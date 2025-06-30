@@ -29,7 +29,9 @@ $type = auth()->user()->type ?? 'b2c'; // Default to b2c
             @php
             $imagePath = 'products/' . $product->id . '.' . $product->extension;
             $storage = \Illuminate\Support\Facades\Storage::disk('public')->exists($imagePath);
-            $price = $product->listPrices->first();
+            $prices = $product->listPrices;
+
+            $price = $prices->first();
             @endphp
             @if($price->shelf_price > 0 )
             <div class="product-card mb-4" data-url="{{ route('website.product.index', ['locale' => app()->getLocale(), 'product' => $product->id]) }}">
@@ -82,8 +84,29 @@ $type = auth()->user()->type ?? 'b2c'; // Default to b2c
                                                                         ->pluck('UOM')
                                                                 ) }}">
                                     @csrf
-                                    <input type="hidden" name="product" value="{{ $product }}">
-
+                                    <input type="hidden" name="old_price" value="{{ $price->old_price }}">
+                                    <input type="hidden" name="type" value="{{ $price->type }}">
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                    <input type="hidden" name="quantity" value="{{ $totalStock }}">
+                                    <input type="hidden" name="unit_price" value="{{ $price->unit_price}}">
+                                    <input type="hidden" name="shelf_price" value="{{ $price->shelf_price }}">
+                                    <input type="hidden" name="description" value="{{ $product->{'small_description_'.app()->getLocale()} ?? $product->small_description_en }}">
+                                    <input type="hidden" name="name" value="{{ $product->{'name_'.app()->getLocale()} ?? $product->name_en }}">
+                                    <input type="hidden" name="ea-ca" value="{{ $product->ea_ca ?? 12 }}">
+                                    <input type="hidden" name="ea-pl" value="{{ $product->ea_pl ?? 144 }}">
+                                    <input type="hidden" name="min_quantity" value="{{ $price->min_quantity_to_order}}">
+                                    <input type="hidden" name="max_quantity" value="{{ $price->max_quantity_to_order}}">
+                                    @foreach($prices as $p)
+                                    @if($p->UOM === 'CA')
+                                    <input type="hidden" name="unit_price_ca" value="{{ $p->unit_price }}">
+                                    <input type="hidden" name="shelf_price_ca" value="{{ $p->shelf_price }}">
+                                    <input type="hidden" name="old_price_ca" value="{{ $p->old_price }}">
+                                    @elseif($p->UOM === 'PL')
+                                    <input type="hidden" name="unit_price_pl" value="{{ $p->unit_price }}">
+                                    <input type="hidden" name="shelf_price_pl" value="{{ $p->shelf_price }}">
+                                    <input type="hidden" name="old_price_pl" value="{{ $p->old_price }}">
+                                    @endif
+                                    @endforeach
                                     <button type="submit" class="border-0 bg-transparent p-0">
                                         <i class="fas fa-cart-plus"></i>
                                     </button>
@@ -96,7 +119,29 @@ $type = auth()->user()->type ?? 'b2c'; // Default to b2c
                                                                         ->pluck('UOM')
                                                                 ) }}">
                                     @csrf
-                                    <input type="hidden" name="product" value="{{ $product }}">
+                                    <input type="hidden" name="old_price" value="{{ $price->old_price }}">
+                                    <input type="hidden" name="type" value="{{ $price->type }}">
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                    <input type="hidden" name="quantity" value="{{ $totalStock }}">
+                                    <input type="hidden" name="unit_price" value="{{ $price->unit_price}}">
+                                    <input type="hidden" name="shelf_price" value="{{ $price->shelf_price }}">
+                                    <input type="hidden" name="description" value="{{ $product->{'small_description_'.app()->getLocale()} ?? $product->small_description_en }}">
+                                    <input type="hidden" name="name" value="{{ $product->{'name_'.app()->getLocale()} ?? $product->name_en }}">
+                                    <input type="hidden" name="ea-ca" value="{{ $product->ea_ca ?? 12 }}">
+                                    <input type="hidden" name="ea-pl" value="{{ $product->ea_pl ?? 144 }}">
+                                    <input type="hidden" name="min_quantity" value="{{ $price->min_quantity_to_order}}">
+                                    <input type="hidden" name="max_quantity" value="{{ $price->max_quantity_to_order}}">
+                                    @foreach($prices as $p)
+                                    @if($p->UOM === 'CA')
+                                    <input type="hidden" name="unit_price_ca" value="{{ $p->unit_price }}">
+                                    <input type="hidden" name="shelf_price_ca" value="{{ $p->shelf_price }}">
+                                    <input type="hidden" name="old_price_ca" value="{{ $p->old_price }}">
+                                    @elseif($p->UOM === 'PL')
+                                    <input type="hidden" name="unit_price_pl" value="{{ $p->unit_price }}">
+                                    <input type="hidden" name="shelf_price_pl" value="{{ $p->shelf_price }}">
+                                    <input type="hidden" name="old_price_pl" value="{{ $p->old_price }}">
+                                    @endif
+                                    @endforeach
 
                                     <button type="submit" class="border-0 bg-transparent p-0">
                                         <i class="fas fa-cart-plus"></i>
@@ -172,7 +217,8 @@ $type = auth()->user()->type ?? 'b2c'; // Default to b2c
         <div class="carousel gx-0">
             @foreach($products as $product)
             @php
-            $price = $product->listPrices->first();
+            $prices = $product->listPrices;
+            $price = $prices->first();
             @endphp
             @if($price && $price->shelf_price > 0 )
             <div class="product-card mb-2" data-url="{{ route('website.product.index', ['locale' => app()->getLocale(), 'product' => $product->id]) }}">
@@ -232,7 +278,29 @@ $type = auth()->user()->type ?? 'b2c'; // Default to b2c
                                                                         ->pluck('UOM')
                                                                 ) }}">
                                     @csrf
-                                    <input type="hidden" name="product" value="{{ $product }}">
+                                    <input type="hidden" name="old_price" value="{{ $price->old_price }}">
+                                    <input type="hidden" name="type" value="{{ $price->type }}">
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                    <input type="hidden" name="quantity" value="{{ $totalStock }}">
+                                    <input type="hidden" name="unit_price" value="{{ $price->unit_price}}">
+                                    <input type="hidden" name="shelf_price" value="{{ $price->shelf_price }}">
+                                    <input type="hidden" name="description" value="{{ $product->{'small_description_'.app()->getLocale()} ?? $product->small_description_en }}">
+                                    <input type="hidden" name="name" value="{{ $product->{'name_'.app()->getLocale()} ?? $product->name_en }}">
+                                    <input type="hidden" name="ea-ca" value="{{ $product->ea_ca ?? 12 }}">
+                                    <input type="hidden" name="ea-pl" value="{{ $product->ea_pl ?? 144 }}">
+                                    <input type="hidden" name="min_quantity" value="{{ $price->min_quantity_to_order}}">
+                                    <input type="hidden" name="max_quantity" value="{{ $price->max_quantity_to_order}}">
+                                    @foreach($prices as $p)
+                                    @if($p->UOM === 'CA')
+                                    <input type="hidden" name="unit_price_ca" value="{{ $p->unit_price }}">
+                                    <input type="hidden" name="shelf_price_ca" value="{{ $p->shelf_price }}">
+                                    <input type="hidden" name="old_price_ca" value="{{ $p->old_price }}">
+                                    @elseif($p->UOM === 'PL')
+                                    <input type="hidden" name="unit_price_pl" value="{{ $p->unit_price }}">
+                                    <input type="hidden" name="shelf_price_pl" value="{{ $p->shelf_price }}">
+                                    <input type="hidden" name="old_price_pl" value="{{ $p->old_price }}">
+                                    @endif
+                                    @endforeach
 
                                     <button type="submit" class="border-0 bg-transparent p-0">
                                         <i class="fas fa-cart-plus"></i>
@@ -246,7 +314,29 @@ $type = auth()->user()->type ?? 'b2c'; // Default to b2c
                                                                         ->pluck('UOM')
                                                                 ) }}">
                                     @csrf
-                                    <input type="hidden" name="product" value="{{ $product }}">
+                                    <input type="hidden" name="old_price" value="{{ $price->old_price }}">
+                                    <input type="hidden" name="type" value="{{ $price->type }}">
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                    <input type="hidden" name="quantity" value="{{ $totalStock }}">
+                                    <input type="hidden" name="unit_price" value="{{ $price->unit_price}}">
+                                    <input type="hidden" name="shelf_price" value="{{ $price->shelf_price }}">
+                                    <input type="hidden" name="description" value="{{ $product->{'small_description_'.app()->getLocale()} ?? $product->small_description_en }}">
+                                    <input type="hidden" name="name" value="{{ $product->{'name_'.app()->getLocale()} ?? $product->name_en }}">
+                                    <input type="hidden" name="ea-ca" value="{{ $product->ea_ca ?? 12 }}">
+                                    <input type="hidden" name="ea-pl" value="{{ $product->ea_pl ?? 144 }}">
+                                    <input type="hidden" name="min_quantity" value="{{ $price->min_quantity_to_order}}">
+                                    <input type="hidden" name="max_quantity" value="{{ $price->max_quantity_to_order}}">
+                                    @foreach($prices as $p)
+                                    @if($p->UOM === 'CA')
+                                    <input type="hidden" name="unit_price_ca" value="{{ $p->unit_price }}">
+                                    <input type="hidden" name="shelf_price_ca" value="{{ $p->shelf_price }}">
+                                    <input type="hidden" name="old_price_ca" value="{{ $p->old_price }}">
+                                    @elseif($p->UOM === 'PL')
+                                    <input type="hidden" name="unit_price_pl" value="{{ $p->unit_price }}">
+                                    <input type="hidden" name="shelf_price_pl" value="{{ $p->shelf_price }}">
+                                    <input type="hidden" name="old_price_pl" value="{{ $p->old_price }}">
+                                    @endif
+                                    @endforeach
                                     <button type="submit" class="border-0 bg-transparent p-0">
                                         <i class="fas fa-cart-plus"></i>
                                     </button>
