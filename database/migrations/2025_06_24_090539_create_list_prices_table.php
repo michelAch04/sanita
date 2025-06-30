@@ -20,7 +20,7 @@ return new class extends Migration
             $table->decimal('old_price', 10, 2)->nullable();
             $table->enum('UOM', ['EA', 'CA', 'PL']); // 👈 enum here
             $table->integer('min_quantity_to_order')->default(0);
-            $table->integer('max_quantity_to_order')->default(0);
+            $table->integer('max_quantity_to_order')->default(0)->nullable();
             $table->integer('trade_loader')->default(0);
             $table->integer('trade_loader_quantity')->default(0);
             $table->boolean('hidden')->default(0);
