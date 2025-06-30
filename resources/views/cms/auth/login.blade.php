@@ -81,7 +81,7 @@
 
 <body>
     <div class="container d-flex justify-content-center align-items-center glass-container vh-100">
-        <div class="glass-card w-100" style="max-width: 400px;">
+        <div class="glass-card w-100 d-flex justify-content-between flex-column" style="max-width: 400px;">
             <!-- Centered Image -->
             <div class="text-center mb-4">
                 <img src="{{ asset('storage/login/sanita.png') }}" alt="Logo" class="img-fluid" style="max-width: 180px;">

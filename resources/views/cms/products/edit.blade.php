@@ -67,8 +67,8 @@
                         </div>
 
                         <div class="input-container mb-5 mt-3" style="width: 30%;">
-                            <input type="number" name="ea_pa" value="{{ old('ea_pa', $product->ea_pa) }}" required placeholder="">
-                            <label class="label">EA/PA</label>
+                            <input type="number" name="ea_pl" value="{{ old('ea_pl', $product->ea_pl) }}" required placeholder="">
+                            <label class="label">EA/PL</label>
                             <div class="underline"></div>
                         </div>
 
@@ -122,14 +122,14 @@
 
                     {{-- B2B Tab --}}
                     <div class="tab-pane fade" id="b2b" role="tabpanel">
-                        <h5 class="mb-5">B2B Price</h5>
-                        @include('cms.partials.price_fields', ['prefix' => 'b2b', 'data' => $b2bPrice])
+                        <h5 class="mb-2">B2B Price</h5>
+                        @include('cms.partials.price_fields', ['prefix' => 'b2b', 'data' => $data])
                     </div>
 
                     {{-- B2C Tab --}}
                     <div class="tab-pane fade" id="b2c" role="tabpanel">
-                        <h5 class="mb-5">B2C Price</h5>
-                        @include('cms.partials.price_fields', ['prefix' => 'b2c', 'data' => $b2cPrice])
+                        <h5 class="mb-2">B2C Price</h5>
+                        @include('cms.partials.price_fields', ['prefix' => 'b2c', 'data' => $data])
                     </div>
                 </div>
 

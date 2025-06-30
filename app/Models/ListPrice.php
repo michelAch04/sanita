@@ -11,7 +11,7 @@ class ListPrice extends Model
 
     protected $fillable = [
         'products_id',
-        'type',
+        'type', // b2b or b2c
         'unit_price',
         'shelf_price',
         'old_price',
@@ -19,10 +19,7 @@ class ListPrice extends Model
         'max_quantity_to_order',
         'trade_loader',
         'trade_loader_quantity',
-        'UOM',
-        'EA',
-        'CA',
-        'PL',
+        'UOM', // EA, CA, PL
         'hidden',
         'automatic_hide',
         'cancelled',

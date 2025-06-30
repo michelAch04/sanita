@@ -18,22 +18,19 @@ return new class extends Migration
             $table->decimal('unit_price', 10, 2)->default(0);
             $table->decimal('shelf_price', 10, 2)->default(0);
             $table->decimal('old_price', 10, 2)->nullable();
-            $table->string('UOM', 10);
+            $table->enum('UOM', ['EA', 'CA', 'PL']); // 👈 enum here
             $table->integer('min_quantity_to_order')->default(0);
             $table->integer('max_quantity_to_order')->default(0);
             $table->integer('trade_loader')->default(0);
             $table->integer('trade_loader_quantity')->default(0);
-            $table->tinyInteger('hidden')->default(0);
-            $table->tinyInteger('automatic_hide')->default(0);
+            $table->boolean('hidden')->default(0);
+            $table->boolean('automatic_hide')->default(0);
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('list_price');
+        Schema::dropIfExists('list_prices');
     }
 };

@@ -63,8 +63,8 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         try {
-            // Validate the input
-            $validated = $request->validate([
+            // Validation rules for each UOM per type
+            $rules = [
                 'sku' => 'required|string|max:255|unique:products,sku',
                 'name_en' => 'required|string|max:255',
                 'name_ar' => 'required|string|max:255',
@@ -73,35 +73,30 @@ class ProductController extends Controller
                 'small_description_ar' => 'nullable|string',
                 'small_description_ku' => 'nullable|string',
                 'ea_ca' => 'required|numeric',
-                'ea_pa' => 'required|numeric',
+                'ea_pl' => 'required|numeric',
                 'subcategories_id' => 'required|exists:subcategories,id',
                 'brands_id' => 'required|exists:brands,id',
                 'tax_id' => 'nullable|exists:taxes,id',
                 'image' => 'nullable|image|max:2048',
+            ];
 
-                // B2B
-                'b2b_unit_price' => 'required|numeric|min:0',
-                'b2b_old_price' => 'nullable|numeric|min:0',
-                'b2b_min_quantity_to_order' => 'nullable|integer|min:0',
-                'b2b_max_quantity_to_order' => 'nullable|integer|min:0',
-                'b2b_trade_loader' => 'nullable|numeric|min:0',
-                'b2b_trade_loader_quantity' => 'nullable|integer|min:0',
-                'b2b_UOM' => 'nullable|string|max:50',
+            foreach (['b2b', 'b2c'] as $prefix) {
+                foreach (['ea', 'ca', 'pl'] as $uom) {
+                    $rules["{$prefix}_{$uom}_unit_price"] = 'required|numeric|min:0';
+                    $rules["{$prefix}_{$uom}_old_price"] = 'nullable|numeric|min:0';
+                    $rules["{$prefix}_{$uom}_min_quantity_to_order"] = 'nullable|integer|min:0';
+                    $rules["{$prefix}_{$uom}_max_quantity_to_order"] = 'nullable|integer|min:0';
+                    $rules["{$prefix}_{$uom}_trade_loader"] = 'nullable|numeric|min:0';
+                    $rules["{$prefix}_{$uom}_trade_loader_quantity"] = 'nullable|integer|min:0';
+                    $rules["{$prefix}_{$uom}_UOM"] = 'required|in:EA,CA,PL';
+                }
+            }
 
-                // B2C
-                'b2c_unit_price' => 'required|numeric|min:0',
-                'b2c_old_price' => 'nullable|numeric|min:0',
-                'b2c_min_quantity_to_order' => 'nullable|integer|min:0',
-                'b2c_max_quantity_to_order' => 'nullable|integer|min:0',
-                'b2c_trade_loader' => 'nullable|numeric|min:0',
-                'b2c_trade_loader_quantity' => 'nullable|integer|min:0',
-                'b2c_UOM' => 'nullable|string|max:50',
-            ]);
+            $validated = $request->validate($rules);
 
             DB::transaction(function () use ($request, $validated) {
-
                 $extension = 'png';
-                // Create product
+
                 $product = Product::create([
                     'sku' => $validated['sku'],
                     'name_en' => $validated['name_en'],
@@ -111,7 +106,7 @@ class ProductController extends Controller
                     'small_description_ar' => $validated['small_description_ar'],
                     'small_description_ku' => $validated['small_description_ku'],
                     'ea_ca' => $validated['ea_ca'],
-                    'ea_pa' => $validated['ea_pa'],
+                    'ea_pl' => $validated['ea_pl'],
                     'subcategories_id' => $validated['subcategories_id'],
                     'brands_id' => $validated['brands_id'],
                     'tax_id' => $validated['tax_id'] ?? null,
@@ -119,7 +114,6 @@ class ProductController extends Controller
                     'cancelled' => 0,
                 ]);
 
-                $imagePath = null;
                 if ($request->hasFile('image')) {
                     $image = $request->file('image');
                     $extension = $image->getClientOriginalExtension();
@@ -129,54 +123,32 @@ class ProductController extends Controller
                     $newPath = 'products/' . $newFileName;
 
                     \Storage::disk('public')->move($tempPath, $newPath);
-
                     $product->update(['extension' => $extension]);
                 }
 
-
-
-                // Insert B2B price
-                ListPrice::create([
-                    'products_id' => $product->id,
-                    'type' => 'b2b',
-                    'unit_price' => $validated['b2b_unit_price'],
-                    'shelf_price' => $this->calculateShelfPrice($validated['b2b_unit_price'], $product->tax?->rate),
-                    'old_price' => $validated['b2b_old_price'],
-                    'min_quantity_to_order' => 1,
-                    'max_quantity_to_order' => $validated['b2b_max_quantity_to_order'],
-                    'trade_loader' => $validated['b2b_trade_loader'],
-                    'trade_loader_quantity' => $validated['b2b_trade_loader_quantity'],
-                    'UOM' => $validated['b2b_UOM'],
-                    'hidden' => $request->has('b2b_hidden'),
-                    'automatic_hide' => $request->has('b2b_automatic_hide'),
-                    'EA' => $request->has('b2b_EA'),
-                    'CA'    => $request->has('b2b_CA'),
-                    'PL' => $request->has('b2b_PL'),
-                ]);
-
-                // Insert B2C price
-                ListPrice::create([
-                    'products_id' => $product->id,
-                    'type' => 'b2c',
-                    'unit_price' => $validated['b2c_unit_price'],
-                    'shelf_price' => $this->calculateShelfPrice($validated['b2c_unit_price'], $product->tax?->rate),
-                    'old_price' => $validated['b2c_old_price'],
-                    'min_quantity_to_order' => 1,
-                    'max_quantity_to_order' => $validated['b2c_max_quantity_to_order'],
-                    'trade_loader' => $validated['b2c_trade_loader'],
-                    'trade_loader_quantity' => $validated['b2c_trade_loader_quantity'],
-                    'UOM' => $validated['b2c_UOM'],
-                    'hidden' => $request->has('b2c_hidden'),
-                    'automatic_hide' => $request->has('b2c_automatic_hide'),
-                    'EA' => $request->has('b2c_EA'),
-                    'CA'    => $request->has('b2c_CA'),
-                    'PL' => $request->has('b2c_PL'),
-                ]);
+                foreach (['b2b', 'b2c'] as $prefix) {
+                    foreach (['ea', 'ca', 'pl'] as $uom) {
+                        ListPrice::create([
+                            'products_id' => $product->id,
+                            'type' => $prefix,
+                            'UOM' => strtoupper($uom),
+                            'unit_price' => $validated["{$prefix}_{$uom}_unit_price"],
+                            'shelf_price' => $this->calculateShelfPrice($validated["{$prefix}_{$uom}_unit_price"], $product->tax?->rate),
+                            'old_price' => $validated["{$prefix}_{$uom}_old_price"] ?? null,
+                            'min_quantity_to_order' => $validated["{$prefix}_{$uom}_min_quantity_to_order"] ?? 1,
+                            'max_quantity_to_order' => $validated["{$prefix}_{$uom}_max_quantity_to_order"] ?? null,
+                            'trade_loader' => $validated["{$prefix}_{$uom}_trade_loader"] ?? null,
+                            'trade_loader_quantity' => $validated["{$prefix}_{$uom}_trade_loader_quantity"] ?? null,
+                            'hidden' => $request->has("{$prefix}_hidden"),
+                            'automatic_hide' => $request->has("{$prefix}_automatic_hide"),
+                        ]);
+                    }
+                }
             });
 
             return redirect()->route('products.index')->with('success', 'Product created successfully!');
         } catch (\Exception $e) {
-            return redirect()->route('products.index')->with('error', 'Failed to update product: ' . $e->getMessage());
+            return redirect()->route('products.index')->with('error', 'Failed to create product: ' . $e->getMessage());
         }
     }
 
@@ -188,18 +160,45 @@ class ProductController extends Controller
         $subcategories = Subcategory::where('cancelled', 0)->get();
         $taxes = Tax::where('cancelled', 0)->get();
 
-        // Load B2B and B2C price records
-        $b2bPrice = $product->listPrices->where('type', 'b2b')->first();
-        $b2cPrice = $product->listPrices->where('type', 'b2c')->first();
+        // Prepare price data for b2b and b2c, indexed by UOM
+        $priceData = [];
 
-        return view('cms.products.edit', compact('product', 'brands', 'subcategories', 'taxes', 'b2bPrice', 'b2cPrice'));
+        foreach ($product->listPrices as $price) {
+            $type = $price->type;          // b2b or b2c
+            $uom = strtolower($price->UOM); // ea, ca, pl
+
+            foreach (
+                [
+                    'unit_price',
+                    'old_price',
+                    'min_quantity_to_order',
+                    'max_quantity_to_order',
+                    'trade_loader',
+                    'trade_loader_quantity',
+                    'hidden',
+                    'automatic_hide',
+                ] as $field
+            ) {
+                $key = "{$type}_{$uom}_{$field}";
+                $priceData[$key] = $price->$field;
+            }
+        }
+
+        return view('cms.products.edit', [
+            'product' => $product,
+            'brands' => $brands,
+            'subcategories' => $subcategories,
+            'taxes' => $taxes,
+            'data' => (object) $priceData,
+        ]);
     }
+
 
 
     public function update(Request $request, Product $product)
     {
         try {
-            $validated = $request->validate([
+            $rules = [
                 'sku' => 'required|string|max:255|unique:products,sku,' . $product->id,
                 'name_en' => 'required|string|max:255',
                 'name_ar' => 'required|string|max:255',
@@ -208,33 +207,28 @@ class ProductController extends Controller
                 'small_description_ar' => 'nullable|string',
                 'small_description_ku' => 'nullable|string',
                 'ea_ca' => 'required|numeric',
-                'ea_pa' => 'required|numeric',
+                'ea_pl' => 'required|numeric',
                 'subcategories_id' => 'required|exists:subcategories,id',
                 'brands_id' => 'required|exists:brands,id',
                 'tax_id' => 'nullable|exists:taxes,id',
                 'image' => 'nullable|image|max:2048',
+            ];
 
-                // B2B
-                'b2b_unit_price' => 'required|numeric|min:0',
-                'b2b_old_price' => 'nullable|numeric|min:0',
-                'b2b_min_quantity_to_order' => 'nullable|integer|min:0',
-                'b2b_max_quantity_to_order' => 'nullable|integer|min:0',
-                'b2b_trade_loader' => 'nullable|numeric|min:0',
-                'b2b_trade_loader_quantity' => 'nullable|integer|min:0',
-                'b2b_UOM' => 'nullable|string|max:50',
+            foreach (['b2b', 'b2c'] as $prefix) {
+                foreach (['ea', 'ca', 'pl'] as $uom) {
+                    $rules["{$prefix}_{$uom}_unit_price"] = 'required|numeric|min:0';
+                    $rules["{$prefix}_{$uom}_old_price"] = 'nullable|numeric|min:0';
+                    $rules["{$prefix}_{$uom}_min_quantity_to_order"] = 'nullable|integer|min:0';
+                    $rules["{$prefix}_{$uom}_max_quantity_to_order"] = 'nullable|integer|min:0';
+                    $rules["{$prefix}_{$uom}_trade_loader"] = 'nullable|numeric|min:0';
+                    $rules["{$prefix}_{$uom}_trade_loader_quantity"] = 'nullable|integer|min:0';
+                    $rules["{$prefix}_{$uom}_UOM"] = 'required|in:EA,CA,PL';
+                }
+            }
 
-                // B2C
-                'b2c_unit_price' => 'required|numeric|min:0',
-                'b2c_old_price' => 'nullable|numeric|min:0',
-                'b2c_min_quantity_to_order' => 'nullable|integer|min:0',
-                'b2c_max_quantity_to_order' => 'nullable|integer|min:0',
-                'b2c_trade_loader' => 'nullable|numeric|min:0',
-                'b2c_trade_loader_quantity' => 'nullable|integer|min:0',
-                'b2c_UOM' => 'nullable|string|max:50',
-            ]);
+            $validated = $request->validate($rules);
 
             DB::transaction(function () use ($request, $validated, $product) {
-                // Update product core fields
                 $product->update([
                     'sku' => $validated['sku'],
                     'name_en' => $validated['name_en'],
@@ -244,62 +238,41 @@ class ProductController extends Controller
                     'small_description_ar' => $validated['small_description_ar'],
                     'small_description_ku' => $validated['small_description_ku'],
                     'ea_ca' => $validated['ea_ca'],
-                    'ea_pa' => $validated['ea_pa'],
+                    'ea_pl' => $validated['ea_pl'],
                     'subcategories_id' => $validated['subcategories_id'],
                     'brands_id' => $validated['brands_id'],
                     'tax_id' => $validated['tax_id'] ?? null,
                 ]);
 
-                // Handle image upload
                 if ($request->hasFile('image')) {
                     $image = $request->file('image');
                     $extension = $image->getClientOriginalExtension();
-                    $imageName = $product->id . '.' . $extension;
-                    $image->storeAs('products', $imageName, 'public');
+                    $tempPath = $image->store('products', 'public');
+                    $newFileName = $product->id . '.' . $extension;
+                    $newPath = 'products/' . $newFileName;
+
+                    \Storage::disk('public')->move($tempPath, $newPath);
                     $product->update(['extension' => $extension]);
                 }
 
-                // Update B2B list price
-                $product->listPrices()->updateOrCreate(
-                    ['type' => 'b2b'],
-                    [
-                        'unit_price' => $validated['b2b_unit_price'],
-                        'shelf_price' => $this->calculateShelfPrice($validated['b2b_unit_price'], $product->tax?->rate),
-                        'old_price' => $validated['b2b_old_price'],
-                        'min_quantity_to_order' => 1,
-                        'max_quantity_to_order' => $validated['b2b_max_quantity_to_order'],
-                        'trade_loader' => $validated['b2b_trade_loader'],
-                        'trade_loader_quantity' => $validated['b2b_trade_loader_quantity'],
-                        'UOM' => $validated['b2b_UOM'],
-                        'hidden' => $request->has('b2b_hidden'),
-                        'automatic_hide' => $request->has('b2b_automatic_hide'),
-                        'EA' => $request->has('b2b_EA'),
-                        'CA' => $request->has('b2b_CA'),
-                        'PL' => $request->has('b2b_PL'),
-
-                    ]
-                );
-
-                // Update B2C list price
-                $product->listPrices()->updateOrCreate(
-                    ['type' => 'b2c'],
-                    [
-                        'unit_price' => $validated['b2c_unit_price'],
-                        'shelf_price' => $this->calculateShelfPrice($validated['b2c_unit_price'], $product->tax?->rate),
-                        'old_price' => $validated['b2c_old_price'],
-                        'min_quantity_to_order' => 1,
-                        'max_quantity_to_order' => $validated['b2c_max_quantity_to_order'],
-                        'trade_loader' => $validated['b2c_trade_loader'],
-                        'trade_loader_quantity' => $validated['b2c_trade_loader_quantity'],
-                        'UOM' => $validated['b2c_UOM'],
-                        'hidden' => $request->has('b2c_hidden'),
-                        'automatic_hide' => $request->has('b2c_automatic_hide'),
-                        'EA' => $request->has('b2c_EA'),
-                        'CA' => $request->has('b2c_CA'),
-                        'PL' => $request->has('b2c_PL'),
-
-                    ]
-                );
+                foreach (['b2b', 'b2c'] as $prefix) {
+                    foreach (['ea', 'ca', 'pl'] as $uom) {
+                        $product->listPrices()->updateOrCreate(
+                            ['type' => $prefix, 'UOM' => strtoupper($uom)],
+                            [
+                                'unit_price' => $validated["{$prefix}_{$uom}_unit_price"],
+                                'shelf_price' => $this->calculateShelfPrice($validated["{$prefix}_{$uom}_unit_price"], $product->tax?->rate),
+                                'old_price' => $validated["{$prefix}_{$uom}_old_price"] ?? null,
+                                'min_quantity_to_order' => $validated["{$prefix}_{$uom}_min_quantity_to_order"] ?? 1,
+                                'max_quantity_to_order' => $validated["{$prefix}_{$uom}_max_quantity_to_order"] ?? null,
+                                'trade_loader' => $validated["{$prefix}_{$uom}_trade_loader"] ?? null,
+                                'trade_loader_quantity' => $validated["{$prefix}_{$uom}_trade_loader_quantity"] ?? null,
+                                'hidden' => $request->has("{$prefix}_hidden"),
+                                'automatic_hide' => $request->has("{$prefix}_automatic_hide"),
+                            ]
+                        );
+                    }
+                }
             });
 
             return redirect()->route('products.index')->with('success', 'Product updated successfully!');
