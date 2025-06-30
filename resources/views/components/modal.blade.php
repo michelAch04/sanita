@@ -73,9 +73,7 @@ $isRtl = 0;
                             <input type="text" id="modalProductQuantity" name="quantity" class="quantity-input" value="1">
                             <button type="button" class="btn btn-sm btn-increase"><i class="fa fa-plus"></i></button>
                             <select name="UOM" id="modalProductUOM" class="form-select ms-2" style="width: 120px;">
-                                <option value="EA">EA</option>
-                                <option value="CA">CA</option>
-                                <option value="PL">PL</option>
+                                <!-- Options will be injected dynamically -->
                             </select>
                         </div>
                     </div>

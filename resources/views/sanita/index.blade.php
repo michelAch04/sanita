@@ -3,6 +3,7 @@
 @section('title', 'Home')
 @php
 $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
+$type = auth()->user()->type ?? 'b2c'; // Default to b2c
 @endphp
 
 @section('content')
@@ -75,7 +76,11 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                             @endphp
                             <div class="card__button">
                                 @if(!$auth)
-                                <form action="{{ route('website.cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="add-to-cart-form m-0">
+                                <form action="{{ route('website.cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="add-to-cart-form m-0"
+                                    data-available-uoms="{{ json_encode($product->listPrices
+                                                                        ->where('type', $type) // e.g. 'b2c'
+                                                                        ->pluck('UOM')
+                                                                ) }}">
                                     @csrf
                                     <input type="hidden" name="product" value="{{ $product }}">
 
@@ -85,7 +90,11 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                                 </form>
                                 @else
                                 @if($totalStock > 0)
-                                <form action="{{ route('website.cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="add-to-cart-form m-0">
+                                <form action="{{ route('website.cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="add-to-cart-form m-0"
+                                    data-available-uoms="{{ json_encode($product->listPrices
+                                                                        ->where('type', $type) // e.g. 'b2c'
+                                                                        ->pluck('UOM')
+                                                                ) }}">
                                     @csrf
                                     <input type="hidden" name="product" value="{{ $product }}">
 
@@ -217,7 +226,11 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                             @endphp
                             <div class=" card__button">
                                 @if(!$auth)
-                                <form action="{{ route('website.cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="add-to-cart-form m-0">
+                                <form action="{{ route('website.cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="add-to-cart-form m-0"
+                                    data-available-uoms="{{ json_encode($product->listPrices
+                                                                        ->where('type', $type) // e.g. 'b2c'
+                                                                        ->pluck('UOM')
+                                                                ) }}">
                                     @csrf
                                     <input type="hidden" name="product" value="{{ $product }}">
 
@@ -227,7 +240,11 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                                 </form>
                                 @else
                                 @if($totalStock > 0)
-                                <form action="{{ route('website.cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="add-to-cart-form m-0">
+                                <form action="{{ route('website.cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="add-to-cart-form m-0"
+                                    data-available-uoms="{{ json_encode($product->listPrices
+                                                                        ->where('type', $type) // e.g. 'b2c'
+                                                                        ->pluck('UOM')
+                                                                ) }}">
                                     @csrf
                                     <input type="hidden" name="product" value="{{ $product }}">
                                     <button type="submit" class="border-0 bg-transparent p-0">

@@ -62,8 +62,7 @@ $(document).ready(function () {
         let productDescription = form.find('input[name="description"]').val();
         let productEaCa = form.find('input[name="ea-ca"]').val();
         let productEaPl = form.find('input[name="ea-pl"]').val();
-let product = form.find('input[name="product"]').val();
-        
+
         // Set modal fields
         $('#addToCartModalLabel').text(productName);
         $('#modalProductId').val(productId);
@@ -87,11 +86,17 @@ let product = form.find('input[name="product"]').val();
         } else {
             $('#modalProductOldPriceDisplay').hide();
         }
+        // 🔁 Populate UOM select dynamically
+        let availableUOMs = JSON.parse(form.attr('data-available-uoms') || '[]');
+        let uomSelect = $('#modalProductUOM');
+        uomSelect.empty();
+
+        availableUOMs.forEach(uom => {
+            uomSelect.append(`<option value="${uom}">${uom}</option>`);
+        });
         // Show modal
         var modal = new bootstrap.Modal(document.getElementById('addToCartModal'));
         modal.show();
-
-     
     });
 
     // Handle modal form submit
@@ -109,10 +114,10 @@ let product = form.find('input[name="product"]').val();
             old_price: $('#modalProductOldPrice').val(),
             unit_price: $('#modalProductUnitPrice').val(),
             shelf_price: $('#modalProductShelfPrice').text().replace('Price: $', ''),
-            type : $('#modalProductType').val(),
+            type: $('#modalProductType').val(),
             ea_ca: $('#modalProductEaCa').val(),
             ea_pl: $('#modalProductEaPl').val(),
-            unit: $('#modalProductUnit').val() || 'EA' // Default to EA if no unit selected
+            unit: $('#modalProductUOM').val() || 'EA'
         };
 
         $.ajax({
@@ -155,7 +160,7 @@ let product = form.find('input[name="product"]').val();
         }
     });
 
-    $('#modalProductUnit').off('change').on('change', function() {
+    $('#modalProductUnit').off('change').on('change', function () {
         let selectedUOM = $(this).val();
         let modal = $('#addToCartModal');
         let unitPrices = modal.data('unitPrices');
