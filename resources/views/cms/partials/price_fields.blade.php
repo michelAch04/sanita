@@ -2,6 +2,7 @@
 $types = ['EA' => 'Each', 'CA' => 'Case', 'PL' => 'Pallet'];
 $fields = [
 ['label' => 'Unit Price', 'name' => 'unit_price', 'type' => 'number', 'step' => '0.01', 'required' => true],
+['label' => 'Shelf Price', 'name' => 'shelf_price', 'type' => 'number', 'step' => '0.01', 'readonly' => true],
 ['label' => 'Old Price', 'name' => 'old_price', 'type' => 'number', 'step' => '0.01'],
 ['label' => 'Shelf Price', 'name' => 'shelf_price', 'type' => 'number', 'step' => '0.01' , 'readonly' => true],
 ['label' => 'Min Quantity', 'name' => 'min_quantity_to_order', 'type' => 'number'],
@@ -36,7 +37,7 @@ $fields = [
         <input type="hidden" name="{{ $prefix }}_{{ strtolower($key) }}_UOM" value="{{ $key }}">
 
         @foreach ($fields as $field)
-        <div class="input-container mb-5 mt-3" style="width: 30%;">
+        <div class="input-container mb-5 mt-3 {{ $field['readonly'] ?? false ? 'disabled-container' : '' }}" style="width: 30%;">
             <input
                 type="{{ $field['type'] }}"
                 name="{{ $prefix }}_{{ strtolower($key) }}_{{ $field['name'] }}"
@@ -51,7 +52,25 @@ $fields = [
             <div class="underline"></div>
         </div>
         @endforeach
-
     </div>
     @endforeach
 </div>
+<script>
+    function calculateShelfPrice(unitPrice) {
+        const taxRate = {{ $product->tax->rate ?? 0 }}; // use 0 if no tax
+        return (parseFloat(unitPrice) + (parseFloat(unitPrice) * taxRate / 100)).toFixed(2);
+    }
+
+    document.querySelectorAll('input[id$="_unit_price"]').forEach(unitInput => {
+        unitInput.addEventListener('input', function () {
+            const shelfInputId = this.id.replace('unit_price', 'shelf_price');
+            const shelfInput = document.getElementById(shelfInputId);
+            if (shelfInput) {
+                shelfInput.value = calculateShelfPrice(this.value || 0);
+            }
+        });
+
+        // Trigger once on load to fill shelf price
+        unitInput.dispatchEvent(new Event('input'));
+    });
+</script>

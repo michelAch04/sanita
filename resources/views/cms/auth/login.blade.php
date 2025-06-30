@@ -66,10 +66,7 @@
             margin-top: 0 !important;
             padding-top: 0 !important;
         }
-        .img-fluid{
-            margin-bottom: 5rem;
-            display: none;
-        }
+
         .form-control, .form-control:focus, .form-control:active {
             color: #fff !important;
         }
