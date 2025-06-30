@@ -24,7 +24,7 @@
             var(--secondary-blue) 60%,
             var(--primary-blue) 100%);
     box-shadow: 0 4px 12px rgba(30, 58, 95, 0.2);
-    transition: background-color 0.4s ease;
+    transition: background-color 0.4s ease, transform 0.3s ease;
 }
 
 /* Brand Area Transparent to show white part from gradient */

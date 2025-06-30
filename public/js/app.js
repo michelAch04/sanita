@@ -73,7 +73,19 @@ $(document).ready(function () {
                 CA: form.find('input[name="old_price_ca"]').val(),
                 PL: form.find('input[name="old_price_pl"]').val(),
             };
+            let minQuantities = {
+                EA: form.find('input[name="min_quantity"]').val(),
+                CA: form.find('input[name="min_quantity_ca"]').val(),
+                PL: form.find('input[name="min_quantity_pl"]').val(),
+            };
+            let maxQuantities = {
+                EA: form.find('input[name="max_quantity"]').val(),
+                CA: form.find('input[name="max_quantity_ca"]').val(),
+                PL: form.find('input[name="max_quantity_pl"]').val(),
+            };
             // Store for use in the modal
+            $("#addToCartModal").data("minQuantities", minQuantities);
+            $("#addToCartModal").data("maxQuantities", maxQuantities);
             $("#addToCartModal").data("unitPrices", unitPrices);
             $("#addToCartModal").data("shelfPrices", shelfPrices);
             $("#addToCartModal").data("oldPrices", oldPrices);
@@ -123,6 +135,16 @@ $(document).ready(function () {
             } else {
                 $("#modalProductOldPriceDisplay").hide();
             }
+
+            // Sort UOMs: EA first, then CA, then PL
+            const uomOrder = ["EA", "CA", "PL"];
+            availableUOMs.sort((a, b) => {
+                let ia = uomOrder.indexOf(a);
+                let ib = uomOrder.indexOf(b);
+                ia = ia === -1 ? 99 : ia;
+                ib = ib === -1 ? 99 : ib;
+                return ia - ib;
+            });
 
             // Populate UOM select dynamically
             let uomSelect = $("#modalProductUOM");
@@ -219,6 +241,8 @@ $(document).ready(function () {
             let unitPrices = modal.data("unitPrices") || {};
             let shelfPrices = modal.data("shelfPrices") || {};
             let oldPrices = modal.data("oldPrices") || {};
+            let minQuantities = modal.data("minQuantities") || {};
+            let maxQuantities = modal.data("maxQuantities") || {};
 
             // Update price fields
             let unitPrice = unitPrices[selectedUOM] || unitPrices["EA"] || "";
@@ -237,5 +261,12 @@ $(document).ready(function () {
             } else {
                 $("#modalProductOldPriceDisplay").hide();
             }
+
+            // Update min/max quantity fields
+            let minqty = minQuantities[selectedUOM] || minQuantities["EA"] || 1;
+            let maxqty = maxQuantities[selectedUOM] || maxQuantities["EA"] || "";
+            $("#modalProductMinQuantity").val(minqty);
+            $("#modalProductMaxQuantity").val(maxqty);
+            $("#modalProductQuantity").val(minqty);
         });
 });

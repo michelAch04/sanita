@@ -66,38 +66,40 @@ $isRtl = 0;
                         <span id="modalProductOldPriceDisplay" class="text-muted text-decoration-line-through me-2" style="display:none;"></span>
                         <span id="modalProductShelfPrice" class="fw-bold" style="color: var(--primary-text);"></span>
                     </div>
-                    <div class="mb-3">
+                    <div class="align-items-center d-flex">
+                        <label for="modalProductUOM">Order per:</label>
+                        <select name="UOM" id="modalProductUOM" class="form-select ms-2" style="width: 120px;">
+                        </select>
+                    </div>
+                    <div class="mt-3">
                         <label for="modalProductQuantity">{{ __('cart.quantity') }}:</label>
-                        <div class="update-quantity-form align-items-center d-flex">
+                        <div class="update-quantity-form align-items-center d-flex mb-2">
                             <button type="button" class="btn btn-sm btn-decrease"><i class="fa fa-minus"></i></button>
-                            <input type="text" id="modalProductQuantity" name="quantity" class="quantity-input" value="1">
+                            <input type="text" id="modalProductQuantity" name="quantity" class="quantity-input">
                             <button type="button" class="btn btn-sm btn-increase"><i class="fa fa-plus"></i></button>
-                            <select name="UOM" id="modalProductUOM" class="form-select ms-2" style="width: 120px;">
-                            </select>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn bubbles bubbles-grey" data-bs-dismiss="modal"><span class="text">Cancel</span></button>
-                    <button type="submit" class="btn bubbles bubbles-arctic">
-                        <span class="text"> <i class="fas fa-cart-plus me-2"></i>{{ __('cart.add_to_cart') }}</span>
-                    </button>
-                </div>
-                <input type="hidden" id="modalProductUOM" name="UOM">
-                <input type="hidden" id="modalProductId" name="product_id">
-                <input type="hidden" id="modalProductShelfPrice" name="shelf_price">
-                <input type="hidden" id="modalProductUnitPrice" name="unit_price">
-                <input type="hidden" id="modalProductOldPrice" name="old_price">
-                <input type="hidden" id="modalProductType" name="type">
-                <input type="hidden" id="modalProductName" name="name">
-                <input type="hidden" id="modalProductDescription" name="description">
-                <input type="hidden" id="modalProductEaCa" name="ea-ca">
-                <input type="hidden" id="modalProductEaPl" name="ea-pl">
-                <input type="hidden" id="modalProductEa" name="ea">
-                <input type="hidden" id="modalProductCa" name="ca">
-                <input type="hidden" id="modalProductPl" name="pl">
-                <input type="hidden" id="modalProductMinQuantity" name="min_quantity">
-                <input type="hidden" id="modalProductMaxQuantity" name="max_quantity">
+                    <div class="modal-footer">
+                        <button type="button" class="btn bubbles bubbles-grey" data-bs-dismiss="modal"><span class="text">Cancel</span></button>
+                        <button type="submit" class="btn bubbles bubbles-arctic">
+                            <span class="text"> <i class="fas fa-cart-plus me-2"></i>{{ __('cart.add_to_cart') }}</span>
+                        </button>
+                    </div>
+                    <input type="hidden" id="modalProductUOM" name="UOM">
+                    <input type="hidden" id="modalProductId" name="product_id">
+                    <input type="hidden" id="modalProductShelfPrice" name="shelf_price">
+                    <input type="hidden" id="modalProductUnitPrice" name="unit_price">
+                    <input type="hidden" id="modalProductOldPrice" name="old_price">
+                    <input type="hidden" id="modalProductType" name="type">
+                    <input type="hidden" id="modalProductName" name="name">
+                    <input type="hidden" id="modalProductDescription" name="description">
+                    <input type="hidden" id="modalProductEaCa" name="ea-ca">
+                    <input type="hidden" id="modalProductEaPl" name="ea-pl">
+                    <input type="hidden" id="modalProductEa" name="ea">
+                    <input type="hidden" id="modalProductCa" name="ca">
+                    <input type="hidden" id="modalProductPl" name="pl">
+                    <input type="hidden" id="modalProductMinQuantity" name="min_quantity">
+                    <input type="hidden" id="modalProductMaxQuantity" name="max_quantity">
             </form>
         </div>
     </div>
@@ -165,6 +167,14 @@ $isRtl = 0;
 </style>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        function showQuantityWarning(message) {
+            if (typeof showAjaxToast === "function") {
+                showAjaxToast('warning', message);
+            } else {
+                alert(message); // fallback if toast not loaded
+            }
+        }
+
         const modal = document.getElementById('addToCartModal');
         if (!modal) return;
 
@@ -178,10 +188,9 @@ $isRtl = 0;
             let minqty = parseInt(document.getElementById('modalProductMinQuantity').value) || 1;
             let maxqty = parseInt(document.getElementById('modalProductMaxQuantity').value) || 0;
             let val = parseInt(quantityInput.value) || minqty;
-            console.log("Current value:", val, "Min quantity:", minqty, "Max quantity:", maxqty);
             if (maxqty && val + 1 > maxqty) {
                 quantityInput.value = maxqty;
-                console.log("Cannot decrease below minimum quantity:", minqty);
+                showQuantityWarning("Cannot increase above maximum quantity: " + maxqty);
             } else {
                 quantityInput.value = val + 1;
             }
@@ -193,7 +202,7 @@ $isRtl = 0;
             console.log("Current value:", val, "Min quantity:", minqty);
             if (val - 1 < minqty) {
                 quantityInput.value = minqty;
-                console.log("Cannot decrease below minimum quantity:", minqty);
+                showQuantityWarning("Cannot decrease below minimum quantity: " + minqty);
             } else {
                 quantityInput.value = val - 1;
             }
@@ -206,10 +215,10 @@ $isRtl = 0;
             let val = parseInt(quantityInput.value) || minqty;
             if (val < minqty) {
                 quantityInput.value = minqty;
-                console.log("Cannot decrease below minimum quantity:", minqty);
+                showQuantityWarning("Cannot decrease below minimum quantity: " + minqty);
             } else if (maxqty && val > maxqty) {
                 quantityInput.value = maxqty;
-                console.log("Cannot decrease below minimum quantity:", minqty);
+                showQuantityWarning("Cannot increase above maximum quantity: " + maxqty);
             } else {
                 quantityInput.value = val;
             }
