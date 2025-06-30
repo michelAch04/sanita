@@ -151,6 +151,50 @@
             width: '100%'
         });
     });
+
+    window.taxRates = @json($taxes->pluck('rate', 'id'));
+
+    function getSelectedTaxRate() {
+        const taxSelect = document.getElementById('tax_id');
+        if (!taxSelect) return 0;
+        const selectedId = taxSelect.value;
+        return window.taxRates && window.taxRates[selectedId] ? parseFloat(window.taxRates[selectedId]) : 0;
+    }
+
+    function calculateShelfPrice(unitPrice, taxRate) {
+        return (parseFloat(unitPrice) + (parseFloat(unitPrice) * taxRate / 100)).toFixed(2);
+    }
+
+    function updateShelfPrices() {
+        const taxRate = getSelectedTaxRate();
+        document.querySelectorAll('input[id$="_unit_price"]').forEach(unitInput => {
+            const shelfInputId = unitInput.id.replace('unit_price', 'shelf_price');
+            const shelfInput = document.getElementById(shelfInputId);
+            if (shelfInput) {
+                shelfInput.value = calculateShelfPrice(unitInput.value || 0, taxRate);
+            }
+        });
+    }
+
+    // Listen for changes on unit price inputs
+    document.querySelectorAll('input[id$="_unit_price"]').forEach(unitInput => {
+        unitInput.addEventListener('input', updateShelfPrices);
+        // Trigger once on load
+        unitInput.dispatchEvent(new Event('input'));
+    });
+
+    // Listen for changes on tax select
+    const taxSelect = document.getElementById('tax_id');
+    if (taxSelect) {
+        taxSelect.addEventListener('change', updateShelfPrices);
+    }
+
+    // Listen for Bootstrap tab shown event
+    document.querySelectorAll('button[data-bs-toggle="tab"]').forEach(tabBtn => {
+        tabBtn.addEventListener('shown.bs.tab', function() {
+            updateShelfPrices();
+        });
+    });
 </script>
 @endpush
 @include('cms.partials.select2-style')

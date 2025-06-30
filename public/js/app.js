@@ -62,10 +62,7 @@ $(document).ready(function () {
         let productDescription = form.find('input[name="description"]').val();
         let productEaCa = form.find('input[name="ea-ca"]').val();
         let productEaPl = form.find('input[name="ea-pl"]').val();
-        let productEA = form.find('input[name="ea"]').val(); // should be boolean if zero mean not visible else visible 
-        let productCA = form.find('input[name="ca"]').val(); // 
-        let productPL = form.find('input[name="pl"]').val();
-
+let product = form.find('input[name="product"]').val();
         
         // Set modal fields
         $('#addToCartModalLabel').text(productName);
@@ -77,12 +74,6 @@ $(document).ready(function () {
         $('#modalProductType').val(producttype);
         $('#modalProductEaCa').val(productEaCa);
         $('#modalProductEaPl').val(productEaPl);
-        $('#modalProductEA').val(productEA);
-        $('#modalProductCA').val(productCA);
-        $('#modalProductPL').val(productPL);
-        console.log('EA:', productEA, 'CA:', productCA, 'PL:', productPL);
-
-
 
         // Show price and description in the modal
         $('#modalProductShelfPrice').text('Price: $' + productShelfPrice);
@@ -95,16 +86,6 @@ $(document).ready(function () {
                 .show();
         } else {
             $('#modalProductOldPriceDisplay').hide();
-        }
-        let unitOptions = '';
-        if (parseInt(productEA) !== 0) unitOptions += '<option value="EA">EA</option>';
-        if (parseInt(productCA) !== 0) unitOptions += '<option value="CA">CA</option>';
-        if (parseInt(productPL) !== 0) unitOptions += '<option value="PL">PL</option>';
-
-        if (unitOptions) {
-            $('#modalProductUnit').html(unitOptions).show();
-        } else {
-            $('#modalProductUnit').html('').hide();
         }
         // Show modal
         var modal = new bootstrap.Modal(document.getElementById('addToCartModal'));
@@ -172,5 +153,24 @@ $(document).ready(function () {
                 window.location.href = url;
             }
         }
+    });
+
+    $('#modalProductUnit').off('change').on('change', function() {
+        let selectedUOM = $(this).val();
+        let modal = $('#addToCartModal');
+        let unitPrices = modal.data('unitPrices');
+        let conversions = modal.data('conversions');
+
+        // Update price fields
+        let price = unitPrices[selectedUOM] || unitPrices['EA'];
+        $('#modalProductUnitPrice').val(price);
+
+        // Update conversion fields if needed
+        if (selectedUOM === 'CA') {
+            $('#modalProductEaCa').val(conversions.EA_CA);
+        } else if (selectedUOM === 'PL') {
+            $('#modalProductEaPl').val(conversions.EA_PL);
+        }
+        // Optionally update shelf price, etc.
     });
 });

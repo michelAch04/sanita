@@ -72,7 +72,11 @@ $isRtl = 0;
                             <button type="button" class="btn btn-sm btn-decrease"><i class="fa fa-minus"></i></button>
                             <input type="text" id="modalProductQuantity" name="quantity" class="quantity-input" value="1">
                             <button type="button" class="btn btn-sm btn-increase"><i class="fa fa-plus"></i></button>
-                            <select id="modalProductUnit" name="unit" class="form-select ms-2" style="width:auto;"></select>
+                            <select name="UOM" id="modalProductUOM" class="form-select ms-2" style="width: 120px;">
+                                <option value="EA">EA</option>
+                                <option value="CA">CA</option>
+                                <option value="PL">PL</option>
+                            </select>
                         </div>
                     </div>
                 </div>

@@ -77,19 +77,8 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                                 @if(!$auth)
                                 <form action="{{ route('website.cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="add-to-cart-form m-0">
                                     @csrf
-                                    <input type="hidden" name="old_price" value="{{ $price->old_price }}">
-                                    <input type="hidden" name="type" value="{{ $price->type }}">
-                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                    <input type="hidden" name="quantity" value="{{ $totalStock }}">
-                                    <input type="hidden" name="unit_price" value="{{ $price->unit_price}}">
-                                    <input type="hidden" name="shelf_price" value="{{ $price->shelf_price }}">
-                                    <input type="hidden" name="description" value="{{ $product->{'small_description_'.app()->getLocale()} ?? $product->small_description_en }}">
-                                    <input type="hidden" name="name" value="{{ $product->{'name_'.app()->getLocale()} ?? $product->name_en }}">
-                                    <input type="hidden" name="ea-ca" value="{{ $product->ea_ca ?? 12 }}">
-                                    <input type="hidden" name="ea-pl" value="{{ $product->ea_pl ?? 144 }}">
-                                    <input type="hidden" name="ea" value="{{ $price->EA }}">
-                                    <input type="hidden" name="ca" value="{{ $price->CA }}">
-                                    <input type="hidden" name="pl" value="{{ $price->PL }}">
+                                    <input type="hidden" name="product" value="{{ $product }}">
+
                                     <button type="submit" class="border-0 bg-transparent p-0">
                                         <i class="fas fa-cart-plus"></i>
                                     </button>
@@ -98,19 +87,8 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                                 @if($totalStock > 0)
                                 <form action="{{ route('website.cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="add-to-cart-form m-0">
                                     @csrf
-                                    <input type="hidden" name="old_price" value="{{ $price->old_price }}">
-                                    <input type="hidden" name="type" value="{{ $price->type }}">
-                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                    <input type="hidden" name="quantity" value="{{ $totalStock }}">
-                                    <input type="hidden" name="unit_price" value="{{ $price->unit_price}}">
-                                    <input type="hidden" name="shelf_price" value="{{ $price->shelf_price }}">
-                                    <input type="hidden" name="description" value="{{ $product->{'small_description_'.app()->getLocale()} ?? $product->small_description_en }}">
-                                    <input type="hidden" name="name" value="{{ $product->{'name_'.app()->getLocale()} ?? $product->name_en }}">
-                                    <input type="hidden" name="ea-ca" value="{{ $product->ea_ca ?? 12 }}">
-                                    <input type="hidden" name="ea-pl" value="{{ $product->ea_pl ?? 144 }}">
-                                    <input type="hidden" name="ea" value="{{ $price->EA }}">
-                                    <input type="hidden" name="ca" value="{{ $price->CA }}">
-                                    <input type="hidden" name="pl" value="{{ $price->PL }}">
+                                    <input type="hidden" name="product" value="{{ $product }}">
+
                                     <button type="submit" class="border-0 bg-transparent p-0">
                                         <i class="fas fa-cart-plus"></i>
                                     </button>
@@ -241,19 +219,8 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                                 @if(!$auth)
                                 <form action="{{ route('website.cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="add-to-cart-form m-0">
                                     @csrf
-                                    <input type="hidden" name="old_price" value="{{ $price->old_price }}">
-                                    <input type="hidden" name="type" value="{{ $price->type }}">
-                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                    <input type="hidden" name="quantity" value="{{ $totalStock }}">
-                                    <input type="hidden" name="unit_price" value="{{ $price->unit_price}}">
-                                    <input type="hidden" name="shelf_price" value="{{ $price->shelf_price }}">
-                                    <input type="hidden" name="description" value="{{ $product->{'small_description_'.app()->getLocale()} ?? $product->small_description_en }}">
-                                    <input type="hidden" name="name" value="{{ $product->{'name_'.app()->getLocale()} ?? $product->name_en }}">
-                                    <input type="hidden" name="ea-ca" value="{{ $product->ea_ca ?? 12 }}">
-                                    <input type="hidden" name="ea-pl" value="{{ $product->ea_pl ?? 144 }}">
-                                    <input type="hidden" name="ea" value="{{ $price->EA }}">
-                                    <input type="hidden" name="ca" value="{{ $price->CA }}">
-                                    <input type="hidden" name="pl" value="{{ $price->PL }}">
+                                    <input type="hidden" name="product" value="{{ $product }}">
+
                                     <button type="submit" class="border-0 bg-transparent p-0">
                                         <i class="fas fa-cart-plus"></i>
                                     </button>
@@ -262,19 +229,7 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                                 @if($totalStock > 0)
                                 <form action="{{ route('website.cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="add-to-cart-form m-0">
                                     @csrf
-                                    <input type="hidden" name="old_price" value="{{ $price->old_price }}">
-                                    <input type="hidden" name="type" value="{{ $price->type }}">
-                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                    <input type="hidden" name="quantity" value="{{ $totalStock }}">
-                                    <input type="hidden" name="unit_price" value="{{ $price->unit_price}}">
-                                    <input type="hidden" name="shelf_price" value="{{ $price->shelf_price }}">
-                                    <input type="hidden" name="description" value="{{ $product->{'small_description_'.app()->getLocale()} ?? $product->small_description_en }}">
-                                    <input type="hidden" name="name" value="{{ $product->{'name_'.app()->getLocale()} ?? $product->name_en }}">
-                                    <input type="hidden" name="ea-ca" value="{{ $product->ea_ca ?? 12 }}">
-                                    <input type="hidden" name="ea-pl" value="{{ $product->ea_pl ?? 144 }}">
-                                    <input type="hidden" name="ea" value="{{ $price->EA }}">
-                                    <input type="hidden" name="ca" value="{{ $price->CA }}">
-                                    <input type="hidden" name="pl" value="{{ $price->PL }}">
+                                    <input type="hidden" name="product" value="{{ $product }}">
                                     <button type="submit" class="border-0 bg-transparent p-0">
                                         <i class="fas fa-cart-plus"></i>
                                     </button>
