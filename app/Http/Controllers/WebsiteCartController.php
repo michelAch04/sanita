@@ -14,12 +14,9 @@ class WebsiteCartController extends Controller
 {
     public function index()
     {
-        $cart = Cart::with(['cartDetails' => function ($q) {
-            $q->with(['product']);
-        }])
+        $cart = Cart::with('cartDetails')
             ->where('customers_id', auth()->id())
             ->first();
-
         return view('sanita.cart.index', compact('cart'));
     }
 
@@ -77,37 +74,58 @@ class WebsiteCartController extends Controller
             // 1. Get customer ID
             $customerId = auth('customer')->id();
 
-            // 2. Create cart header if not exists
-            $cart = Cart::firstOrCreate(
-                [
+            // 2. Use existing cart if available, otherwise create new
+            $cart = Cart::where('customers_id', $customerId)
+
+                ->first();
+
+            if (!$cart) {
+                $cart = Cart::create([
                     'customers_id' => $customerId,
                     'total_amount' => 0,
                     'subtotal_amount' => 0,
-                    'tax_amount' => 0
-                ]
-            );
+                    'tax_amount' => 0,
+                ]);
+            }
 
             $unitPrice = $request->input('unit_price');
             $shelfPrice = $request->input('shelf_price');
             $oldPrice = $request->input('old_price', 0);
-
             $extendedPrice = $shelfPrice * $requestedQuantityEA;
+
+            // Update cart totals
             $cart->total_amount += $extendedPrice;
-            $cart->subtotal_amount += $unitPrice;
+            $cart->subtotal_amount += $unitPrice * $requestedQuantityEA;
             $cart->tax_amount += ($shelfPrice - $unitPrice) * $requestedQuantityEA;
             $cart->save();
 
-            CartDetail::create([
-                'carts_id' => $cart->id,
-                'products_id' => $product->id,
-                'quantity_ea' => $quantity,
-                'UOM' => $unit,
-                'unit_price' => $unitPrice,
-                'shelf_price' => $shelfPrice,
-                'old_price' => $oldPrice,
-                'extended_price' => $extendedPrice,
-                'description' => $request->input('description'),
-            ]);
+            // Check if this product+UOM already exists in the cart
+            $cartDetail = CartDetail::where('carts_id', $cart->id)
+                ->where('products_id', $product->id)
+                ->where('UOM', $unit)
+                ->first();
+
+            if ($cartDetail) {
+                // Update existing cart detail
+                $cartDetail->quantity_ea += $quantity;
+                $cartDetail->unit_price = $unitPrice;
+                $cartDetail->shelf_price = $shelfPrice;
+                $cartDetail->old_price = $oldPrice;
+                $cartDetail->extended_price += $extendedPrice;
+                $cartDetail->save();
+            } else {
+                // Create new cart detail
+                CartDetail::create([
+                    'carts_id' => $cart->id,
+                    'products_id' => $product->id,
+                    'quantity_ea' => $quantity,
+                    'UOM' => $unit,
+                    'unit_price' => $unitPrice,
+                    'shelf_price' => $shelfPrice,
+                    'old_price' => $oldPrice,
+                    'extended_price' => $extendedPrice,
+                ]);
+            }
 
             return response()->json([
                 'success' => true,
@@ -185,10 +203,6 @@ class WebsiteCartController extends Controller
         if ($request->ajax()) {
             return response()->json([
                 'success' => true,
-                'data' => [
-                    'carts_id' => $cart->carts_id,
-                    'products_id' => $cart->products_id,
-                ]
             ]);
         }
 
@@ -199,10 +213,21 @@ class WebsiteCartController extends Controller
     {
         $customerId = auth('customer')->id();
 
-        $cart = Cart::firstOrCreate(
-            ['customers_id' => $customerId, 'purchased' => 0, 'cancelled' => 0],
-            ['customers_id' => $customerId, 'total_amount' => 0]
-        );
+        $cart = Cart::where('customers_id', $customerId)
+            ->where('purchased', 0)
+            ->where('cancelled', 0)
+            ->first();
+
+        if (!$cart) {
+            $cart = Cart::create([
+                'customers_id' => $customerId,
+                'total_amount' => 0,
+                'subtotal_amount' => 0,
+                'tax_amount' => 0,
+                'purchased' => 0,
+                'cancelled' => 0,
+            ]);
+        }
 
         $addresses = Address::where('customer_id', $customerId)->get();
 

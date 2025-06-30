@@ -301,7 +301,6 @@ $type = auth()->user()->type ?? 'b2c'; // Default to b2c
                                     <input type="hidden" name="old_price_pl" value="{{ $p->old_price }}">
                                     @endif
                                     @endforeach
-
                                     <button type="submit" class="border-0 bg-transparent p-0">
                                         <i class="fas fa-cart-plus"></i>
                                     </button>
