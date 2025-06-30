@@ -92,12 +92,11 @@ class WebsiteCartController extends Controller
             $oldPrice = $request->input('old_price', 0);
 
             $extendedPrice = $shelfPrice * $requestedQuantityEA;
-            $unitPrice = $unitPrice * $requestedQuantityEA;
             $cart->total_amount += $extendedPrice;
             $cart->subtotal_amount += $unitPrice;
             $cart->tax_amount += ($shelfPrice - $unitPrice) * $requestedQuantityEA;
             $cart->save();
-            
+
             CartDetail::create([
                 'carts_id' => $cart->id,
                 'products_id' => $product->id,
@@ -166,25 +165,21 @@ class WebsiteCartController extends Controller
         return redirect()->back()->with('success', __('cart.updated'));
     }
 
-    public function destroy(Request $request, $locale, CartDetail $cart)
+    public function destroy(Request $request, CartDetail $cart)
     {
         $carts_id = $cart->carts_id;
         $products_id = $cart->products_id;
 
         $remainingItems = CartDetail::where('carts_id', $carts_id)
-            ->where('cancelled', 0)
             ->where('id', '!=', $cart->id)
             ->count();
 
         CartDetail::where('carts_id', $carts_id)
             ->where('products_id', $products_id)
-            ->update(['cancelled' => 1]);
-
-        Product::where('id', $products_id)
-            ->increment('available_quantity', $cart->quantity);
+            ->delete();
 
         if ($remainingItems === 0) {
-            Cart::where('id', $carts_id)->update(['cancelled' => 1]);
+            Cart::where('id', $carts_id)->delete();
         }
 
         if ($request->ajax()) {
