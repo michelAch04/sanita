@@ -63,14 +63,16 @@ $isRtl = 0;
                         <span id="modalProductDescriptionDisplay" class="text-muted"></span>
                     </div>
                     <div class="mb-4">
-                        <span id="modalProductPriceDisplay" class="fw-bold" style="color: var(--primary-text);"></span>
+                        <span id="modalProductOldPriceDisplay" class="text-muted text-decoration-line-through me-2" style="display:none;"></span>
+                        <span id="modalProductShelfPrice" class="fw-bold" style="color: var(--primary-text);"></span>
                     </div>
                     <div class="mb-3">
                         <label for="modalProductQuantity">{{ __('cart.quantity') }}:</label>
-                        <div class="update-quantity-form">
+                        <div class="update-quantity-form align-items-center d-flex">
                             <button type="button" class="btn btn-sm btn-decrease"><i class="fa fa-minus"></i></button>
                             <input type="text" id="modalProductQuantity" name="quantity" class="quantity-input" value="1">
                             <button type="button" class="btn btn-sm btn-increase"><i class="fa fa-plus"></i></button>
+                            <select id="modalProductUnit" name="unit" class="form-select ms-2" style="width:auto;"></select>
                         </div>
                     </div>
                 </div>
@@ -81,8 +83,17 @@ $isRtl = 0;
                     </button>
                 </div>
                 <input type="hidden" id="modalProductId" name="product_id">
-                <input type="hidden" id="modalProductPrice" name="price">
+                <input type="hidden" id="modalProductShelfPrice" name="shelf_price">
+                <input type="hidden" id="modalProductUnitPrice" name="unit_price">
+                <input type="hidden" id="modalProductOldPrice" name="old_price">
+                <input type="hidden" id="modalProductType" name="type">
+                <input type="hidden" id="modalProductName" name="name">
                 <input type="hidden" id="modalProductDescription" name="description">
+                <input type="hidden" id="modalProductEaCa" name="ea-ca">
+                <input type="hidden" id="modalProductEaPl" name="ea-pl">
+                <input type="hidden" id="modalProductEa" name="ea">
+                <input type="hidden" id="modalProductCa" name="ca">
+                <input type="hidden" id="modalProductPl" name="pl">
             </form>
         </div>
     </div>

@@ -18,14 +18,11 @@ return new class extends Migration
             $table->decimal('unit_price', 10, 2)->default(0);
             $table->decimal('shelf_price', 10, 2)->default(0);
             $table->decimal('old_price', 10, 2)->nullable();
+            $table->string('UOM', 10);
             $table->integer('min_quantity_to_order')->default(0);
             $table->integer('max_quantity_to_order')->default(0);
             $table->integer('trade_loader')->default(0);
             $table->integer('trade_loader_quantity')->default(0);
-            $table->string('UOM', 10);
-            $table->tinyInteger('EA')->default(0);
-            $table->tinyInteger('CA')->default(0);
-            $table->tinyInteger('PL')->default(0);
             $table->tinyInteger('hidden')->default(0);
             $table->tinyInteger('automatic_hide')->default(0);
             $table->timestamps();

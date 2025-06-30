@@ -107,7 +107,7 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
 
                         @if($defaultAddress)
                         <a href="{{ route('addresses.index', ['locale' => app()->getLocale()]) }}" class="nav-link me-2" title="{{ __('nav.addresses') }}">
-                            <i class="fa-solid fa-location-dot me-1"></i>
+                            <i class="fa-solid fa-location-dot me-1"></i>   
                             {{ $defaultAddress->city->name_en ?? '' }}, {{ $defaultAddress->district->name_en ?? '' }}
                         </a>
                         @else

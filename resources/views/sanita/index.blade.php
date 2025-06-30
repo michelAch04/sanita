@@ -26,6 +26,8 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
         <div class="carousel gx-0">
             @foreach($offers as $product)
             @php
+            $imagePath = 'products/' . $product->id . '.' . $product->extension;
+            $storage = \Illuminate\Support\Facades\Storage::disk('public')->exists($imagePath);
             $price = $product->listPrices->first();
             @endphp
             @if($price->shelf_price > 0 )
@@ -36,7 +38,7 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                     <div class="card__content">
                         <div class="card__badge">{{ __('nav.offer') }}</div>
                         <div style="--bg-color: #a78bfa" class="card__image">
-                            @if($product->extension)
+                            @if($storage)
                             <img src="{{ asset('storage/products/' . $product->id . '.' . $product->extension) }}"
                                 alt="{{ $product->{'name_'.app()->getLocale()} ?? $product->name_en }}"
                                 class="img-fluid w-100 h-100 dynamic-fit">
@@ -68,13 +70,47 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                                 @endif
                             </div>
                             @php
+                            $auth = auth('customer')->user();
                             $totalStock = $product->distributorStocks?->sum('stock') ?? 0;
                             @endphp
                             <div class="card__button">
+                                @if(!$auth)
+                                <form action="{{ route('website.cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="add-to-cart-form m-0">
+                                    @csrf
+                                    <input type="hidden" name="old_price" value="{{ $price->old_price }}">
+                                    <input type="hidden" name="type" value="{{ $price->type }}">
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                    <input type="hidden" name="quantity" value="{{ $totalStock }}">
+                                    <input type="hidden" name="unit_price" value="{{ $price->unit_price}}">
+                                    <input type="hidden" name="shelf_price" value="{{ $price->shelf_price }}">
+                                    <input type="hidden" name="description" value="{{ $product->{'small_description_'.app()->getLocale()} ?? $product->small_description_en }}">
+                                    <input type="hidden" name="name" value="{{ $product->{'name_'.app()->getLocale()} ?? $product->name_en }}">
+                                    <input type="hidden" name="ea-ca" value="{{ $product->ea_ca ?? 12 }}">
+                                    <input type="hidden" name="ea-pl" value="{{ $product->ea_pl ?? 144 }}">
+                                    <input type="hidden" name="ea" value="{{ $price->EA }}">
+                                    <input type="hidden" name="ca" value="{{ $price->CA }}">
+                                    <input type="hidden" name="pl" value="{{ $price->PL }}">
+                                    <button type="submit" class="border-0 bg-transparent p-0">
+                                        <i class="fas fa-cart-plus"></i>
+                                    </button>
+                                </form>
+                                @else
                                 @if($totalStock > 0)
                                 <form action="{{ route('website.cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="add-to-cart-form m-0">
                                     @csrf
+                                    <input type="hidden" name="old_price" value="{{ $price->old_price }}">
+                                    <input type="hidden" name="type" value="{{ $price->type }}">
                                     <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                    <input type="hidden" name="quantity" value="{{ $totalStock }}">
+                                    <input type="hidden" name="unit_price" value="{{ $price->unit_price}}">
+                                    <input type="hidden" name="shelf_price" value="{{ $price->shelf_price }}">
+                                    <input type="hidden" name="description" value="{{ $product->{'small_description_'.app()->getLocale()} ?? $product->small_description_en }}">
+                                    <input type="hidden" name="name" value="{{ $product->{'name_'.app()->getLocale()} ?? $product->name_en }}">
+                                    <input type="hidden" name="ea-ca" value="{{ $product->ea_ca ?? 12 }}">
+                                    <input type="hidden" name="ea-pl" value="{{ $product->ea_pl ?? 144 }}">
+                                    <input type="hidden" name="ea" value="{{ $price->EA }}">
+                                    <input type="hidden" name="ca" value="{{ $price->CA }}">
+                                    <input type="hidden" name="pl" value="{{ $price->PL }}">
                                     <button type="submit" class="border-0 bg-transparent p-0">
                                         <i class="fas fa-cart-plus"></i>
                                     </button>
@@ -83,6 +119,7 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                                 <button class="btn btn-sm btn-secondary" disabled>
                                     {{ __('cart.out_of_stock') ?: 'Out of Stock' }}
                                 </button>
+                                @endif
                                 @endif
                             </div>
                         </div>
@@ -161,8 +198,12 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                             {{ __('nav.new') }}
                         </div>
                         @endif
+                        @php
+                        $imagePath = 'products/' . $product->id . '.' . $product->extension;
+                        $storage = \Illuminate\Support\Facades\Storage::disk('public')->exists($imagePath);
+                        @endphp
                         <div style="--bg-color: #38bdf8" class="card__image">
-                            @if($product->extension)
+                            @if($storage)
                             <img src="{{ asset('storage/products/' . $product->id . '.' . $product->extension) }}"
                                 alt="{{ $product->{'name_'.app()->getLocale()} ?? $product->name_en }}"
                                 class="img-fluid w-100 h-100 dynamic-fit" style="border-radius: 12px;">
@@ -193,13 +234,47 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                                 @endif
                             </div>
                             @php
+                            $auth = auth('customer')->user();
                             $totalStock = $product->distributorStocks?->sum('stock') ?? 0;
                             @endphp
-                            <div class="card__button">
+                            <div class=" card__button">
+                                @if(!$auth)
+                                <form action="{{ route('website.cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="add-to-cart-form m-0">
+                                    @csrf
+                                    <input type="hidden" name="old_price" value="{{ $price->old_price }}">
+                                    <input type="hidden" name="type" value="{{ $price->type }}">
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                    <input type="hidden" name="quantity" value="{{ $totalStock }}">
+                                    <input type="hidden" name="unit_price" value="{{ $price->unit_price}}">
+                                    <input type="hidden" name="shelf_price" value="{{ $price->shelf_price }}">
+                                    <input type="hidden" name="description" value="{{ $product->{'small_description_'.app()->getLocale()} ?? $product->small_description_en }}">
+                                    <input type="hidden" name="name" value="{{ $product->{'name_'.app()->getLocale()} ?? $product->name_en }}">
+                                    <input type="hidden" name="ea-ca" value="{{ $product->ea_ca ?? 12 }}">
+                                    <input type="hidden" name="ea-pl" value="{{ $product->ea_pl ?? 144 }}">
+                                    <input type="hidden" name="ea" value="{{ $price->EA }}">
+                                    <input type="hidden" name="ca" value="{{ $price->CA }}">
+                                    <input type="hidden" name="pl" value="{{ $price->PL }}">
+                                    <button type="submit" class="border-0 bg-transparent p-0">
+                                        <i class="fas fa-cart-plus"></i>
+                                    </button>
+                                </form>
+                                @else
                                 @if($totalStock > 0)
                                 <form action="{{ route('website.cart.store', ['locale' => app()->getLocale()]) }}" method="POST" class="add-to-cart-form m-0">
                                     @csrf
+                                    <input type="hidden" name="old_price" value="{{ $price->old_price }}">
+                                    <input type="hidden" name="type" value="{{ $price->type }}">
                                     <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                    <input type="hidden" name="quantity" value="{{ $totalStock }}">
+                                    <input type="hidden" name="unit_price" value="{{ $price->unit_price}}">
+                                    <input type="hidden" name="shelf_price" value="{{ $price->shelf_price }}">
+                                    <input type="hidden" name="description" value="{{ $product->{'small_description_'.app()->getLocale()} ?? $product->small_description_en }}">
+                                    <input type="hidden" name="name" value="{{ $product->{'name_'.app()->getLocale()} ?? $product->name_en }}">
+                                    <input type="hidden" name="ea-ca" value="{{ $product->ea_ca ?? 12 }}">
+                                    <input type="hidden" name="ea-pl" value="{{ $product->ea_pl ?? 144 }}">
+                                    <input type="hidden" name="ea" value="{{ $price->EA }}">
+                                    <input type="hidden" name="ca" value="{{ $price->CA }}">
+                                    <input type="hidden" name="pl" value="{{ $price->PL }}">
                                     <button type="submit" class="border-0 bg-transparent p-0">
                                         <i class="fas fa-cart-plus"></i>
                                     </button>
@@ -208,6 +283,7 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                                 <button class="btn btn-sm btn-secondary" disabled>
                                     {{ __('cart.out_of_stock') ?: 'Out of Stock' }}
                                 </button>
+                                @endif
                                 @endif
                             </div>
                         </div>

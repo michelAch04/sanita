@@ -27,7 +27,7 @@ class ProductsSeeder extends Seeder
                 'small_description_ar' => "وصف صغير للمنتج $i",
                 'small_description_ku' => "وەسفی کەمەکە بۆ بەرھەم $i",
                 'ea_ca' => rand(1, 10),
-                'ea_pa' => rand(1, 10),
+                'ea_pl' => rand(1, 10),
                 'subcategories_id' => $subcategory->id,
                 'brands_id' => $brand->id,
                 'tax_id' => $tax?->id,

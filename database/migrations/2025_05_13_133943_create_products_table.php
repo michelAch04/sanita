@@ -32,7 +32,7 @@ return new class extends Migration
             $table->text('small_description_ku')->nullable();
 
             $table->integer('ea_ca');
-            $table->integer('ea_pa');
+            $table->integer('ea_pl');
 
             // Classification Codes
             $table->string('product_line_code')->nullable();

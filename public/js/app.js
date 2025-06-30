@@ -1,6 +1,5 @@
 // ---------------------------------- INDEX HANDLING ---------------------------------- //
 $(document).ready(function () {
-    console.log(document.querySelectorAll('.hero-carousel'));
     $('.hero-carousel').slick({
         dots: false,
         infinite: true,
@@ -13,7 +12,6 @@ $(document).ready(function () {
         draggable: true,
         swipe: true,
     });
- console.log(document.querySelectorAll('.carousel'));
     $('.carousel').slick({
         centerMode: false,
         centerPadding: '0px',
@@ -56,23 +54,63 @@ $(document).ready(function () {
         let form = $(this);
         let productName = form.closest('.card').find('.card__title, .card-title').text().trim();
         let productId = form.find('input[name="product_id"]').val();
-        let productPrice = form.find('input[name="price"]').val();
-        let productDescription = form.find('input[name="description"]').val();
+        let productOldPrice = form.find('input[name="old_price"]').val();
+        let productShelfPrice = form.find('input[name="shelf_price"]').val();
 
+        let productUnitPrice = form.find('input[name="unit_price"]').val();
+        let producttype = form.find('input[name="type"]').val();
+        let productDescription = form.find('input[name="description"]').val();
+        let productEaCa = form.find('input[name="ea-ca"]').val();
+        let productEaPl = form.find('input[name="ea-pl"]').val();
+        let productEA = form.find('input[name="ea"]').val(); // should be boolean if zero mean not visible else visible 
+        let productCA = form.find('input[name="ca"]').val(); // 
+        let productPL = form.find('input[name="pl"]').val();
+
+        
         // Set modal fields
         $('#addToCartModalLabel').text(productName);
         $('#modalProductId').val(productId);
-        $('#modalProductPrice').val(productPrice);
+        $('#modalProductUnitPrice').val(productUnitPrice);
         $('#modalProductDescription').val(productDescription);
         $('#modalProductQuantity').val(1);
+        $('#modalProductOldPrice').val(productOldPrice);
+        $('#modalProductType').val(producttype);
+        $('#modalProductEaCa').val(productEaCa);
+        $('#modalProductEaPl').val(productEaPl);
+        $('#modalProductEA').val(productEA);
+        $('#modalProductCA').val(productCA);
+        $('#modalProductPL').val(productPL);
+        console.log('EA:', productEA, 'CA:', productCA, 'PL:', productPL);
+
+
 
         // Show price and description in the modal
-        $('#modalProductPriceDisplay').text('Price: $' + productPrice);
+        $('#modalProductShelfPrice').text('Price: $' + productShelfPrice);
         $('#modalProductDescriptionDisplay').text(productDescription);
-        
+
+        // Show old price only if it exists and is greater than shelf price
+        if (productOldPrice && parseFloat(productOldPrice) > parseFloat(productShelfPrice)) {
+            $('#modalProductOldPriceDisplay')
+                .text('Old: $' + parseFloat(productOldPrice).toFixed(2))
+                .show();
+        } else {
+            $('#modalProductOldPriceDisplay').hide();
+        }
+        let unitOptions = '';
+        if (parseInt(productEA) !== 0) unitOptions += '<option value="EA">EA</option>';
+        if (parseInt(productCA) !== 0) unitOptions += '<option value="CA">CA</option>';
+        if (parseInt(productPL) !== 0) unitOptions += '<option value="PL">PL</option>';
+
+        if (unitOptions) {
+            $('#modalProductUnit').html(unitOptions).show();
+        } else {
+            $('#modalProductUnit').html('').hide();
+        }
         // Show modal
         var modal = new bootstrap.Modal(document.getElementById('addToCartModal'));
         modal.show();
+
+     
     });
 
     // Handle modal form submit
@@ -85,10 +123,15 @@ $(document).ready(function () {
         let url = $('form.add-to-cart-form').first().attr('action'); // Use the action from any add-to-cart form
         let data = {
             product_id: $('#modalProductId').val(),
-            price: $('#modalProductPrice').val(),
             description: $('#modalProductDescription').val(),
             quantity: $('#modalProductQuantity').val(),
-            _token: window.csrfToken
+            old_price: $('#modalProductOldPrice').val(),
+            unit_price: $('#modalProductUnitPrice').val(),
+            shelf_price: $('#modalProductShelfPrice').text().replace('Price: $', ''),
+            type : $('#modalProductType').val(),
+            ea_ca: $('#modalProductEaCa').val(),
+            ea_pl: $('#modalProductEaPl').val(),
+            unit: $('#modalProductUnit').val() || 'EA' // Default to EA if no unit selected
         };
 
         $.ajax({

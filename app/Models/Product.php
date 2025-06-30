@@ -22,7 +22,7 @@ class Product extends Model
         'small_description_ar',
         'small_description_ku',
         'ea_ca',
-        'ea_pa',
+        'ea_pl',
         'product_line_code',
         'product_line_description',
         'family_code',

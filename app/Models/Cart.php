@@ -10,12 +10,9 @@ class Cart extends Model
     use HasFactory;
     protected $fillable = [
         'customers_id',
-        'expires_at',
-        'purchased',
-        'locked',
-        'cancelled',
-        'delivery_charge',
-        'promocode',
+        'total_amount',
+        'subtotal_amount',
+        'tax_amount',
     ];
     public function cartDetails()
     {
