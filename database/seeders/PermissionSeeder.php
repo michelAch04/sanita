@@ -13,7 +13,7 @@ class PermissionSeeder extends Seeder
     public function run(): void
     {
         $permissions = [
-            ['pages_id' => 11, 'users_id' => 1,  'view' => 1, 'created_at' => now(), 'updated_at' => now()],
+            ['pages_id' => 14, 'users_id' => 1,  'view' => 1, 'created_at' => now(), 'updated_at' => now()],
 
         ];
 
