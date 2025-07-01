@@ -5,14 +5,21 @@
 @section('content')
 <section id="products" class="py-3 bg-light">
     <div class="p-5 gx-0 w-100">
-        <h2 class="display-5 text-center mb-4">special {{ __('nav.products') }}</h2>
+        <h2 class="display-5 text-center mb-4">{{ __('nav.products') }}</h2>
 
         @if($products->isEmpty())
         <p class="text-center">{{ __('No products available currently.') }}</p>
         @else
         <div class="d-flex flex-wrap justify-content-center gap-3">
             @foreach($products as $product)
-            @include('sanita.partials.product-card')
+                @php
+                $isNew = $product->created_at && $product->created_at->gt(\Illuminate\Support\Carbon::now()->subDays(7));
+                @endphp
+                @include('sanita.partials.product-card', [
+                    'product' => $product,
+                    'cardType' => $isNew ? 'new' : 'product',
+                    'badge' => __('nav.new')
+                ])
             @endforeach
         </div>
 
@@ -25,7 +32,7 @@
 </section>
 @include('sanita.partials.contact-us')
 <style>
-    .offer-card {
+    .product-card {
         flex: 0 0 auto;
         width: 18%;
         /* 5 per row approx */
@@ -33,25 +40,25 @@
     }
 
     @media (max-width: 1200px) {
-        .offer-card {
+        .product-card {
             width: 22%;
         }
     }
 
     @media (max-width: 992px) {
-        .offer-card {
+        .product-card {
             width: 28%;
         }
     }
 
     @media (max-width: 768px) {
-        .offer-card {
+        .product-card {
             width: 45%;
         }
     }
 
     @media (max-width: 576px) {
-        .offer-card {
+        .product-card {
             width: 90%;
         }
     }

@@ -129,7 +129,6 @@ class CategoryController extends Controller
 
             $category->extension = $extension;
         }
-        dd($category);
         $category->save();
 
         return redirect()->route('categories.index')->with('success', 'Category updated successfully.');
