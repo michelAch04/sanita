@@ -23,21 +23,27 @@ class WebsiteCartController extends Controller
     public function store(Request $request)
     {
         try {
-            //validate the request 
+            // 1. Validate the request
             $request->validate([
-                'product_id' => 'required|exists:products,id',
-                'description' => 'nullable|string|max:255',
-                'quantity' => 'required|integer|min:1',
-                'type' => 'required|string|max:50',
-                'old_price' => 'nullable|numeric|min:0',
-                'unit_price' => 'required|numeric|min:0',
-                'shelf_price' => 'required|numeric|min:0',
-                'ea_ca' => 'required|integer|min:0',
-                'ea_pl' => 'required|integer|min:0',
-                'unit' => 'required|string|in:EA,CA,PL',
+                'product_id'   => 'required|exists:products,id',
+                'quantity'     => 'required|integer|min:1',
+                'type'         => 'required|string|max:50',
+                'old_price'    => 'nullable|numeric|min:0',
+                'unit_price'   => 'required|numeric|min:0',
+                'shelf_price'  => 'required|numeric|min:0',
+                'ea_ca'        => 'required|integer|min:0',
+                'ea_pl'        => 'required|integer|min:0',
+                'unit'         => 'required|string|in:EA,CA,PL',
             ]);
+
+            // 2. Get product and customer
             $product_id = $request->input('product_id');
-            $quantity = max(1, (int)$request->input('quantity'));
+            $quantity   = max(1, (int)$request->input('quantity'));
+            $unit       = $request->input('unit', 'EA');
+            $ea_ca      = (int)$request->input('ea_ca');
+            $ea_pl      = (int)$request->input('ea_pl');
+            $customerId = auth('customer')->id();
+
             $product = Product::where('id', $product_id)
                 ->with(['listPrices' => function ($q) use ($request) {
                     $q->where('type', $request->input('type'));
@@ -45,13 +51,27 @@ class WebsiteCartController extends Controller
                 ->with(['distributorStocks' => function ($q) {
                     $q->where('stock', '>', 0);
                 }])
+                ->firstOrFail();
+
+            $latestPrice = $product->listPrices()
+                ->where('UOM', $unit)
+                ->where('type', $request->input('type'))
+                ->orderByDesc('id')
                 ->first();
 
-            $unit = $request->input('unit', 'EA');
-            $ea_ca = (int)$request->input('ea_ca');
-            $ea_pl = (int)$request->input('ea_pl');
+            if ($latestPrice) {
+                $unitPrice = $latestPrice->unit_price;
+                $shelfPrice = $latestPrice->shelf_price;
+                $oldPrice = $latestPrice->old_price;
+            } else {
+                $unitPrice = $request->input('unit_price');
+                $shelfPrice = $request->input('shelf_price');
+                $oldPrice = $request->input('old_price', 0);
+            }
 
-            // Convert requested quantity to EA
+            $extendedPrice = $shelfPrice * $quantity;
+
+            // 3. Convert requested quantity to EA
             $requestedQuantityEA = $quantity;
             if ($unit === 'CA') {
                 $requestedQuantityEA = $quantity * $ea_ca;
@@ -59,82 +79,82 @@ class WebsiteCartController extends Controller
                 $requestedQuantityEA = $quantity * $ea_pl;
             }
 
-            // Calculate total available stock in EA
-            $totalStockEA = $product->distributorStocks->sum('stock');
-
-            // Check stock
-            if ($requestedQuantityEA > $totalStockEA) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Not enough stock available.',
-                    'stock' => $totalStockEA,
-                ], 422);
-            }
-
-            // 1. Get customer ID
-            $customerId = auth('customer')->id();
-
-            // 2. Use existing cart if available, otherwise create new
-            $cart = Cart::where('customers_id', $customerId)
-
-                ->first();
-
+            // 4. Find or create the cart
+            $cart = Cart::where('customers_id', $customerId)->first();
             if (!$cart) {
                 $cart = Cart::create([
-                    'customers_id' => $customerId,
-                    'total_amount' => 0,
+                    'customers_id'   => $customerId,
+                    'total_amount'   => 0,
                     'subtotal_amount' => 0,
-                    'tax_amount' => 0,
+                    'tax_amount'     => 0,
                 ]);
             }
 
-            $unitPrice = $request->input('unit_price');
-            $shelfPrice = $request->input('shelf_price');
-            $oldPrice = $request->input('old_price', 0);
-            $extendedPrice = $shelfPrice * $requestedQuantityEA;
-
-            // Update cart totals
-            $cart->total_amount += $extendedPrice;
-            $cart->subtotal_amount += $unitPrice * $requestedQuantityEA;
-            $cart->tax_amount += ($shelfPrice - $unitPrice) * $requestedQuantityEA;
-            $cart->save();
-
-            // Check if this product+UOM already exists in the cart
+            // 5. Check if this product+UOM already exists in the cart
             $cartDetail = CartDetail::where('carts_id', $cart->id)
                 ->where('products_id', $product->id)
                 ->where('UOM', $unit)
                 ->first();
 
+            $alreadyInCartEA = $cartDetail ? $cartDetail->quantity_ea : 0;
+            $totalRequestedEA = $requestedQuantityEA + $alreadyInCartEA;
+
+            // 6. Calculate total available stock in EA
+            $totalStockEA = $product->distributorStocks->sum('stock');
+
+            // 7. Check stock (including what's already in the cart)
+            if ($totalRequestedEA > $totalStockEA) {
+                return response()->json([
+                    'success'            => false,
+                    'message'            => 'Not enough stock available.',
+                    'stock'              => $totalStockEA,
+                    'requested_quantity' => $totalRequestedEA,
+                    'already_in_cart'    => $alreadyInCartEA,
+                ], 422);
+            }
+
+            // 8. Update cart totals
+            $cart->total_amount    += $extendedPrice;
+            $cart->subtotal_amount += $unitPrice * $quantity;
+            $cart->tax_amount      += ($shelfPrice - $unitPrice) * $quantity;
+            $cart->save();
+
+            // 9. Update or create cart detail
             if ($cartDetail) {
                 // Update existing cart detail
-                $cartDetail->quantity_ea += $quantity;
-                $cartDetail->unit_price = $unitPrice;
-                $cartDetail->shelf_price = $shelfPrice;
-                $cartDetail->old_price = $oldPrice;
+                $cartDetail->quantity_ea    += $quantity;
+                $cartDetail->unit_price      = $unitPrice;
+                $cartDetail->shelf_price     = $shelfPrice;
+                $cartDetail->old_price       = $oldPrice;
                 $cartDetail->extended_price += $extendedPrice;
                 $cartDetail->save();
             } else {
                 // Create new cart detail
                 CartDetail::create([
-                    'carts_id' => $cart->id,
-                    'products_id' => $product->id,
-                    'quantity_ea' => $quantity,
-                    'UOM' => $unit,
-                    'unit_price' => $unitPrice,
-                    'shelf_price' => $shelfPrice,
-                    'old_price' => $oldPrice,
+                    'carts_id'      => $cart->id,
+                    'products_id'   => $product->id,
+                    'quantity_ea'   => $quantity,
+                    'UOM'           => $unit,
+                    'unit_price'    => $unitPrice,
+                    'shelf_price'   => $shelfPrice,
+                    'old_price'     => $oldPrice,
                     'extended_price' => $extendedPrice,
                 ]);
             }
 
             return response()->json([
-                'success' => true,
-                'product' => $product,
-                'quantity_ea' => $quantity,
-                'unit' => $unit,
-                'ea_ca' => $ea_ca,
-                'ea_pl' => $ea_pl,
-
+                'success'      => true,
+                'product'      => $product,
+                'quantity_ea'  => $quantity,
+                'unit'         => $unit,
+                'ea_ca'        => $ea_ca,
+                'ea_pl'        => $ea_pl,
+                'item_total'   => round($extendedPrice, 2),
+                'cart_total'   => round($cart->total_amount, 2),
+                'cart_subtotal' => round($cart->subtotal_amount, 2),
+                'cart_tax'     => round($cart->tax_amount, 2),
+                'cart_id'      => $cart->id,
+                ''
             ]);
         } catch (\Exception $e) {
             \Log::error($e);
@@ -214,51 +234,13 @@ class WebsiteCartController extends Controller
         $customerId = auth('customer')->id();
 
         $cart = Cart::where('customers_id', $customerId)
-            ->where('purchased', 0)
-            ->where('cancelled', 0)
+            ->with('cartDetails')
             ->first();
 
-        if (!$cart) {
-            $cart = Cart::create([
-                'customers_id' => $customerId,
-                'total_amount' => 0,
-                'subtotal_amount' => 0,
-                'tax_amount' => 0,
-                'purchased' => 0,
-                'cancelled' => 0,
-            ]);
-        }
-
-        $addresses = Address::where('customer_id', $customerId)->get();
-
-        $subtotal = 0;
-        $totalTax = 0;
-        $total = 0;
-
-        if ($cart && $cart->cartDetails) {
-            foreach ($cart->cartDetails as $item) {
-                $product = $item->product;
-
-                // Only calculate tax if shelf_price > unit_price
-                if ($product->shelf_price > $product->unit_price) {
-                    $lineUnitPrice = $product->unit_price * $item->quantity;
-                    $lineShelfPrice = $product->shelf_price * $item->quantity;
-
-                    $lineTax = $lineShelfPrice - $lineUnitPrice;
-
-                    $subtotal += $lineUnitPrice;
-                    $total += $lineShelfPrice;
-                    $totalTax += $lineTax;
-                } else {
-                    // No tax applied, treat shelf = unit
-                    $linePrice = $product->unit_price * $item->quantity;
-
-                    $subtotal += $linePrice;
-                    $total += $linePrice;
-                    // $totalTax += 0; // Not necessary to add zero
-                }
-            }
-        }
+        $total = $cart->total_amount;
+        $subtotal = $cart->subtotal_amount;
+        $totalTax = $cart->tax_amount;
+        $addresses = Address::where('customers_id', $customerId)->get();
 
 
         return view('sanita.cart.checkout', compact('cart', 'addresses', 'subtotal', 'totalTax', 'total'));

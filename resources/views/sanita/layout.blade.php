@@ -65,7 +65,7 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
 <body class="d-flex flex-column min-vh-100">
 
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg sticky-top shadow">
+    <nav id="mainNavbar" class="navbar navbar-expand-lg sticky-top shadow">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}">
                 <!-- <span>Sanita</span> -->
@@ -107,7 +107,7 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
 
                         @if($defaultAddress)
                         <a href="{{ route('addresses.index', ['locale' => app()->getLocale()]) }}" class="nav-link me-2" title="{{ __('nav.addresses') }}">
-                            <i class="fa-solid fa-location-dot me-1"></i>   
+                            <i class="fa-solid fa-location-dot me-1"></i>
                             {{ $defaultAddress->city->name_en ?? '' }}, {{ $defaultAddress->district->name_en ?? '' }}
                         </a>
                         @else
@@ -221,7 +221,33 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
             </p>
         </div>
     </footer>
+    <script>
+        let lastScroll = 0;
+        let navbar = document.getElementById('mainNavbar');
+        let isScrolling;
+
+        window.addEventListener('scroll', function() {
+            const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+            // Hide navbar if scrolling down
+            if (currentScroll > lastScroll && currentScroll > 50) {
+                navbar.style.transform = 'translateY(-100%)';
+            } else {
+                navbar.style.transform = 'translateY(0)';
+            }
+
+            lastScroll = currentScroll <= 0 ? 0 : currentScroll;
+
+            // Show navbar if scrolling stops
+            clearTimeout(isScrolling);
+            isScrolling = setTimeout(() => {
+                navbar.style.transform = 'translateY(0)';
+            }, 300); // after scroll stops
+        });
+    </script>
+
 </body>
+
 <!-- Core Libraries -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

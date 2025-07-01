@@ -87,7 +87,7 @@
             <span class="text"><i class="fa fa-arrow-left me-1"></i> {{ __('cart.continue_shopping') }}</span>
         </a>
         <div class="d-flex align-items-center flex-direction-row gap-4">
-            <h5 class="mb-0 fw-bold text-light">{{ __('cart.cart_total') }}: <span id="cart-total">${{ number_format($cartTotal, 2) }}</span></h5>
+            <h5 class="mb-0 fw-bold text-light">{{ __('cart.cart_total') }}: <span id="cart-total">${{ number_format($cart->total_amount, 2) }}</span></h5>
             <a href="{{ route('cart.checkout', ['locale' => app()->getLocale()]) }}" class="btn bubbles fw-semibold">
                 <span class="text"><i class="fa fa-credit-card me-1"></i> {{ __('cart.proceed_checkout') }}</span>
             </a>
