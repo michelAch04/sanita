@@ -8,6 +8,9 @@ use App\Models\CartDetail;
 use App\Models\Product;
 use App\Models\Tax;
 use App\Models\Address;
+use App\Models\Governorate;
+use App\Models\City;
+use App\Models\District;
 use App\Models\Customer;
 
 class WebsiteCartController extends Controller
@@ -241,8 +244,11 @@ class WebsiteCartController extends Controller
         $subtotal = $cart->subtotal_amount;
         $totalTax = $cart->tax_amount;
         $addresses = Address::where('customers_id', $customerId)->get();
+        $governorates = Governorate::all();
+        $districts = District::all();
+        $cities = City::all();
 
-
-        return view('sanita.cart.checkout', compact('cart', 'addresses', 'subtotal', 'totalTax', 'total'));
+        return view('sanita.cart.checkout', compact('cart', 'addresses', 
+        'subtotal', 'totalTax', 'total', 'governorates', 'districts', 'cities'));
     }
 }

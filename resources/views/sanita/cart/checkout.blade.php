@@ -54,29 +54,31 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                     <div class="d-flex justify-content-between align-items-start flex-direction-row mb-0">
                         <h5 class="fw-semibold mb-2 mt-1">{{ __('cart.shipping_address') }}</h5>
                         <button type="button"
-                            onclick="window.location='{{ route('addresses.create', app()->getLocale()) }}'"
+                            data-bs-toggle="modal" data-bs-target="#addAddressModal"
                             class="btn underline-btn border-0">
                             + {{ __('cart.add_address') }}
                         </button>
                     </div>
-                    <select id="address_id" name="address_id" class="form-select styled-select" required>
-                        <option value="">{{ __('cart.select_address') }}</option>
-                        @foreach($addresses as $address)
-                        <option value="{{ $address->id }}" {{ $address->is_default ? 'selected' : '' }}>
-                            {{ $address->title }} — {{ $address->street }}, {{ $address->building }}, {{ $address->floor }}
-                        </option>
-                        @endforeach
-                    </select>
+                    <div class="login-inputForm">
+                        <select id="address_id" name="address_id" class="login-input" required>
+                            <option value="">{{ __('cart.select_address') }}</option>
+                            @foreach($addresses as $address)
+                            <option value="{{ $address->id }}" {{ $address->is_default ? 'selected' : '' }}>
+                                {{ $address->title }} — {{ $address->city->name_en }}, {{ $address->district->name_en }} 
+                                | Street {{ $address->street }}, Building {{ $address->building }}, Floor {{ $address->floor }}
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
 
                     <h5 class="fw-semibold mb-2 mt-5">{{ __('cart.payment_method') }}</h5>
                     <p class="mb-5">{{ __('cart.cod') }}</p>
 
-                    <h5 class="fw-semibold mb-3">{{ __('cart.promo_code') }}</h5>
+                    <h5 class="fw-semibold mb-2">{{ __('cart.promo_code') }}</h5>
                     <div class="promo mb-4 d-flex gap-3 align-items-center flex-direction-row">
-                        <div class="input-container" style="width: 40%;">
-                            <input type="text" id="promo_code" name="promo_code" style="width: 100%;" placeholder="">
-                            <label for="promo_code" class="label">{{ __('cart.enter_promo_code') }}</label>
-                            <div class="underline"></div>
+                        <div class="login-inputForm" style="width: 40%;">
+                            <input type="text" id="promo_code" name="promo_code"
+                            class="login-input" style="width: 100%;" placeholder="Enter Promo Code">
                         </div>
                         <div>
                             <button type="submit" class="btn underline-btn">{{ __('cart.apply') }}</button>
@@ -104,9 +106,29 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
     </form>
 </div>
 
+<!-- Add Address Modal -->
+<div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg d-flex justify-content-center">
+        <div class="modal-content p-3 pb-2" style="width: 75%;">
+            <div class="modal-header" style="border: none !important;">
+                <h2 class="display-5 login-title text-center mb-0" style="font-size: 2.5rem;">{{ __('Add New Address') }}</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('Close') }}"></button>
+            </div>
+            <div class="modal-body d-flex justify-content-center">
+                @include('sanita.addresses.create') {{-- We'll extract the form here --}}
+            </div>
+        </div>
+    </div>
+</div>
+
 {{-- Styles --}}
 <link href="{{ asset('css/cart.css') }}" rel="stylesheet" />
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<style>
+    .login-inputForm:focus-within {
+        border: 1.5px solid #38B2AC;
+    }
+</style>
 
 {{-- Scripts --}}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

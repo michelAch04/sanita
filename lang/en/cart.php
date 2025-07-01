@@ -11,6 +11,7 @@ return [
     'cart_total' => 'Cart Total',
     'add_to_cart' => 'Add to Cart',
     'order-per' => 'Order per',
+    'view_in_cart' => 'View in Cart',
     'continue_shopping' => 'Continue Shopping',
     'proceed_checkout' => 'Proceed to Checkout',
     'empty' => 'Your cart is currently empty.',

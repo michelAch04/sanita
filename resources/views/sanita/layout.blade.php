@@ -13,6 +13,7 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
 
     <!-- CSS Links -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
@@ -195,9 +196,6 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
     <!-- Main Content -->
     @yield('content')
 
-    @include('components.toast')
-    @include('components.modal')
-
     <!-- Footer -->
     <footer class="footer text-center text-white mt-auto py-4"
         style="background: linear-gradient(to right, #1E3A5F, #2A4365);     
@@ -221,6 +219,10 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
             </p>
         </div>
     </footer>
+    
+    @include('components.toast')
+    @include('components.modal')
+    
     <script>
         let lastScroll = 0;
         let navbar = document.getElementById('mainNavbar');

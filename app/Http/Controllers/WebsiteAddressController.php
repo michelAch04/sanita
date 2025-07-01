@@ -73,6 +73,8 @@ class WebsiteAddressController extends Controller
             if (session('force_address_modal')) {
                 session()->forget('force_address_modal');
                 return redirect()->route('sanita.index', app()->getLocale())->with('success', __('Address saved.'));
+            } else if (str_contains(url()->previous(), 'checkout')) {
+                return redirect()->route('cart.checkout', app()->getLocale())->with('success', __('Address saved.'));
             } else
                 return redirect()->route('addresses.index', app()->getLocale())->with('success', __('Address saved.'));
         } catch (\Exception $e) {

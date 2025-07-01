@@ -1,3 +1,6 @@
+:root{
+  --primary-color: #38B2AC;
+}
 /* CHECKBOX STYLING */
 .checkbox-container {
   display: flex;
@@ -111,7 +114,7 @@
 }
 
 .ios-checkbox.teal {
-  --checkbox-color: #38B2AC;
+  --checkbox-color: var(--primary-color);
   /* Your teal */
   --checkbox-bg: #B2DFDB;
   /* A lighter teal for background */
@@ -163,7 +166,7 @@
 
 .bubbles {
   --c1: #ffffff;
-  --c2: #38B2AC;
+  --c2: var(--primary-color);
   --size-letter: 15px;
   padding: 0.45em 0.5em;
   font-size: var(--size-letter);
@@ -232,7 +235,7 @@
 /* UNDERLINE BUTTON STYLING */
 .underline-btn {
   position: relative;
-  color: #38B2AC;
+  color: var(--primary-color);
   text-decoration: none;
   padding: 3px 0;
   font-weight: 600;
@@ -248,7 +251,7 @@
   transform-origin: center;
   width: 100%;
   height: 2px;
-  background-color: #38B2AC;
+  background-color: var(--primary-color);
   transition: transform 0.3s ease;
 }
 
@@ -287,7 +290,7 @@
 .input-container input:not(:placeholder-shown)~.label {
   top: -20px;
   font-size: 16px;
-  color: #38B2AC;
+  color: var(--primary-color);
 }
 
 .input-container .underline {
@@ -296,7 +299,7 @@
   left: 0;
   height: 2px;
   width: 100%;
-  background-color: #38B2AC;
+  background-color: var(--primary-color);
   transform: scaleX(0);
   transition: all 0.3s ease;
 }
@@ -336,7 +339,7 @@
 .input-container textarea:valid~.label {
   top: -20px;
   font-size: 16px;
-  color: #38B2AC;
+  color: var(--primary-color);
 }
 
 /* END OF UNDERLINE INPUT STYLING */
@@ -465,7 +468,7 @@
 }
 
 .visible-label {
-  color: #38B2AC;
+  color: var(--primary-color);
 }
 
 /* END OF VISIBLE INPUT STYLING */
@@ -474,7 +477,7 @@
 .select-container:focus,
 .select-label:focus {
   outline: 0;
-  border-color: #38B2AC;
+  border-color: var(--primary-color);
   box-shadow: 0 0 0 4px #6ee7b7;
 }
 
@@ -499,7 +502,7 @@
   box-shadow: 0 0 0 0.0625em #4DB6AC;
   background-color: #e5fffe;
   z-index: 1;
-  color: #38B2AC;
+  color: var(--primary-color);
 }
 
 .select-label span {

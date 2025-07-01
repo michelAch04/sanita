@@ -19,70 +19,77 @@
             </a>
         </div>
 
-@if($category->subcategories->count() > 1)
-    <!-- Multiple subcategories: Show tabs -->
-    <ul class="nav nav-pills justify-content-center mb-4" id="subcategoryTabs" role="tablist">
-        @foreach($category->subcategories as $index => $subcategory)
-        <li class="nav-item" role="presentation">
-            <button class="nav-link @if($index === 0) active @endif"
-                id="tab-{{ $subcategory->id }}"
-                data-bs-toggle="pill"
-                data-bs-target="#content-{{ $subcategory->id }}"
-                type="button"
-                role="tab">
-                {{ $subcategory->name_en }}
-            </button>
-        </li>
-        @endforeach
-    </ul>
+        @if($category->subcategories->count() > 1)
+        <!-- Multiple subcategories: Show tabs -->
+        <ul class="nav nav-pills justify-content-center mb-4" id="subcategoryTabs" role="tablist">
+            @foreach($category->subcategories as $index => $subcategory)
+            <li class="nav-item" role="presentation">
+                <button class="nav-link @if($index === 0) active @endif"
+                    id="tab-{{ $subcategory->id }}"
+                    data-bs-toggle="pill"
+                    data-bs-target="#content-{{ $subcategory->id }}"
+                    type="button"
+                    role="tab">
+                    {{ $subcategory->name_en }}
+                </button>
+            </li>
+            @endforeach
+        </ul>
 
-    <div class="tab-content" id="subcategoryTabContent">
-        @foreach($category->subcategories as $index => $subcategory)
-        @php
+        <div class="tab-content" id="subcategoryTabContent">
+            @foreach($category->subcategories as $index => $subcategory)
+            @php
             $subProducts = $productsBySubcategory[$subcategory->id] ?? null;
-        @endphp
-        <div class="tab-pane fade @if($index === 0) show active @endif"
-            id="content-{{ $subcategory->id }}"
-            role="tabpanel">
-            @if($subProducts && $subProducts->isNotEmpty())
-            <div class="d-flex flex-wrap justify-content-center gap-3">
-                @foreach($subProducts as $product)
-                @include('sanita.partials.product-card', ['product' => $product])
-                @endforeach
+            @endphp
+            <div class="tab-pane fade @if($index === 0) show active @endif"
+                id="content-{{ $subcategory->id }}"
+                role="tabpanel">
+                @if($subProducts && $subProducts->isNotEmpty())
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    @foreach($subProducts as $product)
+                    @include('sanita.partials.product-card', [
+                    'product' => $product,
+                    'cardType' => 'product',
+                    'badge' => __('nav.product')
+                    ])
+                    @endforeach
+                </div>
+                <div class="d-flex justify-content-center mt-4">
+                    {{ $subProducts->withQueryString()->links('pagination::bootstrap-5') }}
+                </div>
+                @else
+                <p class="text-center">{{ __('No products available in this subcategory.') }}</p>
+                @endif
             </div>
-            <div class="d-flex justify-content-center mt-4">
-                {{ $subProducts->withQueryString()->links('pagination::bootstrap-5') }}
-            </div>
-            @else
-            <p class="text-center">{{ __('No products available in this subcategory.') }}</p>
-            @endif
+            @endforeach
         </div>
-        @endforeach
-    </div>
 
-@elseif($category->subcategories->count() === 1)
-    <!-- Exactly one subcategory: show products directly -->
-    @php
+        @elseif($category->subcategories->count() === 1)
+        <!-- Exactly one subcategory: show products directly -->
+        @php
         $onlySubcategory = $category->subcategories->first();
         $products = $productsBySubcategory[$onlySubcategory->id] ?? $products ?? collect();
-    @endphp
-    @if($products->isNotEmpty())
-    <div class="d-flex flex-wrap justify-content-center gap-3">
-        @foreach($products as $product)
-        @include('sanita.partials.product-card', ['product' => $product])
-        @endforeach
-    </div>
-    <div class="d-flex justify-content-center mt-4">
-        {{ $products->withQueryString()->links('pagination::bootstrap-5') }}
-    </div>
-    @else
-    <p class="text-center">{{ __('No products available in this category.') }}</p>
-    @endif
+        @endphp
+        @if($products->isNotEmpty())
+        <div class="d-flex flex-wrap justify-content-center gap-3">
+            @foreach($products as $product)
+            @include('sanita.partials.product-card', [
+            'product' => $product,
+            'cardType' => 'product',
+            'badge' => __('nav.product')
+            ]) @endforeach
+        </div>
+        <div class="d-flex justify-content-center mt-4">
+            {{ $products->withQueryString()->links('pagination::bootstrap-5') }}
+        </div>
+        @else
+        <p class="text-center">{{ __('No products available in this category.') }}</p>
+        @endif
 
-@else
-    <!-- No subcategories -->
-    <p class="text-center">{{ __('No products available in this category.') }}</p>
-@endif
+        @else
+        <!-- No subcategories -->
+        <p class="text-center">{{ __('No products available in this category.') }}</p>
+        @endif
     </div>
 </section>
 

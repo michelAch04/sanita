@@ -12,7 +12,19 @@
         @else
         <div class="d-flex flex-wrap justify-content-center gap-3">
             @foreach($offers as $product)
-            @include('sanita.partials.product-card')
+            @php
+            $imagePath = 'products/' . $product->id . '.' . $product->extension;
+            $storage = \Illuminate\Support\Facades\Storage::disk('public')->exists($imagePath);
+            $prices = $product->listPrices;
+            $price = $prices->where('UOM', 'EA')->first();
+            @endphp
+            <div class="offer-card">
+                @include('sanita.partials.product-card', [
+                'product' => $product,
+                'cardType' => 'offer',
+                'badge' => __('nav.offer')
+                ])
+            </div>
             @endforeach
         </div>
 

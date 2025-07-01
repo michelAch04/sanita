@@ -6,7 +6,7 @@
     --link-hover: #d884f2;       /*--link-hover: #d884f2;*/
     --primary-text: #1E293B;     /*--primary-text: #241e3b;*/
     --card-width: 14.075rem;       /*--card-width: 17.075rem;*/
-    --card-height: 18.25rem;       /*--card-height: 20.25rem;*/
+    --card-height: 20.25rem;       /*--card-height: 20.25rem;*/
     --card-title: 1rem;           /*--card-title: 1.2em;*/
     --card-description: 0.6rem;    /*--card-description: 0.9em;*/
     --card-bg: #ffffff;          /*--card-bg: #ffffff;*/
@@ -318,6 +318,13 @@ section:nth-of-type(5) {
     cursor: pointer;
 }
 
+.product-card.out-of-stock-card {
+    opacity: 0.7;
+}
+.product-card.out-of-stock-card .card__glow {
+    display: none;
+}
+
 .card__shine {
     position: absolute;
     inset: 0;
@@ -332,10 +339,10 @@ section:nth-of-type(5) {
 .card__glow {
     position: absolute;
     inset: -10px;
-    background: radial-gradient(circle at 50% 0%,
-            rgba(42, 67, 101, 0.3) 0%,
+    background: radial-gradient(circle at 70% 0%,
+            rgba(80, 111, 148, 0.3) 0%,
             /* Updated glow */
-            rgba(42, 67, 101, 0) 70%);
+            rgba(76, 107, 147, 0) 70%);
     opacity: 0;
     transition: opacity 0.5s ease;
 }
@@ -397,7 +404,7 @@ section:nth-of-type(5) {
             rgba(255, 255, 255, 0.1) 0%,
             transparent 30%),
         repeating-linear-gradient(45deg,
-            rgba(42, 67, 101, 0.1) 0px,
+            rgba(255, 255, 255, 0.1) 0px,
             rgba(42, 67, 101, 0.1) 2px,
             transparent 2px,
             transparent 4px);
@@ -461,23 +468,44 @@ section:nth-of-type(5) {
 }
 
 .card__button {
-    width: 2rem;
-    height: 2rem;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0.5rem 0;
+    border-radius: 10px;
     background: var(--card-accent);
-    border-radius: 50%;
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    transform: scale(0.9);
+    gap: 0.5rem;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card__button:hover {
+    background: #162d6a; /* Darker on hover, adjust to your theme */
+}
+
+.card__button:disabled {
+    background: rgba(0, 0, 0, 0.2) !important;
+    cursor: not-allowed;
+}
+
+.card__button-incart{
+    background: rgb(17, 128, 41);
+    text-decoration: none;
+}
+.card__button-incart:hover{
+    background: rgb(13, 95, 30);
 }
 
 .card__button i {
-    color: #fff !important;
     font-size: 1rem;
-    padding: 5px;
+    margin: 0;
+    padding: 0;
+    color: white !important;
 }
 
 /* Hover Effects */
@@ -520,7 +548,6 @@ section:nth-of-type(5) {
 
 .card:hover .card__button {
     transform: scale(1);
-    box-shadow: 0 0 0 4px rgba(42, 67, 101, 0.2);
 }
 
 .card:hover .card__button svg {

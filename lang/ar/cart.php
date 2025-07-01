@@ -12,6 +12,7 @@ return [
     'cart_total' => 'إجمالي السلة',
     'add_to_cart' => 'أضف إلى السلة',
     'order-per' => 'الوحدة',
+    'view_in_cart' => 'عرض في السلة',
     'continue_shopping' => 'متابعة التسوق',
     'proceed_checkout' => 'إتمام الشراء',
     'empty' => 'سلة التسوق فارغة حالياً.',

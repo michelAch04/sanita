@@ -181,7 +181,7 @@ $(document).ready(function () {
                 unit_price: $("#modalProductUnitPrice").val(),
                 shelf_price: $("#modalProductShelfPrice")
                     .text()
-                    .replace("Price: $", ""),
+                    .replace(/[^\d.]/g, ""),
                 type: $("#modalProductType").val(),
                 ea_ca: $("#modalProductEaCa").val(),
                 ea_pl: $("#modalProductEaPl").val(),
@@ -254,7 +254,7 @@ $(document).ready(function () {
             let oldPrice = oldPrices[selectedUOM] || oldPrices["EA"] || "";
 
             $("#modalProductUnitPrice").val(unitPrice);
-            $("#modalProductShelfPrice").text(shelfPrice);
+            $("#modalProductShelfPrice").text("$" + shelfPrice);
 
             // Show old price only if it exists and is greater than shelf price
             if (oldPrice && parseFloat(oldPrice) > parseFloat(shelfPrice)) {
