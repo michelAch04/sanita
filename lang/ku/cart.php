@@ -11,6 +11,7 @@ return [
     'action' => 'کردار',
     'cart_total' => 'کۆی گشتیی سەبەت',
     'add_to_cart' => 'زیادکردن بۆ سەبەتە',
+    'order-per' => 'بە یەکە',
     'continue_shopping' => 'بەردەوام بە لە کڕین',
     'proceed_checkout' => 'چوونە ناو پڕۆسەی کڕین',
     'empty' => 'سەبەتی کڕین بەتاڵە.',

@@ -1,7 +1,7 @@
 @php
-    if (str_starts_with(request()->path(), 'cms')) {
-        $isRtl = 0;
-    }
+if (str_starts_with(request()->path(), 'cms')) {
+$isRtl = 0;
+}
 @endphp
 {{-- Global Toasts --}}
 @if (session('success') || session('error') || $errors->any() || session('info') || session('warning'))
@@ -73,68 +73,3 @@
   @endif
 </div>
 @endif
-<style>
-  .custom-toast-card {
-    width: auto;
-    height: 80px;
-    border-radius: 8px;
-    box-sizing: border-box;
-    padding: 10px 15px;
-    background-color: #ffffff;
-    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    gap: 15px;
-  }
-
-  .custom-toast-card .wave {
-    position: absolute;
-    transform: rotate(90deg);
-    left: -31px;
-    top: 32px;
-    width: 80px;
-  }
-
-  .custom-toast-card .icon-container {
-    width: 2rem !important;
-    height: 2rem !important;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #04e40048;
-    border-radius: 50% !important;
-    margin-left: 8px;
-    font-size: 18px;
-  }
-
-  .error-toast .custom-toast-card .icon-container {
-    width: 2.5rem !important;
-  }
-  .custom-toast-card .message-text-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    flex-grow: 1;
-  }
-
-  .custom-toast-card .message-text,
-  .custom-toast-card .sub-text {
-    margin: 0;
-    cursor: default;
-  }
-
-  .custom-toast-card .message-text {
-    color: #269b24;
-    font-size: 17px;
-    font-weight: 700;
-  }
-
-  .info-toast .custom-toast-card .custom-toast-card .sub-text {
-    font-size: 14px;
-    color: #555;
-  }
-</style>

@@ -10,6 +10,7 @@ return [
     'action' => 'Action',
     'cart_total' => 'Cart Total',
     'add_to_cart' => 'Add to Cart',
+    'order-per' => 'Order per',
     'continue_shopping' => 'Continue Shopping',
     'proceed_checkout' => 'Proceed to Checkout',
     'empty' => 'Your cart is currently empty.',

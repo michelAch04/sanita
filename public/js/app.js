@@ -120,6 +120,8 @@ $(document).ready(function () {
             $("#modalProductMaxQuantity").val(productmaxqty);
             $("#modalProductQuantity").val(productminqty || 1);
             $("#modalProductDescriptionDisplay").text(productDescription);
+            $("#modalProductEaCa").val(productEaCa);
+            $("#modalProductEaPl").val(productEaPl);
 
             // Show price and description in the modal
             $("#modalProductShelfPrice").text("Price: $" + productShelfPrice);
@@ -251,12 +253,12 @@ $(document).ready(function () {
             let oldPrice = oldPrices[selectedUOM] || oldPrices["EA"] || "";
 
             $("#modalProductUnitPrice").val(unitPrice);
-            $("#modalProductShelfPrice").text("Price: $" + shelfPrice);
+            $("#modalProductShelfPrice").text("$" + shelfPrice);
 
             // Show old price only if it exists and is greater than shelf price
             if (oldPrice && parseFloat(oldPrice) > parseFloat(shelfPrice)) {
                 $("#modalProductOldPriceDisplay")
-                    .text("Old: $" + parseFloat(oldPrice).toFixed(2))
+                    .text("$" + parseFloat(oldPrice).toFixed(2))
                     .show();
             } else {
                 $("#modalProductOldPriceDisplay").hide();
@@ -268,5 +270,20 @@ $(document).ready(function () {
             $("#modalProductMinQuantity").val(minqty);
             $("#modalProductMaxQuantity").val(maxqty);
             $("#modalProductQuantity").val(minqty);
+
+            // Update conversion field
+            let ea_ca = $("#modalProductEaCa").val();
+            let ea_pl = $("#modalProductEaPl").val();
+            let conversionText = "";
+
+            if (selectedUOM === "CA" && ea_ca) {
+                conversionText = `1 CA = ${ea_ca} EA`;
+            } else if (selectedUOM === "PL" && ea_pl) {
+                conversionText = `1 PL = ${ea_pl} EA`;
+            } else if (selectedUOM === "EA") {
+                conversionText = "";
+            }
+
+            $("#modalProductConversion").text(conversionText);
         });
 });

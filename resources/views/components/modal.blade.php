@@ -2,7 +2,6 @@
 if (str_starts_with(request()->path(), 'cms')) {
 $isRtl = 0;
 }
-
 @endphp
 {{-- Global Delete Confirmation Modal --}}
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -62,16 +61,17 @@ $isRtl = 0;
                     <div class="mb-2">
                         <span id="modalProductDescriptionDisplay" class="text-muted"></span>
                     </div>
-                    <div class="mb-4">
+                    <div class="mb-2">
                         <span id="modalProductOldPriceDisplay" class="text-muted text-decoration-line-through me-2" style="display:none;"></span>
                         <span id="modalProductShelfPrice" class="fw-bold" style="color: var(--primary-text);"></span>
                     </div>
-                    <div class="align-items-center d-flex">
-                        <label for="modalProductUOM">Order per:</label>
-                        <select name="UOM" id="modalProductUOM" class="form-select ms-2" style="width: 120px;">
+                    <div class="align-items-center d-flex mb-1">
+                        <label for="modalProductUOM">{{__('cart.order-per')}}:</label>
+                        <select name="UOM" id="modalProductUOM" class="form-select ms-2" style="width: fit-content;">
                         </select>
                     </div>
-                    <div class="mt-3">
+                    <div id="modalProductConversion" class="mb-1 mt-0 text-muted small"></div>
+                    <div class="mt-0">
                         <label for="modalProductQuantity">{{ __('cart.quantity') }}:</label>
                         <div class="update-quantity-form align-items-center d-flex mb-2">
                             <button type="button" class="btn btn-sm btn-decrease"><i class="fa fa-minus"></i></button>
@@ -80,7 +80,7 @@ $isRtl = 0;
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn bubbles bubbles-grey" data-bs-dismiss="modal"><span class="text">Cancel</span></button>
+                        <button type="button" class="btn bubbles bubbles-grey" data-bs-dismiss="modal"><span class="text">{{__( 'nav.cancel' )}}</span></button>
                         <button type="submit" class="btn bubbles bubbles-arctic">
                             <span class="text"> <i class="fas fa-cart-plus me-2"></i>{{ __('cart.add_to_cart') }}</span>
                         </button>

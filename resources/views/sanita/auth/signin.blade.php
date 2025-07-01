@@ -47,7 +47,6 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                     id="password"
                     class="login-input"
                     placeholder="{{ __('auth.sign_in.password') }}">
-                <i class="fa fa-eye toggle-password" style="cursor: pointer;"></i>
             </div>
 
             @if ($errors->has('login_error'))
