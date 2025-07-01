@@ -34,7 +34,10 @@
                         @if($detail->old_price && $detail->old_price > $detail->shelf_price)
                         <small class="text-decoration-line-through text-muted me-2">${{ number_format($detail->old_price, 2) }}</small>
                         @endif
-                        <span class="fw-semibold text-dark">${{ number_format($detail->shelf_price, 2) }}</span>
+                        <span class="fw-semibold text-dark">
+                            ${{ number_format($detail->shelf_price, 2) }}
+                            <span class="text-muted fs-6 ms-1">/ {{ $detail->UOM }}</span>
+                        </span>
                     </div>
 
                     <div class="d-flex align-items-center justify-content-between">
@@ -42,7 +45,7 @@
                             @csrf
                             @method('PUT')
                             <button type="button" class="btn btn-sm btn-decrease"><i class="fa fa-minus"></i></button>
-                            <input type="text" name="quantity" class="quantity-input" value="{{ $detail->quantity }}">
+                            <input type="text" name="quantity" class="quantity-input" value="{{ $detail->quantity_ea }}">
                             <button type="button" class="btn btn-sm btn-increase"><i class="fa fa-plus"></i></button>
                         </form>
                         <form class="delete-item-form mt-2" method="POST" action="{{ route('website.cart.destroy', ['locale' => app()->getLocale(), 'cart' => $detail->id]) }}">
@@ -84,7 +87,7 @@
             <span class="text"><i class="fa fa-arrow-left me-1"></i> {{ __('cart.continue_shopping') }}</span>
         </a>
         <div class="d-flex align-items-center flex-direction-row gap-4">
-            <h5 class="mb-0 fw-bold text-light">{{ __('cart.cart_total') }}: <span id="cart-total">${{ number_format($cartTotal, 2) }}</span></h5>
+            <h5 class="mb-0 fw-bold text-light">{{ __('cart.cart_total') }}: <span id="cart-total">${{ number_format($cart->total_amount, 2) }}</span></h5>
             <a href="{{ route('cart.checkout', ['locale' => app()->getLocale()]) }}" class="btn bubbles fw-semibold">
                 <span class="text"><i class="fa fa-credit-card me-1"></i> {{ __('cart.proceed_checkout') }}</span>
             </a>

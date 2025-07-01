@@ -33,8 +33,8 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                                         @endif
                                         <span class="fw-semibold">${{ number_format($item->shelf_price, 2) }}</span>
                                     </p>
-                                    <p class="mb-0"><small>{{ __('cart.quantity') }}: {{ $item->quantity }}</small></p>
-                                    <p><small>{{ __('cart.total') }}: ${{ number_format($item->shelf_price * $item->quantity, 2) }}</small></p>
+                                    <p class="mb-0"><small>{{ __('cart.quantity') }}: {{ $item->quantity_ea }} / {{$item->UOM}}</small></p>
+                                    <p><small>{{ __('cart.total') }}: ${{ number_format($item->extended_price, 2) }}</small></p>
                                 </div>
                             </div>
                         </div>
