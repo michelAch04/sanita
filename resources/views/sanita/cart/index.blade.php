@@ -45,7 +45,7 @@
                             @csrf
                             @method('PUT')
                             <button type="button" class="btn btn-sm btn-decrease"><i class="fa fa-minus"></i></button>
-                            <input type="text" name="quantity" class="quantity-input" value="{{ $detail->quantity_ea }}">
+                            <input type="text" name="quantity" class="quantity-input" value="{{ $detail->quantity_foreign }}">
                             <button type="button" class="btn btn-sm btn-increase"><i class="fa fa-plus"></i></button>
                         </form>
                         <form class="delete-item-form mt-2" method="POST" action="{{ route('website.cart.destroy', ['locale' => app()->getLocale(), 'cart' => $detail->id]) }}">

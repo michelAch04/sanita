@@ -17,10 +17,7 @@ class WebsiteCartController extends Controller
 {
     public function index()
     {
-        $cart = Cart::with('cartDetails')
-            ->where('customers_id', auth()->id())
-            ->first();
-            
+        $cart = $this->getCartWithDetails();
         return view('sanita.cart.index', compact('cart'));
     }
 
@@ -76,38 +73,20 @@ class WebsiteCartController extends Controller
             $extendedPrice = $shelfPrice * $quantity;
 
             // 3. Convert requested quantity to EA
-            $requestedQuantityEA = $quantity;
-            if ($unit === 'CA') {
-                $requestedQuantityEA = $quantity * $ea_ca;
-            } elseif ($unit === 'PL') {
-                $requestedQuantityEA = $quantity * $ea_pl;
-            }
+            $requestedQuantityEA = $this->convertToEA($quantity, $unit, $ea_ca, $ea_pl);
 
             // 4. Find or create the cart
-            $cart = Cart::where('customers_id', $customerId)->first();
-            if (!$cart) {
-                $cart = Cart::create([
-                    'customers_id'   => $customerId,
-                    'total_amount'   => 0,
-                    'subtotal_amount' => 0,
-                    'tax_amount'     => 0,
-                ]);
-            }
+            $cart = $this->getOrCreateCart($customerId);
 
             // 5. Check if this product+UOM already exists in the cart
-            $cartDetail = CartDetail::where('carts_id', $cart->id)
-                ->where('products_id', $product->id)
-                ->where('UOM', $unit)
-                ->first();
+            $cartDetail = $this->getCartDetail($cart->id, $product->id, $unit);
 
-            $alreadyInCartEA = $cartDetail ? $cartDetail->quantity_ea : 0;
+            $alreadyInCartEA = $cartDetail ? $cartDetail->quantity_primary : 0;
             $totalRequestedEA = $requestedQuantityEA + $alreadyInCartEA;
 
-            // 6. Calculate total available stock in EA
-            $totalStockEA = $product->distributorStocks->sum('stock');
-
-            // 7. Check stock (including what's already in the cart)
-            if ($totalRequestedEA > $totalStockEA) {
+            // 6. Check stock (including what's already in the cart)
+            if (!$this->hasEnoughStock($product, $totalRequestedEA)) {
+                $totalStockEA = $product->distributorStocks->sum('stock');
                 return response()->json([
                     'success'            => false,
                     'message'            => 'Not enough stock available.',
@@ -117,32 +96,34 @@ class WebsiteCartController extends Controller
                 ], 422);
             }
 
-            // 8. Update cart totals
+            // 7. Update cart totals
             $cart->total_amount    += $extendedPrice;
             $cart->subtotal_amount += $unitPrice * $quantity;
             $cart->tax_amount      += ($shelfPrice - $unitPrice) * $quantity;
             $cart->save();
 
-            // 9. Update or create cart detail
+            // 8. Update or create cart detail
             if ($cartDetail) {
                 // Update existing cart detail
-                $cartDetail->quantity_ea    += $quantity;
-                $cartDetail->unit_price      = $unitPrice;
-                $cartDetail->shelf_price     = $shelfPrice;
-                $cartDetail->old_price       = $oldPrice;
-                $cartDetail->extended_price += $extendedPrice;
+                $cartDetail->quantity_primary   += $requestedQuantityEA;
+                $cartDetail->quantity_foreign   += $quantity;
+                $cartDetail->unit_price          = $unitPrice;
+                $cartDetail->shelf_price         = $shelfPrice;
+                $cartDetail->old_price           = $oldPrice;
+                $cartDetail->extended_price     += $extendedPrice;
                 $cartDetail->save();
             } else {
                 // Create new cart detail
                 CartDetail::create([
-                    'carts_id'      => $cart->id,
-                    'products_id'   => $product->id,
-                    'quantity_ea'   => $quantity,
-                    'UOM'           => $unit,
-                    'unit_price'    => $unitPrice,
-                    'shelf_price'   => $shelfPrice,
-                    'old_price'     => $oldPrice,
-                    'extended_price' => $extendedPrice,
+                    'carts_id'         => $cart->id,
+                    'products_id'      => $product->id,
+                    'quantity_primary' => $requestedQuantityEA,
+                    'quantity_foreign' => $quantity,
+                    'UOM'              => $unit,
+                    'unit_price'       => $unitPrice,
+                    'shelf_price'      => $shelfPrice,
+                    'old_price'        => $oldPrice,
+                    'extended_price'   => $extendedPrice,
                 ]);
             }
 
@@ -158,7 +139,6 @@ class WebsiteCartController extends Controller
                 'cart_subtotal' => round($cart->subtotal_amount, 2),
                 'cart_tax'     => round($cart->tax_amount, 2),
                 'cart_id'      => $cart->id,
-                ''
             ]);
         } catch (\Exception $e) {
             \Log::error($e);
@@ -207,21 +187,39 @@ class WebsiteCartController extends Controller
         return redirect()->back()->with('success', __('cart.updated'));
     }
 
-    public function destroy(Request $request, CartDetail $cart)
+    public function destroy(Request $request, $locale, CartDetail $cart)
     {
         $carts_id = $cart->carts_id;
         $products_id = $cart->products_id;
 
-        $remainingItems = CartDetail::where('carts_id', $carts_id)
-            ->where('id', '!=', $cart->id)
-            ->count();
+        // Get the cart header
+        $cartHeader = Cart::find($carts_id);
 
-        CartDetail::where('carts_id', $carts_id)
-            ->where('products_id', $products_id)
-            ->delete();
+        // Calculate the item's amounts
+        $itemTotal = $cart->extended_price;
+        $itemTax   = ($cart->shelf_price - $cart->unit_price) * $cart->quantity_foreign;
+        $itemSubtotal = $cart->unit_price * $cart->quantity_foreign;
 
-        if ($remainingItems === 0) {
-            Cart::where('id', $carts_id)->delete();
+        // Remove the cart detail
+        $cart->delete();
+
+        // Check if there are remaining items
+        $remainingItems = CartDetail::where('carts_id', $carts_id)->count();
+
+        if ($cartHeader) {
+            if ($remainingItems === 0) {
+                // If last item, reset totals but keep the cart header
+                $cartHeader->total_amount = 0;
+                $cartHeader->subtotal_amount = 0;
+                $cartHeader->tax_amount = 0;
+                $cartHeader->save();
+            } else {
+                // Otherwise, subtract the removed item's amounts
+                $cartHeader->total_amount    = max(0, $cartHeader->total_amount - $itemTotal);
+                $cartHeader->subtotal_amount = max(0, $cartHeader->subtotal_amount - $itemSubtotal);
+                $cartHeader->tax_amount      = max(0, $cartHeader->tax_amount - $itemTax);
+                $cartHeader->save();
+            }
         }
 
         if ($request->ajax()) {
@@ -249,7 +247,105 @@ class WebsiteCartController extends Controller
         $districts = District::all();
         $cities = City::all();
 
-        return view('sanita.cart.checkout', compact('cart', 'addresses', 
-        'subtotal', 'totalTax', 'total', 'governorates', 'districts', 'cities'));
+        return view('sanita.cart.checkout', compact(
+            'cart',
+            'addresses',
+            'subtotal',
+            'totalTax',
+            'total',
+            'governorates',
+            'districts',
+            'cities'
+        ));
+    }
+
+    public function getCartWithDetails()
+    {
+        $customerId = auth('customer')->id();
+        return Cart::with('cartDetails')
+            ->where('customers_id', $customerId)
+            ->first();
+    }
+
+    /**
+     * Convert requested quantity to EA based on unit.
+     */
+    protected function convertToEA($quantity, $unit, $ea_ca, $ea_pl)
+    {
+        if ($unit === 'CA') {
+            return $quantity * $ea_ca;
+        } elseif ($unit === 'PL') {
+            return $quantity * $ea_pl;
+        }
+        return $quantity;
+    }
+
+    /**
+     * Check if requested EA quantity is available in stock.
+     */
+    protected function hasEnoughStock(Product $product, int $requestedEA): bool
+    {
+        $totalStockEA = $product->distributorStocks->sum('stock');
+        return $requestedEA <= $totalStockEA;
+    }
+
+    /**
+     * Get or create the cart for the current customer.
+     */
+    protected function getOrCreateCart($customerId)
+    {
+        $cart = Cart::where('customers_id', $customerId)->first();
+        if (!$cart) {
+            $cart = Cart::create([
+                'customers_id'   => $customerId,
+                'total_amount'   => 0,
+                'subtotal_amount' => 0,
+                'tax_amount'     => 0,
+            ]);
+        }
+        return $cart;
+    }
+
+    /**
+     * Get cart detail for a given cart, product, and UOM.
+     */
+    protected function getCartDetail($cartId, $productId, $unit)
+    {
+        return CartDetail::where('carts_id', $cartId)
+            ->where('products_id', $productId)
+            ->where('UOM', $unit)
+            ->first();
+    }
+
+    /**
+     * Check if the price in the request matches the latest price in the database.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Product $product
+     * @param string $unit
+     * @return array [bool $changed, float $latestUnitPrice, float $latestShelfPrice]
+     */
+    protected function isPriceChanged(Request $request, Product $product, $unit)
+    {
+        $latestPrice = $product->listPrices()
+            ->where('UOM', $unit)
+            ->where('type', $request->input('type'))
+            ->orderByDesc('id')
+            ->first();
+
+        if ($latestPrice) {
+            $unitPrice = $latestPrice->unit_price;
+            $shelfPrice = $latestPrice->shelf_price;
+
+            $changed = (
+                $request->input('unit_price') != $unitPrice ||
+                $request->input('shelf_price') != $shelfPrice
+            );
+
+            return [$changed, $unitPrice, $shelfPrice];
+        }
+
+        // If no price found, treat as not changed (or handle as needed)
+        return [false, $request->input('unit_price'), $request->input('shelf_price')];
     }
 }

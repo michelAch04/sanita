@@ -14,7 +14,8 @@ class CartDetail extends Model
         'shelf_price',
         'old_price',
         'extended_price',
-        'quantity_ea',
+        'quantity_primary',
+        'quantity_foreign',
         'canceled',
     ];
 

@@ -197,11 +197,13 @@ class WebsiteController extends Controller
             $type = $customer->type;
 
             if ($type == 'b2c') {
-                return $this->productsForCustomer($customerid, 'b2c');
+                // return $this->productsForCustomer($customerid, 'b2c');
+                return $this->allProducts($type);
             } elseif ($type == 'b2b') {
-                return $this->productsForCustomer($customerid, 'b2b');
+                // return $this->productsForCustomer($customerid, 'b2b');  
+                return $this->allProducts($type);
             }
         }
-        return $this->allProducts();
+        return $this->allProducts('b2b');
     }
 }
