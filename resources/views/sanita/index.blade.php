@@ -94,18 +94,4 @@ $type = auth()->user()->type ?? 'b2c';
 
 @include('sanita.partials.add-to-cart-modal')
 @include('sanita.partials.contact-us')
-
-@section('scripts')
-<script>
-    window.uomLabels = {
-        EA: "{{ __('cart.EA') }}",
-        CA: "{{ __('cart.CA') }}",
-        PL: "{{ __('cart.PL') }}"
-    };
-
-    window.conversionCaseEach = "{{ __('cart.conversion_case_each') }}";
-    window.conversionPalletEach = "{{ __('cart.conversion_pallet_each') }}";
-</script>
-@endsection
-@yield('scripts')
 @endsection

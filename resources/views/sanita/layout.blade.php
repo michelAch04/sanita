@@ -235,6 +235,14 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
         selectDistrict: "{{ __('Select District') }}",
         selectGovernorate: "{{ __('Select Governorate') }}"
     };
+    window.uomLabels = {
+        EA: "{{ __('cart.EA') }}",
+        CA: "{{ __('cart.CA') }}",
+        PL: "{{ __('cart.PL') }}"
+    };
+
+    window.conversionCaseEach = "{{ __('cart.conversion_case_each') }}";
+    window.conversionPalletEach = "{{ __('cart.conversion_pallet_each') }}";
 </script>
 
 <!-- Per-page Scripts -->
