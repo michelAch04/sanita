@@ -209,6 +209,20 @@ $(document).ready(function () {
                         let current = parseInt($("#cart-count").text()) || 0;
                         $("#cart-count").text(current + 1);
                     }
+
+                    // Build the "View in Cart" button (same as in Blade)
+                    let productId = $("#modalProductId").val();
+                    let productCardForm = $(`form.add-to-cart-form input[name="product_id"][value="${productId}"]`).closest("form");
+                    let viewCartButton = `
+                            <a href="${window.url}/${window.locale}/cart" class="card__button card__button-incart">
+                                <i class="fas fa-shopping-cart"></i> ${window.cartMessages.viewInCart}
+                            </a>
+                        `;
+                    if (productCardForm.length) {
+                        productCardForm.replaceWith(viewCartButton);
+                    }
+                    
+
                     showAjaxToast("success", window.cartMessages.addSuccess);
                 },
                 error: function (xhr) {
@@ -287,4 +301,53 @@ $(document).ready(function () {
 
             $("#modalProductConversion").text(conversionText);
         });
+    // ------------------------------------ NAVBAR SCROLL --------------------------------------- //
+    let lastScroll = 0;
+    let navbar = document.getElementById('mainNavbar');
+    let isScrolling;
+
+    window.addEventListener('scroll', function () {
+        const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+        // Hide navbar if scrolling down
+        if (currentScroll > lastScroll && currentScroll > 50) {
+            navbar.style.transform = 'translateY(-100%)';
+        } else {
+            navbar.style.transform = 'translateY(0)';
+        }
+
+        lastScroll = currentScroll <= 0 ? 0 : currentScroll;
+
+        // Show navbar if scrolling stops
+        clearTimeout(isScrolling);
+        isScrolling = setTimeout(() => {
+            navbar.style.transform = 'translateY(0)';
+        }, 300); // after scroll stops
+    });
+
+    // ------------------------------------ SEARCH BAR ------------------------------------------ //
+    const searchInput = document.getElementById("searchInput");
+    const searchIcon = searchInput.previousElementSibling;
+
+    searchInput.addEventListener("focus", () => {
+        searchInput.classList.add("expanded");
+        searchIcon.classList.add('focused');
+    });
+
+    searchInput.addEventListener("blur", () => {
+        if (searchInput.value.trim() === "") {
+            searchInput.classList.remove("expanded");
+            searchIcon.classList.remove('focused');
+        }
+    });
+
+    searchInput.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            const q = this.value.trim();
+            if (q) {
+                window.location.href = window.url + `/${window.locale}/search?q=${encodeURIComponent(q)}`;
+            }
+        }
+    });
 });

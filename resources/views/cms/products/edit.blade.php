@@ -146,21 +146,12 @@
     </div>
 </div>
 
-@push('styles')
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-@endpush
-
+@include('cms.partials.select2', [
+    'id' => '.select2',
+    'placeholder' => 'Select an option',
+])
 @push('scripts')
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
-    $(document).ready(function() {
-        $('.select2').select2({
-            placeholder: 'Select an option',
-            width: '100%'
-        });
-    });
-
     window.taxRates = @json($taxes-> pluck('rate', 'id'));
 
     function getSelectedTaxRate() {
@@ -206,6 +197,4 @@
     });
 </script>
 @endpush
-
-@include('cms.partials.select2-style')
 @endsection

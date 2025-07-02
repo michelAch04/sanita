@@ -34,7 +34,7 @@
         </div>
 
         {{-- District --}}
-        <div id="districtsInput" class="mb-3 o-50" style="transition: opacity 0.3s ease;">
+        <div id="districtsInput" class="mb-3 o-50 o-transition">
             <label for="district" class="{{ $isRtl ? 'text-end w-100' : '' }}">{{ __('District') }}</label>
             <div class="login-inputForm @error('district') is-invalid @enderror {{ $isRtl ? 'text-end w-100' : '' }}">
                 <i class="fa-solid fa-map-marker-alt "></i>
@@ -48,7 +48,7 @@
         </div>
 
         {{-- City --}}
-        <div id="citiesInput" class="mb-3 o-50" style="transition: opacity 0.3s ease;">
+        <div id="citiesInput" class="mb-3 o-50 o-transition">
             <label for="city" class="{{ $isRtl ? 'text-end w-100' : '' }}">{{ __('City') }}</label>
             <div class="login-inputForm @error('city') is-invalid @enderror {{ $isRtl ? 'text-end w-100' : '' }}">
                 <i class="fa fa-city"></i>
@@ -115,149 +115,9 @@
     </form>
 </div>
 
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-@include('sanita.partials.select2-style')
-<style>
-    .textarea-container {
-        height: 5rem;
-    }
-
-    .textarea-container {
-        align-items: baseline;
-    }
-
-    .textarea-input {
-        width: 100%;
-        resize: none;
-    }
-
-    .select2-container--default .select2-selection--single {
-        border: none !important;
-        width: 100% !important;
-    }
-
-    .select2-selection--single {
-        display: flex !important;
-        align-items: center;
-        margin-left: 0.9rem !important;
-    }
-
-    .select2-selection__clear {
-        display: none !important;
-    }
-
-    .select2-container--default .select2-selection--single .select2-selection__placeholder {
-        color: #767676;
-    }
-
-    .select2-container--default .select2-selection--single:focus-visible {
-        border: none !important;
-    }
-
-    .select2-container--default .select2-selection--single:hover,
-    .select2-container--default.select2-container--open .select2-selection--single {
-        border-color: rgb(65, 75, 152);
-    }
-
-    .select2-container .select2-search--dropdown .select2-search__field:focus {
-        box-shadow: 0 0 6px rgb(65, 75, 152);
-    }
-
-    .select2-results__option--highlighted {
-        background-color: rgb(65, 75, 152) !important;
-    }
-
-    .select2-container--open {
-        z-index: 9999 !important;
-    }
-
-    .select2-container--default.select2-container--disabled .select2-selection--single {
-        background: transparent !important;
-    }
-
-    .o-50 {
-        opacity: 0.5;
-    }
-</style>
-
-{{-- Scripts --}}
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js" defer></script>
-<script>
-    $(document).ready(function() {
-        var $govIn = $('#governoratesInput');
-        var $disIn = $('#districtsInput');
-        var $citIn = $('#citiesInput');
-
-        $('#governorate').select2({
-            placeholder: "{{ __('Select Governorate') }}",
-            allowClear: true,
-            width: '95%',
-            minimumResultsForSearch: 4,
-            dropdownParent: $govIn
-        });
-
-        $('#district').select2({
-            placeholder: "{{ __('Select District') }}",
-            allowClear: true,
-            width: '95%',
-            minimumResultsForSearch: 4,
-            dropdownParent: $disIn,
-            disabled: true
-        });
-
-        $('#city').select2({
-            placeholder: "{{ __('Select City') }}",
-            allowClear: true,
-            width: '95%',
-            minimumResultsForSearch: 4,
-            dropdownParent: $citIn,
-            disabled: true
-        });
-
-        const locale = '{{ app()->getLocale() }}';
-        const baseUrl = '{{ url('') }}';
-        console.log(baseUrl)
-
-        $('#governorate').on('change', function() {
-            const governorateId = $(this).val();
-            $('#district').html('<option value="">{{ __("Loading...") }}</option>');
-            $('#city').html('<option value="">{{ __("Select City") }}</option>');
-
-            $.ajax({
-                url: `${baseUrl}/${locale}/get-districts`,
-                data: {
-                    governorates_id: governorateId
-                },
-                success: function(data) {
-                    $disIn.removeClass('o-50');
-                    $('#district').html('<option value="">{{ __("Select District") }}</option>');
-                    data.forEach(d => {
-                        $('#district').append(`<option value="${d.id}">${d.name_en}</option>`);
-                    });
-                    $('#district').prop('disabled', false); // Re-enable after loading
-                }
-            });
-        });
-
-        $('#district').on('change', function() {
-            const districtId = $(this).val();
-            $('#city').html('<option value="">{{ __("Loading...") }}</option>')
-
-            $.ajax({
-                url: `${baseUrl}/${locale}/get-cities`,
-                data: {
-                    districts_id: districtId
-                },
-                success: function(data) {
-                    $citIn.removeClass('o-50');
-                    $('#city').html('<option value="">{{ __("Select City") }}</option>');
-                    data.forEach(c => {
-                        $('#city').append(`<option value="${c.id}">${c.name_en}</option>`);
-                    });
-                    $('#city').prop('disabled', false); // Re-enable after loading
-                }
-            });
-        });
-    });
-</script>
+@include('sanita.partials.select2',[
+'id' => '#governorate',
+'placeholder' => "{{ __('cart.select_address') }}"
+])
+<link rel="stylesheet" href="{{ asset('css/address.css') }}" />
+<script src="{{ asset('js/address.js') }}"></script>

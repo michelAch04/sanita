@@ -6,8 +6,8 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
 
 @section('content')
 
-<div class="container mb-4" style="max-width:400px;">
-    <h2 class="display-5 login-title text-center mt-4">{{ __('auth.sign_in.title') }}</h2>
+<div class="container login-container signin-container mb-4">
+    <h2 class="display-5 login-title text-center mt-4 mb-4">{{ __('auth.sign_in.title') }}</h2>
 
     <div class="{{ $isRtl ? 'rtl-container' : '' }}">
         <form method="POST" action="{{ route('customer.signin', ['locale' => app()->getLocale()]) }}" 
@@ -17,7 +17,7 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
             <div class="login-flex-column">
                 <label for="mobile" class="{{ $isRtl ? 'text-end w-100' : '' }}">{{ __('auth.sign_up.mobile') }}</label>
             </div>
-            <div class="login-inputForm phone-group @error('mobile') is-invalid @enderror" style="position: relative;">
+            <div class="login-inputForm phone-group position-relative @error('mobile') is-invalid @enderror">
                 <i class="fa fa-phone"></i>
                 <input type="hidden" name="country_code" id="country_code">
                 <input id="mobile" type="tel" name="mobile"
@@ -25,17 +25,17 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                     value="{{ old('mobile') }}"
                     data-old="{{ old('country_code') ? '+' . old('country_code') . old('mobile') : '' }}"
                     placeholder="{{ __('auth.sign_up.mobile') }}" required> 
-                <span id="phone-loading" class="phone-status-icon d-none" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); display: none;">
+                <span id="phone-loading" class="phone-status-icon d-none">
                     <i class="fa fa-spinner fa-spin"></i>
                 </span>
-                <span id="phone-valid" class="phone-status-icon text-success d-none" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); display: none;">
+                <span id="phone-valid" class="phone-status-icon text-success d-none">
                     <i class="fa fa-check-circle"></i>
                 </span>
-                <span id="phone-invalid" class="phone-status-icon text-danger d-none" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); display: none;">
+                <span id="phone-invalid" class="phone-status-icon text-danger d-none">
                     <i class="fa fa-xmark-circle"></i>
                 </span>
             </div>
-            <div id="mobile-error" class="login-error-message" style="display:none;"></div>
+            <div id="mobile-error" class="login-error-message d-none"></div>
 
             <div class="login-flex-column">
                 <label for="password" class="{{ $isRtl ? 'text-end w-100' : '' }}">{{ __('auth.sign_in.password') }}</label>
@@ -57,7 +57,7 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
 
             <div class="login-flex-row">
                 <label class="cl-checkbox" for="remember">
-                    <input type="checkbox" id="remember" name="remember" style="cursor: pointer;" checked="">
+                    <input type="checkbox" id="remember" name="remember" class="cursor-pointer" checked="">
                     <span>{{ __('auth.sign_in.remember_me') }}</span>
                 </label>
                 <a href="{{ route('password.request', ['locale' => app()->getLocale()]) }}" class="login-span">
@@ -78,10 +78,6 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
     </div>
 </div>
 <style>
-    .error-toast {
-        display: none !important;
-    }
-
     .login-input {
         width: 85% !important;
     }

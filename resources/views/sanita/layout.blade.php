@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}" style="min-height:100vh;">
+<html lang="{{ app()->getLocale() }}" class="min-vh-100">
 @php
 $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
 @endphp
@@ -21,30 +21,6 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
     <link rel="stylesheet" href="{{ asset('css/ui-tools.css') }}">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
-    <style>
-        .hero-carousel img {
-            width: 100%;
-            height: 400px;
-            object-fit: cover;
-        }
-
-        .cart-icon {
-            font-size: 1.5rem;
-        }
-
-        .nav-item.position-relative {
-            position: relative;
-        }
-
-        #cart-count {
-            font-size: 0.75rem;
-            width: 20px;
-            height: 20px;
-            line-height: 18px;
-            text-align: center;
-            padding: 0;
-        }
-    </style>
 </head>
 
 <!-- Start of Tawk.to Script-->
@@ -66,7 +42,7 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
 <body class="d-flex flex-column min-vh-100">
 
     <!-- Navbar -->
-    <nav id="mainNavbar" class="navbar navbar-expand-lg sticky-top shadow">
+    <nav id="mainNavbar" class="navbar navbar-expand-lg sticky-top shadow p-1">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}">
                 <!-- <span>Sanita</span> -->
@@ -78,7 +54,7 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="navbarNav" style="margin-right: -5%;">
+            <div class="collapse navbar-collapse" id="navbarNav" style="margin-right: -5%;"> <!--CHECK LINE -->
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 
                     <li class="nav-item">
@@ -118,12 +94,15 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                         @endif
                     </li>
                     @endauth
-
+                    <li class="nav-item expanding-search position-relative">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="search" id="searchInput" placeholder="Search...">
+                    </li>
                     @auth('customer')
                     <li class="nav-item position-relative">
                         <a href="{{ route('website.cart.index', ['locale' => app()->getLocale()]) }}" class="nav-link cart-icon-container">
                             <i class="fas fa-shopping-cart cart-icon"></i>
-                            <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="margin-top: 0.3rem !important;">
+                            <span id="cart-count">
                                 {{ $cartCount }}
                             </span>
                         </a>
@@ -187,7 +166,6 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                             </li>
                         </ul>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -197,10 +175,7 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
     @yield('content')
 
     <!-- Footer -->
-    <footer class="footer text-center text-white mt-auto py-4"
-        style="background: linear-gradient(to right, #1E3A5F, #2A4365);     
-    box-shadow: 0 4px 12px rgba(30, 58, 95, 0.2);
-    transition: background-color 0.4s ease;">
+    <footer class="footer text-center text-white mt-auto py-4">
         <div class="container">
             <p class="mb-1">{{ __('nav.copyright') }}</p>
             <p>
@@ -219,35 +194,8 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
             </p>
         </div>
     </footer>
-    
+
     @include('components.toast')
-    @include('components.modal')
-    
-    <script>
-        let lastScroll = 0;
-        let navbar = document.getElementById('mainNavbar');
-        let isScrolling;
-
-        window.addEventListener('scroll', function() {
-            const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-
-            // Hide navbar if scrolling down
-            if (currentScroll > lastScroll && currentScroll > 50) {
-                navbar.style.transform = 'translateY(-100%)';
-            } else {
-                navbar.style.transform = 'translateY(0)';
-            }
-
-            lastScroll = currentScroll <= 0 ? 0 : currentScroll;
-
-            // Show navbar if scrolling stops
-            clearTimeout(isScrolling);
-            isScrolling = setTimeout(() => {
-                navbar.style.transform = 'translateY(0)';
-            }, 300); // after scroll stops
-        });
-    </script>
-
 </body>
 
 <!-- Core Libraries -->
@@ -262,12 +210,40 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
 <script src="{{ asset('js/app.js') }}"></script>
 <script src="{{ asset('js/modals.js') }}"></script>
 
-<!-- Global Toast Config -->
+<!-- Global Window Variables -->
 <script>
-    window.success = "{{ __('nav.success') }}";
-    window.failed = "{{ __('nav.failed') }}";
-    window.error = "{{ __('nav.error') }}";
+    window.csrfToken = "{{ csrf_token() }}";
+    window.toastMessages = {
+        success: "{{ __('nav.success') }}",
+        failed: "{{ __('nav.failed') }}",
+        error: "{{ __('nav.error') }}",
+        warning: "{{ __('nav.warning') }}"
+    }
     window.isRtl = '{{ $isRtl }}';
+    window.signinUrl = "{{ route('customer.signin', ['locale' => app()->getLocale()]) }}";
+    window.csrfToken = "{{ csrf_token() }}";
+    window.cartMessages = {
+        addSuccess: "{{ __('nav.cart_add_success') }}",
+        addFail: "{{ __('nav.cart_add_failed') }}",
+        addError: "{{ __('nav.cart_add_error') }}",
+        viewInCart: "{{ __('cart.view_in_cart') }}",
+        outOfStock: "{{ __('cart.out_of_stock') }}",
+        updateSuccess: '{{ __("cart.update_success") }}',
+        updateFailed: '{{ __("cart.update_failed") }}',
+        updateError: '{{ __("cart.update_error") }}',
+        removeConfirm: '{{ __("cart.remove_confirm") }}',
+        removeSuccess: '{{ __("cart.remove_success") }}',
+        removeFailed: '{{ __("cart.remove_failed") }}',
+        removeError: '{{ __("cart.remove_error") }}'
+    };
+    window.locale = "{{ app()->getLocale() }}";
+    window.url = "{{ url('') }}";
+    window.addressMessages = {
+        loading: "{{ __('Loading...') }}",
+        selectCity: "{{ __('Select City') }}",
+        selectDistrict: "{{ __('Select District') }}",
+        selectGovernorate: "{{ __('Select Governorate') }}"
+    };
 </script>
 
 <!-- Per-page Scripts -->

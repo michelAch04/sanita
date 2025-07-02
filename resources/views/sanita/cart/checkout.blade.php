@@ -64,7 +64,7 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                             <option value="">{{ __('cart.select_address') }}</option>
                             @foreach($addresses as $address)
                             <option value="{{ $address->id }}" {{ $address->is_default ? 'selected' : '' }}>
-                                {{ $address->title }} — {{ $address->city->name_en }}, {{ $address->district->name_en }} 
+                                {{ $address->title }} — {{ $address->city->name_en }}, {{ $address->district->name_en }}
                                 | Street {{ $address->street }}, Building {{ $address->building }}, Floor {{ $address->floor }}
                             </option>
                             @endforeach
@@ -76,9 +76,9 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
 
                     <h5 class="fw-semibold mb-2">{{ __('cart.promo_code') }}</h5>
                     <div class="promo mb-4 d-flex gap-3 align-items-center flex-direction-row">
-                        <div class="login-inputForm" style="width: 40%;">
+                        <div class="login-inputForm promo-code-container">
                             <input type="text" id="promo_code" name="promo_code"
-                            class="login-input" style="width: 100%;" placeholder="Enter Promo Code">
+                                class="login-input w-100" placeholder="Enter Promo Code">
                         </div>
                         <div>
                             <button type="submit" class="btn underline-btn">{{ __('cart.apply') }}</button>
@@ -109,9 +109,9 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
 <!-- Add Address Modal -->
 <div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg d-flex justify-content-center">
-        <div class="modal-content p-3 pb-2" style="width: 75%;">
-            <div class="modal-header" style="border: none !important;">
-                <h2 class="display-5 login-title text-center mb-0" style="font-size: 2.5rem;">{{ __('Add New Address') }}</h2>
+        <div class="modal-content p-3 pb-2 w-75">
+            <div class="modal-header border-0">
+                <h2 class="display-5 login-title text-center mb-0 fs-1">{{ __('Add New Address') }}</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('Close') }}"></button>
             </div>
             <div class="modal-body d-flex justify-content-center">
@@ -123,24 +123,17 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
 
 {{-- Styles --}}
 <link href="{{ asset('css/cart.css') }}" rel="stylesheet" />
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@include('sanita.partials.select2',[
+'id' => '#address_id',
+'placeholder' => "{{ __('cart.select_address') }}"
+])
 <style>
+    .select2-selection__rendered {
+        padding-right: 3rem !important;
+    }
+
     .login-inputForm:focus-within {
         border: 1.5px solid #38B2AC;
     }
 </style>
-
-{{-- Scripts --}}
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js" defer></script>
-<script>
-    $(document).ready(function() {
-        $('#address_id').select2({
-            placeholder: "{{ __('cart.select_address') }}",
-            allowClear: true,
-            width: '100%'
-        });
-    });
-</script>
-@include('sanita.partials.select2-style')
 @endsection

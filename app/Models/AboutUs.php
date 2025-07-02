@@ -9,7 +9,8 @@ class AboutUs extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'id',
-        'textarea',
+        'textarea_en', 
+        'textarea_ar', 
+        'textarea_ku'
     ];
 }

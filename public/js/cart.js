@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const csrfToken = window.cartMessages.csrfToken;
+    const csrfToken = window.csrfToken;
 
     const recalculateCartTotal = () => {
         let total = 0;

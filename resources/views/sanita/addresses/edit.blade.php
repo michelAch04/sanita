@@ -35,7 +35,7 @@
         </div>
 
         {{-- District --}}
-        <div id="edit_districtsInput" class="mb-3">
+        <div id="edit_districtsInput" class="mb-3  o-transition">
             <label for="edit_district" class="{{ $isRtl ? 'text-end w-100' : '' }}">{{ __('District') }}</label>
             <div class="login-inputForm @error('district') is-invalid @enderror {{ $isRtl ? 'text-end w-100' : '' }}">
                 <i class="fa-solid fa-map-marker-alt "></i>
@@ -52,7 +52,7 @@
         </div>
 
         {{-- City --}}
-        <div id="edit_citiesInput" class="mb-3">
+        <div id="edit_citiesInput" class="mb-3  o-transition">
             <label for="edit_city" class="{{ $isRtl ? 'text-end w-100' : '' }}">{{ __('City') }}</label>
             <div class="login-inputForm @error('city') is-invalid @enderror {{ $isRtl ? 'text-end w-100' : '' }}">
                 <i class="fa fa-city"></i>
@@ -121,81 +121,3 @@
         </button>
     </form>
 </div>
-
-<script>
-    $(document).ready(function() {
-        const locale = '{{ app()->getLocale() }}';
-        const baseUrl = '{{ url("") }}';
-        const $govIn = $('#edit_governoratesInput');
-        const $disIn = $('#edit_districtsInput');
-        const $citIn = $('#edit_citiesInput');
-
-        $('#edit_governorate').select2({
-            placeholder: "{{ __('Select Governorate') }}",
-            allowClear: true,
-            width: '95%',
-            minimumResultsForSearch: 4,
-            dropdownParent: $govIn
-        });
-
-        $('#edit_district').select2({
-            placeholder: "{{ __('Select District') }}",
-            allowClear: true,
-            width: '95%',
-            minimumResultsForSearch: 4,
-            dropdownParent: $disIn
-        });
-
-        $('#edit_city').select2({
-            placeholder: "{{ __('Select City') }}",
-            allowClear: true,
-            width: '95%',
-            minimumResultsForSearch: 4,
-            dropdownParent: $citIn
-        });
-
-        $('#edit_governorate').on('change', function() {
-            const governorateId = $(this).val();
-            $disIn.addClass('o-50');
-            $('#edit_district').html('<option value="">{{ __("Loading...") }}</option>').prop('disabled', true);
-            $('#edit_city').html('<option value="">{{ __("Select City") }}</option>').prop('disabled', true);
-
-            $.ajax({
-                url: `${baseUrl}/${locale}/get-districts`,
-                data: {
-                    governorates_id: governorateId
-                },
-                success: function(data) {
-                    $('#edit_district').html('<option value="">{{ __("Select District") }}</option>');
-                    data.forEach(d => {
-                        $('#edit_district').append(`<option value="${d.id}">${d.name_en}</option>`);
-                    });
-                    $disIn.removeClass('o-50');
-                    $('#edit_district').prop('disabled', false);
-                }
-            });
-        });
-
-        $('#edit_district').on('change', function() {
-            const districtId = $(this).val();
-            $('#edit_city').html('<option value="">{{ __("Loading...") }}</option>').prop('disabled', true);
-            $citIn.addClass('o-50');
-
-            $.ajax({
-                url: `${baseUrl}/${locale}/get-cities`,
-                data: {
-                    districts_id: districtId
-                },
-                success: function(data) {
-                    $citIn.removeClass('o-50');
-                    $('#edit_city').html('<option value="">{{ __("Select City") }}</option>');
-                    data.forEach(c => {
-                        $('#edit_city').append(`<option value="${c.id}">${c.name_en}</option>`);
-                    });
-                    $citIn.removeClass('o-50');
-                    $('#edit_city').prop('disabled', false);
-                }
-            });
-        });
-    });
-</script>

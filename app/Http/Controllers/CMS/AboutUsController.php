@@ -33,12 +33,14 @@ class AboutUsController extends Controller
         ]);
 
         // Assuming you have only one about_us row (id = 1)
-        $aboutUs = AboutUs::firstOrFail();
-
-        $aboutUs->textarea_en = $request->input('textarea_en');
-        $aboutUs->textarea_ar = $request->input('textarea_ar');
-        $aboutUs->textarea_ku = $request->input('textarea_ku');
-        $aboutUs->save();
+        AboutUs::updateOrCreate(
+            ['id' => 1], // or [] if you don't have an id column
+            [
+                'textarea_en' => $request->input('textarea_en'),
+                'textarea_ar' => $request->input('textarea_ar'),
+                'textarea_ku' => $request->input('textarea_ku'),
+            ]
+        );
 
         return redirect()->back()->with('success', 'About Us updated successfully!');
     }

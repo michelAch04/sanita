@@ -4,12 +4,12 @@
 @php
 $isRtl = app()->getLocale() === 'ar';
 @endphp
-<section class="py-5 bg-light">
-    <div class="container">
-        <h2 class="text-center mb-4 mt-4">{{ __('about.title') }}</h2>
-        <p class="text-center" {{ $isRtl ? 'dir=rtl' : '' }}>
+<section class="py-5">
+    <h2 class="text-center mb-4 mt-4">{{ __('about.title') }}</h2>
+    <div class="container bg-white rounded-1">
+        <p class="p-2 text-start" {{ $isRtl ? 'dir=rtl' : '' }}>
             @if ($aboutUs)
-                {!! $aboutUs->{'textarea_' . app()->getLocale()} !!}
+                {{ strip_tags($aboutUs->{'textarea_' . app()->getLocale()}) }}
             @else
                 <p>About Us information is not available.</p>
             @endif

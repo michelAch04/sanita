@@ -42,7 +42,7 @@ function showAjaxToast(status, message) {
                     </svg>
                     <div class="icon-container"><i class="fa-regular fa-circle-check text-success"></i></div>
                     <div class="message-text-container">
-                        <p class="message-text">${window.success || 'Success!'}</p>
+                        <p class="message-text">${window.toastMessages.success || 'Success!'}</p>
                         <p class="sub-text">${message}</p>
                     </div>
                     <button type="button" class="btn-close ms-2 me-1" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -64,7 +64,7 @@ function showAjaxToast(status, message) {
                         <i class="fa-regular fa-circle-xmark text-danger"></i>
                     </div>
                     <div class="message-text-container">
-                        <p class="message-text" style="color: var(--toast-color);">${window.failed || 'Error'}</p>
+                        <p class="message-text" style="color: var(--toast-color);">${window.toastMessages.failed || 'Error'}</p>
                         <p class="sub-text">${message}</p>
                     </div>
                     <button type="button" class="btn-close ms-2 me-1" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -87,7 +87,7 @@ function showAjaxToast(status, message) {
                     <i class="fa-solid fa-triangle-exclamation text-warning"></i>
                 </div>
                 <div class="message-text-container">
-                    <p class="message-text" style="color: var(--toast-color);">${window.warning || 'Warning'}</p>
+                    <p class="message-text" style="color: var(--toast-color);">${window.toastMessages.warning || 'Warning'}</p>
                     <p class="sub-text">${message}</p>
                 </div>
                 <button type="button" class="btn-close ms-2 me-1" data-bs-dismiss="toast" aria-label="Close"></button>

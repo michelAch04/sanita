@@ -92,18 +92,10 @@ $type = auth()->user()->type ?? 'b2c';
     </div>
 </section>
 
+@include('sanita.partials.add-to-cart-modal')
 @include('sanita.partials.contact-us')
 
 @section('scripts')
-<script>
-    window.signinUrl = "{{ route('customer.signin', ['locale' => app()->getLocale()]) }}";
-    window.csrfToken = "{{ csrf_token() }}";
-    window.cartMessages = {
-        addSuccess: "{{ __('nav.cart_add_success') }}",
-        addFail: "{{ __('nav.cart_add_failed') }}",
-        addError: "{{ __('nav.cart_add_error') }}"
-    };
-</script>
 @endsection
 @yield('scripts')
 @endsection

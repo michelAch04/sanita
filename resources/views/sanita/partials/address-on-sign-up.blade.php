@@ -1,8 +1,8 @@
 <div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg d-flex justify-content-center">
-        <div class="modal-content p-3 pb-2" style="width: 75%;">
-            <div class="modal-header" style="border: none !important;">
-                <h2 class="display-5 login-title text-center mb-0" style="font-size: 2.5rem;">{{ __('nav.add_first_address') }}</h2>
+        <div class="modal-content p-3 pb-2 w-75">
+            <div class="modal-header border-0">
+                <h2 class="display-5 login-title text-center mb-0 fs-1">{{ __('nav.add_first_address') }}</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('Close') }}"></button>
             </div>
             <div class="modal-body d-flex justify-content-center flex-column">

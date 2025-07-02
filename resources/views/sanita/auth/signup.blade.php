@@ -5,10 +5,10 @@
 @section('content')
 @php $isRtl = (app()->getLocale() === 'ar' || app()->getLocale() === 'ku'); @endphp
 
-<div class="container mb-4 mt-5" style="max-width: 500px;">
-    <h2 class="display-5 login-title text-center mb-5">{{ __('auth.sign_up.title') }}</h2>
+<div class="container login-container mb-4">
+    <h2 class="display-5 login-title text-center mb-4 mt-4">{{ __('auth.sign_up.title') }}</h2>
 
-    <form method="POST" action="{{ route('customer.signup', ['locale' => app()->getLocale()]) }}" class="{{ $isRtl ? 'rtl-container' : '' }}">
+    <form method="POST" action="{{ route('customer.signup', ['locale' => app()->getLocale()]) }}" class="{{ $isRtl ? 'rtl-container' : '' }} login-form">
         @csrf
 
         {{-- First and Last Name --}}
@@ -42,7 +42,7 @@
         {{-- Mobile --}}
         <div class="mb-3">
             <label for="mobile" class="{{ $isRtl ? 'text-end w-100' : '' }}">{{ __('auth.sign_up.mobile') }}</label>
-            <div class="login-inputForm phone-group @error('mobile') is-invalid @enderror" style="position: relative;">
+            <div class="login-inputForm phone-group position-relative @error('mobile') is-invalid @enderror">
                 <i class="fa fa-phone"></i>
                 <input type="hidden" name="country_code" id="country_code">
                 <input id="mobile" type="tel" name="mobile"
@@ -50,17 +50,17 @@
                     value="{{ old('mobile') }}"
                     data-old="{{ old('country_code') ? '+' . old('country_code') . old('mobile') : old('mobile') }}"
                     placeholder="{{ __('auth.sign_up.mobile') }}" required>
-                <span id="phone-loading" class="phone-status-icon" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); display: none;">
+                <span id="phone-loading" class="phone-status-icon">
                     <i class="fa fa-spinner fa-spin"></i>
                 </span>
-                <span id="phone-valid" class="phone-status-icon text-success" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); display: none;">
+                <span id="phone-valid" class="phone-status-icon text-success">
                     <i class="fa fa-check-circle"></i>
                 </span>
-                <span id="phone-invalid" class="phone-status-icon text-danger" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); display: none;">
+                <span id="phone-invalid" class="phone-status-icon text-danger">
                     <i class="fa fa-xmark-circle"></i>
                 </span>
             </div>
-            <div id="mobile-error" class="login-error-message" style="display:none;"></div>
+            <div id="mobile-error" class="login-error-message d-none"></div>
             @error('mobile')
             <div class="login-error-message">{{ $message }}</div>
             @enderror
@@ -74,7 +74,7 @@
                 <input type="password" name="password" id="password"
                     class="login-input"
                     placeholder="{{ __('auth.sign_up.password') }}">
-                <i class="fa fa-eye toggle-password" style="cursor: pointer;"></i>
+                <i class="fa fa-eye toggle-password cursor-pointer"></i>
             </div>
             @error('password')
             <div class="login-error-message">{{ $message }}</div>
@@ -88,7 +88,7 @@
                 <i class="fa fa-check"></i>
                 <input type="password" name="password_confirmation" id="password_confirmation"
                     class="login-input" placeholder="{{ __('auth.sign_up.password_confirmation') }}">
-                <i class="fa fa-eye toggle-confirm" style="cursor: pointer;"></i>
+                <i class="fa fa-eye toggle-confirm cursor-pointer"></i>
             </div>
         </div>
 
@@ -122,7 +122,7 @@
                 {{-- Hidden final DOB input --}}
                 <input type="hidden" name="DOB" id="DOB">
             </div>
-            <div id="dob-error" class="login-error-message" style="display:none;"></div>
+            <div id="dob-error" class="login-error-message d-none"></div>
             @error('DOB')
             <div class="login-error-message">{{ $message }}</div>
             @enderror
@@ -159,10 +159,5 @@
         </p>
     </form>
 </div>
-<style>
-    /* .error-toast {
-        display: none !important;
-    } */
-</style>
 <script src="{{ asset('js/auth.js') }}"></script>
 @endsection

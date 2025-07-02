@@ -89,22 +89,13 @@
         </div>
     </div>
 </div>
-
-@push('styles')
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-@endpush
-
+@include('cms.partials.select2', [
+    'id' => '#cities_id',
+    'placeholder' => 'Select a city',
+])
 @push('scripts')
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('#cities_id').select2({
-            placeholder: 'Select a city',
-            allowClear: true,
-            width: '100%'
-        });
-
         $('#searchCity').on('keyup', function() {
             var value = $(this).val().toLowerCase();
             $('#cityList tr').filter(function() {
@@ -114,6 +105,4 @@
     });
 </script>
 @endpush
-
-@include('cms.partials.select2-style')
 @endsection

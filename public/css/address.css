@@ -1,0 +1,100 @@
+.o-transition {
+    transition: opacity 0.3s ease;
+}
+.add-address-btn {
+    border-radius: 2rem;
+}
+.textarea-container {
+    height: 5rem;
+}
+
+.textarea-container {
+    align-items: baseline;
+}
+
+.textarea-input {
+    width: 100%;
+    resize: none;
+}
+
+.select2-container--default .select2-selection--single {
+    border: none !important;
+    width: 100% !important;
+}
+
+.select2-selection--single {
+    display: flex !important;
+    align-items: center;
+    margin-left: 0.9rem !important;
+}
+
+.select2-selection__clear {
+    display: none !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__placeholder {
+    color: #767676;
+}
+
+.select2-container--default .select2-selection--single:focus-visible {
+    border: none !important;
+}
+
+.select2-container--default .select2-selection--single:hover,
+.select2-container--default.select2-container--open .select2-selection--single {
+    border-color: rgb(65, 75, 152);
+}
+
+.select2-container .select2-search--dropdown .select2-search__field:focus {
+    box-shadow: 0 0 6px rgb(65, 75, 152);
+}
+
+.select2-results__option--highlighted {
+    background-color: rgb(65, 75, 152) !important;
+}
+
+.select2-container--open {
+    z-index: 9999 !important;
+}
+
+.select2-container--default.select2-container--disabled .select2-selection--single {
+    background: transparent !important;
+}
+
+.o-50 {
+    opacity: 0.5;
+}
+
+.modify-btn {
+    width: 5.5rem;
+    padding: 0.25rem 0.25rem !important;
+    border-width: 0.12rem;
+}
+
+.modify-btn>.text {
+    font-weight: 500 !important;
+}
+
+.edit-btn {
+    --c2: rgb(54, 116, 222);
+}
+
+.delete-btn {
+    --c2: rgb(196, 49, 49);
+}
+
+p i {
+    width: 1.2rem;
+    text-align: center;
+}
+
+.success-btn {
+    --c2: green;
+    padding: 0.25rem 0.5rem !important;
+    border-width: 0.08rem;
+    font-size: 0.9rem;
+}
+
+.success-btn>.text {
+    font-weight: 400;
+}

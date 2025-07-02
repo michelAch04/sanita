@@ -37,7 +37,7 @@ $inCart = in_array($product->id, $cartProductIds);
                 @if($storage)
                 <img src="{{ asset('storage/' . $imagePath) }}"
                     alt="{{ $product->{'name_'.app()->getLocale()} ?? $product->name_en }}"
-                    class="img-fluid w-100 h-100 dynamic-fit" style="border-radius: 12px;">
+                    class="img-fluid w-100 h-100 dynamic-fit" style="border-radius: 0.75rem;">
                 @endif
             </div>
 
@@ -76,12 +76,17 @@ $inCart = in_array($product->id, $cartProductIds);
                         <i class="fas fa-cart-plus"></i> {{ __('cart.add_to_cart') }}
                     </button>
                 </form>
+                @elseif ($totalStock <= 0)
+                {{-- Out of stock --}}
+                <button class="card__button" disabled>
+                    <i class="fa-solid fa-ban"></i> {{ __('cart.out_of_stock') }}
+                </button>
                 @elseif ($inCart)
                 {{-- Already in cart --}}
                 <a href="{{ route('website.cart.index', ['locale' => app()->getLocale()]) }}" class="card__button card__button-incart">
                     <i class="fas fa-shopping-cart"></i>{{ __('cart.view_in_cart') }}
                 </a>
-                @elseif ($totalStock > 0)
+                @else
                 {{-- In stock and not in cart --}}
                 <form action="{{ route('website.cart.store', ['locale' => app()->getLocale()]) }}"
                     method="POST" class="add-to-cart-form m-0"
@@ -92,11 +97,6 @@ $inCart = in_array($product->id, $cartProductIds);
                         <i class="fas fa-cart-plus"></i> {{ __('cart.add_to_cart') }}
                     </button>
                 </form>
-                @else
-                {{-- Out of stock --}}
-                <button class="card__button" disabled>
-                    <i class="fa-solid fa-ban"></i> {{ __('cart.out_of_stock') }}
-                </button>
                 @endif
             </div>
         </div>

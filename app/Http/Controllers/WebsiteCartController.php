@@ -157,7 +157,7 @@ class WebsiteCartController extends Controller
                 'cart_subtotal' => round($cart->subtotal_amount, 2),
                 'cart_tax'     => round($cart->tax_amount, 2),
                 'cart_id'      => $cart->id,
-                ''
+                'stock'         => $totalStockEA,
             ]);
         } catch (\Exception $e) {
             \Log::error($e);
@@ -248,7 +248,15 @@ class WebsiteCartController extends Controller
         $districts = District::all();
         $cities = City::all();
 
-        return view('sanita.cart.checkout', compact('cart', 'addresses', 
-        'subtotal', 'totalTax', 'total', 'governorates', 'districts', 'cities'));
+        return view('sanita.cart.checkout', compact(
+            'cart',
+            'addresses',
+            'subtotal',
+            'totalTax',
+            'total',
+            'governorates',
+            'districts',
+            'cities'
+        ));
     }
 }

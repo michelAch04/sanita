@@ -15,7 +15,7 @@
             <div class="cart-item d-flex flex-row gap-1 p-3 bg-white rounded shadow-sm align-items-center flex-wrap w-100" data-id="{{ $detail->id }}">
                 <img src="{{ asset('storage/products/' . $detail->product->id . '.' . $detail->product->extension) }}"
                     alt="{{ $detail->product->{'name_'.app()->getLocale()} ?? $detail->product->name_en }}"
-                    class="cart-item-img rounded" style="width: 20%; height: 80%; object-fit: cover;">
+                    class="cart-item-img rounded">
 
                 <div class="flex-grow-1 ms-2 mt-3 d-flex flex-column h-100">
 
@@ -66,14 +66,14 @@
             @endforeach
         </div>
         @else
-        <div class="empty-cart-alert text-center py-5 px-4 my-5 rounded-4 shadow-sm" style="background: #f9f9f9; border: 2px dashed var(--primary-blue); max-width: 500px; margin: 0 auto;">
-            <div style="font-size: 3rem; color: var(--primary-blue); margin-bottom: 0.5rem;">
+        <div class="empty-cart-alert text-center py-5 px-4 my-5 rounded-4 shadow-sm">
+            <div class="empty-cart-icon">
                 🛒
             </div>
-            <div class="fs-4 fw-semibold mb-2" style="color: var(--primary-blue);">
+            <div class="fs-4 fw-semibold mb-2" class="empty-cart-msg">
                 {{ __('cart.empty') }}
             </div>
-            <a href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic mt-3 px-4 py-2 fs-6 shadow-sm" style="border-radius: 2rem;">
+            <a href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic mt-3 px-4 py-2 fs-6 shadow-sm empty-cart-btn">
                 <span class="text"><i class="fa fa-arrow-left me-2"></i> {{ __('cart.browse_products') }}</span>
             </a>
         </div>
@@ -98,18 +98,7 @@
 </section>
 
 <link href="{{ asset('css/cart.css') }}" rel="stylesheet" />
-<script>
-    window.cartMessages = {
-        csrfToken: '{{ csrf_token() }}',
-        updateSuccess: '{{ __("cart.update_success") }}',
-        updateFailed: '{{ __("cart.update_failed") }}',
-        updateError: '{{ __("cart.update_error") }}',
-        removeConfirm: '{{ __("cart.remove_confirm") }}',
-        removeSuccess: '{{ __("cart.remove_success") }}',
-        removeFailed: '{{ __("cart.remove_failed") }}',
-        removeError: '{{ __("cart.remove_error") }}'
-    };
-</script>
 
 <script src="{{ asset('js/cart.js') }}"></script>
+@include('components.modal')
 @endsection
