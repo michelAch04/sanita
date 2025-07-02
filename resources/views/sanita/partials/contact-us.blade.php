@@ -77,7 +77,7 @@
     }
 </style>
 
-<a href="https://wa.me/96171999874?text=Hello%20Sanita%20Iraq" class="floating-contact" title="{{ __('nav.contact') }}">
+<a href="https://wa.me/96171999874?text=Hello%20Sanita%20Iraq" class="floating-contact" title="{{ __('nav.contact') }}" target="_blank">
     <i class="fab fa-whatsapp"></i>
 </a>
 

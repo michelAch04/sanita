@@ -12,19 +12,11 @@
         @else
         <div class="d-flex flex-wrap justify-content-center gap-3">
             @foreach($offers as $product)
-            @php
-            $imagePath = 'products/' . $product->id . '.' . $product->extension;
-            $storage = \Illuminate\Support\Facades\Storage::disk('public')->exists($imagePath);
-            $prices = $product->listPrices;
-            $price = $prices->where('UOM', 'EA')->first();
-            @endphp
-            <div class="offer-card">
                 @include('sanita.partials.product-card', [
                 'product' => $product,
                 'cardType' => 'offer',
                 'badge' => __('nav.offer')
                 ])
-            </div>
             @endforeach
         </div>
 
@@ -37,7 +29,7 @@
 </section>
 @include('sanita.partials.contact-us')
 <style>
-    .offer-card {
+    .product-card {
         flex: 0 0 auto;
         width: 18%;
         /* 5 per row approx */
@@ -45,25 +37,25 @@
     }
 
     @media (max-width: 1200px) {
-        .offer-card {
+        .product-card {
             width: 22%;
         }
     }
 
     @media (max-width: 992px) {
-        .offer-card {
+        .product-card {
             width: 28%;
         }
     }
 
     @media (max-width: 768px) {
-        .offer-card {
+        .product-card {
             width: 45%;
         }
     }
 
     @media (max-width: 576px) {
-        .offer-card {
+        .product-card {
             width: 90%;
         }
     }

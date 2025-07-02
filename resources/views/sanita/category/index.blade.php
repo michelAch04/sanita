@@ -5,19 +5,24 @@
 @section('content')
 <section id="category" class="py-3 bg-light">
     <div class="p-5 gx-0 w-100">
-        <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
-            <a href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic mb-5">
+        <!-- Header Buttons -->
+        <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
+            <a href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic mb-2">
                 <span class="text"><i class="fa-solid fa-arrow-left me-1"></i> {{ __('Continue Shopping') }}</span>
             </a>
 
-            <h2 class="display-5 text-center flex-grow-1 text-center m-0">
-                {{ $category->{'name_'.app()->getLocale()} ?? $category->name_en }}
-            </h2>
-
-            <a href="{{ route('website.categories.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic mb-5">
+            <a href="{{ route('website.categories.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic mb-2 ">
                 <span class="text">{{ __('nav.view_all_categories') }}<i class="fa-solid fa-arrow-right ms-1"></i></span>
             </a>
         </div>
+
+        <!-- Category Title -->
+        <div class="text-center mb-4">
+            <h2 class="display-5 m-0" style="word-wrap: break-word;">
+                {{ $category->{'name_'.app()->getLocale()} ?? $category->name_en }}
+            </h2>
+        </div>
+
 
         @if($category->subcategories->count() > 1)
         <!-- Multiple subcategories: Show tabs -->
@@ -96,6 +101,16 @@
 @include('sanita.partials.contact-us')
 
 <style>
+    @media(max-width:800px) { 
+        #category div{
+            padding: 0.1rem !important;
+        } 
+        .bubbles {
+            width: fit-content;
+            font-size: 0.7rem;
+            padding: 0.25rem 0.2rem;
+        }
+    }
     .nav-pills .nav-item .nav-link {
         color: #38B2AC;
     }
