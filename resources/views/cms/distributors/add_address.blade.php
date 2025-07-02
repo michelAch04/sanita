@@ -11,6 +11,14 @@
         </a>
     </div>
 
+    {{-- Assign City (Excel) Button --}}
+    <div class="mb-3 text-end">
+        <input type="file" id="excelInput" accept=".xlsx,.xls" style="display:none;">
+        <button type="button" class="btn bubbles bubbles-grey" onclick="document.getElementById('excelInput').click();">
+            <span class="text"><i class="bi bi-upload"></i> Assign City (Excel)</span>
+        </button>
+    </div>
+
     <ul class="nav nav-tabs mb-4" id="cityTabs" role="tablist">
         <li class="nav-item" role="presentation">
             <button class="nav-link active" id="assign-tab" data-bs-toggle="tab" data-bs-target="#assign" type="button">Assign City</button>
@@ -94,6 +102,7 @@
     'placeholder' => 'Select a city',
 ])
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script>
     $(document).ready(function() {
         $('#searchCity').on('keyup', function() {
@@ -102,6 +111,60 @@
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
             });
         });
+    });
+
+    document.getElementById('excelInput').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, {
+                type: 'array'
+            });
+            const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+            const rows = XLSX.utils.sheet_to_json(firstSheet, {
+                header: 1
+            });
+            // Assuming city_id is in the first column
+            const cities = rows
+                .map(row => parseInt(row[0]))
+                .filter(id => !isNaN(id));
+
+            // Prepare payload
+            const payload = {
+                distributor_id: {{ $distributor->id }},
+                cities: cities
+            };
+
+            // Get CSRF token from the meta tag
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            // Send to API with CSRF token
+            fetch('{{ url("/api/distributor/assign-city") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Basic {{ base64_encode(env('API_AUTH_USERNAME') . ':' . env('API_AUTH_PASSWORD')) }}',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken 
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showAjaxToast('success','Cities assigned successfully!');
+                } else {
+                    showAjaxToast('warning','Failed to assign cities: ' + (data.message || 'Unknown error'));
+                }
+            })
+            .catch(error => {
+                alert('Error: ' + error);
+            });
+        };
+        reader.readAsArrayBuffer(file);
     });
 </script>
 @endpush

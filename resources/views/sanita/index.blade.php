@@ -8,15 +8,15 @@ $type = auth()->user()->type ?? 'b2c';
 
 @section('content')
 @if(session('force_address_modal'))
-    @include('sanita.partials.address-on-sign-up')
+@include('sanita.partials.address-on-sign-up')
 @endif
 
 <!-- Hero Section -->
 <div class="hero-carousel">
     @foreach ($slideshow as $image)
-        <div>
-            <img src="{{ asset('storage/slideshow/' . $image->id . '.' . $image->extension) }}" alt="Slide" class="img-fluid rounded shadow">
-        </div>
+    <div>
+        <img src="{{ asset('storage/slideshow/' . $image->id . '.' . $image->extension) }}" alt="Slide" class="img-fluid rounded shadow">
+    </div>
     @endforeach
 </div>
 
@@ -26,10 +26,10 @@ $type = auth()->user()->type ?? 'b2c';
         <h2 class="display-5 text-center mb-4">{{ __('nav.offers') }}</h2>
         <div class="carousel gx-0">
             @foreach($offers as $product)
-                @include('sanita.partials.product-card', [
-                    'product' => $product,
-                    'cardType' => 'offer'
-                ])
+            @include('sanita.partials.product-card', [
+            'product' => $product,
+            'cardType' => 'offer'
+            ])
             @endforeach
         </div>
         <div class="text-center mt-4 mb-0">
@@ -48,11 +48,11 @@ $type = auth()->user()->type ?? 'b2c';
         <h2 class="display-5 mb-4">{{ __('nav.categories') }}</h2>
         <div class="carousel mx-auto mb-5">
             @foreach($categories as $category)
-                <div class="px-0">
-                    @include('sanita.partials.category-card', [
-                        'category' => $category,
-                        ])
-                </div>
+            <div class="px-0">
+                @include('sanita.partials.category-card', [
+                'category' => $category,
+                ])
+            </div>
             @endforeach
         </div>
         <div class="text-center mt-5 mb-0">
@@ -72,13 +72,13 @@ $type = auth()->user()->type ?? 'b2c';
         <h2 class="display-5 text-center mb-4">{{ __('nav.products') }}</h2>
         <div class="carousel gx-0">
             @foreach($products as $product)
-                @php
-                $isNew = $product->created_at && $product->created_at->gt(\Illuminate\Support\Carbon::now()->subDays(7));
-                @endphp
-                @include('sanita.partials.product-card', [
-                    'product' => $product,
-                    'cardType' => $isNew ? 'new' : 'product'
-                ])
+            @php
+            $isNew = $product->created_at && $product->created_at->gt(\Illuminate\Support\Carbon::now()->subDays(7));
+            @endphp
+            @include('sanita.partials.product-card', [
+            'product' => $product,
+            'cardType' => $isNew ? 'new' : 'product'
+            ])
             @endforeach
         </div>
         <div class="text-center mt-5 mb-0">
@@ -96,6 +96,16 @@ $type = auth()->user()->type ?? 'b2c';
 @include('sanita.partials.contact-us')
 
 @section('scripts')
+<script>
+    window.uomLabels = {
+        EA: "{{ __('cart.EA') }}",
+        CA: "{{ __('cart.CA') }}",
+        PL: "{{ __('cart.PL') }}"
+    };
+
+    window.conversionCaseEach = "{{ __('cart.conversion_case_each') }}";
+    window.conversionPalletEach = "{{ __('cart.conversion_pallet_each') }}";
+</script>
 @endsection
 @yield('scripts')
 @endsection

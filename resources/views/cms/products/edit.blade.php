@@ -36,6 +36,12 @@
                             <div class="underline"></div>
                         </div>
 
+                        <div class="input-container mb-5 mt-3" style="width: 30%;">
+                            <input type="text" name="barcode" value="{{ old('barcode', $product->barcode) }}" required placeholder="">
+                            <label class="label">Barcode</label>
+                            <div class="underline"></div>
+                        </div>
+
                         @foreach ([
                         'name_en' => 'Product Name (English)',
                         'name_ar' => 'Product Name (Arabic)',

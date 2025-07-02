@@ -26,7 +26,7 @@ class AboutUsController extends Controller
 
     public function update(Request $request)
     {
-        $request->validate([
+        $validate = $request->validate([
             'textarea_en' => 'nullable|string',
             'textarea_ar' => 'nullable|string',
             'textarea_ku' => 'nullable|string',

@@ -11,6 +11,13 @@
         </a>
     </div>
 
+      <div class="mb-3 text-end">
+        <input type="file" id="stockExcelInput" accept=".xlsx,.xls" style="display:none;">
+        <button type="button" class="btn bubbles bubbles-grey" onclick="document.getElementById('stockExcelInput').click();">
+            <span class="text"><i class="bi bi-upload"></i> Add Stock (Excel)</span>
+        </button>
+    </div>
+
     <ul class="nav nav-tabs mb-4" id="stockTabs" role="tablist">
         <li class="nav-item" role="presentation">
             <button class="nav-link active" id="manage-tab" data-bs-toggle="tab" data-bs-target="#manage" type="button">Add/Update Stocks</button>
@@ -110,6 +117,7 @@
     'placeholder' => 'Select a Product',
 ])
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script>
     $(document).ready(function() {
         $('#searchStock').on('keyup', function() {
@@ -124,6 +132,56 @@
         $('#products_id').val(productId).trigger('change');
         $('#stock').val(stockValue);
     }
+
+     document.getElementById('stockExcelInput').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+            const rows = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+
+            // Assuming the Excel columns are: item_code | stock
+            // Skip header row
+            const products = rows.slice(1)
+                .filter(row => row[0] && row[1])
+                .map(row => ({
+                    item_code: String(row[0]).trim(),
+                    stock: parseInt(row[1])
+                }));
+
+            const payload = {
+                distributor_id: {{ $distributor->id }},
+                products: products
+            };
+
+            fetch('{{ url("/api/distributor/add-stock") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Basic {{ base64_encode(env('API_AUTH_USERNAME') . ':' . env('API_AUTH_PASSWORD')) }}',
+                    'Accept': 'application/json',
+                      'X-CSRF-TOKEN': csrfToken 
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showAjaxToast('success','Stock added successfully!');
+                } else {
+                    showAjaxToast('warning','Failed to add stock: ' + (data.message || 'Unknown error'));
+                }
+            })
+            .catch(error => {
+                alert('Error: ' + error);
+            });
+        };
+        reader.readAsArrayBuffer(file);
+    });
 </script>
 @endpush
 

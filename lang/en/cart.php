@@ -40,4 +40,9 @@ return [
     'cod' => 'Cash on Delivery',
     'out_of_stock' => 'Out of Stock',
     'in_stock' => 'In Stock',
+    'EA' => 'Each',
+    'CA' => 'Case',
+    'PL' => 'Pallet',
+    'conversion_case_each' => 'One Case is equal to :count Each',
+    'conversion_pallet_each' => 'One Pallet is equal to :count Each',
 ];
