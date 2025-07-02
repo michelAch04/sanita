@@ -152,7 +152,8 @@ $(document).ready(function () {
             let uomSelect = $("#modalProductUOM");
             uomSelect.empty();
             availableUOMs.forEach((uom) => {
-                uomSelect.append(`<option value="${uom}">${uom}</option>`);
+                let label = window.uomLabels[uom] || uom;
+                uomSelect.append(`<option value="${uom}">${label}</option>`);
             });
 
             // Show modal
@@ -267,7 +268,8 @@ $(document).ready(function () {
 
             // Update min/max quantity fields
             let minqty = minQuantities[selectedUOM] || minQuantities["EA"] || 1;
-            let maxqty = maxQuantities[selectedUOM] || maxQuantities["EA"] || "";
+            let maxqty =
+                maxQuantities[selectedUOM] || maxQuantities["EA"] || "";
             $("#modalProductMinQuantity").val(minqty);
             $("#modalProductMaxQuantity").val(maxqty);
             $("#modalProductQuantity").val(minqty);
@@ -277,10 +279,14 @@ $(document).ready(function () {
             let ea_pl = $("#modalProductEaPl").val();
             let conversionText = "";
 
+            let caLabel = window.uomLabels["CA"] || "CA";
+            let eaLabel = window.uomLabels["EA"] || "EA";
+            let plLabel = window.uomLabels["PL"] || "PL";
+
             if (selectedUOM === "CA" && ea_ca) {
-                conversionText = `1 CA = ${ea_ca} EA`;
+                conversionText = window.conversionCaseEach.replace(":count", ea_ca);
             } else if (selectedUOM === "PL" && ea_pl) {
-                conversionText = `1 PL = ${ea_pl} EA`;
+                conversionText = window.conversionPalletEach.replace(":count", ea_pl);
             } else if (selectedUOM === "EA") {
                 conversionText = "";
             }

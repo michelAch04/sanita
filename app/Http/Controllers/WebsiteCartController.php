@@ -20,6 +20,7 @@ class WebsiteCartController extends Controller
         $cart = Cart::with('cartDetails')
             ->where('customers_id', auth()->id())
             ->first();
+            
         return view('sanita.cart.index', compact('cart'));
     }
 

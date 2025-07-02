@@ -120,7 +120,7 @@ class WebsiteController extends Controller
     public function productsForCustomer($customerId, $type)
     {
         // Get all city IDs for the customer's addresses
-        $cityIds = Address::where('customers_id', $customerId)->pluck('cities_id');
+        $cityIds = Address::where('customers_id', $customerId)->where('is_default', 1)->pluck('cities_id');
 
         // Get all distributor IDs serving those cities
         $distributorIds = DistributorAddress::whereIn('cities_id', $cityIds)->pluck('distributors_id');

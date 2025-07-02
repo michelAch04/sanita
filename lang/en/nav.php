@@ -1,5 +1,6 @@
 <?php
 return [
+    'title' => 'Sanita',
     'add_first_address' => 'Add Your Address',
     'add_address_required' => 'Our website customizes products and stock availability based on your location to give you the most relevant shopping experience.',
     'categories' => 'Categories',
@@ -8,7 +9,6 @@ return [
     'offers' => 'Offers',
     'store' => 'Store',
     'about' => 'About Us',
-    'contact' => 'Contact Us',
     'sign_in' => 'Sign In',
     'sign_out' => 'Sign Out',
     'cart' => 'Cart',

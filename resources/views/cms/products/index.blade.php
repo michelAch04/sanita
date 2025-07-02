@@ -12,6 +12,7 @@ $permissions = Permission::with('page')
 $canAdd = $permissions && $permissions->add;
 $canEdit = $permissions && $permissions->edit;
 $canDelete = $permissions && $permissions->delete;
+
 @endphp
 
 @section('content')
@@ -33,35 +34,42 @@ $canDelete = $permissions && $permissions->delete;
 
     <div class="card shadow-sm border-0">
         <div class="card-body p-0">
-            <div class="table-responsive rounded-1" style="overflow-x: auto !important; width: 100% !important;"
-                data-sortable-table data-reorder-url="{{ route('products.reorder') }}">
+            <div class="table-responsive rounded-1" style="overflow-x: auto; overflow-y: auto; height: 70vh; width: 100%;">
                 <table class="table mb-0 mr-0 w-100">
                     <thead class="bg-grey text-dark opacity-75">
                         <tr>
-                            <th style="width: 50px;"></th> {{-- No text, just an icon --}}
-                            <th>Image</th>
-                            <th>Name</th>
-                            <th>Subcategory</th>
-                            <th>Brand</th>
-                            <th>tax</th>
-                            <th>Created At</th>
-                            <th>Updated At</th>
-                            <th class="text-end">Options</th>
+                            <th class="position-sticky top-0 bg-grey" style="background-color: #f8f9fa; z-index:2; width: 50px;"></th>
+                            <th class="position-sticky top-0 bg-grey" style="background-color: #f8f9fa; z-index:2;">Image</th>
+                            <th class="position-sticky top-0 bg-grey" style="background-color: #f8f9fa; z-index:2;">Item Code</th>
+                            <th class="position-sticky top-0 bg-grey" style="background-color: #f8f9fa; z-index:2;">Barcode</th>
+                            <th class="position-sticky top-0 bg-grey" style="background-color: #f8f9fa; z-index:2;">Name</th>
+                            <th class="position-sticky top-0 bg-grey" style="background-color: #f8f9fa; z-index:2;">Subcategory</th>
+                            <th class="position-sticky top-0 bg-grey" style="background-color: #f8f9fa; z-index:2;">Brand</th>
+                            <th class="position-sticky top-0 bg-grey" style="background-color: #f8f9fa; z-index:2;">tax</th>
+                            <th class="position-sticky top-0 bg-grey" style="background-color: #f8f9fa; z-index:2;">Created At</th>
+                            <th class="position-sticky top-0 bg-grey" style="background-color: #f8f9fa; z-index:2;">Updated At</th>
+                            <th class="position-sticky top-0 bg-grey text-end" style="background-color: #f8f9fa; z-index:2;">Options</th>
                         </tr>
                     </thead>
                     <tbody id="product-table-body">
                         @section('products_list')
                         @forelse ($products as $product)
+                        @php
+                        $imagePath = 'products/' . $product->id . '.' . $product->extension;
+                        $storage = \Illuminate\Support\Facades\Storage::disk('public')->exists($imagePath);
+                        @endphp
                         <tr class="bg-hover-light-grey" data-id="{{ $product->id }}">
                             <td class="handle text-muted text-center"><i class="bi bi-list" style="cursor:grab;"></i></td>
                             <td>
-                                @if ($product->id)
+                                @if($storage)
                                 <img src="{{ asset('storage/products/' . $product->id . '.' . $product->extension) }}"
                                     alt="{{ $product->name }}" class="img-thumbnail" style="width: 100px; height: 100px;">
                                 @else
                                 <span class="text-muted">No Image</span>
                                 @endif
                             </td>
+                            <td>{{ $product->sku}}</td>
+                            <td>{{ $product->barcode }}</td>
                             <td>{{ $product->name_en }}</td>
                             <td>{{ $product->subcategories->name_en ?? 'N/A' }}</td>
                             <td>{{ $product->brands->name_en ?? 'N/A' }}</td>

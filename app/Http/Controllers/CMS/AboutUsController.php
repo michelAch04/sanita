@@ -26,19 +26,24 @@ class AboutUsController extends Controller
 
     public function update(Request $request)
     {
-        $request->validate([
+        $validate = $request->validate([
             'textarea_en' => 'nullable|string',
             'textarea_ar' => 'nullable|string',
             'textarea_ku' => 'nullable|string',
         ]);
 
-        // Assuming you have only one about_us row (id = 1)
-        $aboutUs = AboutUs::firstOrFail();
+        $aboutUs = AboutUs::first();
 
-        $aboutUs->textarea_en = $request->input('textarea_en');
-        $aboutUs->textarea_ar = $request->input('textarea_ar');
-        $aboutUs->textarea_ku = $request->input('textarea_ku');
-        $aboutUs->save();
+        if ($aboutUs) {
+            // Update existing record
+            $aboutUs->textarea_en = $request->input('textarea_en');
+            $aboutUs->textarea_ar = $request->input('textarea_ar');
+            $aboutUs->textarea_ku = $request->input('textarea_ku');
+            $aboutUs->save();
+        } else {
+            // Create new record
+            AboutUs::create($validate);
+        }
 
         return redirect()->back()->with('success', 'About Us updated successfully!');
     }

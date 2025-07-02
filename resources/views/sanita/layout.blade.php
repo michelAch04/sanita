@@ -109,7 +109,7 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                         @if($defaultAddress)
                         <a href="{{ route('addresses.index', ['locale' => app()->getLocale()]) }}" class="nav-link me-2" title="{{ __('nav.addresses') }}">
                             <i class="fa-solid fa-location-dot me-1"></i>
-                            {{ $defaultAddress->city->name_en ?? '' }}, {{ $defaultAddress->district->name_en ?? '' }}
+                            {{ $defaultAddress->city->{'name_' . app()->getLocale()} ?? '' }}, {{ $defaultAddress->district->{'name_' . app()->getLocale()} ?? '' }}
                         </a>
                         @else
                         <a href="{{ route('addresses.index', ['locale' => app()->getLocale()]) }}" class="btn btn-outline me-2" title="{{ __('nav.addresses') }}">
@@ -133,7 +133,7 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
 
                 <div class="d-flex ms-3">
                     @guest('customer')
-                    <a href="{{ route('customer.signin', ['locale' => app()->getLocale()]) }}" class="btn btn-outline-light me-2">
+                    <a href="{{ route('customer.signin', ['locale' => app()->getLocale()]) }}" class="btn btn-outline-light me-2 pe-2">
                         {{ __('nav.sign_in') }}
                     </a>
                     @else
@@ -144,14 +144,6 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                             {{ Auth::guard('customer')->user()->first_name }}
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                            <li>
-                                <a href="{{ route('addresses.index', ['locale' => app()->getLocale()]) }}" class="dropdown-item">
-                                    <i class="fas fa-map-marker-alt me-2"></i> {{ __('nav.addresses') }}
-                                </a>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
                             <li>
                                 <form action="{{ route('customer.signout', ['locale' => app()->getLocale()]) }}" method="POST">
                                     @csrf
@@ -219,10 +211,10 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
             </p>
         </div>
     </footer>
-    
+
     @include('components.toast')
     @include('components.modal')
-    
+
     <script>
         let lastScroll = 0;
         let navbar = document.getElementById('mainNavbar');

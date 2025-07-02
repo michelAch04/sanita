@@ -26,6 +26,8 @@ class ProductController extends Controller
                 $query->where(function ($q) use ($search) {
                     $q->where('name_en', 'like', "%$search%")
                         ->orWhere('small_description_en', 'like', "%$search%")
+                        ->orWhere('sku', 'like', "%$search%")
+                        ->orWhere('barcode', 'like', "%$search%")
                         // Search subcategory name
                         ->orWhereHas('subcategories', function ($sub) use ($search) {
                             $sub->where('name_en', 'like', "%$search%");
