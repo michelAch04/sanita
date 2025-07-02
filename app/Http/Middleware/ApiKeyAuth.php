@@ -26,9 +26,8 @@ class ApiKeyAuth
         $decoded = base64_decode($encodedCredentials);
         [$username, $password] = explode(':', $decoded, 2);
 
-        // Set your static username and password here
-        $validUsername = 'API';
-        $validPassword = 'c1e8b2f7-4a9d-4e2b-9a7e-8f3d2b6a1c5e';
+        $validUsername = env('API_AUTH_USERNAME');
+        $validPassword = env('API_AUTH_PASSWORD');
 
         if ($username !== $validUsername || $password !== $validPassword) {
             return response()->json(['message' => 'Unauthorized'], 401);

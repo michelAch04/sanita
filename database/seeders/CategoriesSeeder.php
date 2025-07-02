@@ -4,36 +4,18 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
-use Faker\Factory as Faker;
 
 class CategoriesSeeder extends Seeder
 {
     public function run(): void
     {
-
-        $this->createRandomCategories(10);
-    }
-
-    public function createRandomCategories($count = 10)
-    {
-        $faker = Faker::create();
-        $categories = [];
-
-        for ($i = 0; $i < $count; $i++) {
-            $categories[] = [
-                'position'    => $i + 1,
-                'name_en'     => $faker->words(2, true) . ' ' . Str::random(3),
-                'name_ar'     => $faker->words(2, true) . ' ع',
-                'name_ku'     => $faker->words(2, true) . ' ک',
-                'extension'   => null,
-                'hidden'      => $faker->boolean(10) ? 1 : 0, // 10% hidden
-                'cancelled'   => 0,
-                'created_at'  => now(),
-                'updated_at'  => now(),
-            ];
-        }
-
-        DB::table('categories')->insert($categories);
+        DB::table('categories')->insert([
+            ['id' => 1, 'position' => 1, 'name_en' => 'Cleaning Wipes', 'name_ar' => 'مناديل تنظيف', 'name_ku' => 'پاککەرەوەی پاککردن', 'extension' => null, 'hidden' => 0, 'cancelled' => 0, 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 2, 'position' => 2, 'name_en' => 'Garbage Bags & Bin Liners', 'name_ar' => 'أكياس قمامة وبطانات صناديق', 'name_ku' => 'جەلی پاک و لاینەری سطل', 'extension' => null, 'hidden' => 0, 'cancelled' => 0, 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 3, 'position' => 3, 'name_en' => 'Household Cleaning Products', 'name_ar' => 'منتجات تنظيف منزلية', 'name_ku' => 'بەرھەمە پاککردنەوەی خێزانی', 'extension' => null, 'hidden' => 0, 'cancelled' => 0, 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 4, 'position' => 4, 'name_en' => 'Personal Care & Hygiene', 'name_ar' => 'العناية الشخصية والنظافة', 'name_ku' => 'چاودێری کەسی و پاکیزەیی', 'extension' => null, 'hidden' => 0, 'cancelled' => 0, 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 5, 'position' => 5, 'name_en' => 'Disposable Tableware & Food Packaging', 'name_ar' => 'أواني طعام وأغلفة طعام للاستخدام مرة واحدة', 'name_ku' => 'کەرەستە و پاکێجی خواردنەوەیەک بۆ جارێک', 'extension' => null, 'hidden' => 0, 'cancelled' => 0, 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 6, 'position' => 6, 'name_en' => 'Sanitary Products', 'name_ar' => 'منتجات صحية', 'name_ku' => 'بەرھەمە تەندروستییەکان', 'extension' => null, 'hidden' => 0, 'cancelled' => 0, 'created_at' => now(), 'updated_at' => now()],
+        ]);
     }
 }

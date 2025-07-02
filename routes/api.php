@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\SubcategoryApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\LocationController;
+use App\Http\Controllers\Api\DistributorController;
 
 
 /*
@@ -29,6 +30,7 @@ Route::middleware('api.key')->group(function () {
     Route::apiResource('categories', CategoryApiController::class);
     Route::apiResource('subcategories', SubcategoryApiController::class);
     Route::apiResource('brands', BrandApiController::class);
-});
 
-Route::get('/locations', [LocationController::class, 'getLocations']);
+    // Distributor API routes
+    Route::post('/distributor/assign-city', [DistributorController::class, 'assignCity']);
+});
