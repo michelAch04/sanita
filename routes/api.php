@@ -33,4 +33,5 @@ Route::middleware('api.key')->group(function () {
 
     // Distributor API routes
     Route::post('/distributor/assign-city', [DistributorController::class, 'assignCity']);
+    Route::post('/distributor/add-stock', [DistributorController::class, 'addStock']);
 });

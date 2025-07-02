@@ -34,6 +34,12 @@
                             <div class="underline"></div>
                         </div>
 
+                        <div class="input-container mb-5 mt-3" style="width: 30%;">
+                            <input type="text" name="barcode" value="{{ old('barcode') }}" required style="width: 100%;" placeholder="">
+                            <label class="label">Barcode</label>
+                            <div class="underline"></div>
+                        </div>
+
                         @foreach ([
                         'name_en' => 'Product Name (English)',
                         'name_ar' => 'Product Name (Arabic)',
@@ -152,7 +158,7 @@
         });
     });
 
-    window.taxRates = @json($taxes->pluck('rate', 'id'));
+    window.taxRates = @json($taxes - > pluck('rate', 'id'));
 
     function getSelectedTaxRate() {
         const taxSelect = document.getElementById('tax_id');

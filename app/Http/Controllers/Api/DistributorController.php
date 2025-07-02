@@ -28,8 +28,8 @@ class DistributorController extends Controller
 
             DB::table('distributor_stocks')->updateOrInsert(
                 [
-                    'distributor_id' => $validated['distributor_id'],
-                    'product_id' => $product->id,
+                    'distributors_id' => $validated['distributor_id'],
+                    'products_id' => $product->id,
                 ],
                 [
                     'stock' => $productData['stock'],
@@ -84,11 +84,11 @@ class DistributorController extends Controller
             'assigned' => $assigned,
             'skipped' => $skipped,
             'message' =>
-                count($assigned) === 0
-                    ? 'All selected cities are already assigned to other distributors.'
-                    : (count($skipped) === 0
-                        ? 'All cities assigned successfully.'
-                        : 'Some cities were already assigned to other distributors and were skipped.')
+            count($assigned) === 0
+                ? 'All selected cities are already assigned to other distributors.'
+                : (count($skipped) === 0
+                    ? 'All cities assigned successfully.'
+                    : 'Some cities were already assigned to other distributors and were skipped.')
         ]);
     }
 }

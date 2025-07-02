@@ -157,17 +157,16 @@
                     'Content-Type': 'application/json',
                     'Authorization': 'Basic {{ base64_encode(env('API_AUTH_USERNAME') . ':' . env('API_AUTH_PASSWORD')) }}',
                     'Accept': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken // Include CSRF token here
+                    'X-CSRF-TOKEN': csrfToken 
                 },
                 body: JSON.stringify(payload)
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert('Cities assigned successfully!');
-                    location.reload();
+                    showAjaxToast('success','Cities assigned successfully!');
                 } else {
-                    alert('Failed to assign cities: ' + (data.message || 'Unknown error'));
+                    showAjaxToast('warning','Failed to assign cities: ' + (data.message || 'Unknown error'));
                 }
             })
             .catch(error => {

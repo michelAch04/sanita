@@ -66,6 +66,7 @@ class ProductController extends Controller
             // Validation rules for each UOM per type
             $rules = [
                 'sku' => 'required|string|max:255|unique:products,sku',
+                'barcode' => 'required|string|max:255|unique:products,sku',
                 'name_en' => 'required|string|max:255',
                 'name_ar' => 'required|string|max:255',
                 'name_ku' => 'required|string|max:255',
@@ -99,6 +100,7 @@ class ProductController extends Controller
 
                 $product = Product::create([
                     'sku' => $validated['sku'],
+                    'barcode' => $validated['barcode'],
                     'name_en' => $validated['name_en'],
                     'name_ar' => $validated['name_ar'],
                     'name_ku' => $validated['name_ku'],
@@ -205,6 +207,7 @@ class ProductController extends Controller
         try {
             $rules = [
                 'sku' => 'required|string|max:255|unique:products,sku,' . $product->id,
+                'barcode' => 'required|string|max:255|unique:products,sku,' . $product->id,
                 'name_en' => 'required|string|max:255',
                 'name_ar' => 'required|string|max:255',
                 'name_ku' => 'required|string|max:255',
@@ -236,6 +239,7 @@ class ProductController extends Controller
             DB::transaction(function () use ($request, $validated, $product) {
                 $product->update([
                     'sku' => $validated['sku'],
+                    'barcode' => $validated['barcode'],
                     'name_en' => $validated['name_en'],
                     'name_ar' => $validated['name_ar'],
                     'name_ku' => $validated['name_ku'],
@@ -271,7 +275,7 @@ class ProductController extends Controller
                             $existing->delete();
                             continue;
                         }
-                        
+
                         $product->listPrices()->updateOrCreate(
                             ['type' => $prefix, 'UOM' => strtoupper($uom)],
                             [
