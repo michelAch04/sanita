@@ -18,7 +18,7 @@
 
         <!-- Category Title -->
         <div class="text-center mb-4">
-            <h2 class="display-5 m-0 text-break">
+            <h2 class="display-5 m-0 text-break section-title">
                 {{ $category->{'name_'.app()->getLocale()} ?? $category->name_en }}
             </h2>
         </div>

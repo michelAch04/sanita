@@ -1,5 +1,3 @@
-@php $isRtl = (app()->getLocale() === 'ar' || app()->getLocale() === 'ku'); @endphp
-
 <div class="container mb-4 mt-2 mx-1 {{ $isRtl ? 'text-end w-100' : '' }}">
     <form action="{{ route('addresses.update', ['locale' => app()->getLocale(), 'address' => $address->id]) }}" method="POST" class="{{ $isRtl ? 'rtl-container' : '' }}">
         @csrf

@@ -43,14 +43,14 @@ body {
 /* ------------------------------- NAVBAR STYLING ------------------------------------ */
 /* Navbar Background Split: white for logo area, then gradient */
 .navbar {
-    /* background: linear-gradient(to right, var(--secondary-blue), var(--primary-blue)); */
-    background: linear-gradient(to right,
+    /* background: linear-gradient(to right,
             #b1c0d4 0%,
             #68809c 15%,
             #365c7d 30%,
             #294e6f 40%,
             var(--secondary-blue) 60%,
-            var(--primary-blue) 100%);
+            var(--primary-blue) 100%) */
+    background: #fafafa;
     box-shadow: 0 4px 12px rgba(30, 58, 95, 0.2);
     transition: background-color 0.4s ease, transform 0.3s ease;
     height: 3.5rem;
@@ -85,7 +85,7 @@ body {
 
 /* Nav Links */
 .navbar-nav .nav-link {
-    color: var(--secondary-text) !important;
+    color: var(--primary-blue) !important;
     margin: 0 0.5rem;
     position: relative;
     transition: color 0.3s ease;
@@ -377,20 +377,15 @@ section {
 
 
 /* Section Title Styling */
-section h2 {
-    font-size: 2rem;
-    font-weight: 700;
-    text-align: center;
+.section-title {
     color: var(--primary-blue);
     text-transform: uppercase;
     letter-spacing: 1px;
-    margin-bottom: 2rem;
     position: relative;
-    text-align: center !important;
 }
 
 /* Underline effect under title */
-section h2::after {
+.section-title::after {
     content: "";
     width: 60px;
     height: 3px;

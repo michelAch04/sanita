@@ -1,13 +1,11 @@
 @extends('sanita.layout')
-@php
-$isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
-@endphp
+
 @section('title', 'Sign In')
 
 @section('content')
 
 <div class="container login-container signin-container mb-4">
-    <h2 class="display-5 login-title text-center mt-4 mb-4">{{ __('auth.sign_in.title') }}</h2>
+    <h2 class="display-5 text-center mt-4 mb-4 section-title">{{ __('auth.sign_in.title') }}</h2>
 
     <div class="{{ $isRtl ? 'rtl-container' : '' }}">
         <form method="POST" action="{{ route('customer.signin', ['locale' => app()->getLocale()]) }}" 

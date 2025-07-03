@@ -5,7 +5,7 @@
 @section('content')
 <section id="categories" class="py-3 bg-light">
     <div class="p-5 gx-0 w-100">
-        <h2 class="display-5 text-center mb-4">{{ __('nav.categories') }}</h2>
+        <h2 class="display-5 text-center mb-4 section-title">{{ __('nav.categories') }}</h2>
 
         @if($categories->isEmpty())
         <p class="text-center">{{ __('No categories found.') }}</p>

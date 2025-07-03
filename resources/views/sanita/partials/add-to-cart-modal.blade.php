@@ -1,3 +1,4 @@
+
 {{-- Add to Cart Modal --}}
 <div class="modal fade {{ $isRtl ? 'rtl-container' : '' }}" id="addToCartModal" tabindex="-1" aria-labelledby="addToCartModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">

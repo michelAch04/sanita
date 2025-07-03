@@ -5,7 +5,7 @@
 @section('content')
 <section id="products" class="py-3 bg-light">
     <div class="p-5 gx-0 w-100">
-        <h2 class="display-5 text-center mb-4">{{ __('nav.products') }}</h2>
+        <h2 class="display-5 text-center mb-4 section-title">{{ __('nav.products') }}</h2>
 
         @if($products->isEmpty())
         <p class="text-center">{{ __('No products available currently.') }}</p>

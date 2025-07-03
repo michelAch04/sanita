@@ -3,10 +3,9 @@
 @section('title', 'Sign Up')
 
 @section('content')
-@php $isRtl = (app()->getLocale() === 'ar' || app()->getLocale() === 'ku'); @endphp
 
 <div class="container login-container mb-4">
-    <h2 class="display-5 login-title text-center mb-4 mt-4">{{ __('auth.sign_up.title') }}</h2>
+    <h2 class="display-5 text-center mb-4 mt-4 section-title">{{ __('auth.sign_up.title') }}</h2>
 
     <form method="POST" action="{{ route('customer.signup', ['locale' => app()->getLocale()]) }}" class="{{ $isRtl ? 'rtl-container' : '' }} login-form">
         @csrf
