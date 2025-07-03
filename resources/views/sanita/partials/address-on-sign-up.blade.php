@@ -1,9 +1,9 @@
-<div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressLabel" aria-hidden="true">
+<div class="modal fade show" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg d-flex justify-content-center">
         <div class="modal-content p-3 pb-2 w-75">
-            <div class="modal-header border-0">
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="{{ __('Close') }}"></button>
+            <div class="modal-header bg-transparent border-0 justify-content-center">
                 <h2 class="display-5 text-center mb-0 fs-1 section-title">{{ __('nav.add_first_address') }}</h2>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('Close') }}"></button>
             </div>
             <div class="modal-body d-flex justify-content-center flex-column">
                 <p class="text-center address-msg">
@@ -21,13 +21,16 @@
         color: rgb(194, 160, 66);
         transition: transform 0.3s ease, color 0.3s ease;
     }
+
     @keyframes glow {
-        0%{
+        0% {
             transform: scale(1);
         }
+
         50% {
             transform: scale(1.015);
         }
+
         100% {
             transform: scale(1);
         }
