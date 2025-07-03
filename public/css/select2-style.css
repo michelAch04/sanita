@@ -30,6 +30,14 @@
         box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
         transition: all 0.3s ease;
         border-radius: 4px;
+        background-color: var(--primary-bg) !important;
+        color: var(--primary-text) !important;
+    }
+
+    .select2-container--default .select2-dropdown {
+        background-color: var(--primary-bg) !important;
+        color: var(--primary-text) !important;
+        border-color: var(--input-border-color) !important;
     }
 
     .select2-container .select2-search--dropdown .select2-search__field:focus {
@@ -48,7 +56,7 @@
         border: none;
         border-bottom: 2px solid teal;
         font-size: 16px;
-        color: #333;
+        color: var(--primary-text);
         padding: 0;
         outline: none;
         transition: all 0.3s ease;
