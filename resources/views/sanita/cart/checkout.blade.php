@@ -83,7 +83,6 @@
                         <div class="login-inputForm promo-code-container">
                             <input type="text" id="promo_code" name="promo_code"
                                 class="login-input w-100" placeholder="Enter Promo Code">
-                                class="login-input" style="width: 100%;" placeholder="Enter Promo Code">
                         </div>
                         <div>
                             <button type="submit" class="btn underline-btn">{{ __('cart.apply') }}</button>
