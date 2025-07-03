@@ -247,7 +247,105 @@ class WebsiteCartController extends Controller
         $districts = District::all();
         $cities = City::all();
 
-        return view('sanita.cart.checkout', compact('cart', 'addresses', 
-        'subtotal', 'totalTax', 'total', 'governorates', 'districts', 'cities'));
+        return view('sanita.cart.checkout', compact(
+            'cart',
+            'addresses',
+            'subtotal',
+            'totalTax',
+            'total',
+            'governorates',
+            'districts',
+            'cities'
+        ));
+    }
+
+    public function getCartWithDetails()
+    {
+        $customerId = auth('customer')->id();
+        return Cart::with('cartDetails')
+            ->where('customers_id', $customerId)
+            ->first();
+    }
+
+    /**
+     * Convert requested quantity to EA based on unit.
+     */
+    protected function convertToEA($quantity, $unit, $ea_ca, $ea_pl)
+    {
+        if ($unit === 'CA') {
+            return $quantity * $ea_ca;
+        } elseif ($unit === 'PL') {
+            return $quantity * $ea_pl;
+        }
+        return $quantity;
+    }
+
+    /**
+     * Check if requested EA quantity is available in stock.
+     */
+    protected function hasEnoughStock(Product $product, int $requestedEA): bool
+    {
+        $totalStockEA = $product->distributorStocks->sum('stock');
+        return $requestedEA <= $totalStockEA;
+    }
+
+    /**
+     * Get or create the cart for the current customer.
+     */
+    protected function getOrCreateCart($customerId)
+    {
+        $cart = Cart::where('customers_id', $customerId)->first();
+        if (!$cart) {
+            $cart = Cart::create([
+                'customers_id'   => $customerId,
+                'total_amount'   => 0,
+                'subtotal_amount' => 0,
+                'tax_amount'     => 0,
+            ]);
+        }
+        return $cart;
+    }
+
+    /**
+     * Get cart detail for a given cart, product, and UOM.
+     */
+    protected function getCartDetail($cartId, $productId, $unit)
+    {
+        return CartDetail::where('carts_id', $cartId)
+            ->where('products_id', $productId)
+            ->where('UOM', $unit)
+            ->first();
+    }
+
+    /**
+     * Check if the price in the request matches the latest price in the database.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Product $product
+     * @param string $unit
+     * @return array [bool $changed, float $latestUnitPrice, float $latestShelfPrice]
+     */
+    protected function isPriceChanged(Request $request, Product $product, $unit)
+    {
+        $latestPrice = $product->listPrices()
+            ->where('UOM', $unit)
+            ->where('type', $request->input('type'))
+            ->orderByDesc('id')
+            ->first();
+
+        if ($latestPrice) {
+            $unitPrice = $latestPrice->unit_price;
+            $shelfPrice = $latestPrice->shelf_price;
+
+            $changed = (
+                $request->input('unit_price') != $unitPrice ||
+                $request->input('shelf_price') != $shelfPrice
+            );
+
+            return [$changed, $unitPrice, $shelfPrice];
+        }
+
+        // If no price found, treat as not changed (or handle as needed)
+        return [false, $request->input('unit_price'), $request->input('shelf_price')];
     }
 }
