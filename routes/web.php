@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\WebsiteController;
 use App\Http\Controllers\WebsiteAddressController;
 use App\Http\Controllers\WebsiteCartController;
+use App\Http\Controllers\WebsiteOrderController;
 
 use App\Http\Controllers\CMS\DistributorController;
 use App\Http\Controllers\CMS\ProductController;
@@ -121,14 +122,17 @@ Route::prefix('{locale}')->middleware(['localization', 'force.address.modal'])->
             'update' => 'website.cart.update',
             'destroy' => 'website.cart.destroy',
         ]);
-        Route::resource('addresses', WebsiteAddressController::class);
 
+        Route::post('/checkout/place-order', [WebsiteOrderController::class, 'placeOrder'])->name('website.checkout.place_order');
+        Route::get('/orders', [WebsiteOrderController::class, 'index'])->name('website.orders.index');
+
+        Route::resource('addresses', WebsiteAddressController::class);
         //address routes
         Route::post('/addresses/{address}/set-default', [WebsiteAddressController::class, 'setDefault'])->name('addresses.setDefault');
         Route::get('/get-districts', [WebsiteAddressController::class, 'getDistricts']);
         Route::get('/get-cities', [WebsiteAddressController::class, 'getCities']);
 
-        Route::get('checkout', [WebsiteCartController::class, 'checkout'])->name('cart.checkout');
+        Route::get('/checkout', [WebsiteCartController::class, 'checkout'])->name('cart.checkout');
     });
 
     Route::get('categories', [WebsiteController::class, 'categories'])->name('website.categories.index');

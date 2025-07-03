@@ -4,13 +4,13 @@
 
 @section('content')
 <div class="checkout-wrapper container-fluid py-5 px-0 {{ $isRtl ? 'rtl-container' : '' }}">
-    <form method="POST" action="">
+    <form method="POST" action="{{ route('website.checkout.place_order', ['locale' => app()->getLocale()]) }}">
         @csrf
 
         <h2 class="display-5 text-center mb-5 section-title">{{ __('cart.checkout') }}</h2>
 
         {{-- MAIN GRID --}}
-        <div class="row gy-4 px-0 mx-0">
+        <div class=" row gy-4 px-0 mx-0">
             <!-- LEFT COLUMN: CART ITEMS -->
             <div class="col-lg-6">
                 <div class="checkout-card p-4 shadow-sm rounded bg-secondary">
@@ -31,8 +31,13 @@
                                         @endif
                                         <span class="fw-semibold">${{ number_format($item->shelf_price, 2) }}</span>
                                     </p>
-                                    <p class="mb-0 text-muted"><small>{{ __('cart.quantity') }}: {{ $item->quantity_ea }} / {{$item->UOM}}</small></p>
-                                    <p class="text-primary"><small>{{ __('cart.total') }}: ${{ number_format($item->extended_price, 2) }}</small></p>
+                                    <p class="mb-0 text-muted">
+                                        <small>
+                                            {{ __('cart.quantity') }}: {{ $item->quantity_foreign }} /
+                                            {{ __('cart.' . $item->UOM) }}
+                                        </small>
+                                    </p>
+                                    <p><small>{{ __('cart.total') }}: ${{ number_format($item->extended_price, 2) }}</small></p>
                                 </div>
                             </div>
                         </div>
@@ -62,6 +67,7 @@
                             <option value="">{{ __('cart.select_address') }}</option>
                             @foreach($addresses as $address)
                             <option value="{{ $address->id }}" {{ $address->is_default ? 'selected' : '' }}>
+                                {{ $address->title }} — {{ $address->city->name_en }}, {{ $address->district->name_en }}
                                 {{ $address->title }} — {{ $address->city->name_en }}, {{ $address->district->name_en }}
                                 | Street {{ $address->street }}, Building {{ $address->building }}, Floor {{ $address->floor }}
                             </option>
