@@ -139,7 +139,6 @@ class WebsiteCartController extends Controller
                 'cart_subtotal' => round($cart->subtotal_amount, 2),
                 'cart_tax'     => round($cart->tax_amount, 2),
                 'cart_id'      => $cart->id,
-                ''
             ]);
         } catch (\Exception $e) {
             \Log::error($e);
