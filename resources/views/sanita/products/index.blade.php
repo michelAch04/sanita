@@ -31,6 +31,7 @@
     </div>
 </section>
 @include('sanita.partials.contact-us')
+@include('sanita.partials.add-to-cart-modal')
 <style>
     .product-card {
         flex: 0 0 auto;

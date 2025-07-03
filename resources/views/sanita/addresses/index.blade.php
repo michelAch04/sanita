@@ -10,7 +10,7 @@ $sortedAddresses = $addresses->sortByDesc('is_default');
         <h2 class="display-5 text-center mb-5">📍 {{ __('Your Addresses') }}</h2>
         @if($sortedAddresses->count() != 0)
         <div class="d-flex justify-content-center mb-4">
-            <button data-bs-toggle="modal" data-bs-target="#addAddressModal" class="btn bubbles bubbles-arctic px-4 py-2" style="border-radius: 2rem;">
+            <button data-bs-toggle="modal" data-bs-target="#addAddressModal" class="btn bubbles bubbles-arctic px-4 py-2 add-address-btn">
                 <span class="text"><i class="fa fa-plus me-2"></i>{{ __('Add Address') }}</span>
             </button>
         </div>
@@ -77,15 +77,15 @@ $sortedAddresses = $addresses->sortByDesc('is_default');
             @endforeach
         </div>
         @else
-        <div class="empty-cart-alert text-center py-5 px-4 my-5 rounded-4 shadow-sm" style="background: #f9f9f9; border: 2px dashed var(--primary-blue); max-width: 500px; margin: 0 auto;">
-            <div style="font-size: 3rem; color: var(--primary-blue); margin-bottom: 0.5rem;">
+        <div class="empty-cart-alert text-center py-5 px-4 my-5 rounded-4 shadow-sm">
+            <div class="empty-cart-icon">
                 📭
             </div>
-            <div class="fs-4 fw-semibold mb-2" style="color: var(--primary-blue);">
+            <div class="fs-4 fw-semibold mb-2 empty-cart-msg">
                 {{ __('No addresses found.') }}
             </div>
             <div class="d-flex justify-content-center mb-4">
-                <button data-bs-toggle="modal" data-bs-target="#addAddressModal" class="btn bubbles bubbles-arctic px-4 py-2" style="border-radius: 2rem;">
+                <button data-bs-toggle="modal" data-bs-target="#addAddressModal" class="btn bubbles bubbles-arctic px-4 py-2 empty-cart-btn">
                     <span class="text"><i class="fa fa-plus me-2"></i>{{ __('Add Address') }}</span>
                 </button>
             </div>
@@ -97,9 +97,9 @@ $sortedAddresses = $addresses->sortByDesc('is_default');
 <!-- Add Address Modal -->
 <div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg d-flex justify-content-center">
-        <div class="modal-content p-3 pb-2" style="width: 75%;">
-            <div class="modal-header" style="border: none !important;">
-                <h2 class="display-5 login-title text-center mb-0" style="font-size: 2.5rem;">{{ __('Add New Address') }}</h2>
+        <div class="modal-content p-3 pb-2 w-75">
+            <div class="modal-header border-0">
+                <h2 class="display-5 login-title text-center mb-0 fs-1">{{ __('Add New Address') }}</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('Close') }}"></button>
             </div>
             <div class="modal-body d-flex justify-content-center">
@@ -113,9 +113,9 @@ $sortedAddresses = $addresses->sortByDesc('is_default');
 <!-- Edit Address Modal -->
 <div class="modal fade" id="editAddressModal-{{ $address->id }}" tabindex="-1" aria-labelledby="editAddressLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg d-flex justify-content-center">
-        <div class="modal-content p-3 pb-2" style="width: 75%;">
-            <div class="modal-header" style="border: none !important;">
-                <h2 class="display-5 login-title text-center mb-0" style="font-size: 2.5rem;">{{ __('Edit Address') }}</h2>
+        <div class="modal-content p-3 pb-2 w-75">
+            <div class="modal-header border-0">
+                <h2 class="display-5 login-title text-center mb-0 fs-1">{{ __('Edit Address') }}</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('Close') }}"></button>
             </div>
             <div class="modal-body d-flex justify-content-center">
@@ -125,51 +125,6 @@ $sortedAddresses = $addresses->sortByDesc('is_default');
     </div>
 </div>
 @endforeach
-
-
 <link rel="stylesheet" href="{{ asset('css/cart.css') }}" />
-<style>
-    .modify-btn {
-        width: 5.5rem;
-        padding: 0.25rem 0.25rem !important;
-        border-width: 0.12rem;
-    }
-
-    .modify-btn>.text {
-        font-weight: 500 !important;
-    }
-
-    .edit-btn {
-        --c2: rgb(54, 116, 222);
-    }
-
-    .delete-btn {
-        --c2: rgb(196, 49, 49);
-    }
-
-    p i {
-        width: 1.2rem;
-        text-align: center;
-    }
-
-    .success-btn {
-        --c2: green;
-        padding: 0.25rem 0.5rem !important;
-        border-width: 0.08rem;
-        font-size: 0.9rem;
-    }
-
-    .success-btn>.text {
-        font-weight: 400;
-    }
-</style>
-
-<script>
-    function confirmDelete(action) {
-        const form = document.getElementById('deleteForm');
-        form.action = action;
-        const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
-        modal.show();
-    }
-</script>
+@include('components.modal')
 @endsection

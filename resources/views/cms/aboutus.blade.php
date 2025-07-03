@@ -27,7 +27,7 @@ $canEdit = $permissions && $permissions->edit;
     {{-- Content Display --}}
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body">
-            {!! $aboutUs->textarea ?? '<p class="text-muted fst-italic">No About Us content available.</p>' !!}
+            {!! $aboutUs->textarea_en ?? '<p class="text-muted fst-italic">No About Us content available.</p>' !!}
         </div>
     </div>
 

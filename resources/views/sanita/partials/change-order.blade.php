@@ -1,7 +1,5 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        window.csrfToken = "{{ csrf_token() }}";
-
         let reorderEnabled = true; // For toggle
 
         document.querySelectorAll('[data-sortable-table]').forEach(table => {
