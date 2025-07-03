@@ -5,7 +5,7 @@
 @section('content')
 <section id="cart" class="pt-5 bg-light">
     <div class="container px-5 mb-5">
-        <h2 class="display-5 text-center mb-5">🛒 {{ __('cart.heading') }}</h2>
+        <h2 class="display-5 text-center mb-5 section-title">🛒 {{ __('cart.heading') }}</h2>
 
         @if($cart && $cart->cartDetails->count() > 0)
         <div class="d-flex flex-wrap justify-content-center gap-2">

@@ -1,7 +1,5 @@
 @extends('sanita.layout')
-@php
-$isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
-@endphp
+
 @section('title', __('Checkout'))
 
 @section('content')
@@ -9,7 +7,7 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
     <form method="POST" action="{{ route('website.checkout.place_order', ['locale' => app()->getLocale()]) }}">
         @csrf
 
-        <h2 class="display-5 login-title text-center mb-5">{{ __('cart.checkout') }}</h2>
+        <h2 class="display-5 text-center mb-5 section-title">{{ __('cart.checkout') }}</h2>
 
         {{-- MAIN GRID --}}
         <div class=" row gy-4 px-0 mx-0">

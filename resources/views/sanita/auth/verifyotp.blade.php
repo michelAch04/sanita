@@ -3,10 +3,9 @@
 @section('title', __('auth.verify_otp.title'))
 
 @section('content')
-@php $isRtl = (app()->getLocale() === 'ar' || app()->getLocale() === 'ku'); @endphp
 
 <div class="container mb-4 mt-5" style="max-width: 500px;">
-    <h2 class="display-5 login-title text-center mb-5">{{ __('auth.verify_otp.title') }}</h2>
+    <h2 class="display-5 text-center mb-5 section-title">{{ __('auth.verify_otp.title') }}</h2>
 
     <form method="POST" action="{{ route('customer.verifyOtp', ['locale' => app()->getLocale()]) }}" class="{{ $isRtl ? 'rtl-container' : '' }}">
         @csrf

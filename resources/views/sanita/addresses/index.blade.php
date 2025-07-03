@@ -7,7 +7,7 @@ $sortedAddresses = $addresses->sortByDesc('is_default');
 @section('content')
 <section id="addresses" class="pt-5 bg-light">
     <div class="container px-5 mb-5">
-        <h2 class="display-5 text-center mb-5">📍 {{ __('Your Addresses') }}</h2>
+        <h2 class="display-5 text-center mb-5 section-title">📍 {{ __('Your Addresses') }}</h2>
         @if($sortedAddresses->count() != 0)
         <div class="d-flex justify-content-center mb-4">
             <button data-bs-toggle="modal" data-bs-target="#addAddressModal" class="btn bubbles bubbles-arctic px-4 py-2 add-address-btn">
@@ -99,7 +99,7 @@ $sortedAddresses = $addresses->sortByDesc('is_default');
     <div class="modal-dialog modal-dialog-centered modal-lg d-flex justify-content-center">
         <div class="modal-content p-3 pb-2 w-75">
             <div class="modal-header border-0">
-                <h2 class="display-5 login-title text-center mb-0 fs-1">{{ __('Add New Address') }}</h2>
+                <h2 class="display-5 section-title text-center mb-0 fs-1">{{ __('Add New Address') }}</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('Close') }}"></button>
             </div>
             <div class="modal-body d-flex justify-content-center">
@@ -115,7 +115,7 @@ $sortedAddresses = $addresses->sortByDesc('is_default');
     <div class="modal-dialog modal-dialog-centered modal-lg d-flex justify-content-center">
         <div class="modal-content p-3 pb-2 w-75">
             <div class="modal-header border-0">
-                <h2 class="display-5 login-title text-center mb-0 fs-1">{{ __('Edit Address') }}</h2>
+                <h2 class="display-5 section-title text-center mb-0 fs-1">{{ __('Edit Address') }}</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('Close') }}"></button>
             </div>
             <div class="modal-body d-flex justify-content-center">

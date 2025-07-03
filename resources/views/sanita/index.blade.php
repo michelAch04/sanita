@@ -2,7 +2,6 @@
 
 @section('title', 'Home')
 @php
-$isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
 $type = auth()->user()->type ?? 'b2c';
 @endphp
 
@@ -23,7 +22,7 @@ $type = auth()->user()->type ?? 'b2c';
 <!-- Offers Section -->
 <section id="offers" class="py-5 bg-light">
     <div class="container gx-0">
-        <h2 class="display-5 text-center mb-4">{{ __('nav.offers') }}</h2>
+        <h2 class="display-5 text-center mb-4 section-title">{{ __('nav.offers') }}</h2>
         <div class="carousel gx-0">
             @foreach($offers as $product)
             @include('sanita.partials.product-card', [
@@ -45,7 +44,7 @@ $type = auth()->user()->type ?? 'b2c';
 <!-- Categories Section -->
 <section id="categories" class="py-5">
     <div class="container text-center">
-        <h2 class="display-5 mb-4">{{ __('nav.categories') }}</h2>
+        <h2 class="display-5 mb-4 section-title">{{ __('nav.categories') }}</h2>
         <div class="carousel mx-auto mb-5">
             @foreach($categories as $category)
             <div class="px-0">
@@ -69,7 +68,7 @@ $type = auth()->user()->type ?? 'b2c';
 <!-- Products Section -->
 <section id="products" class="py-5 bg-light">
     <div class="container">
-        <h2 class="display-5 text-center mb-4">{{ __('nav.products') }}</h2>
+        <h2 class="display-5 text-center mb-4 section-title">{{ __('nav.products') }}</h2>
         <div class="carousel gx-0">
             @foreach($products as $product)
             @php

@@ -25,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrapFive(); // or Paginator::useBootstrapFour();
+        View::share('isRtl', app()->getLocale() === 'ar' || app()->getLocale() === 'ku');
         View::composer('*', function ($view) {
             $customerId = auth()->guard('customer')->id(); // Use the correct guard
 

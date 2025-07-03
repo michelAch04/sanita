@@ -3,11 +3,9 @@
 @section('title', __('auth.passwords.email_title'))
 
 @section('content')
-@php
-$isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
-@endphp
+
 <div class="container login-container mb-4 mt-3 d-flex justify-content-center flex-column align-items-center">
-    <h2 class="display-5 login-title text-center mt-4">{{ __('auth.passwords.email_title') }}</h2>
+    <h2 class="display-5 text-center mt-4 section-title">{{ __('auth.passwords.email_title') }}</h2>
     <div class="mt-5 mb-5 shadow bg-light rounded-2 px-5 py-4 w-100" {{ $isRtl ? 'dir=rtl' : '' }}>
         <form class="form" method="POST" action="{{ route('password.email', ['locale' => app()->getLocale()]) }}">
             @csrf
