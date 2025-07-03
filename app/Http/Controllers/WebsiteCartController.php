@@ -151,41 +151,96 @@ class WebsiteCartController extends Controller
 
     public function update(Request $request, $locale, CartDetail $cart)
     {
-        $product = Product::where('id', $cart->products_id)
-            ->where('available_quantity', '>', 0)
-            ->first();
-
-        if (!$product) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Product is out of stock.',
-            ], 422);
-        }
-
-        $quantity = max(1, (int)$request->input('quantity'));
-
-        if ($quantity > $product->available_quantity) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Not enough stock available.',
-            ], 422);
-        }
-
-        $cart->quantity = $quantity;
-        $cart->save();
-
-        $itemTotal = $cart->shelf_price * $quantity;
-
-        if ($request->ajax()) {
-            return response()->json([
-                'success' => true,
-                'quantity' => $quantity,
-                'item_total' => round($itemTotal, 2)
+        try {
+            // Validate quantity input
+            $request->validate([
+                'quantity' => 'required|integer|min:1',
             ]);
-        }
 
-        return redirect()->back()->with('success', __('cart.updated'));
+            $newForeignQuantity = (int) $request->input('quantity');
+            $unit = $cart->UOM;
+
+            // Fetch associated product with stock data
+            $product = Product::with('distributorStocks')->find($cart->products_id);
+            if (!$product) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'The product for this cart item no longer exists.',
+                ], 404);
+            }
+
+            // Conversion rates (fallback to 1 if not provided)
+            $ea_ca = (int) $product->ea_ca;
+            $ea_pl = (int) $product->ea_pl;
+            dd($ea_ca, $ea_pl);
+
+            // Convert input quantity to primary (EA)
+            $newPrimaryQuantity = $this->convertToEA($newForeignQuantity, $unit, $ea_ca, $ea_pl);
+
+            // Get the cart model (parent cart) from the CartDetail
+            $cartModel = $cart->cart;
+
+            // Sum EA quantities of all *other* items in the same cart
+            $otherItemsEA = $cartModel->cartDetails()
+                ->where('id', '!=', $cart->id)
+                ->sum('quantity_primary');
+
+            $totalRequestedEA = $otherItemsEA + $newPrimaryQuantity;
+            $totalStockEA = $product->distributorStocks->sum('stock');
+
+            // Check stock availability
+            if ($totalRequestedEA > $totalStockEA) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Not enough stock available.',
+                    'stock' => $totalStockEA,
+                    'requested_quantity' => $totalRequestedEA
+                ], 422);
+            }
+
+            // Update cart detail
+            $cart->quantity_foreign = $newForeignQuantity;
+            $cart->quantity_primary = $newPrimaryQuantity;
+            $cart->extended_price = $cart->shelf_price * $newForeignQuantity;
+            $cart->save();
+
+            // Recalculate cart totals
+            $cartModel->subtotal_amount = $cartModel->cartDetails->sum(
+                fn($item) =>
+                $item->unit_price * $item->quantity_foreign
+            );
+
+            $cartModel->tax_amount = $cartModel->cartDetails->sum(
+                fn($item) => ($item->shelf_price - $item->unit_price) * $item->quantity_foreign
+            );
+
+            $cartModel->total_amount = $cartModel->subtotal_amount + $cartModel->tax_amount;
+            $cartModel->save();
+
+            // Handle response
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'quantity' => $newForeignQuantity,
+                    'item_total' => round($cart->extended_price, 2),
+                    'cart_total' => round($cartModel->total_amount, 2),
+                    'cart_subtotal' => round($cartModel->subtotal_amount, 2),
+                    'cart_tax' => round($cartModel->tax_amount, 2),
+                ]);
+            }
+
+            return redirect()->back()->with('success', __('cart.updated'));
+        } catch (\Exception $e) {
+            \Log::error('Cart update error: ' . $e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Server error: ' . $e->getMessage(),
+            ], 500);
+        }
     }
+
+
 
     public function destroy(Request $request, $locale, CartDetail $cart)
     {

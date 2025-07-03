@@ -132,7 +132,7 @@
 
                     <div class="dropdown me-3">
                         <button class="btn btn-outline-light dropdown-toggle" type="button" id="localeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        {{ strtoupper(app()->getLocale()) }}
+                            {{ strtoupper(app()->getLocale()) }}
                         </button>
                         <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="localeDropdown">
                             <li>
