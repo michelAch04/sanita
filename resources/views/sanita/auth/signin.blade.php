@@ -19,7 +19,7 @@
                 <i class="fa fa-phone"></i>
                 <input type="hidden" name="country_code" id="country_code">
                 <input id="mobile" type="tel" name="mobile"
-                    class="login-input"
+                    class="login-input text-primary"
                     value="{{ old('mobile') }}"
                     data-old="{{ old('country_code') ? '+' . old('country_code') . old('mobile') : '' }}"
                     placeholder="{{ __('auth.sign_up.mobile') }}" required> 
@@ -43,7 +43,7 @@
                 <input type="password"
                     name="password"
                     id="password"
-                    class="login-input"
+                    class="login-input text-primary"
                     placeholder="{{ __('auth.sign_in.password') }}">
             </div>
 

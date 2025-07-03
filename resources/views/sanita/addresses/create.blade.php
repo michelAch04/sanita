@@ -4,7 +4,7 @@
 
         {{-- Title --}}
         <div class="mb-3">
-            <label for="title" class="{{ $isRtl ? 'text-end w-100' : '' }}">{{ __('Title (e.g. Home, Work)') }}</label>
+            <label for="title" class="{{ $isRtl ? 'text-end w-100' : '' }} text-primary">{{ __('Title (e.g. Home, Work)') }}</label>
             <div class="login-inputForm @error('title') is-invalid @enderror">
                 <i class="fa fa-tag"></i>
                 <input type="text" name="title" id="title" class="login-input" value="{{ old('title') }}" placeholder="{{ __('Title (e.g. Home, Work)') }}">
@@ -16,7 +16,7 @@
 
         {{-- Governorate --}}
         <div id="governoratesInput" class="mb-3">
-            <label for="governorate" class="{{ $isRtl ? 'text-end w-100' : '' }}">{{ __('Governorate') }}</label>
+            <label for="governorate" class="{{ $isRtl ? 'text-end w-100' : '' }} text-primary">{{ __('Governorate') }}</label>
             <div class="login-inputForm @error('governorate') is-invalid @enderror {{ $isRtl ? 'text-end w-100' : '' }}">
                 <i class="fa-solid fa-map"></i>
                 <select name="governorate" id="governorate" class="login-input" required>
@@ -33,7 +33,7 @@
 
         {{-- District --}}
         <div id="districtsInput" class="mb-3 o-50 o-transition">
-            <label for="district" class="{{ $isRtl ? 'text-end w-100' : '' }}">{{ __('District') }}</label>
+            <label for="district" class="{{ $isRtl ? 'text-end w-100' : '' }} text-primary">{{ __('District') }}</label>
             <div class="login-inputForm @error('district') is-invalid @enderror {{ $isRtl ? 'text-end w-100' : '' }}">
                 <i class="fa-solid fa-map-marker-alt "></i>
                 <select name="district" id="district" class="login-input" required>
@@ -47,7 +47,7 @@
 
         {{-- City --}}
         <div id="citiesInput" class="mb-3 o-50 o-transition">
-            <label for="city" class="{{ $isRtl ? 'text-end w-100' : '' }}">{{ __('City') }}</label>
+            <label for="city" class="{{ $isRtl ? 'text-end w-100' : '' }} text-primary">{{ __('City') }}</label>
             <div class="login-inputForm @error('city') is-invalid @enderror {{ $isRtl ? 'text-end w-100' : '' }}">
                 <i class="fa fa-city"></i>
                 <select name="city" id="city" class="login-input" required>
@@ -61,7 +61,7 @@
 
         {{-- Street --}}
         <div class="mb-3">
-            <label for="street" class="{{ $isRtl ? 'text-end w-100' : '' }}">{{ __('Street') }}</label>
+            <label for="street" class="{{ $isRtl ? 'text-end w-100' : '' }} text-primary">{{ __('Street') }}</label>
             <div class="login-inputForm @error('street') is-invalid @enderror">
                 <i class="fa fa-road"></i>
                 <input type="text" name="street" id="street" class="login-input" value="{{ old('street') }}" placeholder="{{ __('Street') }}" required>
@@ -73,7 +73,7 @@
 
         {{-- Building --}}
         <div class="mb-3">
-            <label for="building" class="{{ $isRtl ? 'text-end w-100' : '' }}">{{ __('Building') }}</label>
+            <label for="building" class="{{ $isRtl ? 'text-end w-100' : '' }} text-primary">{{ __('Building') }}</label>
             <div class="login-inputForm @error('building') is-invalid @enderror">
                 <i class="fa fa-building"></i>
                 <input type="text" name="building" id="building" class="login-input" value="{{ old('building') }}" placeholder="{{ __('Building') }}" required>
@@ -85,7 +85,7 @@
 
         {{-- Floor --}}
         <div class="mb-3">
-            <label for="floor" class="{{ $isRtl ? 'text-end w-100' : '' }}">{{ __('Floor') }}</label>
+            <label for="floor" class="{{ $isRtl ? 'text-end w-100' : '' }} text-primary">{{ __('Floor') }}</label>
             <div class="login-inputForm @error('floor') is-invalid @enderror">
                 <i class="fa fa-layer-group"></i>
                 <input type="text" name="floor" id="floor" class="login-input" value="{{ old('floor') }}" placeholder="{{ __('Floor') }}">
@@ -97,7 +97,7 @@
 
         {{-- Notes --}}
         <div class="mb-3">
-            <label for="notes" class="{{ $isRtl ? 'text-end w-100' : '' }}">{{ __('Notes') }}</label>
+            <label for="notes" class="{{ $isRtl ? 'text-end w-100' : '' }} text-primary">{{ __('Notes') }}</label>
             <div class="login-inputForm @error('notes') is-invalid @enderror textarea-container">
                 <i class="fa fa-sticky-note"></i>
                 <textarea name="notes" id="notes" class="login-input textarea-input" placeholder="{{ __('Notes') }}">{{ old('notes') }}</textarea>

@@ -17,7 +17,7 @@
                 <div class="login-inputForm @error('first_name') is-invalid @enderror">
                     <i class="fa fa-user"></i>
                     <input type="text" name="first_name" id="first_name"
-                        class="login-input"
+                        class="login-input text-primary"
                         value="{{ old('first_name') }}" placeholder="{{ __('auth.sign_up.first_name') }}">
                 </div>
                 @error('first_name')
@@ -29,7 +29,7 @@
                 <div class="login-inputForm @error('last_name') is-invalid @enderror">
                     <i class="fa fa-user"></i>
                     <input type="text" name="last_name" id="last_name"
-                        class="login-input"
+                        class="login-input text-primary"
                         value="{{ old('last_name') }}" placeholder="{{ __('auth.sign_up.last_name') }}">
                 </div>
                 @error('last_name')
@@ -45,7 +45,7 @@
                 <i class="fa fa-phone"></i>
                 <input type="hidden" name="country_code" id="country_code">
                 <input id="mobile" type="tel" name="mobile"
-                    class="login-input"
+                    class="login-input text-primary"
                     value="{{ old('mobile') }}"
                     data-old="{{ old('country_code') ? '+' . old('country_code') . old('mobile') : old('mobile') }}"
                     placeholder="{{ __('auth.sign_up.mobile') }}" required>
@@ -71,7 +71,7 @@
             <div class="login-inputForm @error('password') is-invalid @enderror">
                 <i class="fa fa-lock"></i>
                 <input type="password" name="password" id="password"
-                    class="login-input"
+                    class="login-input text-primary"
                     placeholder="{{ __('auth.sign_up.password') }}">
                 <i class="fa fa-eye toggle-password cursor-pointer"></i>
             </div>
@@ -86,7 +86,7 @@
             <div class="login-inputForm">
                 <i class="fa fa-check"></i>
                 <input type="password" name="password_confirmation" id="password_confirmation"
-                    class="login-input" placeholder="{{ __('auth.sign_up.password_confirmation') }}">
+                    class="login-input text-primary" placeholder="{{ __('auth.sign_up.password_confirmation') }}">
                 <i class="fa fa-eye toggle-confirm cursor-pointer"></i>
             </div>
         </div>
@@ -97,7 +97,7 @@
             <div class="login-inputForm @error('email') is-invalid @enderror">
                 <i class="fa fa-envelope"></i>
                 <input type="email" name="email" id="email"
-                    class="login-input"
+                    class="login-input text-primary"
                     value="{{ old('email') }}" placeholder="{{ __('auth.sign_up.email') }}">
             </div>
             @error('email')
@@ -111,13 +111,13 @@
             <div class="login-inputForm dob-group @error('DOB') is-invalid @enderror">
                 <i class="fa fa-calendar"></i>
                 <input type="text" name="dob_day" id="dob_day" maxlength="2" placeholder="DD"
-                    class="login-input small-input" value="{{ old('dob_day') }}">
+                    class="login-input small-input text-primary" value="{{ old('dob_day') }}">
                 <span class="slash">/</span>
                 <input type="text" name="dob_month" id="dob_month" maxlength="2" placeholder="MM"
-                    class="login-input small-input" value="{{ old('dob_month') }}">
+                    class="login-input small-input text-primary" value="{{ old('dob_month') }}">
                 <span class="slash">/</span>
                 <input type="text" name="dob_year" id="dob_year" maxlength="4" placeholder="YYYY"
-                    class="login-input small-input small-input-year" value="{{ old('dob_year') }}">
+                    class="login-input small-input small-input-year text-primary" value="{{ old('dob_year') }}">
                 {{-- Hidden final DOB input --}}
                 <input type="hidden" name="DOB" id="DOB">
             </div>

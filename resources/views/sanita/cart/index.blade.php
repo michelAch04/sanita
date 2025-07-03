@@ -3,8 +3,8 @@
 @section('title', __('cart.title'))
 
 @section('content')
-<section id="cart" class="pt-5 bg-light">
-    <div class="container px-5 mb-5">
+<section id="cart" class="pt-3">
+    <div class="container px-5 py-2 mb-5">
         <h2 class="display-5 text-center mb-5 section-title">🛒 {{ __('cart.heading') }}</h2>
 
         @if($cart && $cart->cartDetails->count() > 0)
@@ -12,7 +12,7 @@
             @php $cartTotal = 0; @endphp
 
             @foreach($cart->cartDetails as $detail)
-            <div class="cart-item d-flex flex-row gap-1 p-3 bg-white rounded shadow-sm align-items-center flex-wrap w-100" data-id="{{ $detail->id }}">
+            <div class="cart-item d-flex flex-row gap-1 p-3 rounded shadow-sm align-items-center flex-wrap w-100" data-id="{{ $detail->id }}">
                 <img src="{{ asset('storage/products/' . $detail->product->id . '.' . $detail->product->extension) }}"
                     alt="{{ $detail->product->{'name_'.app()->getLocale()} ?? $detail->product->name_en }}"
                     class="cart-item-img rounded">
@@ -20,7 +20,7 @@
                 <div class="flex-grow-1 ms-2 mt-3 d-flex flex-column h-100">
 
                     <div class="d-flex align-items-center justify-content-between">
-                        <h5 class="mb-1">
+                        <h5 class="mb-1 text-primary">
                             {{ $detail->product->{'name_'.app()->getLocale()} ?? $detail->product->name_en }}
                         </h5>
                         <div class="fw-bold text-secondary total-price">${{ number_format($detail->extended_price, 2) }}</div>
@@ -82,7 +82,7 @@
 
     @if($cart && $cart->cartDetails->count() > 0)
     <!-- Sticky Bottom Checkout Bar -->
-    <div class="sticky-checkout-bar bg-white border-top shadow-sm py-3 px-4 d-flex justify-content-between align-items-center mb-0">
+    <div class="sticky-checkout-bar shadow-sm py-3 px-4 d-flex justify-content-between align-items-center mb-0">
         <a href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles me-2">
             <span class="text"><i class="fa fa-arrow-left me-1"></i> {{ __('cart.continue_shopping') }}</span>
         </a>

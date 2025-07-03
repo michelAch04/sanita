@@ -119,6 +119,7 @@
 }
 
 .cart-item {
+  background-color: var(--card-bg);
   transition: transform 0.3s;
 }
 
@@ -175,7 +176,9 @@ section {
 .row {
   justify-content: center !important;
 }
-
+.btn:hover {
+  color: var(--primary-text) !important;
+}
 .checkout-wrapper {
   max-width: 1300px;
   margin: auto;
@@ -184,21 +187,12 @@ section {
 }
 
 .checkout-card {
-  border: 1px solid #eaeaea;
+  border: 1px solid var(--input-border-color);
   border-radius: 1rem;
-  background-color: #fff;
 }
 
 .checkout-card h5 {
   font-size: 1.05rem;
-  color: #333;
-}
-
-.section-divider.small-divider {
-  height: 1px;
-  background: #ddd;
-  opacity: 0.3;
-  margin: 1rem 0;
 }
 
 .section-divider {
@@ -220,23 +214,6 @@ section {
   object-fit: cover;
   flex-shrink: 0;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-}
-
-.input_field,
-.form-select {
-  border: 2px solid var(--primary-blue, #105652);
-  border-radius: 0.75rem;
-  background-color: #fdfaf5;
-  font-size: 1rem;
-  padding: 0.6rem 1rem;
-}
-
-.input_field:focus,
-.form-select:focus {
-  outline: none;
-  border-color: var(--link-hover, #0d6efd);
-  background-color: #fffefb;
-  box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.2);
 }
 
 .totals-row {

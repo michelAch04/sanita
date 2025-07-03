@@ -1,20 +1,28 @@
 :root {
     --primary-blue: #2A4365;
-    /*--primary-blue: #3f3790;*/
+    /*--primary-blue: #2A4365;*/
     --secondary-blue: #1E3A5F;
-    /*--secondary-blue: #4b459e;*/
-    --hover-blue: #b5d0e3;
-    /*--hover-blue: #b5d0e3;*/
+    /*--secondary-blue: #1E3A5F*/
+    --hover-blue: #d1dded;
+    /*--hover-blue: #d1dded*/
     --link-blue: #8fb1ca;
-    /*--link-blue: #cda0db;*/
+    /*--link-blue: #8fb1ca*/
     --link-hover: #d884f2;
     /*--link-hover: #d884f2;*/
-    --primary-text: #1E293B;
+    --primary-text: #241e3b;
     /*--primary-text: #241e3b;*/
-    --secondary-text: #E2E8F0;
-    /*--secondary-text: #E2E8F0*/
+    --secondary-text: rgba(53, 78, 82, 0.909);
+    /*--secondary-text: rgba(78, 129, 136, 0.909)*/
+    --tertiary-text: rgba(33, 37, 41, 0.75);
+    /*--tertiary-text: rgba(33, 37, 41, 0.75);*/
+    --nav-bg: #f9f9f9;
+    /*--nav-bg: #f9f9f9; LIGHT = --primary-bg, DARK = --card-bg*/
     --primary-bg: #f9f9f9;
     /*--primary-bg: #f9f9f9;*/
+    --secondary-bg: #f9f9f9;
+    /*--secondary-bg: #f9f9f9;  == --card-bg*/
+    --tertiary-bg: #E2E8F0;
+    /*--tertiary-bg: #E2E8F0*/
     --card-width: 14.075rem;
     /*--card-width: 17.075rem;*/
     --card-height: 20.25rem;
@@ -25,13 +33,18 @@
     /*--card-description: 0.9em;*/
     --card-bg: #ffffff;
     /*--card-bg: #ffffff;*/
+    --input-border-color: #ecedec;
+    /*--input-border-color: #ecedec;*/
     --primary-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
         Ubuntu, Cantarell, sans-serif;
 }
 
+/* ------------------------------------ GLOBAL STYLING ------------------------------------- */
+
 body {
     font-family: var(--primary-font);
     background-color: var(--primary-bg);
+    overflow-x: hidden;
 }
 
 .hero-carousel img {
@@ -40,6 +53,38 @@ body {
     object-fit: cover;
 }
 
+.text-muted {
+    color: var(--tertiary-text) !important;
+}
+
+.text-primary {
+    color: var(--primary-text) !important;
+}
+
+.text-secondary {
+    color: var(--secondary-text) !important;
+}
+
+.bg-primary {
+    background-color: var(--primary-bg) !important;
+}
+
+.bg-secondary {
+    background-color: var(--secondary-bg) !important;
+}
+
+.bg-tertiary {
+    background-color: var(--tertiary-bg) !important;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.rtl-container {
+  direction: rtl !important;
+  text-align: right !important;
+}
 /* ------------------------------- NAVBAR STYLING ------------------------------------ */
 /* Navbar Background Split: white for logo area, then gradient */
 .navbar {
@@ -50,7 +95,7 @@ body {
             #294e6f 40%,
             var(--secondary-blue) 60%,
             var(--primary-blue) 100%) */
-    background: #fafafa;
+    background: var(--nav-bg);
     box-shadow: 0 4px 12px rgba(30, 58, 95, 0.2);
     transition: background-color 0.4s ease, transform 0.3s ease;
     height: 3.5rem;
@@ -86,14 +131,14 @@ body {
 /* Nav Links */
 .navbar-nav .nav-link {
     color: var(--primary-blue) !important;
-    margin: 0 0.5rem;
+    margin: 0 0.25rem;
     position: relative;
     transition: color 0.3s ease;
     font-size: 1.1rem;
 }
 
 .navbar-nav .nav-link:hover {
-    color: var(--hover-blue) !important;
+    color: var(--secondary-blue) !important;
 }
 
 .navbar-nav .nav-link::after {
@@ -101,7 +146,7 @@ body {
     display: block;
     width: 0%;
     height: 4px;
-    background: var(--hover-blue);
+    background: var(--primary-blue);
     transition: width 0.3s ease;
     position: absolute;
     bottom: -0.5rem;
@@ -126,12 +171,8 @@ body {
 .cart-icon {
     font-size: 1.5rem;
     /* Base size for desktop */
-    color: var(--secondary-text);
+    color: var(--primary-blue);
     transition: color 0.3s ease;
-}
-
-.cart-icon:hover {
-    color: var(--hover-blue);
 }
 
 #cart-count {
@@ -145,7 +186,6 @@ body {
     font-weight: bold;
     height: 1.2rem;
     border-radius: 999px;
-    border: 2px solid var(--secondary-blue);
     min-width: 1.2rem;
     text-align: center;
     z-index: 5;
@@ -174,109 +214,85 @@ body {
 
 /* Sign In Button */
 .btn-outline-light {
-    border: 1px solid var(--hover-blue);
-    color: var(--hover-blue);
+    border: 1px solid var(--primary-blue);
+    color: var(--primary-blue);
     font-weight: 500;
     transition: all 0.3s ease;
     font-size: 1.1rem;
 }
 
-.btn-outline-light:hover {
-    background-color: var(--hover-blue);
-    color: var(--secondary-blue);
-    border-color: var(--secondary-blue);
-}
 
+.btn-outline-light:hover,
 .btn-outline-light:focus,
-.btn-outline-light:active {
-    border: 1px solid var(--hover-blue) !important;
-    background: transparent !important;
-    color: var(--hover-blue) !important;
+.btn-outline-light:active,
+.btn-outline-light:focus-visible,
+.btn-check:checked+.btn,
+.btn.active,
+.btn.show,
+.btn:first-child:active,
+:not(.btn-check)+.btn:active {
+    border: 1px solid var(--primary-blue) !important;
+    background: var(--tertiary-bg) !important;
+    color: var(--primary-blue) !important;
     font-weight: 500 !important;
     transition: all 0.3s ease !important;
 }
 
-/* Addresses Button */
-.btn-outline {
-    border: 1px solid #CBD5E1;
-    color: var(--secondary-text);
-    font-weight: 500;
-    background: transparent;
-    transition: all 0.3s ease;
-    font-size: 1.1rem;
+.user-dropdown-text {
+    max-width: 5rem;
+    /* adjust as needed */
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.btn-outline:hover {
-    background-color: var(--hover-blue);
-    color: var(--secondary-blue);
+#localeDropdown {
+    padding-right: 0.3rem;
+    padding-left: 0.3rem;
 }
 
 /* Dropdown Button */
 .dropdown-toggle {
-    border: 1px solid var(--secondary-text);
-    color: var(--secondary-text);
+    border: 1px solid var(--primary-blue);
+    color: var(--primary-blue);
     font-weight: 500;
     background: transparent;
     transition: all 0.3s ease;
-    font-size: 1.1rem;
+}
+
+.dropdown-toggle::after {
+    margin: 0;
 }
 
 .dropdown-toggle:hover {
-    background-color: var(--hover-blue);
+    background-color: var(--tertiary-bg);
     color: var(--secondary-blue);
-}
-
-/* Dropdown Menu */
-.dropdown-menu {
-    background: var(--secondary-blue);
-    border: none;
-    border-radius: 8px;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-}
-
-.dropdown-menu .dropdown-item {
-    color: var(--secondary-text);
-    transition: background-color 0.3s;
-}
-
-.dropdown-menu .dropdown-item:hover {
-    background-color: var(--primary-blue);
-    color: var(--hover-blue);
 }
 
 /* Dropdown Menu Styling */
 .dropdown-menu {
-    background: var(--secondary-blue);
+    background: var(--tertiary-bg);
     border: none;
     border-radius: 8px;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-    min-width: 150px;
+    min-width: fit-content !important;
 }
 
 .dropdown-item {
-    color: var(--secondary-text);
+    color: var(--primary-blue);
     font-weight: 500;
-    padding: 0.5rem 1rem;
+    padding: 0.4rem 0.5rem;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .dropdown-item:hover {
-    background-color: var(--primary-blue);
-    color: var(--hover-blue);
+    background-color: var(--hover-blue);
+    color: var(--primary-blue);
 }
 
 .dropdown-item.active {
-    background-color: var(--primary-blue);
-    color: var(--hover-blue);
-}
-
-#localeDropdown:focus,
-#localeDropdown:active {
-    outline: none;
-    color: var(--secondary-text) !important;
-}
-
-#localeDropdown:hover {
+    background-color: var(--hover-blue);
     color: var(--primary-blue);
 }
 
@@ -298,7 +314,7 @@ nav {
     font-size: 1rem;
     pointer-events: none;
     transition: color 0.4s ease;
-    color: var(--secondary-text);
+    color: var(--primary-blue);
 }
 
 .search-icon.focused {
@@ -329,7 +345,7 @@ nav {
     /* responsive and safe */
     cursor: text;
     padding-right: 1rem;
-    background-color: var(--secondary-text);
+    background-color: var(--tertiary-bg);
 }
 
 #searchInput:focus-visible {
@@ -369,7 +385,6 @@ input[type="search"]::-webkit-search-cancel-button {
 /* Section Container Styling */
 section {
     padding: 4rem 0;
-    border-top: 1px solid #e0e0e0;
     opacity: 0;
     transform: translateY(20px);
     animation: fadeIn 1s ease-in-out forwards;
@@ -459,7 +474,7 @@ section:nth-of-type(5) {
     inset: 0;
     background: linear-gradient(120deg,
             rgba(255, 255, 255, 0) 40%,
-            rgba(255, 255, 255, 0.8) 50%,
+            var(--card-bg) 50%,
             rgba(255, 255, 255, 0) 60%);
     opacity: 0;
     transition: opacity 0.3s ease;
@@ -548,7 +563,6 @@ section:nth-of-type(5) {
 }
 
 .card__title {
-    color: var(--card-text);
     font-size: var(--card-title);
     /*Previously: 1.1em*/
     margin: 0;
@@ -603,7 +617,7 @@ section:nth-of-type(5) {
     padding: 0.5rem 0;
     border-radius: 10px;
     background: var(--card-accent);
-    color: white;
+    color: var(--card-bg);
     font-size: 0.9rem;
     font-weight: 600;
     border: none;
@@ -614,8 +628,16 @@ section:nth-of-type(5) {
     transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
+
+.card__button i {
+    font-size: 1rem;
+    margin: 0;
+    padding: 0;
+    color: var(--card-bg) !important;
+}
+
 .card__button:hover {
-    background: #162d6a;
+    background: var(--secondary-blue);
     /* Darker on hover, adjust to your theme */
 }
 
@@ -631,13 +653,6 @@ section:nth-of-type(5) {
 
 .card__button-incart:hover {
     background: rgb(13, 95, 30);
-}
-
-.card__button i {
-    font-size: 1rem;
-    margin: 0;
-    padding: 0;
-    color: white !important;
 }
 
 /* Hover Effects */
@@ -829,7 +844,7 @@ section:nth-of-type(5) {
 .category-card::after {
     content: '';
     position: absolute;
-    background: #ffffff;
+    background: var(--card-bg);
     inset: 5px;
     border-radius: 15px;
     z-index: 1;
@@ -860,12 +875,22 @@ section:nth-of-type(5) {
 .view-all-btn {
     padding: 0.5rem 1rem;
     font-size: 1.3rem;
-    --c2: var(--secondary-blue) !important;
+    --c2: var(--primary-blue) !important;
+}
+
+.bubbles-arctic {
+    --c2: var(--primary-blue) !important;
+    --c1: var(--primary-bg) !important;
 }
 
 /* Footer Styling */
 .footer {
-    background: linear-gradient(to right, #1E3A5F, #2A4365);     
+    background: var(--nav-bg);
+    color: var(--primary-blue);
     box-shadow: 0 4px 12px rgba(30, 58, 95, 0.2);
     transition: background-color 0.4s ease;
+}
+
+.footer a {
+    color: var(--primary-blue);
 }

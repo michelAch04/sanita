@@ -3,9 +3,9 @@
 @section('title', __('Offers'))
 
 @section('content')
-<section id="offers" class="py-3 bg-light">
-    <div class="p-5 gx-0 w-100">
-        <h2 class="display-5 text-center mb-4 section-title">special {{ __('nav.offers') }}</h2>
+<section id="offers" class="py-3">
+    <div class="px-5 py-2 gx-0 w-100">
+        <h2 class="display-5 text-center mb-5 section-title">special {{ __('nav.offers') }}</h2>
 
         @if($offers->isEmpty())
         <p class="text-center">{{ __('No offers available currently.') }}</p>

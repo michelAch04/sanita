@@ -51,6 +51,7 @@
                     <input type="hidden" id="modalProductPl" name="pl">
                     <input type="hidden" id="modalProductMinQuantity" name="min_quantity">
                     <input type="hidden" id="modalProductMaxQuantity" name="max_quantity">
+                </div>
             </form>
         </div>
     </div>

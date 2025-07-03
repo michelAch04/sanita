@@ -20,7 +20,7 @@ $type = auth()->user()->type ?? 'b2c';
 </div>
 
 <!-- Offers Section -->
-<section id="offers" class="py-5 bg-light">
+<section id="offers" class="py-5">
     <div class="container gx-0">
         <h2 class="display-5 text-center mb-4 section-title">{{ __('nav.offers') }}</h2>
         <div class="carousel gx-0">
@@ -66,7 +66,7 @@ $type = auth()->user()->type ?? 'b2c';
 </section>
 
 <!-- Products Section -->
-<section id="products" class="py-5 bg-light">
+<section id="products" class="py-5">
     <div class="container">
         <h2 class="display-5 text-center mb-4 section-title">{{ __('nav.products') }}</h2>
         <div class="carousel gx-0">
@@ -90,7 +90,7 @@ $type = auth()->user()->type ?? 'b2c';
         </div>
     </div>
 </section>
-
-@include('sanita.partials.add-to-cart-modal')
 @include('sanita.partials.contact-us')
+@include('sanita.partials.add-to-cart-modal')
+
 @endsection

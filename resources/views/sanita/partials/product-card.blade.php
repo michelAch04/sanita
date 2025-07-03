@@ -44,7 +44,7 @@ $inCart = in_array($product->id, $cartProductIds);
             <div class="card__text">
                 <p class="card__title">
                     <a href="{{ route('website.product.index', ['locale' => app()->getLocale(), 'product' => $product->id]) }}"
-                        class="text-decoration-none text-dark">
+                        class="text-decoration-none text-primary">
                         {{ $product->{'name_'.app()->getLocale()} ?? $product->name_en }}
                     </a>
                 </p>

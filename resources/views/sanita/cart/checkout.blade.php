@@ -13,8 +13,8 @@
         <div class="row gy-4 px-0 mx-0">
             <!-- LEFT COLUMN: CART ITEMS -->
             <div class="col-lg-6">
-                <div class="checkout-card p-4 shadow-sm rounded bg-white">
-                    <h3 class="fw-bold mb-3">{{ __('cart.your_items') }}</h3>
+                <div class="checkout-card p-4 shadow-sm rounded bg-secondary">
+                    <h3 class="fw-bold mb-3 text-primary">{{ __('cart.your_items') }}</h3>
                     <div class="section-divider mb-4"></div>
                     <div class="row gy-0">
                         @forelse($cart->cartDetails as $item)
@@ -23,16 +23,16 @@
                                 <img src="{{ asset('storage/products/' . $item->product->id . '.' . $item->product->extension) }}"
                                     alt="product" class="cart-item-img rounded">
                                 <div class="flex-grow-1">
-                                    <h5 class="fw-semibold mb-1">{{ $item->product->{'name_' . app()->getLocale()} }}</h5>
+                                    <h5 class="fw-semibold mb-1 text-secondary">{{ $item->product->{'name_' . app()->getLocale()} }}</h5>
                                     <p class="text-muted small mb-2">{{ $item->product->{'small_description_' . app()->getLocale()} }}</p>
-                                    <p class="mb-1">
+                                    <p class="mb-1 text-secondary">
                                         @if ($item->old_price && $item->old_price > $item->shelf_price)
                                         <span class="text-decoration-line-through text-muted me-2">${{ number_format($item->old_price, 2) }}</span>
                                         @endif
                                         <span class="fw-semibold">${{ number_format($item->shelf_price, 2) }}</span>
                                     </p>
-                                    <p class="mb-0"><small>{{ __('cart.quantity') }}: {{ $item->quantity_ea }} / {{$item->UOM}}</small></p>
-                                    <p><small>{{ __('cart.total') }}: ${{ number_format($item->extended_price, 2) }}</small></p>
+                                    <p class="mb-0 text-muted"><small>{{ __('cart.quantity') }}: {{ $item->quantity_ea }} / {{$item->UOM}}</small></p>
+                                    <p class="text-primary"><small>{{ __('cart.total') }}: ${{ number_format($item->extended_price, 2) }}</small></p>
                                 </div>
                             </div>
                         </div>
@@ -45,12 +45,12 @@
 
             <!-- RIGHT COLUMN: STICKY ON DESKTOP -->
             <div class="col-lg-5">
-                <div class="checkout-card right-side-card sticky-lg-top p-4 shadow-sm rounded bg-white">
-                    <h3 class="fw-bold mb-3">{{ __('cart.shipping_info') }}</h3>
+                <div class="checkout-card right-side-card sticky-lg-top p-4 shadow-sm rounded bg-secondary">
+                    <h3 class="fw-bold mb-3 text-primary">{{ __('cart.shipping_info') }}</h3>
                     <div class="section-divider mb-4"></div>
 
                     <div class="d-flex justify-content-between align-items-start flex-direction-row mb-0">
-                        <h5 class="fw-semibold mb-2 mt-1">{{ __('cart.shipping_address') }}</h5>
+                        <h5 class="fw-semibold mb-2 mt-1 text-primary">{{ __('cart.shipping_address') }}</h5>
                         <button type="button"
                             data-bs-toggle="modal" data-bs-target="#addAddressModal"
                             class="btn underline-btn border-0">
@@ -69,14 +69,14 @@
                         </select>
                     </div>
 
-                    <h5 class="fw-semibold mb-2 mt-5">{{ __('cart.payment_method') }}</h5>
-                    <p class="mb-5">{{ __('cart.cod') }}</p>
+                    <h5 class="fw-semibold mb-2 mt-5 text-primary">{{ __('cart.payment_method') }}</h5>
+                    <p class="mb-5 text-muted">{{ __('cart.cod') }}</p>
 
-                    <h5 class="fw-semibold mb-2">{{ __('cart.promo_code') }}</h5>
+                    <h5 class="fw-semibold mb-2 text-primary">{{ __('cart.promo_code') }}</h5>
                     <div class="promo mb-4 d-flex gap-3 align-items-center flex-direction-row">
                         <div class="login-inputForm promo-code-container">
                             <input type="text" id="promo_code" name="promo_code"
-                                class="login-input w-100" placeholder="Enter Promo Code">
+                                class="login-input w-100 text-primary" placeholder="Enter Promo Code">
                         </div>
                         <div>
                             <button type="submit" class="btn underline-btn">{{ __('cart.apply') }}</button>

@@ -5,7 +5,7 @@
 $sortedAddresses = $addresses->sortByDesc('is_default');
 @endphp
 @section('content')
-<section id="addresses" class="pt-5 bg-light">
+<section id="addresses" class="pt-5">
     <div class="container px-5 mb-5">
         <h2 class="display-5 text-center mb-5 section-title">📍 {{ __('Your Addresses') }}</h2>
         @if($sortedAddresses->count() != 0)
@@ -21,12 +21,12 @@ $sortedAddresses = $addresses->sortByDesc('is_default');
         @if ($sortedAddresses->count() > 0)
         <div class="d-flex flex-column gap-2">
             @foreach ($sortedAddresses as $address)
-            <div class="cart-item d-flex flex-row justify-content-between p-3 bg-white rounded shadow-sm flex-wrap w-100">
+            <div class="cart-item d-flex flex-row justify-content-between p-3 rounded shadow-sm flex-wrap w-100">
                 {{-- Address Info --}}
                 <div class="d-flex flex-column flex-grow-1 me-3">
 
                     <div class="d-flex align-items-center gap-2 mb-2">
-                        <h5 class="mb-1">{{ $address->title ?? __('Untitled') }}</h5>
+                        <h5 class="mb-1 text-primary">{{ $address->title ?? __('Untitled') }}</h5>
                         @if ($address->is_default)
                         <span class="badge bg-success text-white px-2 py-1 rounded-pill">{{ __('Default') }}</span>
                         @endif
@@ -97,10 +97,10 @@ $sortedAddresses = $addresses->sortByDesc('is_default');
 <!-- Add Address Modal -->
 <div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg d-flex justify-content-center">
-        <div class="modal-content p-3 pb-2 w-75">
-            <div class="modal-header border-0">
+        <div class="modal-content p-3 pb-2 w-75 bg-secondary">
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="{{ __('Close') }}"></button>
+            <div class="modal-header border-0 justify-content-center">
                 <h2 class="display-5 section-title text-center mb-0 fs-1">{{ __('Add New Address') }}</h2>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('Close') }}"></button>
             </div>
             <div class="modal-body d-flex justify-content-center">
                 @include('sanita.addresses.create') {{-- We'll extract the form here --}}
@@ -113,10 +113,10 @@ $sortedAddresses = $addresses->sortByDesc('is_default');
 <!-- Edit Address Modal -->
 <div class="modal fade" id="editAddressModal-{{ $address->id }}" tabindex="-1" aria-labelledby="editAddressLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg d-flex justify-content-center">
-        <div class="modal-content p-3 pb-2 w-75">
-            <div class="modal-header border-0">
+        <div class="modal-content p-3 pb-2 w-75 bg-secondary">
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="{{ __('Close') }}"></button>
+            <div class="modal-header border-0 justify-content-center">
                 <h2 class="display-5 section-title text-center mb-0 fs-1">{{ __('Edit Address') }}</h2>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('Close') }}"></button>
             </div>
             <div class="modal-body d-flex justify-content-center">
                 @include('sanita.addresses.edit') {{-- We'll extract the form here --}}

@@ -1,8 +1,5 @@
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}" class="min-vh-100">
-@php
-$isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
-@endphp
 
 <head>
 
@@ -58,12 +55,12 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('website.offers.index', ['locale' => app()->getLocale()]) }}#offers">
+                        <a class="nav-link active" href="{{ route('website.offers.index', ['locale' => app()->getLocale()]) }}">
                             {{ __('nav.offers') }}
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('website.products.index', ['locale' => app()->getLocale()]) }}#products">
+                        <a class="nav-link active" href="{{ route('website.products.index', ['locale' => app()->getLocale()]) }}">
                             {{ __('nav.store') }}
                         </a>
                     </li>
@@ -88,7 +85,7 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                             {{ $defaultAddress->city->{'name_' . app()->getLocale()} ?? '' }}, {{ $defaultAddress->district->{'name_' . app()->getLocale()} ?? '' }}
                         </a>
                         @else
-                        <a href="{{ route('addresses.index', ['locale' => app()->getLocale()]) }}" class="btn btn-outline me-2" title="{{ __('nav.addresses') }}">
+                        <a href="{{ route('addresses.index', ['locale' => app()->getLocale()]) }}" class="btn btn-outline-light me-2" title="{{ __('nav.addresses') }}">
                             <i class="fa-solid fa-location-dot me-2"></i> {{ __('nav.addresses') }}
                         </a>
                         @endif
@@ -117,16 +114,16 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                     </a>
                     @else
                     <div class="dropdown pe-2">
-                        <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown"
+                        <button class="btn btn-outline-light dropdown-toggle d-flex justify-content-center align-items-center flex-row" type="button" id="userDropdown"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-user me-1"></i>
-                            {{ Auth::guard('customer')->user()->first_name }}
+                            <i class="fas fa-user me-2"></i>
+                            <span class="user-dropdown-text">{{ Auth::guard('customer')->user()->first_name }}</span>
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="userDropdown">
                             <li>
                                 <form action="{{ route('customer.signout', ['locale' => app()->getLocale()]) }}" method="POST">
                                     @csrf
-                                    <button type="submit" class="dropdown-item">{{ __('nav.sign_out') }}</button>
+                                    <button type="submit" class="dropdown-item"><i class="fa-solid fa-right-from-bracket me-2"></i>{{ __('nav.sign_out') }}</button>
                                 </form>
                             </li>
                         </ul>
@@ -134,10 +131,10 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
                     @endguest
 
                     <div class="dropdown me-3">
-                        <button class="btn button-glass dropdown-toggle" type="button" id="localeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-globe"></i> {{ strtoupper(app()->getLocale()) }}
+                        <button class="btn btn-outline-light dropdown-toggle" type="button" id="localeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        {{ strtoupper(app()->getLocale()) }}
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="localeDropdown">
+                        <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="localeDropdown">
                             <li>
                                 <a class="dropdown-item {{ app()->getLocale() == 'en' ? 'active' : '' }}"
                                     href="{{ route(\Illuminate\Support\Facades\Route::currentRouteName(), array_merge(request()->route()->parameters(), ['locale' => 'en'])) }}">
@@ -166,27 +163,29 @@ $isRtl = app()->getLocale() === 'ar' || app()->getLocale() === 'ku';
     <!-- Main Content -->
     @yield('content')
 
+    @include('components.toast')
+
     <!-- Footer -->
-    <footer class="footer text-center text-white mt-auto py-4">
+    <footer class="footer text-center mt-auto py-4">
         <div class="container">
             <p class="mb-1">{{ __('nav.copyright') }}</p>
             <p>
-                <a href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}#offers" class="text-white text-decoration-none">
+                <a href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}#offers" class="text-decoration-none">
                     {{ __('nav.offers') }}
                 </a> |
-                <a href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}#products" class="text-white text-decoration-none">
+                <a href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}#products" class="text-decoration-none">
                     {{ __('nav.products') }}
                 </a> |
-                <a href="{{ route('about', ['locale' => app()->getLocale()]) }}" class="text-white text-decoration-none">
+                <a href="{{ route('about', ['locale' => app()->getLocale()]) }}" class="text-decoration-none">
                     {{ __('nav.about') }}
                 </a> |
-                <a href="{{ route('contact', ['locale' => app()->getLocale()]) }}" class="text-white text-decoration-none">
+                <a href="{{ route('contact', ['locale' => app()->getLocale()]) }}" class="text-decoration-none">
                     {{ __('nav.contact') }}
                 </a>
             </p>
         </div>
     </footer>
-    @include('components.toast')
+
 </body>
 
 <!-- Core Libraries -->

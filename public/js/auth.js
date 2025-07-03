@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // ----------------------------
     const togglePassword = document.querySelector('.toggle-password');
     const passwordInput = document.querySelector('#password');
+    console.log(passwordInput, togglePassword);
     if (togglePassword && passwordInput) {
         togglePassword.addEventListener('click', function () {
             const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
@@ -174,43 +175,4 @@ document.addEventListener('DOMContentLoaded', function () {
             dobDiv.classList.add('is-invalid');
         }
     });
-});
-
-// ----------------------------------------- SIGN IN LOGIC ----------------------------------------------- //
-document.addEventListener('DOMContentLoaded', function () {
-    const countryCodeInput = document.getElementById('country_code');
-    // ----------------------------
-    // 1. Toast auto-dismiss
-    // ----------------------------
-    const toast = document.getElementById('toast-error');
-    if (toast) {
-        setTimeout(() => {
-            toast.style.opacity = '0';
-            toast.style.transition = 'opacity 0.5s ease-out';
-            setTimeout(() => toast.remove(), 500);
-        }, 3000);
-    }
-
-    // ----------------------------
-    // 2. Toggle password visibility
-    // ----------------------------
-    const togglePassword = document.querySelector('.toggle-password');
-    const passwordInput = document.querySelector('#password');
-
-    if (togglePassword && passwordInput) {
-        togglePassword.addEventListener('click', function () {
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            this.classList.toggle('fa-eye');
-            this.classList.toggle('fa-eye-slash');
-        });
-    }
-
-    // ----------------------------
-    // 3. Focus first invalid input
-    // ----------------------------
-    const firstInvalid = document.querySelector('.is-invalid');
-    if (firstInvalid) {
-        firstInvalid.focus();
-    }
 });
