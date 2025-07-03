@@ -9,11 +9,13 @@ class Order extends Model
     protected $fillable = [
         'customers_id',
         'carts_id',
+        'distributors_id',
+        'addresses_id',
+        'subtotal_amount',
+        'tax_amount',
         'total_amount',
-        'status',
+        'statuses_id',
         'payment_method',
-        'shipping_address',
-        'ordered_at',
         'cancelled',
     ];
 
