@@ -26,6 +26,16 @@ class Order extends Model
 
     public function orderDetails()
     {
-        return $this->hasMany(OrderDetail::class);
+        return $this->hasMany(OrderDetail::class, 'orders_id');
     }
+
+    public function address()
+    {
+        return $this->belongsTo(Address::class, 'addresses_id');
+    }
+    public function status()
+    {
+        return $this->belongsTo(Status::class, 'statuses_id');  
+    }
+
 }

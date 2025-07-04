@@ -18,6 +18,7 @@ return [
     'browse_products' => 'Browse Products',
     'remove_confirm' => 'Are you sure you want to remove this item from the cart?',
     'remove_from_cart' => 'Remove from Cart',
+    'remove' => 'Removed successfully.',
     'checkout' => 'Checkout',
     'shipping_address' => 'Shipping Address',
     'your_items' => 'Your Items',

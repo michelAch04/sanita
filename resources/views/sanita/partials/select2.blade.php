@@ -1,6 +1,7 @@
 @php
 $select2id = $id ?? null;
 $select2placeholder = $placeholder ?? null;
+
 @endphp
 {{-- Scripts --}}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
