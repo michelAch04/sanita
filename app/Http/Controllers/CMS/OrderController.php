@@ -125,7 +125,7 @@ class OrderController extends Controller
                         }
                     }
                 }
-                // Optionally: update order status
+                
                 $order->statuses_id = $status_id;
                 $order->save();
             }

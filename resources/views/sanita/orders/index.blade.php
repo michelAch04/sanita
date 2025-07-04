@@ -52,9 +52,11 @@ $sortedOrders = $orders->sortByDesc('created_at');
 
                 {{-- Action (View / Details) --}}
                 <div class="d-flex flex-column justify-content-between align-items-end">
-                    <button data-bs-toggle="modal" data-bs-target="#orderDetailsModal-{{ $order->id }}" class="btn btn-sm bubbles modify-btn edit-btn mb-3">
-                        <span class="text"><i class="fa fa-repeat fa-solid me-1"></i> {{ __('ReOrder') }}</span>
-                    </button>
+                    <span class="text">
+                        <a href="{{ route('website.orders.reorder', ['locale' => app()->getLocale(), 'id' => $order->id]) }}" class="btn btn-sm bubbles modify-btn edit-btn mb-3">
+                            <i class="fa fa-eye me-1"></i> {{ __('ReOrder') }}
+                        </a>
+                    </span>
                     <span class="text">
                         <a href="{{ route('website.orders.show', ['locale' => app()->getLocale(), 'id' => $order->id]) }}" class="btn btn-sm bubbles modify-btn edit-btn mb-3" target="_blank">
                             <i class="fa fa-eye me-1"></i> {{ __('View Details') }}
