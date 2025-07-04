@@ -172,7 +172,6 @@ class WebsiteCartController extends Controller
             // Conversion rates (fallback to 1 if not provided)
             $ea_ca = (int) $product->ea_ca;
             $ea_pl = (int) $product->ea_pl;
-            dd($ea_ca, $ea_pl);
 
             // Convert input quantity to primary (EA)
             $newPrimaryQuantity = $this->convertToEA($newForeignQuantity, $unit, $ea_ca, $ea_pl);
