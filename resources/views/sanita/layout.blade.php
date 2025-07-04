@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/ui-tools.css') }}">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
@@ -242,6 +244,15 @@
 
     window.conversionCaseEach = "{{ __('cart.conversion_case_each') }}";
     window.conversionPalletEach = "{{ __('cart.conversion_pallet_each') }}";
+
+    window.currentPriceUpdates = {
+        unitPrice: 0,
+        shelfPrice: 0,
+        oldPrice: 0,
+        minQuantity: 0,
+        maxQuantity: 0,
+        conversionText: ''
+    };
 </script>
 
 <!-- Per-page Scripts -->

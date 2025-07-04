@@ -71,12 +71,9 @@ $type = auth()->user()->type ?? 'b2c';
         <h2 class="display-5 text-center mb-4 section-title">{{ __('nav.products') }}</h2>
         <div class="carousel gx-0">
             @foreach($products as $product)
-            @php
-            $isNew = $product->created_at && $product->created_at->gt(\Illuminate\Support\Carbon::now()->subDays(7));
-            @endphp
             @include('sanita.partials.product-card', [
             'product' => $product,
-            'cardType' => $isNew ? 'new' : 'product'
+            'cardType' => 'product'
             ])
             @endforeach
         </div>

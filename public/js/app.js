@@ -83,12 +83,21 @@ $(document).ready(function () {
                 CA: form.find('input[name="max_quantity_ca"]').val(),
                 PL: form.find('input[name="max_quantity_pl"]').val(),
             };
-            // Store for use in the modal
-            $("#addToCartModal").data("minQuantities", minQuantities);
-            $("#addToCartModal").data("maxQuantities", maxQuantities);
-            $("#addToCartModal").data("unitPrices", unitPrices);
-            $("#addToCartModal").data("shelfPrices", shelfPrices);
-            $("#addToCartModal").data("oldPrices", oldPrices);
+            // Store for use in the modal or product page
+            if (window.isProductPage) {
+                $("#productPageForm").data("minQuantities", minQuantities);
+                $("#productPageForm").data("maxQuantities", maxQuantities);
+                $("#productPageForm").data("unitPrices", unitPrices);
+                $("#productPageForm").data("shelfPrices", shelfPrices);
+                $("#productPageForm").data("oldPrices", oldPrices);
+            }
+            else {
+                $("#addToCartModal").data("minQuantities", minQuantities);
+                $("#addToCartModal").data("maxQuantities", maxQuantities);
+                $("#addToCartModal").data("unitPrices", unitPrices);
+                $("#addToCartModal").data("shelfPrices", shelfPrices);
+                $("#addToCartModal").data("oldPrices", oldPrices);
+            }
             let producttype = form.find('input[name="type"]').val();
             let productDescription = form
                 .find('input[name="description"]')
@@ -149,21 +158,40 @@ $(document).ready(function () {
             });
 
             // Populate UOM select dynamically
-            let uomSelect = $("#modalProductUOM");
-            uomSelect.empty();
-            availableUOMs.forEach((uom) => {
-                let label = window.uomLabels[uom] || uom;
-                uomSelect.append(`<option value="${uom}">${label}</option>`);
-            });
+            let radiosContainer = $("#modalProductUOMRadios");
+            if (radiosContainer) {
+                radiosContainer.empty();
+                availableUOMs.forEach((uom, idx) => {
+                    let label = window.uomLabels[uom] || uom;
+                    radiosContainer.append(`
+                    <label class="select-label">
+                        <input type="radio" name="UOM" value="${uom}" ${idx === 0 ? "checked" : ""}>
+                        <span>${label}</span>
+                    </label>
+                `);
+                });
+            }
 
-            // Show modal
-            var modal = new bootstrap.Modal(
-                document.getElementById("addToCartModal")
-            );
-            modal.show();
-            $("#modalProductUOM").trigger("change");
+            const addToCartModal = document.getElementById("addToCartModal");
+            if (addToCartModal) {
+                // Show modal
+                var modal = new bootstrap.Modal(
+                    addToCartModal
+                );
+                modal.show();
+            }
+            $('input[name="UOM"]:checked').trigger("change");
         });
 
+    if (window.isProductPage) {
+        const loadForm = $('.add-to-cart-form');
+        loadForm.trigger('submit');
+    }
+
+    $("#addToCartSubmit").on("click", function (e) {
+        e.preventDefault();
+        $("#addToCartForm").trigger("submit");
+    })
     // Handle modal form submit
     $("#addToCartForm")
         .off("submit")
@@ -186,7 +214,7 @@ $(document).ready(function () {
                 type: $("#modalProductType").val(),
                 ea_ca: $("#modalProductEaCa").val(),
                 ea_pl: $("#modalProductEaPl").val(),
-                unit: $("#modalProductUOM").val() || "EA",
+                unit: $('input[name="UOM"]:checked').val() || "EA",
             };
             console.log(data);
 
@@ -199,9 +227,11 @@ $(document).ready(function () {
                 },
                 success: function (response) {
                     button.prop("disabled", false);
-                    bootstrap.Modal.getInstance(
-                        document.getElementById("addToCartModal")
-                    ).hide();
+                    if ($("#addToCartModal").length) {
+                        bootstrap.Modal.getInstance(
+                            document.getElementById("addToCartModal")
+                        ).hide();
+                    }
 
                     // Update cart count badge
                     if (response.cart_count !== undefined) {
@@ -213,17 +243,25 @@ $(document).ready(function () {
 
                     // Build the "View in Cart" button (same as in Blade)
                     let productId = $("#modalProductId").val();
-                    let productCardForm = $(`form.add-to-cart-form input[name="product_id"][value="${productId}"]`).closest("form");
-                    let viewCartButton = `
+                    let productCardForm, viewCartButton;
+                    if ($("#addToCartModal").length) {
+                        productCardForm = $(`form.add-to-cart-form input[name="product_id"][value="${productId}"]`).closest("form");
+                        viewCartButton = `
                             <a href="${window.url}/${window.locale}/cart" class="card__button card__button-incart">
                                 <i class="fas fa-shopping-cart"></i> ${window.cartMessages.viewInCart}
                             </a>
                         `;
+                    }
+                    else {
+                        productCardForm = $("#addToCartSubmit");
+                        viewCartButton = `<a href="${window.url}/${window.locale}/cart" class="btn btn-success" id="addToCartSubmit">
+                            <i class="fas fa-shopping-cart me-1"></i> ${window.cartMessages.viewInCart}
+                        </a>`;
+                    }
+
                     if (productCardForm.length) {
                         productCardForm.replaceWith(viewCartButton);
                     }
-                    
-
                     showAjaxToast("success", window.cartMessages.addSuccess);
                 },
                 error: function (xhr) {
@@ -251,16 +289,16 @@ $(document).ready(function () {
     });
 
     // Dynamic UOM price update in modal
-    $("#addToCartModal")
-        .off("change", "#modalProductUOM")
-        .on("change", "#modalProductUOM", function () {
+    $(document)
+        .off("change", "input[name='UOM']")
+        .on("change", "input[name='UOM']", function () {
             let selectedUOM = $(this).val();
-            let modal = $("#addToCartModal");
-            let unitPrices = modal.data("unitPrices") || {};
-            let shelfPrices = modal.data("shelfPrices") || {};
-            let oldPrices = modal.data("oldPrices") || {};
-            let minQuantities = modal.data("minQuantities") || {};
-            let maxQuantities = modal.data("maxQuantities") || {};
+            let container = window.isProductPage ? $("#productPageForm") : $("#addToCartModal");
+            let unitPrices = container.data("unitPrices") || {};
+            let shelfPrices = container.data("shelfPrices") || {};
+            let oldPrices = container.data("oldPrices") || {};
+            let minQuantities = container.data("minQuantities") || {};
+            let maxQuantities = container.data("maxQuantities") || {};
 
             // Update price fields
             let unitPrice = unitPrices[selectedUOM] || unitPrices["EA"] || "";
@@ -286,16 +324,12 @@ $(document).ready(function () {
                 maxQuantities[selectedUOM] || maxQuantities["EA"] || "";
             $("#modalProductMinQuantity").val(minqty);
             $("#modalProductMaxQuantity").val(maxqty);
-            $("#modalProductQuantity").val(minqty);
+            $("#modalProductQuantity").val(minqty).trigger('input');
 
             // Update conversion field
             let ea_ca = $("#modalProductEaCa").val();
             let ea_pl = $("#modalProductEaPl").val();
             let conversionText = "";
-
-            let caLabel = window.uomLabels["CA"] || "CA";
-            let eaLabel = window.uomLabels["EA"] || "EA";
-            let plLabel = window.uomLabels["PL"] || "PL";
 
             if (selectedUOM === "CA" && ea_ca) {
                 conversionText = window.conversionCaseEach.replace(":count", ea_ca);
@@ -306,7 +340,9 @@ $(document).ready(function () {
             }
 
             $("#modalProductConversion").text(conversionText);
+            $("#conversionText").text(conversionText);
         });
+
     // ------------------------------------ NAVBAR SCROLL --------------------------------------- //
     let lastScroll = 0;
     let navbar = document.getElementById('mainNavbar');

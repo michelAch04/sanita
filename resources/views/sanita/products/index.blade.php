@@ -12,13 +12,9 @@
         @else
         <div class="d-flex flex-wrap justify-content-center gap-3">
             @foreach($products as $product)
-                @php
-                $isNew = $product->created_at && $product->created_at->gt(\Illuminate\Support\Carbon::now()->subDays(7));
-                @endphp
                 @include('sanita.partials.product-card', [
                     'product' => $product,
-                    'cardType' => $isNew ? 'new' : 'product',
-                    'badge' => __('nav.new')
+                    'cardType' => 'product'
                 ])
             @endforeach
         </div>

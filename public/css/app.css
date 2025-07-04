@@ -13,8 +13,10 @@
     /*--primary-text: #241e3b;*/
     --secondary-text: rgba(53, 78, 82, 0.909);
     /*--secondary-text: rgba(78, 129, 136, 0.909)*/
-    --tertiary-text: rgba(33, 37, 41, 0.75);
+    --tertiary-text: #86939E;
     /*--tertiary-text: rgba(33, 37, 41, 0.75);*/
+    --light-text: #ffffff;
+    /*--light-text: #ffffff;*/
     --nav-bg: #f9f9f9;
     /*--nav-bg: #f9f9f9; LIGHT = --primary-bg, DARK = --card-bg*/
     --primary-bg: #f9f9f9;
@@ -35,7 +37,7 @@
     /*--card-bg: #ffffff;*/
     --input-border-color: #ecedec;
     /*--input-border-color: #ecedec;*/
-    --primary-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    --primary-font: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
         Ubuntu, Cantarell, sans-serif;
 }
 
@@ -63,6 +65,10 @@ body {
 
 .text-secondary {
     color: var(--secondary-text) !important;
+}
+
+.text-tertiary {
+    color: var(--tertiary-text) !important;
 }
 
 .bg-primary {
@@ -226,11 +232,11 @@ body {
 .btn-outline-light:focus,
 .btn-outline-light:active,
 .btn-outline-light:focus-visible,
-.btn-check:checked+.btn,
-.btn.active,
-.btn.show,
-.btn:first-child:active,
-:not(.btn-check)+.btn:active {
+.dropdown-toggle.btn-check:checked+.btn,
+.dropdown-toggle.btn.active,
+.dropdown-toggle.btn.show,
+.dropdown-toggle.btn:first-child:active,
+.dropdown-toggle:not(.btn-check)+.btn:active {
     border: 1px solid var(--primary-blue) !important;
     background: var(--tertiary-bg) !important;
     color: var(--primary-blue) !important;
@@ -617,7 +623,7 @@ section:nth-of-type(5) {
     padding: 0.5rem 0;
     border-radius: 10px;
     background: var(--card-accent);
-    color: var(--card-bg);
+    color: var(--light-text);
     font-size: 0.9rem;
     font-weight: 600;
     border: none;
@@ -633,7 +639,7 @@ section:nth-of-type(5) {
     font-size: 1rem;
     margin: 0;
     padding: 0;
-    color: var(--card-bg) !important;
+    color: var(--light-text) !important;
 }
 
 .card__button:hover {
