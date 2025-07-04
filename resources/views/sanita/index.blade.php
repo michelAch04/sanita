@@ -90,6 +90,29 @@ $type = auth()->user()->type ?? 'b2c';
         </div>
     </div>
 </section>
+
+<section id="brands" class="py-5">
+    <div class="container text-center">
+        <h2 class="display-5 mb-4 section-title">{{ __('nav.brands') }}</h2>
+        <div class="carousel mx-auto mb-5">
+            @foreach($brands as $brand)
+            <div class="px-0">
+                @include('sanita.partials.category-card', [
+                'category' => $brand,
+                ])
+            </div>
+            @endforeach
+        </div>
+        <div class="text-center mt-5 mb-0">
+            <a href="{{ route('website.categories.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic view-all-btn">
+                <span class="text">
+                    {{ __('nav.view_all_brands') }}
+                    <i class="fa-solid fa-arrow-right me-1 {{ $isRtl ? 'd-none' : '' }}"></i>
+                </span>
+            </a>
+        </div>
+    </div>
+</section>
 @include('sanita.partials.contact-us')
 @include('sanita.partials.add-to-cart-modal')
 
