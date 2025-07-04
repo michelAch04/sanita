@@ -125,6 +125,7 @@ Route::prefix('{locale}')->middleware(['localization', 'force.address.modal'])->
 
         Route::post('/checkout/place-order', [WebsiteOrderController::class, 'placeOrder'])->name('website.checkout.place_order');
         Route::get('/orders', [WebsiteOrderController::class, 'index'])->name('website.orders.index');
+        Route::get('/orders/{id}', [WebsiteOrderController::class, 'show'])->name('website.orders.show');
 
         Route::resource('addresses', WebsiteAddressController::class);
         //address routes

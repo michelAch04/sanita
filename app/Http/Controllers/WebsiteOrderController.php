@@ -70,16 +70,33 @@ class WebsiteOrderController extends Controller
             'tax_amount'      => 0,
         ]);
 
-        return redirect()->route('website.orders.index')->with('success', 'Order placed successfully!');
+        return redirect()->route('website.orders.index', ['locale' => app()->getLocale()])->with('success', 'Order placed successfully!');
     }
 
     public function index()
     {
         $orders = Order::with('orderDetails.product')
-            ->where('customer_id', auth('customer')->id())
+            ->with('customer.addresses')
+            ->where('cancelled', 0)
+            ->where('customers_id', auth('customer')->id())
             ->orderByDesc('created_at')
             ->get();
 
         return view('sanita.orders.index', compact('orders'));
+    }
+
+    public function show($locale, $id)
+    {
+        $order = Order::with([
+            'orderDetails.product',
+            'customer.addresses.governorate',
+            'customer.addresses.city',
+            'customer.addresses.district'
+        ])
+            ->where('id', $id)
+            ->where('customers_id', auth('customer')->id())
+            ->firstOrFail();
+
+        return view('sanita.orders.show', compact('order'));
     }
 }

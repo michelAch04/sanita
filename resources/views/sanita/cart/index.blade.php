@@ -23,7 +23,7 @@
                         <h5 class="mb-1 text-primary">
                             {{ $detail->product->{'name_'.app()->getLocale()} ?? $detail->product->name_en }}
                         </h5>
-                        <div class="fw-bold text-secondary total-price">${{ number_format($detail->extended_price, 2) }}</div>
+                        <div class="fw-bold text-secondary total-price">IQD {{ number_format($detail->extended_price, 2) }}</div>
                     </div>
 
                     <p class="text-muted small mb-2">
@@ -32,10 +32,10 @@
 
                     <div>
                         @if($detail->old_price && $detail->old_price > $detail->shelf_price)
-                        <small class="text-decoration-line-through text-muted me-2">${{ number_format($detail->old_price, 2) }}</small>
+                        <small class="text-decoration-line-through text-muted me-2">IQD {{ number_format($detail->old_price, 2) }}</small>
                         @endif
                         <span class="fw-semibold text-dark">
-                            ${{ number_format($detail->shelf_price, 2) }}
+                            IQD {{ number_format($detail->shelf_price, 2) }}
                             <span class="text-muted fs-6 ms-1">/ {{ $detail->UOM }}</span>
                         </span>
                     </div>
@@ -87,7 +87,7 @@
             <span class="text"><i class="fa fa-arrow-left me-1"></i> {{ __('cart.continue_shopping') }}</span>
         </a>
         <div class="d-flex align-items-center flex-direction-row gap-4">
-            <h5 class="mb-0 fw-bold text-light">{{ __('cart.cart_total') }}: <span id="cart-total">${{ number_format($cart->total_amount, 2) }}</span></h5>
+            <h5 class="mb-0 fw-bold text-light">{{ __('cart.cart_total') }}: <span id="cart-total">IQD {{ number_format($cart->total_amount, 2) }}</span></h5>
             <a href="{{ route('cart.checkout', ['locale' => app()->getLocale()]) }}" class="btn bubbles fw-semibold">
                 <span class="text"><i class="fa fa-credit-card me-1"></i> {{ __('cart.proceed_checkout') }}</span>
             </a>

@@ -27,9 +27,9 @@
                                     <p class="text-muted small mb-2">{{ $item->product->{'small_description_' . app()->getLocale()} }}</p>
                                     <p class="mb-1 text-secondary">
                                         @if ($item->old_price && $item->old_price > $item->shelf_price)
-                                        <span class="text-decoration-line-through text-muted me-2">${{ number_format($item->old_price, 2) }}</span>
+                                        <span class="text-decoration-line-through text-muted me-2">IQD {{ number_format($item->old_price, 2) }}</span>
                                         @endif
-                                        <span class="fw-semibold">${{ number_format($item->shelf_price, 2) }}</span>
+                                        <span class="fw-semibold">IQD {{ number_format($item->shelf_price, 2) }}</span>
                                     </p>
                                     <p class="mb-0 text-muted">
                                         <small>
@@ -37,7 +37,7 @@
                                             {{ __('cart.' . $item->UOM) }}
                                         </small>
                                     </p>
-                                    <p><small>{{ __('cart.total') }}: ${{ number_format($item->extended_price, 2) }}</small></p>
+                                    <p><small>{{ __('cart.total') }}: IQD {{ number_format($item->extended_price, 2) }}</small></p>
                                 </div>
                             </div>
                         </div>
@@ -68,7 +68,6 @@
                             @foreach($addresses as $address)
                             <option value="{{ $address->id }}" {{ $address->is_default ? 'selected' : '' }}>
                                 {{ $address->title }} — {{ $address->city->name_en }}, {{ $address->district->name_en }}
-                                {{ $address->title }} — {{ $address->city->name_en }}, {{ $address->district->name_en }}
                                 | Street {{ $address->street }}, Building {{ $address->building }}, Floor {{ $address->floor }}
                             </option>
                             @endforeach
@@ -77,6 +76,7 @@
 
                     <h5 class="fw-semibold mb-2 mt-5 text-primary">{{ __('cart.payment_method') }}</h5>
                     <p class="mb-5 text-muted">{{ __('cart.cod') }}</p>
+                    <input type="hidden" name="payment_method" value="Cash On Delivery">
 
                     <h5 class="fw-semibold mb-2 text-primary">{{ __('cart.promo_code') }}</h5>
                     <div class="promo mb-4 d-flex gap-3 align-items-center flex-direction-row">
@@ -96,11 +96,11 @@
         <div class="totals-row shadow-sm mt-4 py-2 px-5 bottom-0 w-100">
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
                 <div class="totals-left">
-                    <p class="mb-1"><strong>{{ __('cart.subtotal') }}:</strong> ${{ number_format($subtotal, 2) }}</p>
-                    <p class="mb-1"><strong>{{ __('cart.vat') }}:</strong> ${{ number_format($totalTax, 2) }}</p>
+                    <p class="mb-1"><strong>{{ __('cart.subtotal') }}:</strong> IQD {{ number_format($subtotal, 2) }}</p>
+                    <p class="mb-1"><strong>{{ __('cart.vat') }}:</strong> IQD {{ number_format($totalTax, 2) }}</p>
                 </div>
                 <div class="totals-right d-flex justify-content-end flex-direction-row mt-3 mt-md-0 h-100 gap-3">
-                    <p class="my-auto fs-5 fw-bold">{{ __('cart.total') }}: ${{ number_format($total, 2) }}</p>
+                    <p class="my-auto fs-5 fw-bold">{{ __('cart.total') }}: IQD {{ number_format($total, 2) }}</p>
                     <button type="submit" class="btn bubbles fw-semibold fs-6 mt-auto">
                         <span class="text">{{ __('cart.place_order') }}</span>
                     </button>

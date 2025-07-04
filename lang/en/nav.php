@@ -29,4 +29,6 @@ return [
     'failed' => 'Failed!',
     'error' => 'Error',
     'cancel' => 'Cancel',
+    'order_history' => 'Order History',
+    'order_details' => 'Order Details',
 ];

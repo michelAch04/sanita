@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Customer;
 use App\Models\Cart;
+use App\Models\Status;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -82,7 +84,8 @@ class OrderController extends Controller
             }
 
             $customers = Customer::where('cancelled', 0)->get();
-            return view('cms.orders.edit', compact('order', 'customers'));
+            $statues = Status::all();
+            return view('cms.orders.edit', compact('order', 'customers', 'statues'));
         } catch (\Exception $e) {
             return redirect()->route('orders.index')->with('error', 'Failed to fetch order: ' . $e->getMessage());
         }
@@ -94,14 +97,39 @@ class OrderController extends Controller
             if ($order->cancelled == 1) {
                 return redirect()->route('orders.index')->with('error', 'This order is cancelled and cannot be updated.');
             }
-
             $request->validate([
-                'customers_id' => 'required|exists:customers,id',
-                'total_amount' => 'required|numeric|min:0',
-                'status' => 'required',
+                'status_id' => 'required',
             ]);
 
-            $order->update($request->only(['customers_id', 'total_amount', 'status']));
+            $status_id = $request->status_id;
+            $description = Status::where('id', $status_id)->pluck('description')->first();
+
+            $itemsqtytoupdate = [];
+
+            if ($description === 'Cancelled') {
+                $orders_details = $order->orderDetails()->get();
+
+                foreach ($orders_details as $item) {
+                    if (isset($itemsqtytoupdate[$item->products_id])) {
+                        $itemsqtytoupdate[$item->products_id] += $item->quantity_primary;
+                    } else {
+                        $itemsqtytoupdate[$item->products_id] = $item->quantity_primary;
+                    }
+                }
+                foreach ($itemsqtytoupdate as $productId => $qtyToRestore) {
+                    $product = Product::with('distributorStocks')->find($productId);
+
+                    if ($product && $product->distributorStocks->count()) {
+                        foreach ($product->distributorStocks as $stock) {
+                            $stock->increment('stock', $qtyToRestore);
+                        }
+                    }
+                }
+                // Optionally: update order status
+                $order->statuses_id = $status_id;
+                $order->save();
+            }
+
 
             return redirect()->route('orders.index')->with('success', 'Order updated successfully.');
         } catch (\Exception $e) {

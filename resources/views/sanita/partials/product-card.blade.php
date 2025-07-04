@@ -57,10 +57,10 @@ $inCart = in_array($product->id, $cartProductIds);
                 <div class="card__price">
                     @if($price->old_price > $price->shelf_price)
                     <small class="text-muted text-decoration-line-through me-1">
-                        ${{ number_format($price->old_price, 2) }}
+                        IQD {{ number_format($price->old_price, 2) }}
                     </small>
                     @endif
-                    <span>${{ number_format($price->shelf_price, 2) }}</span>
+                    <span>IQD {{ number_format($price->shelf_price, 2) }}</span>
                 </div>
             </div>
 
@@ -77,27 +77,27 @@ $inCart = in_array($product->id, $cartProductIds);
                     </button>
                 </form>
                 @elseif ($totalStock <= 0)
-                {{-- Out of stock --}}
-                <button class="card__button" disabled>
+                    {{-- Out of stock --}}
+                    <button class="card__button" disabled>
                     <i class="fa-solid fa-ban"></i> {{ __('cart.out_of_stock') }}
-                </button>
-                @elseif ($inCart)
-                {{-- Already in cart --}}
-                <a href="{{ route('website.cart.index', ['locale' => app()->getLocale()]) }}" class="card__button card__button-incart">
-                    <i class="fas fa-shopping-cart"></i>{{ __('cart.view_in_cart') }}
-                </a>
-                @else
-                {{-- In stock and not in cart --}}
-                <form action="{{ route('website.cart.store', ['locale' => app()->getLocale()]) }}"
-                    method="POST" class="add-to-cart-form m-0"
-                    data-available-uoms="{{ json_encode($prices->where('type', $type)->pluck('UOM')) }}">
-                    @csrf
-                    @include('sanita.partials.product-inputs', [$prices, $price])
-                    <button type="submit" class="card__button">
-                        <i class="fas fa-cart-plus"></i> {{ __('cart.add_to_cart') }}
                     </button>
-                </form>
-                @endif
+                    @elseif ($inCart)
+                    {{-- Already in cart --}}
+                    <a href="{{ route('website.cart.index', ['locale' => app()->getLocale()]) }}" class="card__button card__button-incart">
+                        <i class="fas fa-shopping-cart"></i>{{ __('cart.view_in_cart') }}
+                    </a>
+                    @else
+                    {{-- In stock and not in cart --}}
+                    <form action="{{ route('website.cart.store', ['locale' => app()->getLocale()]) }}"
+                        method="POST" class="add-to-cart-form m-0"
+                        data-available-uoms="{{ json_encode($prices->where('type', $type)->pluck('UOM')) }}">
+                        @csrf
+                        @include('sanita.partials.product-inputs', [$prices, $price])
+                        <button type="submit" class="card__button">
+                            <i class="fas fa-cart-plus"></i> {{ __('cart.add_to_cart') }}
+                        </button>
+                    </form>
+                    @endif
             </div>
         </div>
     </div>

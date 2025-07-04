@@ -121,6 +121,11 @@
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="userDropdown">
                             <li>
+                                <a href="{{ route('website.orders.index', ['locale' => app()->getLocale()]) }}" class="dropdown-item">
+                                    <i class="fa-solid fa-box-archive me-2"></i>{{ __('nav.order_history') }}
+                                </a>
+                            </li>
+                            <li>
                                 <form action="{{ route('customer.signout', ['locale' => app()->getLocale()]) }}" method="POST">
                                     @csrf
                                     <button type="submit" class="dropdown-item"><i class="fa-solid fa-right-from-bracket me-2"></i>{{ __('nav.sign_out') }}</button>

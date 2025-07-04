@@ -45,8 +45,12 @@ $canDelete = $permissions && $permissions->delete;
                         <tr>
                             <th>ID</th>
                             <th>Customer</th>
+                            <th>Address</th>
                             <th>Status</th>
                             <th>Total Price</th>
+                            <th>Payment Method</th>
+                            <th>Created At</th>
+                            <th>Updated At</th>
                             <th class="text-end">Options</th>
                         </tr>
                     </thead>
@@ -55,9 +59,13 @@ $canDelete = $permissions && $permissions->delete;
                         @forelse ($orders as $order)
                         <tr class="bg-hover-light-grey">
                             <td>{{ $order->id }}</td>
-                            <td>{{ $order->customer->first_name }}  {{ $order->customer->last_name }}</td>
-                            <td>{{ $order->status }}</td>
+                            <td>{{ $order->customer->first_name }} {{ $order->customer->last_name }}</td>
+                            <td>{{ ($order->address->governorate->name_en ?? 'N/A') . ', ' . ($order->address->district->name_en ?? 'N/A') . ', ' . ($order->address->city->name_en ?? 'N/A') }}</td>
+                            <td>{{ $order->status->description }}</td>
                             <td>${{ number_format($order->total_amount, 2) }}</td>
+                            <td>{{ $order->payment_method ?? 'N/A' }}</td>
+                            <td>{{ $order->created_at->format('Y-m-d H:i') }}</td>
+                            <td>{{ $order->updated_at->format('Y-m-d H:i') }}</td>
                             <td class="text-end">
                                 @if($canEdit || $canDelete)
                                 <div class="dropdown {{ $loop->first ? 'dropstart' : '' }}">

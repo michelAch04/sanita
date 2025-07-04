@@ -14,34 +14,15 @@
                 @csrf
                 @method('PUT')
 
-                {{-- Customer Select2 --}}
                 <div class="input-container mb-5 mt-3" style="width: 30%; position: relative; padding-top: 5px;">
-                    <label for="customers_id" class="label">Customer</label>
-                    <select id="customers_id" name="customers_id" class="styled-select" required>
-                        @foreach ($customers as $customer)
-                            <option value="{{ $customer->id }}" {{ old('customers_id', $order->customers_id) == $customer->id ? 'selected' : '' }}>
-                                {{ $customer->first_name }} {{ $customer->last_name }}
-                            </option>
+                    <label for="status_id" class="label">Status</label>
+                    <select id="status_id" name="status_id" class="styled-select" required>
+                        @foreach ($statues as $status)
+                        <option value="{{ $status->id }}" {{ old('status_id', $order->status->id) == $status->id ? 'selected' : '' }}>
+                            {{ $status->description }}
+                        </option>
                         @endforeach
                     </select>
-                    <div class="underline"></div>
-                </div>
-                
-
-                {{-- Status Radio Buttons --}}
-                <div class="select-container mb-5 mt-3" style="width: 30%; position: relative;">
-                    <label for="status" class="label">Status</label>
-                    <div class="mt-2">
-                        <label class="select-label"><input type="radio" name="status" value="pending" {{ old('status', $order->status) == 'pending' ? 'checked' : '' }}> <span>Pending</span></label>
-                        <label class="select-label"><input type="radio" name="status" value="completed" {{ old('status', $order->status) == 'completed' ? 'checked' : '' }}> <span>Completed</span></label>
-                        <label class="select-label"><input type="radio" name="status" value="cancelled" {{ old('status', $order->status) == 'cancelled' ? 'checked' : '' }}> <span>Cancelled</span></label>
-                    </div>
-                </div>
-
-                {{-- Total Price --}}
-                <div class="input-container mb-5 mt-3" style="width: 30%;">
-                    <input type="number" id="total_amount" name="total_amount" value="{{ old('total_amount', $order->total_amount) }}" step="0.01" required style="width: 100%;">
-                    <label for="total_amount" class="label">Total Price</label>
                     <div class="underline"></div>
                 </div>
 
@@ -68,6 +49,13 @@
 <script>
     $(document).ready(function() {
         $('#customers_id').select2({
+            placeholder: 'Select a customer',
+            allowClear: true,
+            width: '100%'
+        });
+    });
+    $(document).ready(function() {
+        $('#status').select2({
             placeholder: 'Select a customer',
             allowClear: true,
             width: '100%'
