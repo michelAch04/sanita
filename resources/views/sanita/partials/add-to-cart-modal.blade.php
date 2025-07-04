@@ -1,4 +1,3 @@
-
 {{-- Add to Cart Modal --}}
 <div class="modal fade {{ $isRtl ? 'rtl-container' : '' }}" id="addToCartModal" tabindex="-1" aria-labelledby="addToCartModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -14,15 +13,14 @@
                     </div>
                     <div class="mb-2">
                         <span id="modalProductOldPriceDisplay" class="text-muted text-decoration-line-through me-2 d-none"></span>
-                        <span id="modalProductShelfPrice" class="fw-bold"></span>
+                        <span id="modalProductShelfPriceDisplay" class="fw-bold"></span>
                     </div>
-                    <div class="align-items-center d-flex mb-1">
-                        <label for="modalProductUOM">{{__('cart.order-per')}}:</label>
-                        <select name="UOM" id="modalProductUOM" class="form-select ms-2 w-auto">
-                        </select>
+                    <div class="select-container position-relative align-items-start d-flex flex-column mt-1">
+                        <label>{{ __('cart.order-per') }}:</label>
+                        <div id="modalProductUOMRadios"></div>
                     </div>
-                    <div id="modalProductConversion" class="mb-1 mt-0 text-muted small"></div>
-                    <div class="mt-0">
+                    <div id="modalProductConversion" class="mb-1 mt-1 text-muted small"></div>
+                    <div class="mt-3">
                         <label for="modalProductQuantity">{{ __('cart.quantity') }}:</label>
                         <div class="update-quantity-form align-items-center d-flex mb-2">
                             <button type="button" class="btn btn-sm btn-decrease"><i class="fa fa-minus"></i></button>
@@ -36,27 +34,12 @@
                             <span class="text"> <i class="fas fa-cart-plus me-2"></i>{{ __('cart.add_to_cart') }}</span>
                         </button>
                     </div>
-                    <input type="hidden" id="modalProductUOM" name="UOM">
-                    <input type="hidden" id="modalProductId" name="product_id">
-                    <input type="hidden" id="modalProductShelfPrice" name="shelf_price">
-                    <input type="hidden" id="modalProductUnitPrice" name="unit_price">
-                    <input type="hidden" id="modalProductOldPrice" name="old_price">
-                    <input type="hidden" id="modalProductType" name="type">
-                    <input type="hidden" id="modalProductName" name="name">
-                    <input type="hidden" id="modalProductDescription" name="description">
-                    <input type="hidden" id="modalProductEaCa" name="ea-ca">
-                    <input type="hidden" id="modalProductEaPl" name="ea-pl">
-                    <input type="hidden" id="modalProductEa" name="ea">
-                    <input type="hidden" id="modalProductCa" name="ca">
-                    <input type="hidden" id="modalProductPl" name="pl">
-                    <input type="hidden" id="modalProductMinQuantity" name="min_quantity">
-                    <input type="hidden" id="modalProductMaxQuantity" name="max_quantity">
+                    @include('sanita.partials.add-to-cart-needs')
                 </div>
             </form>
         </div>
     </div>
 </div>
-
 <style>
     .modal-header {
         background: var(--primary-blue);
@@ -124,64 +107,24 @@
         border-color: var(--link-hover);
         color: var(--link-hover);
     }
+
+    /* SELECT CONTAINER STYLING */
+    .select-container:focus,
+    .select-label:focus {
+        border-color: var(--primary-blue);
+        box-shadow: 0 0 0 4px var(--secondary-blue);
+    }
+
+    .select-container input[type="radio"]:checked+span {
+        box-shadow: 0 0 0 0.0625em var(--primary-blue);
+        background-color: var(--hover-blue);
+        z-index: 1;
+        color: var(--primary-text);
+    }
+
+    .select-label span {
+        background-color: var(--card-bg);
+        color: var(--primary-text);
+    }
 </style>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        function showQuantityWarning(message) {
-            if (typeof showAjaxToast === "function") {
-                showAjaxToast('warning', message);
-            } else {
-                alert(message); // fallback if toast not loaded
-            }
-        }
-
-        const modal = document.getElementById('addToCartModal');
-        if (!modal) return;
-
-        const quantityInput = modal.querySelector('.quantity-input');
-        const btnIncrease = modal.querySelector('.btn-increase');
-        const btnDecrease = modal.querySelector('.btn-decrease');
-
-        if (!quantityInput || !btnIncrease || !btnDecrease) return;
-
-        btnIncrease.addEventListener('click', function() {
-            let minqty = parseInt(document.getElementById('modalProductMinQuantity').value) || 1;
-            let maxqty = parseInt(document.getElementById('modalProductMaxQuantity').value) || 0;
-            let val = parseInt(quantityInput.value) || minqty;
-            if (maxqty && val + 1 > maxqty) {
-                quantityInput.value = maxqty;
-                showQuantityWarning("Cannot increase above maximum quantity: " + maxqty);
-            } else {
-                quantityInput.value = val + 1;
-            }
-        });
-
-        btnDecrease.addEventListener('click', function() {
-            let minqty = parseInt(document.getElementById('modalProductMinQuantity').value) || 1;
-            let val = parseInt(quantityInput.value) || minqty;
-            console.log("Current value:", val, "Min quantity:", minqty);
-            if (val - 1 < minqty) {
-                quantityInput.value = minqty;
-                showQuantityWarning("Cannot decrease below minimum quantity: " + minqty);
-            } else {
-                quantityInput.value = val - 1;
-            }
-        });
-
-        // Prevent non-numeric and out-of-bounds input
-        quantityInput.addEventListener('input', function() {
-            let minqty = parseInt(document.getElementById('modalProductMinQuantity').value) || 1;
-            let maxqty = parseInt(document.getElementById('modalProductMaxQuantity').value) || 0;
-            let val = parseInt(quantityInput.value) || minqty;
-            if (val < minqty) {
-                quantityInput.value = minqty;
-                showQuantityWarning("Cannot decrease below minimum quantity: " + minqty);
-            } else if (maxqty && val > maxqty) {
-                quantityInput.value = maxqty;
-                showQuantityWarning("Cannot increase above maximum quantity: " + maxqty);
-            } else {
-                quantityInput.value = val;
-            }
-        });
-    });
-</script>
+<script src="{{ asset('js/quantity-script.js') }}"></script>

@@ -49,8 +49,9 @@ class WebsiteController extends Controller
     public function products()
     {
         $products = $this->getAvailableProducts();
+        $offers = $this->getOffers($products);
         $products = $this->paginateCollection($products, 20, 'products_page');
-        return view('sanita.products.index', compact('products'));
+        return view('sanita.products.index', compact('products', 'offers'));
     }
 
     public function offers()
@@ -104,17 +105,21 @@ class WebsiteController extends Controller
             $productsBySubcategory = [];
         }
 
+        $offers = $this->getOffers($products);
+
         return view('sanita.category.index', [
             'category' => $category,
             'productsBySubcategory' => $productsBySubcategory,
             'products' => $products,
+            'offers' => $offers
         ]);
     }
 
     public function product(Request $request)
     {
         $product_id = $request->product;
-        $product = Product::where('id', $product_id)->first();
+        $product = Product::with(['subcategories', 'brand'])->where('id', $product_id)->first();
+
         return view('sanita.product.index', compact('product'));
     }
 

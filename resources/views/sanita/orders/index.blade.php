@@ -17,9 +17,9 @@ $sortedOrders = $orders->sortByDesc('created_at');
             <div class="cart-item d-flex flex-row justify-content-between p-3 rounded shadow-sm flex-wrap w-100">
                 {{-- Order Info --}}
                 <div class="d-flex flex-column flex-grow-1 me-3">
-                    <h5 class="mb-2 text-primary">
+                    <h4 class="mb-2 text-primary">
                         {{ __('Order #:number', ['number' => $order->id]) }}
-                    </h5>
+                    </h4>
 
                     <p class="text-muted mb-1">
                         <i class="fa fa-calendar-alt me-1"></i> Placed On: {{ $order->created_at->format('Y-m-d H:i') }}
@@ -30,14 +30,14 @@ $sortedOrders = $orders->sortByDesc('created_at');
                     </p>
                     <p class="text-muted mb-1">
                         <i class="fa fa-info-circle me-1"></i> {{ __('Status') }}:
-                        <span class="fw-semibold">
+                        <span class="text-secondary fw-medium">
                             {{ __($order->status->description ?? 'N/A') }}
                         </span>
                     </p>
 
 
                     <div class="mt-3">
-                        <h6 class="mb-2 text-secondary">{{ __('Shipping Address') }}</h6>
+                        <h6 class="mb-2 text-primary">{{ __('Shipping Address') }}</h6>
                         <p class="text-muted mb-1">
                             <i class="fa fa-map-marker-alt me-1"></i> {{ $order->address->governorate->name_en }}
                         </p>
@@ -52,20 +52,13 @@ $sortedOrders = $orders->sortByDesc('created_at');
 
                 {{-- Action (View / Details) --}}
                 <div class="d-flex flex-column justify-content-between align-items-end">
-                    <span class="text">
-                        <a href="{{ route('website.orders.reorder', ['locale' => app()->getLocale(), 'id' => $order->id]) }}" class="btn btn-sm bubbles modify-btn edit-btn mb-3">
-                            <i class="fa fa-eye me-1"></i> {{ __('ReOrder') }}
-                        </a>
-                    </span>
-                    <span class="text">
-                        <a href="{{ route('website.orders.show', ['locale' => app()->getLocale(), 'id' => $order->id]) }}" class="btn btn-sm bubbles modify-btn edit-btn mb-3" target="_blank">
-                            <i class="fa fa-eye me-1"></i> {{ __('View Details') }}
-                        </a>
-                    </span>
-
+                    <a href="{{ route('website.orders.reorder', ['locale' => app()->getLocale(), 'id' => $order->id]) }}" class="btn btn-sm bubbles bubbles-arctic mb-3">
+                        <span class="text"><i class="fa fa-repeat me-1"></i> {{ __('Order Again') }}</span>
+                    </a>
+                    <a href="{{ route('website.orders.show', ['locale' => app()->getLocale(), 'id' => $order->id]) }}" class="btn btn-sm bubbles bubbles-arctic mb-3" target="_blank">
+                        <span class="text"><i class="fa fa-eye me-1"></i> {{ __('View Details') }}</span>
+                    </a>
                 </div>
-
-
             </div>
             @endforeach
         </div>

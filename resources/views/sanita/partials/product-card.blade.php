@@ -1,13 +1,15 @@
 @php
-$prices = $product->listPrices;
 $auth = auth('customer')->user();
 $type = $auth->type ?? 'b2c';
-$price = $prices->where('UOM', 'EA')->first();
+$prices = $product->listPrices->where('type', $type);
+$price = $prices->where('UOM', 'EA')->first() ?? $prices->where('UOM', 'CA')->first() ?? $prices->where('UOM', 'PL')->first();
 $imagePath = 'products/' . $product->id . '.' . $product->extension;
 $storage = \Illuminate\Support\Facades\Storage::disk('public')->exists($imagePath);
 $auth = auth('customer')->user();
 $totalStock = $product->distributorStocks?->sum('stock') ?? 0;
-$badge = $badge ?? ($cardType === 'offer' ? __('nav.offer') : ($cardType === 'new' ? __('nav.new') : __('nav.product')));
+
+$isNew = $product->created_at && $product->created_at->gt(\Illuminate\Support\Carbon::now()->subDays(7));
+$badge = $badge ?? ($cardType === 'offer' ? __('nav.offer') : ($isNew ? __('nav.new') : __('nav.product')));
 
 $cartProductIds = [];
 if ($auth) {
@@ -29,7 +31,7 @@ $inCart = in_array($product->id, $cartProductIds);
         <div class="card__glow"></div>
         <div class="card__content">
 
-            <div class="card__badge {{ $cardType === 'offer' ? 'offer-badge' : ($cardType === 'new' ? 'new-badge' : 'd-none') }}">
+            <div class="card__badge {{ $cardType === 'offer' ? 'offer-badge' : ($isNew ? 'new-badge' : 'd-none') }}">
                 {{ $badge }}
             </div>
 

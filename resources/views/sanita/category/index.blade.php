@@ -52,10 +52,15 @@
                 @if($subProducts && $subProducts->isNotEmpty())
                 <div class="d-flex flex-wrap justify-content-center gap-3">
                     @foreach($subProducts as $product)
+                    @php
+                    $isOffer = $offers && in_array($product, $offers);
+                    $cardType = $isOffer ? 'offer' : 'product';
+                    $badge = $isOffer ? __('nav.offer') : null;
+                    @endphp
                     @include('sanita.partials.product-card', [
                     'product' => $product,
-                    'cardType' => 'product',
-                    'badge' => __('nav.product')
+                    'cardType' => $cardType,
+                    'badge' => $badge
                     ])
                     @endforeach
                 </div>
@@ -80,8 +85,7 @@
             @foreach($products as $product)
             @include('sanita.partials.product-card', [
             'product' => $product,
-            'cardType' => 'product',
-            'badge' => __('nav.product')
+            'cardType' => 'product'
             ]) @endforeach
         </div>
         <div class="d-flex justify-content-center mt-4">
@@ -102,16 +106,18 @@
 @include('sanita.partials.contact-us')
 
 <style>
-    @media(max-width:800px) { 
-        #category div{
+    @media(max-width:800px) {
+        #category div {
             padding: 0.1rem !important;
-        } 
+        }
+
         .bubbles {
             width: fit-content;
             font-size: 0.7rem;
             padding: 0.25rem 0.2rem;
         }
     }
+
     .nav-pills .nav-item .nav-link {
         color: #38B2AC;
     }
@@ -121,32 +127,32 @@
         background-color: #38B2AC;
     }
 
-    .offer-card {
+    .product-card {
         flex: 0 0 auto;
         width: 18%;
         margin: 5px !important;
     }
 
     @media (max-width: 1200px) {
-        .offer-card {
+        .product-card {
             width: 22%;
         }
     }
 
     @media (max-width: 992px) {
-        .offer-card {
+        .product-card {
             width: 28%;
         }
     }
 
     @media (max-width: 768px) {
-        .offer-card {
+        .product-card {
             width: 45%;
         }
     }
 
     @media (max-width: 576px) {
-        .offer-card {
+        .product-card {
             width: 90%;
         }
     }

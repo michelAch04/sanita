@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                             if (document.querySelectorAll('[data-id]').length === 0) {
                                 showAjaxToast('success', window.cartMessages.removeSuccess);
-                                setTimeout(() => location.reload(), 1000);
+                                location.reload();
                             } else {
                                 showAjaxToast('success', window.cartMessages.removeSuccess);
                             }
