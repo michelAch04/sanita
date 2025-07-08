@@ -55,7 +55,7 @@ $type = auth()->user()->type ?? 'b2c';
             @endforeach
         </div>
         <div class="text-center mt-5 mb-0">
-            <a href="{{ route('website.categories.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic view-all-btn">
+            <a href="{{ route('website.categories.index', ['locale' => app()->getLocale()]) }}" class="btn btn-arctic view-all-btn">
                 <span class="text">
                     {{ __('nav.view_all_categories') }}
                     <i class="fa-solid fa-arrow-right me-1 {{ $isRtl ? 'd-none' : '' }}"></i>
@@ -78,7 +78,7 @@ $type = auth()->user()->type ?? 'b2c';
             @endforeach
         </div>
         <div class="text-center mt-5 mb-0">
-            <a href="{{ route('website.products.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic view-all-btn">
+            <a href="{{ route('website.products.index', ['locale' => app()->getLocale()]) }}" class="btn btn-arctic view-all-btn">
                 <span class="text">
                     {{ __('nav.view_all_products') }}
                     <i class="fa-solid fa-arrow-right me-1 {{ $isRtl ? 'd-none' : '' }}"></i>

@@ -242,13 +242,3 @@ section {
 .promo-code-container {
   width: 40% !important;
 }
-
-@media (max-width: 767px) {
-  .sticky-lg-top {
-    position: static;
-  }
-
-  .totals-right {
-    text-align: left;
-  }
-}

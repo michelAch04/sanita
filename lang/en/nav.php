@@ -1,6 +1,7 @@
 <?php
 return [
     'title' => 'Sanita',
+    'home' => 'Home',
     'add_first_address' => 'Add Your Address',
     'add_address_required' => 'Our website customizes products and stock availability based on your location to give you the most relevant shopping experience.',
     'categories' => 'Categories',
@@ -15,6 +16,7 @@ return [
     'cart_add_success' => 'Product added to cart!',
     'copyright' => '© 2025 Sanita. All rights reserved.',
     'addresses'  => 'My Addresses',
+    'menu' => 'Menu',
     'view_all_categories' => 'View All Categories',
     'view_all_products' => 'View All Products',
     'view_all_offers' => 'View All Offers',

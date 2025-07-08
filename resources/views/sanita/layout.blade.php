@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="{{ asset('css/ui-tools.css') }}">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/mobile.css') }}">
 </head>
 
 <!-- Start of Tawk.to Script-->
@@ -39,40 +40,25 @@
 <!--End of Tawk.to Script -->
 
 <body class="d-flex flex-column min-vh-100">
+    <nav id="mainNavbar" class="navbar shadow sticky-top px-2">
+        <div class="container-fluid m-0">
+            <div class="d-flex w-100 align-items-center justify-content-between">
+                {{-- Toggle Menu (left) --}}
+                <div class="col-4">
+                    <button class="btn text-start border-0" id="menuToggle" aria-label="Toggle navigation">
+                        <i class="fas fa-bars fs-4 text-primary nav-link"></i>
+                    </button>
+                </div>
 
-    <!-- Navbar -->
-    <nav id="mainNavbar" class="navbar navbar-expand-lg sticky-top shadow p-1">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}">
-                <!-- <span>Sanita</span> -->
-                <img src="{{ asset('storage/login/sanita.png') }}" alt="Sanita Logo" class="me-2">
-            </a>
+                {{-- Brand (centered) --}}
+                <a class="navbar-brand col-4 text-center m-0" href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}">
+                    <img src="{{ asset('storage/login/sanita.png') }}" alt="Logo" height="32">
+                </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarNav" style="margin-right: -5%;"> <!--CHECK LINE -->
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-
-                    <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('website.offers.index', ['locale' => app()->getLocale()]) }}">
-                            {{ __('nav.offers') }}
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('website.products.index', ['locale' => app()->getLocale()]) }}">
-                            {{ __('nav.store') }}
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('about', ['locale' => app()->getLocale()]) }}">
-                            {{ __('nav.about') }}
-                        </a>
-                    </li>
+                {{-- Right Icons --}}
+                <div class="d-flex align-items-center justify-content-end gap-0 col-4 right-icons-container">
                     @auth('customer')
-                    <li class="nav-item">
+                    <div class="nav-link text-truncate">
                         @php
                         $defaultAddress = \App\Models\Address::with(['city', 'district'])
                         ->where('customers_id', auth('customer')->id())
@@ -84,88 +70,128 @@
                         @if($defaultAddress)
                         <a href="{{ route('addresses.index', ['locale' => app()->getLocale()]) }}" class="nav-link me-2" title="{{ __('nav.addresses') }}">
                             <i class="fa-solid fa-location-dot me-1"></i>
-                            {{ $defaultAddress->city->{'name_' . app()->getLocale()} ?? '' }}, {{ $defaultAddress->district->{'name_' . app()->getLocale()} ?? '' }}
+                            <div class="d-none d-md-inline">
+                                {{ $defaultAddress->city->{'name_' . app()->getLocale()} ?? '' }}, {{ $defaultAddress->district->{'name_' . app()->getLocale()} ?? '' }}
+                            </div>
                         </a>
                         @else
                         <a href="{{ route('addresses.index', ['locale' => app()->getLocale()]) }}" class="btn btn-outline-light me-2" title="{{ __('nav.addresses') }}">
                             <i class="fa-solid fa-location-dot me-2"></i> {{ __('nav.addresses') }}
                         </a>
                         @endif
-                    </li>
-                    @endauth
-                    <li class="nav-item expanding-search position-relative">
-                        <i class="fas fa-search search-icon"></i>
-                        <input type="search" id="searchInput" placeholder="Search...">
-                    </li>
-                    @auth('customer')
-                    <li class="nav-item position-relative">
+                    </div>
+
+                    {{-- Cart --}}
+                    <div class="position-relative nav-link">
                         <a href="{{ route('website.cart.index', ['locale' => app()->getLocale()]) }}" class="nav-link cart-icon-container">
                             <i class="fas fa-shopping-cart cart-icon"></i>
                             <span id="cart-count">
                                 {{ $cartCount }}
                             </span>
                         </a>
-                    </li>
-                    @endauth
-                </ul>
-
-                <div class="d-flex ms-3">
-                    @guest('customer')
+                    </div>
+                    @else
                     <a href="{{ route('customer.signin', ['locale' => app()->getLocale()]) }}" class="btn btn-outline-light me-2 pe-2">
                         {{ __('nav.sign_in') }}
                     </a>
-                    @else
-                    <div class="dropdown pe-2">
-                        <button class="btn btn-outline-light dropdown-toggle d-flex justify-content-center align-items-center flex-row" type="button" id="userDropdown"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-user me-2"></i>
-                            <span class="user-dropdown-text">{{ Auth::guard('customer')->user()->first_name }}</span>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                            <li>
-                                <a href="{{ route('website.orders.index', ['locale' => app()->getLocale()]) }}" class="dropdown-item">
-                                    <i class="fa-solid fa-box-archive me-2"></i>{{ __('nav.order_history') }}
-                                </a>
-                            </li>
-                            <li>
-                                <form action="{{ route('customer.signout', ['locale' => app()->getLocale()]) }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="dropdown-item"><i class="fa-solid fa-right-from-bracket me-2"></i>{{ __('nav.sign_out') }}</button>
-                                </form>
-                            </li>
-                        </ul>
-                    </div>
-                    @endguest
+                    @endauth
 
-                    <div class="dropdown me-3">
-                        <button class="btn btn-outline-light dropdown-toggle" type="button" id="localeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            {{ strtoupper(app()->getLocale()) }}
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="localeDropdown">
-                            <li>
-                                <a class="dropdown-item {{ app()->getLocale() == 'en' ? 'active' : '' }}"
-                                    href="{{ route(\Illuminate\Support\Facades\Route::currentRouteName(), array_merge(request()->route()->parameters(), ['locale' => 'en'])) }}">
-                                    EN English
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item {{ app()->getLocale() == 'ar' ? 'active' : '' }}"
-                                    href="{{ route(\Illuminate\Support\Facades\Route::currentRouteName(), array_merge(request()->route()->parameters(), ['locale' => 'ar'])) }}">
-                                    AR العربية
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item {{ app()->getLocale() == 'ku' ? 'active' : '' }}"
-                                    href="{{ route(\Illuminate\Support\Facades\Route::currentRouteName(), array_merge(request()->route()->parameters(), ['locale' => 'ku'])) }}">
-                                    KU کوردی
-                                </a>
-                            </li>
-                        </ul>
+                    {{-- Search --}}
+                    <div class="expanding-search nav-link">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="search" id="searchInput" placeholder="{{ __('nav.search_placeholder') }}">
                     </div>
+                </div>
+            </div>
+
+            {{-- Offcanvas Menu --}}
+            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasMenu">
+                <div class="offcanvas-header">
+                    <h4 class="offcanvas-title">{{ __('nav.menu') }}</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+                </div>
+                <div class="offcanvas-body d-flex flex-column justify-content-between">
+                    {{-- Main Navigation Links --}}
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}">
+                                <i class="fa-solid fa-house me-2"></i>{{ __('nav.home') }}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ route('website.offers.index', ['locale' => app()->getLocale()]) }}">
+                                <i class="fa-solid fa-tags me-2"></i>{{ __('nav.offers') }}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ route('website.products.index', ['locale' => app()->getLocale()]) }}">
+                                <i class="fa-solid fa-store me-2"></i>{{ __('nav.store') }}
+                            </a>
+                        </li>
+                        @auth('customer')
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ route('website.orders.index', ['locale' => app()->getLocale()]) }}">
+                                <i class="fa-solid fa-box-archive me-2"></i>{{ __('nav.order_history') }}
+                            </a>
+                        </li>
+                        @endauth
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ route('about', ['locale' => app()->getLocale()]) }}">
+                                <i class="fa-solid fa-circle-info me-2"></i>{{ __('nav.about') }}
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="d-flex ms-3 justify-content-end">
+                        @auth('customer')
+                        <div class="dropup pe-2">
+                            <button class="btn btn-outline-light dropdown-toggle d-flex justify-content-center align-items-center flex-row" type="button" id="userDropdown"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user me-2"></i>
+                                <span class="user-dropdown-text">{{ Auth::guard('customer')->user()->first_name }}</span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                                <li>
+                                    <form action="{{ route('customer.signout', ['locale' => app()->getLocale()]) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="dropdown-item"><i class="fa-solid fa-right-from-bracket me-2"></i>{{ __('nav.sign_out') }}</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                        @endauth
+
+                        <div class="dropup me-3">
+                            <button class="btn btn-outline-light dropdown-toggle" type="button" id="localeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ strtoupper(app()->getLocale()) }}
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="localeDropdown">
+                                <li>
+                                    <a class="dropdown-item {{ app()->getLocale() == 'en' ? 'active' : '' }}"
+                                        href="{{ route(\Illuminate\Support\Facades\Route::currentRouteName(), array_merge(request()->route()->parameters(), ['locale' => 'en'])) }}">
+                                        EN English
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item {{ app()->getLocale() == 'ar' ? 'active' : '' }}"
+                                        href="{{ route(\Illuminate\Support\Facades\Route::currentRouteName(), array_merge(request()->route()->parameters(), ['locale' => 'ar'])) }}">
+                                        AR العربية
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item {{ app()->getLocale() == 'ku' ? 'active' : '' }}"
+                                        href="{{ route(\Illuminate\Support\Facades\Route::currentRouteName(), array_merge(request()->route()->parameters(), ['locale' => 'ku'])) }}">
+                                        KU کوردی
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
     </nav>
+
 
     <!-- Main Content -->
     @yield('content')

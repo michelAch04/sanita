@@ -28,6 +28,14 @@ function showAjaxToast(status, message) {
     const isCartPage = window.location.pathname.includes('/cart');
     const positionClass = isCartPage ? 'top-0 start-0 mt-5 ms-3' : 'bottom-0 end-0 p-3';
 
+    if(!window.toastMessages) {
+        window.toastMessages = {
+            success: 'Success!',
+            failed: 'Error',
+            warning: 'Warning'
+        };
+    }
+
     let toastHTML = '';
 
     if (status === 'success') {

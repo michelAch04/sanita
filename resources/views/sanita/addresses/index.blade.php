@@ -16,8 +16,6 @@ $sortedAddresses = $addresses->sortByDesc('is_default');
         </div>
         @endif
 
-
-
         @if ($sortedAddresses->count() > 0)
         <div class="d-flex flex-column gap-2">
             @foreach ($sortedAddresses as $address)

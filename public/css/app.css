@@ -88,9 +88,10 @@ body {
 }
 
 .rtl-container {
-  direction: rtl !important;
-  text-align: right !important;
+    direction: rtl !important;
+    text-align: right !important;
 }
+
 /* ------------------------------- NAVBAR STYLING ------------------------------------ */
 /* Navbar Background Split: white for logo area, then gradient */
 .navbar {
@@ -107,25 +108,16 @@ body {
     height: 3.5rem;
 }
 
+#customNavbar {
+    width: 100%;
+    will-change: transform;
+    transition: transform 0.3s ease;
+}
+
 /* Brand Area Transparent to show white part from gradient */
 .navbar .navbar-brand {
-    margin-left: -2.5% !important;
     background-color: transparent !important;
     padding: 0 !important;
-}
-
-/* Brand Title (kept in case you use span-based branding) */
-.navbar .navbar-brand span {
-    font-weight: 700;
-    font-size: 1.5rem;
-    color: var(--secondary-blue) !important;
-    /* Dark text on white background */
-    letter-spacing: 1px;
-    transition: color 0.3s;
-}
-
-.navbar .navbar-brand:hover span {
-    color: var(--primary-blue) !important;
 }
 
 /* Logo Size */
@@ -134,33 +126,35 @@ body {
     width: auto;
 }
 
+.offcanvas-title {
+    position: relative;
+    padding-bottom: 0.5rem; /* space for border */
+    width: 80%;
+    color: var(--primary-text);
+}
+
+.offcanvas-title::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    background: linear-gradient(to right, var(--link-blue) 0%, var(--primary-bg) 100%);
+    border-radius: 2px;
+    opacity: 0.6;
+}
+
 /* Nav Links */
-.navbar-nav .nav-link {
+.nav-link {
     color: var(--primary-blue) !important;
-    margin: 0 0.25rem;
     position: relative;
     transition: color 0.3s ease;
     font-size: 1.1rem;
 }
 
-.navbar-nav .nav-link:hover {
-    color: var(--secondary-blue) !important;
-}
-
-.navbar-nav .nav-link::after {
-    content: '';
-    display: block;
-    width: 0%;
-    height: 4px;
-    background: var(--primary-blue);
-    transition: width 0.3s ease;
-    position: absolute;
-    bottom: -0.5rem;
-    left: 0;
-}
-
-.navbar-nav .nav-link:hover::after {
-    width: 100%;
+.nav-link:hover {
+    color: var(--link-blue) !important;
 }
 
 /* Cart Badge */
@@ -171,20 +165,19 @@ body {
     justify-content: center;
     padding-top: 0.65rem !important;
     padding-bottom: 0.5rem;
-    margin-left: 0.75rem;
+    margin: 0 0.75rem;
 }
 
 .cart-icon {
     font-size: 1.5rem;
     /* Base size for desktop */
-    color: var(--primary-blue);
     transition: color 0.3s ease;
 }
 
 #cart-count {
     position: absolute;
-    top: 0.4rem;
-    right: 0.2rem;
+    top: 0.3rem;
+    right: -0.1rem;
     transform: translate(50%, -50%);
     background: #EF4444 !important;
     color: white;
@@ -199,23 +192,6 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-@media (max-width: 768px) {
-    .cart-icon-container {
-        margin-left: 0.25rem;
-        padding: 0.4rem;
-    }
-
-    .cart-icon {
-        font-size: 1.1rem;
-    }
-
-    #cart-count {
-        font-size: 0.55rem;
-        height: 0.9rem;
-        min-width: 0.9rem;
-    }
 }
 
 /* Sign In Button */
@@ -307,7 +283,6 @@ nav {
     scroll-behavior: smooth;
 }
 
-
 .expanding-search {
     display: flex;
     align-items: center;
@@ -317,10 +292,8 @@ nav {
 .search-icon {
     position: absolute;
     left: 12px;
-    font-size: 1rem;
     pointer-events: none;
     transition: color 0.4s ease;
-    color: var(--primary-blue);
 }
 
 .search-icon.focused {
@@ -347,11 +320,15 @@ nav {
 /* Expanded on focus or typing */
 #searchInput:focus,
 #searchInput.expanded {
-    width: clamp(150px, 30vw, 300px);
+    width: calc(100vw - 3rem);
     /* responsive and safe */
     cursor: text;
     padding-right: 1rem;
     background-color: var(--tertiary-bg);
+}
+
+.right-icons-container.search-focused .nav-link:not(.expanding-search) {
+    display: none;
 }
 
 #searchInput:focus-visible {
@@ -363,13 +340,13 @@ input[type="search"]::-webkit-search-cancel-button {
     display: none;
 }
 
-/* Responsive fallback */
-@media (max-width: 768px) {
+#addressText {
+    transition: opacity 0.3s ease;
+    opacity: 1;
+}
 
-    #searchInput:focus,
-    #searchInput.expanded {
-        width: clamp(100px, 50vw, 100%);
-    }
+#addressText.d-none {
+    opacity: 0;
 }
 
 /* ------------------------------------ INDEX STYLING ------------------------------------- */
@@ -446,6 +423,23 @@ section:nth-of-type(4) {
 
 section:nth-of-type(5) {
     animation-delay: 1.0s;
+}
+
+/* BUTTONS STYLING */
+.btn-arctic {
+    background-color: var(--primary-blue);
+    color: var(--light-text);
+    font-weight: 500;
+}
+
+.btn-arctic:hover {
+    background-color: var(--hover-blue);
+    color: var(--primary-blue);
+}
+
+.btn-arctic:active, .btn-arctic:focus, .btn-arctic:focus-visible {
+    background-color: var(--link-blue) !important;
+    color: var(--light-text) !important;
 }
 
 /* --------------------------------------- PRODUCT CARD STYLING ------------------------------------- */
