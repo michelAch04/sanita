@@ -95,10 +95,10 @@ $inCart = in_array($product->id, $cartProductIds);
             <div class="product-price">
                 <div>
                     <span id="oldPrice" class="old-price text-muted text-decoration-line-through" style="display: {{ ($price->old_price && $price->old_price > $price->shelf_price) ? 'inline' : 'none' }};">
-                        ${{ number_format($price->old_price, 2) }}
+                        IQD {{ number_format($price->old_price, 2) }}
                     </span>
                     <span id="shelfPrice" class="new-price fw-medium">
-                        ${{ number_format($price->shelf_price, 2) }}
+                        IQD {{ number_format($price->shelf_price, 2) }}
                     </span>
                 </div>
 

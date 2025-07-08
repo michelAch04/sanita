@@ -8,8 +8,7 @@
     <h2 class="display-5 text-center mt-4 mb-4 section-title">{{ __('auth.sign_in.title') }}</h2>
 
     <div class="{{ $isRtl ? 'rtl-container' : '' }}">
-        <form method="POST" action="{{ route('customer.signin', ['locale' => app()->getLocale()]) }}" 
-        onsubmit="console.log(phoneInputField.value, countryCodeInput.value)" class="login-form">
+        <form method="POST" action="{{ route('customer.signin', ['locale' => app()->getLocale()]) }}" class="login-form">
             @csrf
 
             <div class="login-flex-column">
@@ -22,7 +21,7 @@
                     class="login-input text-primary"
                     value="{{ old('mobile') }}"
                     data-old="{{ old('country_code') ? '+' . old('country_code') . old('mobile') : '' }}"
-                    placeholder="{{ __('auth.sign_up.mobile') }}" required> 
+                    placeholder="{{ __('auth.sign_up.mobile') }}" required>
                 <span id="phone-loading" class="phone-status-icon d-none">
                     <i class="fa fa-spinner fa-spin"></i>
                 </span>

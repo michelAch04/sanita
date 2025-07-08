@@ -26,9 +26,7 @@ use App\Http\Controllers\CMS\SubcategoryController;
 use App\Http\Controllers\CMS\CustomerController;
 use App\Http\Controllers\CMS\OrderController;
 use App\Http\Controllers\CMS\CartController;
-
-
-
+use App\Http\Controllers\CMS\PromoCodeController;
 
 
 /*
@@ -76,6 +74,7 @@ Route::middleware('auth:web')->group(function () {
     Route::resource('/cms/permissions', PermissionController::class);
     Route::resource('/cms/tax', TaxController::class);
     Route::resource('/cms/cart', CartController::class);
+    Route::resource('/cms/promocodes', PromoCodeController::class);
     //distributor
     Route::resource('/cms/distributor', DistributorController::class);
     Route::get('cms/distributor/{distributor}/add-address', [DistributorController::class, 'addAddress'])->name('distributor.addAddress');

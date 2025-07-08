@@ -28,7 +28,7 @@
     <div class="container-fluid">
         <div class="d-flex" id="app-container">
             <!-- Sidebar -->
-            <nav id="sidebar" class="sidebar bg-dark text-white sidebar-collapsed">
+            <nav id="sidebar" class="sidebar bg-dark text-white sidebar-collapsed vh-100 overflow-auto position-fixed top-0 start-0">
                 <div class="sidebar-header p-2 fw-bold d-flex align-items-center gap-2">
                     <i class="fas fa-user-cog fs-5"></i>
                     <span class="sidebar-label">Admin Panel</span>
@@ -45,7 +45,6 @@
                     </li>
                     @endforeach
                 </ul>
-
             </nav>
 
             <!-- Content -->

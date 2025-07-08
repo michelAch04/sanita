@@ -14,6 +14,14 @@ return new class extends Migration
         Schema::create('promo_codes', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique();
+            $table->dateTime('start_date');
+            $table->datetime('end_date');
+            $table->enum('type', ['percentage']);
+            $table->decimal('value');
+            $table->integer('max_uses');
+            $table->integer('used_count');
+            $table->integer('max_uses_per_user');
+            $table->decimal('min_order_value');
             $table->timestamps();
         });
     }

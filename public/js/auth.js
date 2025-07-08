@@ -17,7 +17,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // ----------------------------
     const togglePassword = document.querySelector(".toggle-password");
     const passwordInput = document.querySelector("#password");
-    console.log(passwordInput, togglePassword);
     if (togglePassword && passwordInput) {
         togglePassword.addEventListener("click", function () {
             const type =

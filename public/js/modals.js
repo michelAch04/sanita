@@ -1,36 +1,46 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
     // Toasts auto show
-    document.querySelectorAll('.toast').forEach(toastEl => {
+    document.querySelectorAll(".toast").forEach((toastEl) => {
         new bootstrap.Toast(toastEl, {
-            delay: 5000
+            delay: 5000,
         }).show();
     });
 
     // Delete confirmation logic
     window.confirmDelete = function (routeTemplate) {
-        const form = document.getElementById('deleteForm');
+        const form = document.getElementById("deleteForm");
         if (!form) {
             return;
         }
         form.action = routeTemplate;
-        const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('deleteModal'));
+        const modal = bootstrap.Modal.getOrCreateInstance(
+            document.getElementById("deleteModal")
+        );
         modal.show();
     };
 });
 
 function showAjaxToast(status, message) {
     // Remove existing toasts
-    $('.toast-container').remove();
+    $(".toast-container").remove();
 
-    const rtlContainer = window.isRtl ? 'rtl-container' : '';
+    const rtlContainer = window.isRtl ? "rtl-container" : "";
 
     // Determine position based on URL
-    const isCartPage = window.location.pathname.includes('/cart');
-    const positionClass = isCartPage ? 'top-0 start-0 mt-5 ms-3' : 'bottom-0 end-0 p-3';
+    const isCartPage = window.location.pathname.includes("/cart");
+    const positionClass = isCartPage
+        ? "top-0 start-0 mt-5 ms-3"
+        : "bottom-0 end-0 p-3";
+    if (!window.toastMessages) {
+        window.toastMessages = {
+            success: "Success!",
+            failed: "Error",
+            warning: "Warning",
+        };
+    }
+    let toastHTML = "";
 
-    let toastHTML = '';
-
-    if (status === 'success') {
+    if (status === "success") {
         toastHTML = `
         <div class="toast-container position-fixed ${positionClass} ${rtlContainer}" style="z-index: 9999;">
             <div class="toast success-toast show border-0 p-0" role="alert" aria-live="assertive" aria-atomic="true">
@@ -42,14 +52,16 @@ function showAjaxToast(status, message) {
                     </svg>
                     <div class="icon-container"><i class="fa-regular fa-circle-check text-success"></i></div>
                     <div class="message-text-container">
-                        <p class="message-text">${window.toastMessages.success || 'Success!'}</p>
+                        <p class="message-text">${
+                            window.toastMessages.success || "Success!"
+                        }</p>
                         <p class="sub-text">${message}</p>
                     </div>
                     <button type="button" class="btn-close ms-2 me-1" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
             </div>
         </div>`;
-    } else if (status === 'failed') {
+    } else if (status === "failed") {
         toastHTML = `
         <div class="toast-container position-fixed ${positionClass} ${rtlContainer}" style="z-index: 9999;">
             <div class="toast error-toast show border-0 p-0" role="alert" aria-live="assertive" aria-atomic="true">
@@ -64,15 +76,16 @@ function showAjaxToast(status, message) {
                         <i class="fa-regular fa-circle-xmark text-danger"></i>
                     </div>
                     <div class="message-text-container">
-                        <p class="message-text" style="color: var(--toast-color);">${window.toastMessages.failed || 'Error'}</p>
+                        <p class="message-text" style="color: var(--toast-color);">${
+                            window.toastMessages.failed || "Error"
+                        }</p>
                         <p class="sub-text">${message}</p>
                     </div>
                     <button type="button" class="btn-close ms-2 me-1" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
             </div>
         </div>`;
-    }
-    else if (status === 'warning') {
+    } else if (status === "warning") {
         toastHTML = `
     <div class="toast-container position-fixed ${positionClass} ${rtlContainer}" style="z-index: 9999;">
         <div class="toast warning-toast show border-0 p-0" role="alert" aria-live="assertive" aria-atomic="true">
@@ -87,7 +100,9 @@ function showAjaxToast(status, message) {
                     <i class="fa-solid fa-triangle-exclamation text-warning"></i>
                 </div>
                 <div class="message-text-container">
-                    <p class="message-text" style="color: var(--toast-color);">${window.toastMessages.warning || 'Warning'}</p>
+                    <p class="message-text" style="color: var(--toast-color);">${
+                        window.toastMessages.warning || "Warning"
+                    }</p>
                     <p class="sub-text">${message}</p>
                 </div>
                 <button type="button" class="btn-close ms-2 me-1" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -96,9 +111,9 @@ function showAjaxToast(status, message) {
     </div>`;
     }
 
-    $('body').append(toastHTML);
+    $("body").append(toastHTML);
 
-    const toastEl = document.querySelector('.toast');
+    const toastEl = document.querySelector(".toast");
     if (toastEl) {
         new bootstrap.Toast(toastEl, { delay: 5000 }).show();
     }
