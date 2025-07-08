@@ -7,7 +7,7 @@ use App\Models\AboutUs;
 use App\Models\Slideshow;
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\DistributorStock;
+use App\Models\Brand;
 use App\Models\DistributorAddress;
 use App\Models\Address;
 use App\Models\Governorate;
@@ -22,7 +22,7 @@ class WebsiteController extends Controller
         $governorates = Governorate::all();
         $slideshow = Slideshow::where('hidden', 0)->where('cancelled', 0)->get()->sortBy('position');
         $categories = Category::where('hidden', 0)->where('cancelled', 0)->get()->sortBy('position');
-
+        $brands = Brand::where('hidden', 0)->where('cancelled', 0)->get()->sortBy('position');
         $products = $this->getAvailableProducts();
         $offers = $this->getOffers($products);
 
@@ -32,7 +32,8 @@ class WebsiteController extends Controller
             'categories',
             'products',
             'offers',
-            'governorates'
+            'governorates',
+            'brands'
         ));
     }
     public function categories()
