@@ -13,7 +13,7 @@ return [
     'order-per' => 'Order per',
     'view_in_cart' => 'View in Cart',
     'continue_shopping' => 'Continue Shopping',
-    'proceed_checkout' => 'Proceed to Checkout',
+    'proceed_checkout' => 'Checkout',
     'empty' => 'Your cart is currently empty.',
     'browse_products' => 'Browse Products',
     'remove_confirm' => 'Are you sure you want to remove this item from the cart?',

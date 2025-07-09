@@ -1,8 +1,14 @@
 @media (max-width: 768px) {
-    /* APP */
+
+    /* ------------------- APP --------------------------- */
     .navbar,
     .container-fluid {
         padding: 0.05rem !important;
+        margin: 0 !important;
+    }
+
+    .offcanvas.offcanvas-start {
+        width: calc(100vw * 0.8) !important;
     }
 
     .nav-link,
@@ -10,10 +16,14 @@
         margin: 0 !important;
     }
 
-    .right-icons-container.btn-outline-light {
+    .right-icons-container .btn-outline-light {
         font-size: 0.8rem !important;
         margin: 0 !important;
         padding: 0.4rem !important;
+    }
+
+    .right-icons-container.search-focused .btn-outline-light {
+        margin-right: 0.6rem !important;
     }
 
     .cart-icon-container {
@@ -38,12 +48,50 @@
         font-size: 1rem;
     }
 
-    .view-all-btn {
+    .btn-arctic {
         font-size: 0.8rem !important;
         padding: 0.4rem 0.5rem !important;
     }
 
-    /* CART */
+    .view-all-container {
+        margin-top: 0 !important;
+    }
+
+    .py-5 {
+        padding-top: 1.5rem !important;
+        padding-bottom: 1.5rem !important;
+    }
+
+    .mb-5 {
+        margin-bottom: 2rem !important;
+    }
+
+    /* ------------------- INDEX ----------------------------- */
+
+    :root {
+        --card-width: calc((100vw / 2) - 0.3rem);
+        --card-height: 16.25rem;
+        --card-title: 0.9rem;
+        --card-description: 0.6rem;
+        --card-line-height: 1rem;
+    }
+
+    .card__price {
+        font-size: 0.7rem !important;
+    }
+
+    .card__button {
+        font-size: 0.7rem !important;
+        padding: 0.3rem 0 !important;
+        border-radius: 6px !important;
+        font-weight: 500 !important;
+    }
+
+    .card__button i {
+        font-size: 0.8rem !important;
+    }
+
+    /* ------------------- CART ------------------------------ */
     .sticky-lg-top {
         position: static;
     }
@@ -52,10 +100,109 @@
         text-align: left;
     }
 
-    /* PRODUCT PAGE */
+    .cart-item h5 {
+        font-size: 1rem !important;
+    }
+
+    .old-cart-item-price {
+        margin-right: 0rem !important;
+    }
+
+    .cart-item-main p {
+        font-size: 0.7rem !important;
+    }
+
+    .cart-item-content {
+        flex-direction: column !important;
+    }
+
+    .cart-item-img {
+        width: 40% !important;
+    }
+
+    .cart-item-content .update-quantity-form {
+        margin-top: 0.5rem !important;
+        padding: 0 0.5rem !important;
+        gap: 0.1rem !important;
+    }
+
+    .cart-item-price * {
+        font-size: 0.8rem !important;
+    }
+
+    .cart-item-content .update-quantity-form .btn,
+    .cart-item-content .update-quantity-form .quantity-input {
+        font-size: 0.8rem !important;
+    }
+
+    .cart-item-content .update-quantity-form .quantity-input {
+        width: 2.5rem !important;
+    }
+
+    .cart-item-footer {
+        flex-direction: row !important;
+    }
+
+    .cart-item-footer * {
+        font-size: 1rem !important;
+    }
+
+    .delete-item-btn {
+        height: fit-content !important;
+        padding: 0.3rem 0.2rem !important;
+    }
+
+    .cart-item-footer svg {
+        width: 1.1rem;
+        height: 1.1rem;
+    }
+
+    .sticky-checkout-bar {
+        padding: 0.5rem !important;
+    }
+
+    .sticky-checkout-bar i {
+        margin-right: 0.1rem !important;
+    }
+
+    .sticky-checkout-bar .btn {
+        font-size: 0.7rem !important;
+        padding: 0.2rem !important;
+    }
+
+    .sticky-checkout-bar .bubbles>.text{
+        font-weight: 500 !important;
+    }
+
+    .sticky-checkout-bar h5 {
+        font-size: 0.9rem !important;
+        font-weight: 500 !important;
+    }
+
+    .sticky-checkout-bar .total-checkout {
+        gap: 0.5rem !important;
+    }
+
+    /* ------------------- PRODUCT PAGE -------------------- */
     .product-container {
         flex-direction: column !important;
         margin-top: 60px !important;
+    }
+
+    .product-description h1 {
+        font-size: 2rem !important;
+    }
+
+    .product-description p {
+        font-size: 0.9rem !important;
+    }
+
+    .product-classification {
+        font-size: 0.8rem !important;
+    }
+
+    .product-configuration {
+        font-size: 0.8rem !important;
     }
 
     .left-column,
@@ -74,7 +221,18 @@
         left: initial !important;
     }
 
+    .product-price span {
+        font-size: 1.1rem !important;
+    }
 
+    .product-price .btn-arctic {
+        font-size: 0.7rem !important;
+        padding: 0.3rem 0.4rem !important;
+    }
+
+    .product-price .old-price {
+        margin-right: 0.2rem !important;
+    }
 }
 
 @media (max-width: 576px) {

@@ -33,6 +33,8 @@
     /*--card-title: 1.2em;*/
     --card-description: 0.6rem;
     /*--card-description: 0.9em;*/
+    --card-line-height: 1.5rem;
+    /*--card-line-height: 1.5rem;*/
     --card-bg: #ffffff;
     /*--card-bg: #ffffff;*/
     --input-border-color: #ecedec;
@@ -42,16 +44,25 @@
 }
 
 /* ------------------------------------ GLOBAL STYLING ------------------------------------- */
-
 body {
     font-family: var(--primary-font);
     background-color: var(--primary-bg);
-    overflow-x: hidden;
+    overflow-x: hidden !important;
+    padding: 0 !important;
+    margin-top: 3.5rem !important;
+    min-height: calc(100vh - 3.5rem) !important;
+}
+
+.overflow-fix {
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box;
 }
 
 .hero-carousel img {
     width: 100%;
-    height: 400px;
+    height: auto;
+    max-height: 400px;
     object-fit: cover;
 }
 
@@ -128,7 +139,8 @@ body {
 
 .offcanvas-title {
     position: relative;
-    padding-bottom: 0.5rem; /* space for border */
+    padding-bottom: 0.5rem;
+    /* space for border */
     width: 80%;
     color: var(--primary-text);
 }
@@ -155,6 +167,11 @@ body {
 
 .nav-link:hover {
     color: var(--link-blue) !important;
+}
+
+.right-icons-container.search-focused .btn-outline-light {
+    margin-right: 2rem !important;
+    transition: margin 0.3s ease;
 }
 
 /* Cart Badge */
@@ -425,22 +442,7 @@ section:nth-of-type(5) {
     animation-delay: 1.0s;
 }
 
-/* BUTTONS STYLING */
-.btn-arctic {
-    background-color: var(--primary-blue);
-    color: var(--light-text);
-    font-weight: 500;
-}
 
-.btn-arctic:hover {
-    background-color: var(--hover-blue);
-    color: var(--primary-blue);
-}
-
-.btn-arctic:active, .btn-arctic:focus, .btn-arctic:focus-visible {
-    background-color: var(--link-blue) !important;
-    color: var(--light-text) !important;
-}
 
 /* --------------------------------------- PRODUCT CARD STYLING ------------------------------------- */
 .card {
@@ -568,9 +570,9 @@ section:nth-of-type(5) {
     margin: 0;
     font-weight: 700;
     transition: all 0.3s ease;
-    line-height: 1.5rem;
+    line-height: var(--card-line-height);
     /* Set a fixed line height */
-    height: 3rem;
+    height: calc(var(--card-line-height) * 2);
     /* 2 lines × 1.5rem line height */
     overflow: hidden;
     display: -webkit-box;
@@ -587,7 +589,7 @@ section:nth-of-type(5) {
 
 .card__description {
     color: var(--card-text);
-    font-size: 0.75em;
+    font-size: var(--card-description);
     margin: 0;
     opacity: 0.7;
     transition: all 0.3s ease;
@@ -788,6 +790,32 @@ section:nth-of-type(5) {
     right: -2.5rem;
 }
 
+.slick-dots li button {
+    padding: 0 !important;
+}
+
+.slick-dots li {
+    margin: 0 !important;
+}
+
+.slick-dots {
+    margin-top: 0 !important;
+    margin-bottom: 1rem !important;
+}
+
+.slick-dots li button:hover:before, .slick-dots li button:focus:before {
+    opacity: 0.25;
+}
+.slick-dots li.slick-active button:before {
+    opacity: 0.75 !important;
+}
+.slick-dots li button:before {
+    font-size: 0.6rem;
+    color: var(--primary-blue) !important;
+}
+
+/* -------------------------- CATEGORY CARD ----------------------------------- */
+
 .category-card {
     width: calc(var(--card-width) - 0.15rem) !important;
     height: var(--card-height);
@@ -859,6 +887,10 @@ section:nth-of-type(5) {
     height: 75%;
 }
 
+.card-title {
+    font-size: var(--card-title);
+}
+
 .category-card-body img {
     width: calc(var(--card-width) - 5rem);
     height: auto;
@@ -872,6 +904,8 @@ section:nth-of-type(5) {
     width: 100%;
 }
 
+/* ---------------- BUTTON STYLING ---------------- */
+
 .view-all-btn {
     padding: 0.5rem 1rem;
     font-size: 1.3rem;
@@ -881,6 +915,28 @@ section:nth-of-type(5) {
 .bubbles-arctic {
     --c2: var(--primary-blue) !important;
     --c1: var(--primary-bg) !important;
+}
+
+/* BUTTONS STYLING */
+.btn-arctic {
+    background-color: var(--primary-blue);
+    color: var(--light-text);
+    font-weight: 500;
+    border: none;
+}
+
+.btn-arctic:hover {
+    background-color: var(--hover-blue);
+    color: var(--primary-blue);
+    border: 2px solid var(--primary-blue);
+    padding: 0.375rem 0.875rem;
+}
+
+.btn-arctic:active,
+.btn-arctic:focus,
+.btn-arctic:focus-visible {
+    background-color: var(--link-blue) !important;
+    color: var(--light-text) !important;
 }
 
 /* Footer Styling */

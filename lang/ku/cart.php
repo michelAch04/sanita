@@ -14,7 +14,7 @@ return [
     'view_in_cart' => 'بینە لە سەبەتە',
     'order-per' => 'بە یەکە',
     'continue_shopping' => 'بەردەوام بە لە کڕین',
-    'proceed_checkout' => 'چوونە ناو پڕۆسەی کڕین',
+    'proceed_checkout' => 'کڕینەوە',
     'empty' => 'سەبەتی کڕین بەتاڵە.',
     'browse_products' => 'کاڵاکان بگەڕێ',
     'remove_confirm' => 'دڵنیایت لە سڕینەوەی ئەم کاڵایە؟',

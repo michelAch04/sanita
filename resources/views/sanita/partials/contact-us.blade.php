@@ -1,13 +1,9 @@
 <style>
     .floating-contact {
         position: fixed;
-        bottom: 1rem;
-        /* 16px */
         right: 1rem;
         /* 16px */
         z-index: 9;
-        background-color: var(--primary-blue);
-        color: white;
         border-radius: 50%;
         width: 3.5rem;
         height: 3.5rem;
@@ -23,8 +19,6 @@
     }
 
     .floating-contact:hover {
-        background-color: var(--link-blue);
-        color: var(--primary-blue);
         border: 2px solid var(--primary-blue);
     }
 
@@ -35,8 +29,12 @@
 
     @media (max-width: 768px) {
         .floating-contact {
+            width: 2.5rem;
+            height: 2.5rem;
+            margin: 0 !important;
             padding: 0.75rem;
             /* 12px */
+            right: 0.5rem;
         }
 
         .floating-contact i {
@@ -76,11 +74,11 @@
         animation: phone-shake 0.6s ease-in-out;
     }
 </style>
-
-<a href="https://wa.me/96171999874?text=Hello%20Sanita%20Iraq" class="floating-contact" title="{{ __('nav.contact') }}" target="_blank">
+<div class="position-relative overflow-hidden w-100"></div>
+<a href="https://wa.me/96171999874?text=Hello%20Sanita%20Iraq" class="floating-contact btn btn-arctic" title="{{ __('nav.contact') }}" target="_blank">
     <i class="fab fa-whatsapp"></i>
 </a>
-
+</div>
 <script>
     window.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {

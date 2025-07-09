@@ -39,8 +39,8 @@
 </script> -->
 <!--End of Tawk.to Script -->
 
-<body class="d-flex flex-column min-vh-100">
-    <nav id="mainNavbar" class="navbar shadow sticky-top px-2">
+<body class="d-flex flex-column">
+    <nav id="mainNavbar" class="navbar shadow fixed-top px-2">
         <div class="container-fluid m-0">
             <div class="d-flex w-100 align-items-center justify-content-between">
                 {{-- Toggle Menu (left) --}}
@@ -91,7 +91,7 @@
                         </a>
                     </div>
                     @else
-                    <a href="{{ route('customer.signin', ['locale' => app()->getLocale()]) }}" class="btn btn-outline-light me-2 pe-2">
+                    <a href="{{ route('customer.signin', ['locale' => app()->getLocale()]) }}" class="btn btn-outline-light me-2 pe-2 text-truncate">
                         {{ __('nav.sign_in') }}
                     </a>
                     @endauth
@@ -211,9 +211,6 @@
                 </a> |
                 <a href="{{ route('about', ['locale' => app()->getLocale()]) }}" class="text-decoration-none">
                     {{ __('nav.about') }}
-                </a> |
-                <a href="{{ route('contact', ['locale' => app()->getLocale()]) }}" class="text-decoration-none">
-                    {{ __('nav.contact') }}
                 </a>
             </p>
         </div>

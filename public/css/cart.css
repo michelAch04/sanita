@@ -129,9 +129,6 @@
 }
 
 .sticky-checkout-bar {
-  position: sticky;
-  bottom: 0;
-  z-index: 1000;
   background: rgb(81, 155, 81) !important;
   opacity: 0.9;
 }
@@ -140,10 +137,6 @@
 .sticky-checkout-bar button {
   --c2: #dff0dd;
   --c1: rgb(81, 155, 81);
-}
-
-.footer {
-  margin: 0 !important;
 }
 
 section {

@@ -2,6 +2,7 @@
 return [
     'title' => 'Sanita',
     'home' => 'Home',
+    'back' => 'Back',
     'add_first_address' => 'Add Your Address',
     'add_address_required' => 'Our website customizes products and stock availability based on your location to give you the most relevant shopping experience.',
     'categories' => 'Categories',
@@ -31,6 +32,7 @@ return [
     'no_results' => 'No results found for your search.',
     'success' => 'Success!',
     'failed' => 'Failed!',
+    'warning' => 'Warning!',
     'error' => 'Error',
     'cancel' => 'Cancel',
     'order_history' => 'Order History',

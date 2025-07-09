@@ -14,7 +14,7 @@ return [
     'order-per' => 'الوحدة',
     'view_in_cart' => 'عرض في السلة',
     'continue_shopping' => 'متابعة التسوق',
-    'proceed_checkout' => 'إتمام الشراء',
+    'proceed_checkout' => 'الدفع',
     'empty' => 'سلة التسوق فارغة حالياً.',
     'browse_products' => 'تصفح المنتجات',
     'remove_confirm' => 'هل أنت متأكد من إزالة هذا المنتج من السلة؟',

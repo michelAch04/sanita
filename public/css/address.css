@@ -83,8 +83,8 @@
     --c2: rgb(196, 49, 49);
 }
 
-p i {
-    width: 1.2rem;
+p i, .login-inputForm i {
+    width: 1.2rem !important;
     text-align: center;
 }
 
