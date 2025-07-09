@@ -149,12 +149,12 @@ class WebsiteController extends Controller
         return $products;
     }
 
-    public function allProducts()
+    public function allProducts($type)
     {
         //automatic hide
         $products = Product::with([
-            'listPrices' => function ($q) {
-                $q->select()->where('type', 'b2c')->where('hidden', 0);
+            'listPrices' => function ($q) use ($type) {
+                $q->select()->where('type', $type)->where('hidden', 0);
             },
             'distributorStocks'
         ])
@@ -210,6 +210,6 @@ class WebsiteController extends Controller
                 return $this->allProducts($type);
             }
         }
-        return $this->allProducts('b2b');
+        return $this->allProducts('b2c');
     }
 }

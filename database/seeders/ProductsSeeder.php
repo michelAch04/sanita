@@ -32,7 +32,7 @@ class ProductsSeeder extends Seeder
                 'ea_pl' => rand(1, 10),
                 'subcategories_id' => $subcategory->id,
                 'brands_id' => $brand->id,
-                'tax_id' => $tax?->id,
+                'tax_id' => 3,
                 'extension' => 'png',
                 'cancelled' => 0,
             ]);

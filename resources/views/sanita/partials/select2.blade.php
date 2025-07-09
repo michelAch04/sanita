@@ -1,6 +1,6 @@
 @php
-$select2id = $id ?? null;
-$select2placeholder = $placeholder ?? null;
+$select2id = $id;
+$select2placeholder = $placeholder;
 
 @endphp
 {{-- Scripts --}}

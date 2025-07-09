@@ -11,7 +11,7 @@ class PromoCodeController extends Controller
 {
     public function index()
     {
-        $promoCodes = PromoCode::withCount('customers')->paginate(10);
+        $promoCodes = PromoCode::All();
         return view('cms.promocodes.index', compact('promoCodes'));
     }
 

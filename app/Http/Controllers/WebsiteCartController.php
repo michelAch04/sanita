@@ -152,7 +152,7 @@ class WebsiteCartController extends Controller
     public function update(Request $request, $locale, CartDetail $cart)
     {
         try {
-            // Validate quantity input
+            // Validate input
             $request->validate([
                 'quantity' => 'required|integer|min:1',
             ]);
@@ -160,26 +160,52 @@ class WebsiteCartController extends Controller
             $newForeignQuantity = (int) $request->input('quantity');
             $unit = $cart->UOM;
 
-            // Fetch associated product with stock data
-            $product = Product::with('distributorStocks')->find($cart->products_id);
+            // Fetch product with related stocks and prices
+            $product = Product::with(['distributorStocks', 'listPrices'])->find($cart->products_id);
+
             if (!$product) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'The product for this cart item no longer exists.',
-                ], 404);
+                    'message' => 'المنتج غير موجود.',
+                ]);
             }
 
-            // Conversion rates (fallback to 1 if not provided)
-            $ea_ca = (int) $product->ea_ca;
-            $ea_pl = (int) $product->ea_pl;
+            // Get related ListPrice for this type
+            $listPrice = $product->listPrices->first();
 
-            // Convert input quantity to primary (EA)
+            if (!$listPrice) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'لم يتم العثور على التسعيرة المناسبة لهذا المنتج.',
+                ]);
+            }
+
+            // Convert foreign quantity to EA
+            $ea_ca = (int) $product->ea_ca ?: 1;
+            $ea_pl = (int) $product->ea_pl ?: 1;
             $newPrimaryQuantity = $this->convertToEA($newForeignQuantity, $unit, $ea_ca, $ea_pl);
 
-            // Get the cart model (parent cart) from the CartDetail
+            // Check min/max quantity limits
+            $minQty = (int) $listPrice->min_quantity_to_order;
+            $maxQty = (int) $listPrice->max_quantity_to_order;
+            if ($minQty > 0 && $newPrimaryQuantity < $minQty) {
+                return response()->json([
+                    'warning' => true,
+                    'message' => "الكمية أدنى من الحد الأدنى المسموح به: {$minQty}",
+                ]);
+            }
+
+            if ($maxQty > 0 && $newPrimaryQuantity > $maxQty) {
+                return response()->json([
+                    'warning' => true,
+                    'message' => "الكمية تجاوزت الحد الأقصى المسموح به: {$maxQty}",
+                ]);
+            }
+
+            // Get the parent cart
             $cartModel = $cart->cart;
 
-            // Sum EA quantities of all *other* items in the same cart
+            // Sum EA of all other items
             $otherItemsEA = $cartModel->cartDetails()
                 ->where('id', '!=', $cart->id)
                 ->sum('quantity_primary');
@@ -187,14 +213,14 @@ class WebsiteCartController extends Controller
             $totalRequestedEA = $otherItemsEA + $newPrimaryQuantity;
             $totalStockEA = $product->distributorStocks->sum('stock');
 
-            // Check stock availability
+            // Stock check
             if ($totalRequestedEA > $totalStockEA) {
                 return response()->json([
-                    'success' => false,
-                    'message' => 'Not enough stock available.',
+                    'success' => true,
+                    'message' => 'الكمية المطلوبة غير متوفرة في المخزون.',
                     'stock' => $totalStockEA,
-                    'requested_quantity' => $totalRequestedEA
-                ], 422);
+                    'requested_quantity' => $totalRequestedEA,
+                ]);
             }
 
             // Update cart detail
@@ -203,10 +229,9 @@ class WebsiteCartController extends Controller
             $cart->extended_price = $cart->shelf_price * $newForeignQuantity;
             $cart->save();
 
-            // Recalculate cart totals
+            // Recalculate totals
             $cartModel->subtotal_amount = $cartModel->cartDetails->sum(
-                fn($item) =>
-                $item->unit_price * $item->quantity_foreign
+                fn($item) => $item->unit_price * $item->quantity_foreign
             );
 
             $cartModel->tax_amount = $cartModel->cartDetails->sum(
@@ -216,7 +241,7 @@ class WebsiteCartController extends Controller
             $cartModel->total_amount = $cartModel->subtotal_amount + $cartModel->tax_amount;
             $cartModel->save();
 
-            // Handle response
+            // Return response
             if ($request->ajax()) {
                 return response()->json([
                     'success' => true,
@@ -234,11 +259,10 @@ class WebsiteCartController extends Controller
 
             return response()->json([
                 'success' => false,
-                'message' => 'Server error: ' . $e->getMessage(),
+                'message' => 'حدث خطأ في الخادم: ' . $e->getMessage(),
             ], 500);
         }
     }
-
 
 
     public function destroy(Request $request, $locale, CartDetail $cart)
