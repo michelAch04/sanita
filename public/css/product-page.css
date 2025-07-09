@@ -16,7 +16,7 @@ body {
 
 .right-column {
     width: 50%;
-    margin: 30px 0;
+    margin-bottom: 10px;
 }
 
 
@@ -147,35 +147,6 @@ body {
     background-color: #64af3d;
 }
 
-/* Responsive */
-@media (max-width: 940px) {
-    .product-container {
-        flex-direction: column;
-        margin-top: 60px;
-    }
-
-    .left-column,
-    .right-column {
-        width: 100%;
-    }
-
-    .left-column img {
-        width: 300px;
-        right: 0;
-        top: -65px;
-        left: initial;
-    }
-}
-
-@media (max-width: 535px) {
-    .left-column img {
-        width: 220px;
-        top: -85px;
-    }
-    .product-container {
-        padding-top: 40px;
-    }
-}
 
 /* QTTY STYLING */
 /* Update Quantity Form Styling*/
@@ -253,22 +224,6 @@ body {
 .select-label span {
     background-color: var(--card-bg);
     color: var(--primary-text);
-}
-
-/* BUTTONS STYLING */
-.btn-arctic {
-    background-color: var(--primary-blue);
-    color: var(--light-text);
-}
-
-.btn-arctic:hover {
-    background-color: var(--hover-blue);
-    color: var(--primary-blue);
-}
-
-.btn-arctic:active, .btn-arctic:focus, .btn-arctic:focus-visible {
-    background-color: var(--link-blue) !important;
-    color: var(--light-text) !important;
 }
 
 .btn-disabled {

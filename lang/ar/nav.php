@@ -1,5 +1,7 @@
 <?php
 return [
+    'title' => 'سانیتا',
+    'home' => 'الرئيسية',
     'add_first_address' => 'أضف عنوانك',
     'add_address_required' => ".يخصص موقعنا المنتجات وتوفر المخزون حسب موقعك لتقديم تجربة تسوق أكثر ملاءمة لك",
     'categories' => 'الفئات',
@@ -14,6 +16,7 @@ return [
     'cart' => 'عربة التسوق',
     'cart_add_success' => '!تمت إضافة المنتج إلى السلة', 
     'addresses'  => 'عناويني',
+    'menu' => 'القائمة',
     'copyright' => '© 2025 Sanita. جميع الحقوق محفوظة.',
     'view_all_categories' => '← عرض جميع الفئات',
     'view_all_products' => '← عرض جميع المنتجات',

@@ -344,42 +344,45 @@ $(document).ready(function () {
         });
 
     // ------------------------------------ NAVBAR SCROLL --------------------------------------- //
-    let lastScroll = 0;
-    let navbar = document.getElementById('mainNavbar');
-    let isScrolling;
+    // let lastScroll = 0;
+    // let navbar = document.getElementById('mainNavbar');
+    // let isScrolling;
 
-    window.addEventListener('scroll', function () {
-        const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+    // window.addEventListener('scroll', function () {
+    //     const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
 
-        // Hide navbar if scrolling down
-        if (currentScroll > lastScroll && currentScroll > 50) {
-            navbar.style.transform = 'translateY(-100%)';
-        } else {
-            navbar.style.transform = 'translateY(0)';
-        }
+    //     // Hide navbar if scrolling down
+    //     if (currentScroll > lastScroll && currentScroll > 50) {
+    //         navbar.style.transform = 'translateY(-100%)';
+    //     } else {
+    //         navbar.style.transform = 'translateY(0)';
+    //     }
 
-        lastScroll = currentScroll <= 0 ? 0 : currentScroll;
+    //     lastScroll = currentScroll <= 0 ? 0 : currentScroll;
 
-        // Show navbar if scrolling stops
-        clearTimeout(isScrolling);
-        isScrolling = setTimeout(() => {
-            navbar.style.transform = 'translateY(0)';
-        }, 300); // after scroll stops
-    });
+    //     // Show navbar if scrolling stops
+    //     clearTimeout(isScrolling);
+    //     isScrolling = setTimeout(() => {
+    //         navbar.style.transform = 'translateY(0)';
+    //     }, 300); // after scroll stops
+    // });
 
     // ------------------------------------ SEARCH BAR ------------------------------------------ //
     const searchInput = document.getElementById("searchInput");
     const searchIcon = searchInput.previousElementSibling;
+    const rightIconsContainer = searchInput.closest('.right-icons-container');
 
     searchInput.addEventListener("focus", () => {
         searchInput.classList.add("expanded");
         searchIcon.classList.add('focused');
+        rightIconsContainer.classList.add("search-focused");
     });
 
     searchInput.addEventListener("blur", () => {
         if (searchInput.value.trim() === "") {
             searchInput.classList.remove("expanded");
             searchIcon.classList.remove('focused');
+            rightIconsContainer.classList.remove("search-focused");
         }
     });
 
@@ -391,5 +394,10 @@ $(document).ready(function () {
                 window.location.href = window.url + `/${window.locale}/search?q=${encodeURIComponent(q)}`;
             }
         }
+    });
+
+    document.getElementById("menuToggle").addEventListener("click", () => {
+        const offcanvas = new bootstrap.Offcanvas(document.getElementById("offcanvasMenu"));
+        offcanvas.show();
     });
 });

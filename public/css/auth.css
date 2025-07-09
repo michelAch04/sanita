@@ -225,6 +225,10 @@ input:-webkit-autofill:active {
   transition: background-color 5000s ease-in-out 0s;
 }
 
+.iti--separate-dial-code .iti__selected-flag {
+  background-color: transparent;;
+}
+
 /* ------------------------------ CHECKBOX STYLING --------------------------------- */
 .cl-checkbox {
   position: relative;

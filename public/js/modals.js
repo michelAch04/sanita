@@ -27,20 +27,20 @@ function showAjaxToast(status, message) {
     const rtlContainer = window.isRtl ? "rtl-container" : "";
 
     // Determine position based on URL
-    const isCartPage = window.location.pathname.includes("/cart");
-    const positionClass = isCartPage
-        ? "top-0 start-0 mt-5 ms-3"
-        : "bottom-0 end-0 p-3";
-    if (!window.toastMessages) {
+    const isCartPage = window.location.pathname.includes('/cart');
+    const positionClass = isCartPage ? 'top-0 start-0 mt-5 ms-3' : 'bottom-0 end-0 p-3';
+
+    if(!window.toastMessages) {
         window.toastMessages = {
-            success: "Success!",
-            failed: "Error",
-            warning: "Warning",
+            success: 'Success!',
+            failed: 'Error',
+            warning: 'Warning'
         };
     }
-    let toastHTML = "";
 
-    if (status === "success") {
+    let toastHTML = '';
+
+    if (status === 'success') {
         toastHTML = `
         <div class="toast-container position-fixed ${positionClass} ${rtlContainer}" style="z-index: 9999;">
             <div class="toast success-toast show border-0 p-0" role="alert" aria-live="assertive" aria-atomic="true">
