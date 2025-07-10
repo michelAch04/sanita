@@ -58,7 +58,7 @@
                 {{-- Right Icons --}}
                 <div class="d-flex align-items-center justify-content-end gap-0 col-4 right-icons-container">
                     @auth('customer')
-                    <div class="nav-link text-truncate">
+                    <div class="nav-link text-break text-nowrap overflow-visible">
                         @php
                         $defaultAddress = \App\Models\Address::with(['city', 'district'])
                         ->where('customers_id', auth('customer')->id())

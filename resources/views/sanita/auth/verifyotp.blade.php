@@ -4,10 +4,10 @@
 
 @section('content')
 
-<div class="container mb-4 mt-5" style="max-width: 500px;">
+<div class="container login-container mb-4 mt-5" style="max-width: 500px;">
     <h2 class="display-5 text-center mb-5 section-title">{{ __('auth.verify_otp.title') }}</h2>
 
-    <form method="POST" action="{{ route('customer.verifyOtp', ['locale' => app()->getLocale()]) }}" class="{{ $isRtl ? 'rtl-container' : '' }}">
+    <form method="POST" action="{{ route('customer.verifyOtp', ['locale' => app()->getLocale()]) }}" class="{{ $isRtl ? 'rtl-container' : '' }} login-form otp-form">
         @csrf
 
         {{-- Hidden Mobile --}}

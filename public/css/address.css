@@ -67,12 +67,12 @@
 
 .modify-btn {
     width: 5.5rem;
-    padding: 0.25rem 0.25rem !important;
+    padding: 0.25rem;
     border-width: 0.12rem;
 }
 
 .modify-btn>.text {
-    font-weight: 500 !important;
+    font-weight: 500;
 }
 
 .edit-btn {

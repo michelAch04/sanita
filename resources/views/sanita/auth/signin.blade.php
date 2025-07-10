@@ -43,7 +43,8 @@
                     name="password"
                     id="password"
                     class="login-input text-primary"
-                    placeholder="{{ __('auth.sign_in.password') }}">
+                    placeholder="{{ __('auth.sign_in.password') }}"
+                    autocomplete="off">
             </div>
 
             @if ($errors->has('login_error'))

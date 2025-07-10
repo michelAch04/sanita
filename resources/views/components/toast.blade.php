@@ -8,7 +8,7 @@ $isRtl = 0;
 <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 9999;">
   @if (session('success'))
   <div class="toast success-toast show border-0 p-0 {{ $isRtl ? 'rtl-container' : 'not-rtl' }}" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="custom-toast-card bg-white">
+    <div class="custom-toast-card bg-white p-2">
       <svg class="wave" viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg">
         <path
           d="M0,256L11.4,240C22.9,224,46,192,69,192C91.4,192,114,224,137,234.7C160,245,183,235,206,213.3C228.6,192,251,160,274,149.3C297.1,139,320,149,343,181.3C365.7,213,389,267,411,282.7C434.3,299,457,277,480,250.7C502.9,224,526,192,549,181.3C571.4,171,594,181,617,208C640,235,663,277,686,256C708.6,235,731,149,754,122.7C777.1,96,800,128,823,165.3C845.7,203,869,245,891,224C914.3,203,937,117,960,112C982.9,107,1006,181,1029,197.3C1051.4,213,1074,171,1097,144C1120,117,1143,107,1166,133.3C1188.6,160,1211,224,1234,218.7C1257.1,213,1280,139,1303,133.3C1325.7,128,1349,192,1371,192C1394.3,192,1417,128,1429,96L1440,64L1440,320L0,320Z"
@@ -20,14 +20,14 @@ $isRtl = 0;
         <p class="message-text">Success!</p>
         <p class="sub-text">{{ session('success') }}</p>
       </div>
-      <button type="button" class="btn-close ms-2 me-1" data-bs-dismiss="toast" aria-label="Close"></button>
+      <button type="button" class="btn-close me-1" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
   </div>
   @endif
 
   @if (session('error') || $errors->any())
   <div class="toast error-toast show border-0 p-0 {{ $isRtl ? 'rtl-container' : '' }}" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="custom-toast-card bg-white" style="--toast-color: #dc3545; --toast-bg: #dc354533;">
+    <div class="custom-toast-card bg-white p-2" style="--toast-color: #dc3545; --toast-bg: #dc354533;">
       <svg class="wave" viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg">
         <path
           d="M0,256L11.4,240C22.9,224,46,192,69,192C91.4,192,114,224,137,234.7C160,245,183,235,206,213.3C228.6,192,251,160,274,149.3C297.1,139,320,149,343,181.3C365.7,213,389,267,411,282.7C434.3,299,457,277,480,250.7C502.9,224,526,192,549,181.3C571.4,171,594,181,617,208C640,235,663,277,686,256C708.6,235,731,149,754,122.7C777.1,96,800,128,823,165.3C845.7,203,869,245,891,224C914.3,203,937,117,960,112C982.9,107,1006,181,1029,197.3C1051.4,213,1074,171,1097,144C1120,117,1143,107,1166,133.3C1188.6,160,1211,224,1234,218.7C1257.1,213,1280,139,1303,133.3C1325.7,128,1349,192,1371,192C1394.3,192,1417,128,1429,96L1440,64L1440,320L0,320Z"
@@ -47,13 +47,13 @@ $isRtl = 0;
           @endif
         </p>
       </div>
-      <button type="button" class="btn-close ms-2 me-1" data-bs-dismiss="toast" aria-label="Close"></button>
+      <button type="button" class="btn-close me-1" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
   </div>
   @endif
   @if (session('info'))
   <div class="toast info-toast show border-0 p-0 {{ $isRtl ? 'rtl-container' : '' }}" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="custom-toast-card bg-white" style="--toast-color: #0d6efd; --toast-bg: #0d6efd33;">
+    <div class="custom-toast-card bg-white p-2" style="--toast-color: #0d6efd; --toast-bg: #0d6efd33;">
       <svg class="wave" viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg">
         <path
           d="M0,256L11.4,240C22.9,224,46,192,69,192C91.4,192,114,224,137,234.7C160,245,183,235,206,213.3C228.6,192,251,160,274,149.3C297.1,139,320,149,343,181.3C365.7,213,389,267,411,282.7C434.3,299,457,277,480,250.7C502.9,224,526,192,549,181.3C571.4,171,594,181,617,208C640,235,663,277,686,256C708.6,235,731,149,754,122.7C777.1,96,800,128,823,165.3C845.7,203,869,245,891,224C914.3,203,937,117,960,112C982.9,107,1006,181,1029,197.3C1051.4,213,1074,171,1097,144C1120,117,1143,107,1166,133.3C1188.6,160,1211,224,1234,218.7C1257.1,213,1280,139,1303,133.3C1325.7,128,1349,192,1371,192C1394.3,192,1417,128,1429,96L1440,64L1440,320L0,320Z"
@@ -67,7 +67,7 @@ $isRtl = 0;
         <p class="message-text" style="color: var(--toast-color);">Info</p>
         <p class="sub-text">{{ session('info') }}</p>
       </div>
-      <button type="button" class="btn-close ms-2 me-1" data-bs-dismiss="toast" aria-label="Close"></button>
+      <button type="button" class="btn-close me-1" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
   </div>
   @endif
@@ -76,10 +76,9 @@ $isRtl = 0;
 <style>
   .custom-toast-card {
     width: auto;
-    height: 80px;
+    height: fit-content;
     border-radius: 8px;
     box-sizing: border-box;
-    padding: 10px 15px;
     background-color: #ffffff;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
     position: relative;
@@ -99,8 +98,7 @@ $isRtl = 0;
   }
 
   .custom-toast-card .icon-container {
-    width: 2rem !important;
-    height: 2rem !important;
+    width: fit-content !important;
     display: flex;
     justify-content: center;
     align-items: center;

@@ -5,8 +5,8 @@
 $sortedAddresses = $addresses->sortByDesc('is_default');
 @endphp
 @section('content')
-<section id="addresses" class="pt-5">
-    <div class="container px-5 mb-5">
+<section id="addresses" class="pt-4">
+    <div class="container px-5 mb-5 addre">
         <h2 class="display-5 text-center mb-5 section-title">📍 {{ __('Your Addresses') }}</h2>
         @if($sortedAddresses->count() != 0)
         <div class="d-flex justify-content-center mb-4">
@@ -17,16 +17,16 @@ $sortedAddresses = $addresses->sortByDesc('is_default');
         @endif
 
         @if ($sortedAddresses->count() > 0)
-        <div class="d-flex flex-column gap-2">
+        <div class="d-flex flex-column gap-2 items-container">
             @foreach ($sortedAddresses as $address)
             <div class="cart-item d-flex flex-row justify-content-between p-3 rounded shadow-sm flex-wrap w-100">
                 {{-- Address Info --}}
-                <div class="d-flex flex-column flex-grow-1 me-3">
+                <div class="d-flex flex-column flex-grow-1 me-3 address-info">
 
-                    <div class="d-flex align-items-center gap-2 mb-2">
-                        <h5 class="mb-1 text-primary">{{ $address->title ?? __('Untitled') }}</h5>
+                    <div class="d-flex align-items-center gap-2 mb-2 address-title">
+                        <h5 class="mb-0 text-primary">{{ $address->title ?? __('Untitled') }}</h5>
                         @if ($address->is_default)
-                        <span class="badge bg-success text-white px-2 py-1 rounded-pill">{{ __('Default') }}</span>
+                        <span class="badge bg-success text-white px-2 py-1 rounded-pill fw-medium">{{ __('Default') }}</span>
                         @endif
                     </div>
 
@@ -94,7 +94,7 @@ $sortedAddresses = $addresses->sortByDesc('is_default');
 
 <!-- Add Address Modal -->
 <div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg d-flex justify-content-center">
+    <div class="modal-dialog modal-fullscreen-md-down modal-dialog-centered modal-lg d-flex justify-content-center">
         <div class="modal-content p-3 pb-2 w-75 bg-secondary">
             <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="{{ __('Close') }}"></button>
             <div class="modal-header border-0 justify-content-center">
@@ -110,7 +110,7 @@ $sortedAddresses = $addresses->sortByDesc('is_default');
 @foreach ($sortedAddresses as $address)
 <!-- Edit Address Modal -->
 <div class="modal fade" id="editAddressModal-{{ $address->id }}" tabindex="-1" aria-labelledby="editAddressLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg d-flex justify-content-center">
+    <div class="modal-dialog modal-fullscreen-md-down modal-dialog-centered modal-lg d-flex justify-content-center">
         <div class="modal-content p-3 pb-2 w-75 bg-secondary">
             <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="{{ __('Close') }}"></button>
             <div class="modal-header border-0 justify-content-center">

@@ -53,10 +53,14 @@ body {
     min-height: calc(100vh - 3.5rem) !important;
 }
 
+.container {
+    padding: 0 !important;
+}
+
 .overflow-fix {
-  max-width: 100% !important;
-  overflow-x: hidden !important;
-  box-sizing: border-box;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box;
 }
 
 .hero-carousel img {
@@ -101,6 +105,10 @@ body {
 .rtl-container {
     direction: rtl !important;
     text-align: right !important;
+}
+
+.fw-medium {
+    font-weight: 500 !important;
 }
 
 /* ------------------------------- NAVBAR STYLING ------------------------------------ */
@@ -367,9 +375,6 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 /* ------------------------------------ INDEX STYLING ------------------------------------- */
-.container {
-    padding: 0 !important;
-}
 
 .row {
     gap: 0.8rem !important;
@@ -803,12 +808,15 @@ section:nth-of-type(5) {
     margin-bottom: 1rem !important;
 }
 
-.slick-dots li button:hover:before, .slick-dots li button:focus:before {
+.slick-dots li button:hover:before,
+.slick-dots li button:focus:before {
     opacity: 0.25;
 }
+
 .slick-dots li.slick-active button:before {
     opacity: 0.75 !important;
 }
+
 .slick-dots li button:before {
     font-size: 0.6rem;
     color: var(--primary-blue) !important;
@@ -908,8 +916,11 @@ section:nth-of-type(5) {
 
 .view-all-btn {
     padding: 0.5rem 1rem;
-    font-size: 1.3rem;
     --c2: var(--primary-blue) !important;
+}
+
+.view-all-btn>.text {
+    font-size: 1.3rem;
 }
 
 .bubbles-arctic {

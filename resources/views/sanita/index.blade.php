@@ -32,7 +32,7 @@ $type = auth()->user()->type ?? 'b2c';
             @endforeach
         </div>
         <div class="text-center mt-4 mb-0">
-            <a href="{{ route('website.offers.index', ['locale' => app()->getLocale()]) }}" class="btn btn-arctic view-all-btn">
+            <a href="{{ route('website.offers.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic view-all-btn">
                 <span class="text">{{ __('nav.view_all_offers') }}
                     <i class="fa-solid fa-arrow-right me-1 {{ $isRtl ? 'd-none' : '' }}"></i>
                 </span>
@@ -43,7 +43,7 @@ $type = auth()->user()->type ?? 'b2c';
 
 <!-- Categories Section -->
 <section id="categories" class="py-5">
-    <div class="container text-center">
+    <div class="container gx-0 text-center">
         <h2 class="display-5 mb-4 section-title">{{ __('nav.categories') }}</h2>
         <div class="carousel mx-auto mb-5 px-1">
             @foreach($categories as $category)
@@ -55,7 +55,7 @@ $type = auth()->user()->type ?? 'b2c';
             @endforeach
         </div>
         <div class="text-center mt-5 mb-0 view-all-container">
-            <a href="{{ route('website.categories.index', ['locale' => app()->getLocale()]) }}" class="btn btn-arctic view-all-btn">
+            <a href="{{ route('website.categories.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic view-all-btn">
                 <span class="text">
                     {{ __('nav.view_all_categories') }}
                     <i class="fa-solid fa-arrow-right me-1 {{ $isRtl ? 'd-none' : '' }}"></i>
@@ -78,7 +78,7 @@ $type = auth()->user()->type ?? 'b2c';
             @endforeach
         </div>
         <div class="text-center mt-5 mb-0 view-all-container">
-            <a href="{{ route('website.products.index', ['locale' => app()->getLocale()]) }}" class="btn btn-arctic view-all-btn">
+            <a href="{{ route('website.products.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic view-all-btn">
                 <span class="text">
                     {{ __('nav.view_all_products') }}
                     <i class="fa-solid fa-arrow-right me-1 {{ $isRtl ? 'd-none' : '' }}"></i>
@@ -101,7 +101,7 @@ $type = auth()->user()->type ?? 'b2c';
             @endforeach
         </div>
         <div class="text-center mt-5 mb-0 view-all-container">
-            <a href="{{ route('website.categories.index', ['locale' => app()->getLocale()]) }}" class="btn btn-arctic view-all-btn">
+            <a href="{{ route('website.categories.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic view-all-btn">
                 <span class="text">
                     {{ __('nav.view_all_brands') }}
                     <i class="fa-solid fa-arrow-right me-1 {{ $isRtl ? 'd-none' : '' }}"></i>
