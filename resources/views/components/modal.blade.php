@@ -8,18 +8,18 @@ $isRtl = 0;
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow">
             <div class="modal-header text-white" style="background-color:rgba(204, 0, 0, 0.63);">
-                <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                <h5 class="modal-title" id="deleteModalLabel">{{__('delete.Confirm_Deletion')}}</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="deleteForm" method="POST">
                 @csrf
                 @method('DELETE')
                 <div class="modal-body">
-                    Are you sure you want to delete this item?
+                    {{__('delete.Confirm_Deletion_Message')}}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="opacity: 0.63;">Cancel</button>
-                    <button type="submit" class="btn btn-danger" style="background-color:rgba(204, 0, 0, 0.63);">Delete</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="opacity: 0.63;">{{__('delete.Cancel')}}</button>
+                    <button type="submit" class="btn btn-danger" style="background-color:rgba(204, 0, 0, 0.63);">{{__('delete.Delete')}}</button>
                 </div>
             </form>
         </div>

@@ -21,12 +21,18 @@ function confirmDelete(action) {
 function initAddressSelect2(modalId) {
     let isEdit = modalId === "addAddressModal" ? "" : "edit_";
 
-    var $govIn = $(`#${isEdit}governoratesInput`);
-    var $disIn = $(`#${isEdit}districtsInput`);
-    var $citIn = $(`#${isEdit}citiesInput`);
+    const $govIn = $(`#${isEdit}governoratesInput`);
+    const $disIn = $(`#${isEdit}districtsInput`);
+    const $citIn = $(`#${isEdit}citiesInput`);
 
-    $(`#${isEdit}governorate`).select2({
-        placeholder: `${window.addressMessages.selectGovernorate}`,
+    const $govSelect = $(`#${isEdit}governorate`);
+    const $disSelect = $(`#${isEdit}district`);
+    const $citSelect = $(`#${isEdit}city`);
+
+    const locale = window.locale || "en";
+
+    $govSelect.select2({
+        placeholder: window.addressMessages.selectGovernorate,
         allowClear: true,
         width: "95%",
         minimumResultsForSearch: 4,
@@ -35,8 +41,8 @@ function initAddressSelect2(modalId) {
 
     let disableDistrictAndCity = modalId === "addAddressModal";
 
-    $(`#${isEdit}district`).select2({
-        placeholder: `${window.addressMessages.selectDistrict}`,
+    $disSelect.select2({
+        placeholder: window.addressMessages.selectDistrict,
         allowClear: true,
         width: "95%",
         minimumResultsForSearch: 4,
@@ -44,8 +50,8 @@ function initAddressSelect2(modalId) {
         disabled: disableDistrictAndCity,
     });
 
-    $(`#${isEdit}city`).select2({
-        placeholder: `${window.addressMessages.selectCity}`,
+    $citSelect.select2({
+        placeholder: window.addressMessages.selectCity,
         allowClear: true,
         width: "95%",
         minimumResultsForSearch: 4,
@@ -53,61 +59,60 @@ function initAddressSelect2(modalId) {
         disabled: disableDistrictAndCity,
     });
 
-    $(`#${isEdit}governorate`).on("change", function () {
+    $govSelect.on("change", function () {
         const governorateId = $(this).val();
+
         $disIn.addClass("o-50");
-        $(`#${isEdit}district`)
+        $disSelect
             .html(`<option value="">${window.addressMessages.loading}</option>`)
             .prop("disabled", true);
-        $(`#${isEdit}city`)
+
+        $citSelect
             .html(
                 `<option value="">${window.addressMessages.selectCity}</option>`
             )
             .prop("disabled", true);
 
         $.ajax({
-            url: `${window.url}/${window.locale}/get-districts`,
-            data: {
-                governorates_id: governorateId,
-            },
+            url: `${window.url}/${locale}/get-districts`,
+            data: { governorates_id: governorateId },
             success: function (data) {
-                $(`#${isEdit}district`).html(
-                    `<option value="">${window.addressMessages.selectDistrict}</option>`
-                );
+                let options = `<option value="">${window.addressMessages.selectDistrict}</option>`;
                 data.forEach((d) => {
-                    $(`#${isEdit}district`).append(
-                        `<option value="${d.id}">${d.name_en}</option>`
-                    );
+                    const name = d[`name_${locale}`] || d.name_en;
+                    options += `<option value="${d.id}">${name}</option>`;
                 });
+                $disSelect.html(options).prop("disabled", false);
                 $disIn.removeClass("o-50");
-                $(`#${isEdit}district`).prop("disabled", false);
+            },
+            error: function () {
+                alert("Failed to load districts.");
             },
         });
     });
 
-    $(`#${isEdit}district`).on("change", function () {
+    $disSelect.on("change", function () {
         const districtId = $(this).val();
-        $(`#${isEdit}city`)
+
+        $citIn.addClass("o-50");
+        $citSelect
             .html(`<option value="">${window.addressMessages.loading}</option>`)
             .prop("disabled", true);
-        $citIn.addClass("o-50");
 
         $.ajax({
-            url: `${window.url}/${window.locale}/get-cities`,
-            data: {
-                districts_id: districtId,
-            },
+            url: `${window.url}/${locale}/get-cities`,
+            data: { districts_id: districtId },
             success: function (data) {
-                $(`#${isEdit}city`).html(
-                    `<option value="">${window.addressMessages.selectCity}</option>`
-                );
+                let options = `<option value="">${window.addressMessages.selectCity}</option>`;
                 data.forEach((c) => {
-                    $(`#${isEdit}city`).append(
-                        `<option value="${c.id}">${c.name_en}</option>`
-                    );
+                    const name = c[`name_${locale}`] || c.name_en;
+                    options += `<option value="${c.id}">${name}</option>`;
                 });
+                $citSelect.html(options).prop("disabled", false);
                 $citIn.removeClass("o-50");
-                $(`#${isEdit}city`).prop("disabled", false);
+            },
+            error: function () {
+                alert("Failed to load cities.");
             },
         });
     });

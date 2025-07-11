@@ -72,8 +72,8 @@ class WebsiteCartController extends Controller
 
             if (!$this->hasEnoughStock($product, $totalRequestedEA)) {
                 return response()->json([
-                    'success' => false,
-                    'message' => 'الكمية المطلوبة غير متوفرة في المخزون.',
+                    'warning' => true,
+                    'message' => __('cart.out_of_stock'),
                     'stock' => $product->distributorStocks->sum('stock'),
                     'requested_quantity' => $totalRequestedEA,
                 ], 422);
@@ -122,13 +122,13 @@ class WebsiteCartController extends Controller
         }
     }
 
-    public function update(Request $request, $locale, CartDetail $cartDetail)
+    public function update(Request $request, $locale, CartDetail $cart)
     {
         try {
             $request->validate([
                 'quantity' => 'required|integer|min:1',
             ]);
-
+            $cartDetail = $cart;
             $newForeignQuantity = (int) $request->input('quantity');
             $unit = $cartDetail->UOM;
 
@@ -319,9 +319,9 @@ class WebsiteCartController extends Controller
         );
     }
 
-    protected function getCartDetail($cartId, $productId, $unit)
+    protected function getCartDetail($carts_id, $products_id, $unit)
     {
-        return CartDetail::where(compact('cartId', 'productId'))->where('UOM', $unit)->first();
+        return CartDetail::where(compact('carts_id', 'products_id'))->where('UOM', $unit)->first();
     }
 
     protected function isPriceChanged($shelf_price, Product $product, $unit)
