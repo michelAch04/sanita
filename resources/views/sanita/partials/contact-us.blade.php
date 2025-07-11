@@ -27,7 +27,7 @@
         /* 36px */
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 576px) {
         .floating-contact {
             width: 2.5rem;
             height: 2.5rem;
@@ -35,10 +35,11 @@
             padding: 0.75rem;
             /* 12px */
             right: 0.5rem;
+            align-items: normal;
         }
 
         .floating-contact i {
-            font-size: 1.125rem;
+            font-size: 1.6rem;
             /* 18px */
         }
     }

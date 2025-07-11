@@ -20,6 +20,7 @@ return [
     'menu' => 'القائمة',
     'copyright' => '© 2025 Sanita. جميع الحقوق محفوظة.',
     'view_all_categories' => '← عرض جميع الفئات',
+    'all_categories' => 'الفئات',
     'view_all_products' => '← عرض جميع المنتجات',
     'view_all_offers' => '← عرض جميع العروض',
     'new' => '!جديد',
@@ -34,5 +35,5 @@ return [
     'warning' => '!تحذير',
     'error' => 'خطأ',
     'cancel' => 'إلغاء',
-    ''
+    'continue_shopping' => 'متابعة التسوق',
 ];

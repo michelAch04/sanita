@@ -50,6 +50,7 @@ $type = auth()->user()->type ?? 'b2c';
             <div class="px-0">
                 @include('sanita.partials.category-card', [
                 'category' => $category,
+                'type' => 'categories'
                 ])
             </div>
             @endforeach
@@ -96,6 +97,7 @@ $type = auth()->user()->type ?? 'b2c';
             <div class="px-0">
                 @include('sanita.partials.category-card', [
                 'category' => $brand,
+                'type' => 'brands'
                 ])
             </div>
             @endforeach

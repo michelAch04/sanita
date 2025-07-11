@@ -192,9 +192,10 @@
         </div>
     </nav>
 
-
+<div id="content">
     <!-- Main Content -->
     @yield('content')
+</div>
 
     @include('components.toast')
 
@@ -216,6 +217,17 @@
         </div>
     </footer>
 
+    <div id="pageLoader" class="page-loader">
+        <div class="cubes-container">
+            <div class="loop cubes" role="status">
+                <div class="item cubes"></div>
+                <div class="item cubes"></div>
+                <div class="item cubes"></div>
+                <div class="item cubes"></div>
+                <div class="item cubes"></div>
+            </div>
+        </div>
+    </div>
 </body>
 
 <!-- Core Libraries -->

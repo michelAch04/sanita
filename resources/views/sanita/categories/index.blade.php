@@ -14,6 +14,7 @@
             @foreach($categories as $category)
                 @include('sanita.partials.category-card', [
                 'category' => $category,
+                'type' => 'categories'
                 ])
             @endforeach
         </div>

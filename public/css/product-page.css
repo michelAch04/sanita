@@ -12,6 +12,7 @@ body {
 .left-column {
     width: 50%;
     position: relative;
+    aspect-ratio: 1.4/1;
 }
 
 .right-column {

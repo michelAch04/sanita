@@ -20,6 +20,7 @@ return [
     'menu' => 'منو',
     'copyright' => '© 2025 سانیتا. هەموو مافەکان پارێزراون.',
     'view_all_categories' => '← هەموو پێشکەشەکان',
+    'all_categories' => 'پێشکەشەکان',
     'view_all_products' => '← هەموو بەرهەمەکان',
     'view_all_offers' => '← هەموو پێشکەشەکان',
     'new' => '!نوێ',
@@ -34,4 +35,5 @@ return [
     'warning' => '!ئاگاداری',
     'error' => 'هەڵە',
     'cancel' => 'هەڵوەشاندنەوە',
+    'continue_shopping' => 'دەستپێکردنەوەی کڕین',
 ];
