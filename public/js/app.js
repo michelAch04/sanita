@@ -95,8 +95,7 @@ $(document).ready(function () {
                 $("#productPageForm").data("unitPrices", unitPrices);
                 $("#productPageForm").data("shelfPrices", shelfPrices);
                 $("#productPageForm").data("oldPrices", oldPrices);
-            }
-            else {
+            } else {
                 $("#addToCartModal").data("minQuantities", minQuantities);
                 $("#addToCartModal").data("maxQuantities", maxQuantities);
                 $("#addToCartModal").data("unitPrices", unitPrices);
@@ -170,7 +169,9 @@ $(document).ready(function () {
                     let label = window.uomLabels[uom] || uom;
                     radiosContainer.append(`
                     <label class="select-label">
-                        <input type="radio" name="UOM" value="${uom}" ${idx === 0 ? "checked" : ""}>
+                        <input type="radio" name="UOM" value="${uom}" ${
+                        idx === 0 ? "checked" : ""
+                    }>
                         <span>${label}</span>
                     </label>
                 `);
@@ -180,23 +181,21 @@ $(document).ready(function () {
             const addToCartModal = document.getElementById("addToCartModal");
             if (addToCartModal) {
                 // Show modal
-                var modal = new bootstrap.Modal(
-                    addToCartModal
-                );
+                var modal = new bootstrap.Modal(addToCartModal);
                 modal.show();
             }
             $('input[name="UOM"]:checked').trigger("change");
         });
 
     if (window.isProductPage) {
-        const loadForm = $('.add-to-cart-form');
-        loadForm.trigger('submit');
+        const loadForm = $(".add-to-cart-form");
+        loadForm.trigger("submit");
     }
 
     $("#addToCartSubmit").on("click", function (e) {
         e.preventDefault();
         $("#addToCartForm").trigger("submit");
-    })
+    });
     // Handle modal form submit
     $("#addToCartForm")
         .off("submit")
@@ -221,7 +220,6 @@ $(document).ready(function () {
                 ea_pl: $("#modalProductEaPl").val(),
                 unit: $('input[name="UOM"]:checked').val() || "EA",
             };
-            console.log(data);
 
             $.ajax({
                 url: url,
@@ -232,42 +230,51 @@ $(document).ready(function () {
                 },
                 success: function (response) {
                     button.prop("disabled", false);
-                    if ($("#addToCartModal").length) {
-                        bootstrap.Modal.getInstance(
-                            document.getElementById("addToCartModal")
-                        ).hide();
-                    }
+                    if (response.success) {
+                        if ($("#addToCartModal").length) {
+                            bootstrap.Modal.getInstance(
+                                document.getElementById("addToCartModal")
+                            ).hide();
+                        }
 
-                    // Update cart count badge
-                    if (response.cart_count !== undefined) {
-                        $("#cart-count").text(response.cart_count);
-                    } else {
-                        let current = parseInt($("#cart-count").text()) || 0;
-                        $("#cart-count").text(current + 1);
-                    }
+                        // Update cart count badge
+                        if (response.cart_count !== undefined) {
+                            $("#cart-count").text(response.cart_count);
+                        } else {
+                            let current =
+                                parseInt($("#cart-count").text()) || 0;
+                            $("#cart-count").text(current + 1);
+                        }
 
-                    // Build the "View in Cart" button (same as in Blade)
-                    let productId = $("#modalProductId").val();
-                    let productCardForm, viewCartButton;
-                    if ($("#addToCartModal").length) {
-                        productCardForm = $(`form.add-to-cart-form input[name="product_id"][value="${productId}"]`).closest("form");
-                        viewCartButton = `
+                        // Build the "View in Cart" button (same as in Blade)
+                        let productId = $("#modalProductId").val();
+                        let productCardForm, viewCartButton;
+                        if ($("#addToCartModal").length) {
+                            productCardForm = $(
+                                `form.add-to-cart-form input[name="product_id"][value="${productId}"]`
+                            ).closest("form");
+                            viewCartButton = `
                             <a href="${window.url}/${window.locale}/cart" class="card__button card__button-incart">
                                 <i class="fas fa-shopping-cart"></i> ${window.cartMessages.viewInCart}
                             </a>
                         `;
-                    }
-                    else {
-                        productCardForm = $("#addToCartSubmit");
-                        viewCartButton = `<a href="${window.url}/${window.locale}/cart" class="btn btn-success" id="addToCartSubmit">
+                        } else {
+                            productCardForm = $("#addToCartSubmit");
+                            viewCartButton = `<a href="${window.url}/${window.locale}/cart" class="btn btn-success" id="addToCartSubmit">
                             <i class="fas fa-shopping-cart me-1"></i> ${window.cartMessages.viewInCart}
                         </a>`;
-                    }
+                        }
 
-                    if (productCardForm.length) {
-                        productCardForm.replaceWith(viewCartButton);
+                        if (productCardForm.length) {
+                            productCardForm.replaceWith(viewCartButton);
+                        }
+                        showAjaxToast(
+                            "success",
+                            window.cartMessages.addSuccess
+                        );
+                    } else if (response.warning) {
+                        showAjaxToast("warning", response.message);
                     }
-                    showAjaxToast("success", window.cartMessages.addSuccess);
                 },
                 error: function (xhr) {
                     button.prop("disabled", false);
@@ -298,7 +305,9 @@ $(document).ready(function () {
         .off("change", "input[name='UOM']")
         .on("change", "input[name='UOM']", function () {
             let selectedUOM = $(this).val();
-            let container = window.isProductPage ? $("#productPageForm") : $("#addToCartModal");
+            let container = window.isProductPage
+                ? $("#productPageForm")
+                : $("#addToCartModal");
             let unitPrices = container.data("unitPrices") || {};
             let shelfPrices = container.data("shelfPrices") || {};
             let oldPrices = container.data("oldPrices") || {};
@@ -329,7 +338,7 @@ $(document).ready(function () {
                 maxQuantities[selectedUOM] || maxQuantities["EA"] || "";
             $("#modalProductMinQuantity").val(minqty);
             $("#modalProductMaxQuantity").val(maxqty);
-            $("#modalProductQuantity").val(minqty).trigger('input');
+            $("#modalProductQuantity").val(minqty).trigger("input");
 
             // Update conversion field
             let ea_ca = $("#modalProductEaCa").val();
@@ -337,9 +346,15 @@ $(document).ready(function () {
             let conversionText = "";
 
             if (selectedUOM === "CA" && ea_ca) {
-                conversionText = window.conversionCaseEach.replace(":count", ea_ca);
+                conversionText = window.conversionCaseEach.replace(
+                    ":count",
+                    ea_ca
+                );
             } else if (selectedUOM === "PL" && ea_pl) {
-                conversionText = window.conversionPalletEach.replace(":count", ea_pl);
+                conversionText = window.conversionPalletEach.replace(
+                    ":count",
+                    ea_pl
+                );
             } else if (selectedUOM === "EA") {
                 conversionText = "";
             }
@@ -375,18 +390,18 @@ $(document).ready(function () {
     // ------------------------------------ SEARCH BAR ------------------------------------------ //
     const searchInput = document.getElementById("searchInput");
     const searchIcon = searchInput.previousElementSibling;
-    const rightIconsContainer = searchInput.closest('.right-icons-container');
+    const rightIconsContainer = searchInput.closest(".right-icons-container");
 
     searchInput.addEventListener("focus", () => {
         searchInput.classList.add("expanded");
-        searchIcon.classList.add('focused');
+        searchIcon.classList.add("focused");
         rightIconsContainer.classList.add("search-focused");
     });
 
     searchInput.addEventListener("blur", () => {
         if (searchInput.value.trim() === "") {
             searchInput.classList.remove("expanded");
-            searchIcon.classList.remove('focused');
+            searchIcon.classList.remove("focused");
             rightIconsContainer.classList.remove("search-focused");
         }
     });
@@ -396,13 +411,17 @@ $(document).ready(function () {
             e.preventDefault();
             const q = this.value.trim();
             if (q) {
-                window.location.href = window.url + `/${window.locale}/search?q=${encodeURIComponent(q)}`;
+                window.location.href =
+                    window.url +
+                    `/${window.locale}/search?q=${encodeURIComponent(q)}`;
             }
         }
     });
 
     document.getElementById("menuToggle").addEventListener("click", () => {
-        const offcanvas = new bootstrap.Offcanvas(document.getElementById("offcanvasMenu"));
+        const offcanvas = new bootstrap.Offcanvas(
+            document.getElementById("offcanvasMenu")
+        );
         offcanvas.show();
     });
 
