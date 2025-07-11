@@ -113,6 +113,7 @@ $isRtl = 0;
   .error-toast .custom-toast-card .icon-container {
     width: 2.5rem !important;
   }
+
   .custom-toast-card .message-text-container {
     display: flex;
     flex-direction: column;

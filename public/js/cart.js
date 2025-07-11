@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
             })
                 .then((res) => res.json())
                 .then((data) => {
-                    console.log(data.failed);
+                    console.log(data);
                     if (data.success) {
                         input.value = data.quantity;
                         originalValue = data.quantity;
