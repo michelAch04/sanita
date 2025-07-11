@@ -8,11 +8,11 @@
         <!-- Header Buttons -->
         <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
             <a href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic mb-2">
-                <span class="text"><i class="fa-solid fa-arrow-left me-1"></i> {{ __('Continue Shopping') }}</span>
+                <span class="text"><i class="fa-solid fa-arrow-left me-1"></i> {{ __('nav.home') }}</span>
             </a>
 
             <a href="{{ route('website.categories.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic mb-2 ">
-                <span class="text">{{ __('nav.view_all_categories') }}<i class="fa-solid fa-arrow-right ms-1"></i></span>
+                <span class="text">{{ __('nav.all_categories') }}<i class="fa-solid fa-arrow-right ms-1"></i></span>
             </a>
         </div>
 

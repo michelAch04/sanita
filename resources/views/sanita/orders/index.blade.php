@@ -12,7 +12,7 @@ $sortedOrders = $orders->sortByDesc('created_at');
         <h2 class="display-5 text-center mb-5 section-title">🧾 {{ __('Your Orders') }}</h2>
 
         @if($sortedOrders->count())
-        <div class="d-flex flex-column gap-2">
+        <div class="d-flex flex-column gap-2 orders-container">
             @foreach ($sortedOrders as $order)
             <div class="cart-item d-flex flex-row justify-content-between p-3 rounded shadow-sm flex-wrap w-100">
                 {{-- Order Info --}}
@@ -22,11 +22,18 @@ $sortedOrders = $orders->sortByDesc('created_at');
                     </h4>
 
                     <p class="text-muted mb-1">
-                        <i class="fa fa-calendar-alt me-1"></i> Placed On: {{ $order->created_at->format('Y-m-d H:i') }}
+                        <i class="fa fa-calendar-alt me-1"></i> {{ __('Placed On') }}:
+                        <span class="text-secondary fw-medium">
+                            {{ $order->created_at->format('Y-m-d H:i') }}
+                        </span>
                     </p>
 
                     <p class="text-muted mb-1">
-                        <i class="fa fa-money-bill-wave me-1"></i> {{ __('Subtotal') }}: {{ number_format($order->total_amount, 2) }} {{ __('IQD') }}
+                        <i class="fa fa-money-bill-wave me-1"></i>
+                        {{ __('Subtotal') }}:
+                        <span class="text-secondary fw-medium">
+                            {{ number_format($order->total_amount, 2) }} {{ __('IQD') }}
+                        </span>
                     </p>
                     <p class="text-muted mb-1">
                         <i class="fa fa-info-circle me-1"></i> {{ __('Status') }}:
@@ -44,7 +51,7 @@ $sortedOrders = $orders->sortByDesc('created_at');
                         <p class="text-muted mb-1">
                             <i class="fa fa-city me-1"></i> {{ $order->address->city->name_en }}, {{ $order->address->district->name_en }}
                         </p>
-                        <p class="text-muted mb-1">
+                        <p class="text-muted mb-0">
                             <i class="fa fa-home me-1"></i> {{ __('Street') }} {{ $order->address->street }}, {{ __('Building') }} {{ $order->address->building }}
                         </p>
                     </div>
@@ -52,10 +59,10 @@ $sortedOrders = $orders->sortByDesc('created_at');
 
                 {{-- Action (View / Details) --}}
                 <div class="d-flex flex-column justify-content-between align-items-end">
-                    <a href="{{ route('website.orders.reorder', ['locale' => app()->getLocale(), 'id' => $order->id]) }}" class="btn btn-sm bubbles bubbles-arctic mb-3">
+                    <a href="{{ route('website.orders.reorder', ['locale' => app()->getLocale(), 'id' => $order->id]) }}" class="btn btn-sm bubbles bubbles-arctic order-action-btn">
                         <span class="text"><i class="fa fa-repeat me-1"></i> {{ __('Order Again') }}</span>
                     </a>
-                    <a href="{{ route('website.orders.show', ['locale' => app()->getLocale(), 'id' => $order->id]) }}" class="btn btn-sm bubbles bubbles-arctic mb-3" target="_blank">
+                    <a href="{{ route('website.orders.show', ['locale' => app()->getLocale(), 'id' => $order->id]) }}" class="btn btn-sm bubbles bubbles-arctic order-action-btn" target="_blank">
                         <span class="text"><i class="fa fa-eye me-1"></i> {{ __('View Details') }}</span>
                     </a>
                 </div>
@@ -72,7 +79,12 @@ $sortedOrders = $orders->sortByDesc('created_at');
         @endif
     </div>
 </section>
-
+<style>
+    p i {
+        width: 1.2rem !important;
+        text-align: center;
+    }
+</style>
 <link rel="stylesheet" href="{{ asset('css/cart.css') }}" />
 @include('components.modal')
 @endsection

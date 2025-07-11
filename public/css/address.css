@@ -90,7 +90,7 @@ p i, .login-inputForm i {
 
 .success-btn {
     --c2: green;
-    padding: 0.25rem 0.5rem !important;
+    padding: 0.25rem 0.5rem;
     border-width: 0.08rem;
     font-size: 0.9rem;
 }

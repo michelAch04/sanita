@@ -19,7 +19,7 @@
                             alt="{{ $detail->product->{'name_'.app()->getLocale()} ?? $detail->product->name_en }}"
                             class="cart-item-img rounded">
                     </div>
-                    <div class="cart-item-intro d-flex justify-content-between flex-column d-md-none ps-1 overflow-hidden">
+                    <div class="cart-item-intro d-flex justify-content-start flex-column d-md-none ps-1 overflow-hidden">
                         <h5 class="fallback-title text-primary m-0">
                             {{ $detail->product->{'name_'.app()->getLocale()} ?? $detail->product->name_en }}
                         </h5>
@@ -31,15 +31,14 @@
 
                 <div class="flex-grow-1 ms-2 d-flex flex-row justify-content-between h-100 w-100 cart-item-content">
                     <div class="cart-item-main">
-                        <div class="d-flex align-items-center justify-content-between d-none d-md-block">
+                        <div class="d-none d-md-block cart-main-intro overflow-hidden">
                             <h5 class="mb-1 text-primary">
                                 {{ $detail->product->{'name_'.app()->getLocale()} ?? $detail->product->name_en }}
                             </h5>
-                        </div>
-
-                        <p class="text-muted small mb-2 d-none d-md-block text-truncate">
+                            <p class="text-muted small mb-2 text-truncate">
                             {{ \Illuminate\Support\Str::limit($detail->product->{'small_description_'.app()->getLocale()} ?? $detail->product->small_description_en, 80) }}
-                        </p>
+                            </p>
+                        </div>
 
                         <div class="cart-item-conf d-flex flex-column">
                             <div class="cart-item-price">

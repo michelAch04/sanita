@@ -17,15 +17,15 @@ $(document).ready(function () {
     $(".carousel").slick({
         centerMode: false,
         centerPadding: "0px",
-        dots: false,
+        dots: true,
         infinite: true,
         draggable: true,
         swipe: true,
         speed: 300,
         slidesToShow: 5,
         slidesToScroll: 1,
-        arrows: true,
-        autoplay: true,
+        arrows: false,
+        autoplay: false,
         autoplaySpeed: 2500,
         prevArrow:
             '<button type="button" class="slick-prev slick-arrow"><i class="fas fa-chevron-left"></i></button>',
@@ -33,17 +33,21 @@ $(document).ready(function () {
             '<button type="button" class="slick-next slick-arrow"><i class="fas fa-chevron-right"></i></button>',
         responsive: [
             {
-                breakpoint: 992,
+                breakpoint: 1200,
                 settings: { slidesToShow: 4 },
             },
             {
-                breakpoint: 768,
-                settings: { slidesToShow: 3, arrows: false, dots: true, slidesToScroll: 2, },
+                breakpoint: 992,
+                settings: { slidesToShow: 3 },
             },
             {
-                breakpoint: 576,
-                settings: { slidesToShow: 2, arrows: false, dots: true, slidesToScroll: 2, },
+                breakpoint: 768,
+                settings: { slidesToShow: 2 },
             },
+            {
+                breakpoint: 577,
+                settings: { slidesToShow: 2, slidesToScroll: 2},
+            }
         ],
     });
 
@@ -420,4 +424,15 @@ $(document).ready(function () {
         );
         offcanvas.show();
     });
+
+    setTimeout(() => {
+        $('body').addClass('loaded');
+        $("#pageLoader").fadeOut(300);
+    }, 20000); // failsafe in case something blocks forever
+    
+});
+
+$(window).on("load", function () {
+    $('body').addClass('loaded');
+    $("#pageLoader").fadeOut(300);
 });

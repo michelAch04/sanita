@@ -18,6 +18,7 @@ return [
     'addresses'  => 'My Addresses',
     'menu' => 'Menu',
     'view_all_categories' => 'View All Categories',
+    'all_categories' => 'Categories',
     'view_all_products' => 'View All Products',
     'view_all_offers' => 'View All Offers',
     'view_all_brands' => 'View All Brands',
@@ -35,4 +36,5 @@ return [
     'cancel' => 'Cancel',
     'order_history' => 'Order History',
     'order_details' => 'Order Details',
+    'continue_shopping' => 'Continue Shopping'
 ];
