@@ -7,7 +7,7 @@
 <div class="container login-container mb-4">
     <h2 class="display-5 text-center mb-4 mt-4 section-title">{{ __('auth.sign_up.title') }}</h2>
 
-    <form method="POST" action="{{ route('customer.signup', ['locale' => app()->getLocale()]) }}" class="{{ $isRtl ? 'rtl-container' : '' }} login-form">
+    <form method="POST" action="{{ route('customer.signup', ['locale' => app()->getLocale()]) }}" class="{{ $isRtl ? 'rtl-container' : '' }} login-form signup-form">
         @csrf
 
         {{-- First and Last Name --}}
@@ -72,7 +72,7 @@
                 <i class="fa fa-lock"></i>
                 <input type="password" name="password" id="password"
                     class="login-input text-primary"
-                    placeholder="{{ __('auth.sign_up.password') }}">
+                    placeholder="{{ __('auth.sign_up.password') }}" autocomplete="off">
                 <i class="fa fa-eye toggle-password cursor-pointer"></i>
             </div>
             @error('password')
@@ -85,7 +85,7 @@
             <label for="password_confirmation" class="{{ $isRtl ? 'text-end w-100' : '' }}">{{ __('auth.sign_up.password_confirmation') }}</label>
             <div class="login-inputForm">
                 <i class="fa fa-check"></i>
-                <input type="password" name="password_confirmation" id="password_confirmation"
+                <input type="password" name="password_confirmation" id="password_confirmation" autocomplete="off"
                     class="login-input text-primary" placeholder="{{ __('auth.sign_up.password_confirmation') }}">
                 <i class="fa fa-eye toggle-confirm cursor-pointer"></i>
             </div>

@@ -13,6 +13,7 @@ $(document).ready(function () {
         draggable: true,
         swipe: true,
     });
+
     $(".carousel").slick({
         centerMode: false,
         centerPadding: "0px",
@@ -33,15 +34,15 @@ $(document).ready(function () {
         responsive: [
             {
                 breakpoint: 992,
-                settings: { slidesToShow: 3 },
+                settings: { slidesToShow: 4 },
             },
             {
                 breakpoint: 768,
-                settings: { slidesToShow: 2 },
+                settings: { slidesToShow: 3, arrows: false, dots: true, slidesToScroll: 2, },
             },
             {
                 breakpoint: 576,
-                settings: { slidesToShow: 1 },
+                settings: { slidesToShow: 2, arrows: false, dots: true, slidesToScroll: 2, },
             },
         ],
     });

@@ -14,7 +14,7 @@ $type = auth()->user()->type ?? 'b2c';
 <div class="hero-carousel">
     @foreach ($slideshow as $image)
     <div>
-        <img src="{{ asset('storage/slideshow/' . $image->id . '.' . $image->extension) }}" alt="Slide" class="img-fluid rounded shadow">
+        <img src="{{ asset('storage/slideshow/' . $image->id . '.' . $image->extension) }}" alt="Slide" class="img-fluid shadow">
     </div>
     @endforeach
 </div>
@@ -23,7 +23,7 @@ $type = auth()->user()->type ?? 'b2c';
 <section id="offers" class="py-5">
     <div class="container gx-0">
         <h2 class="display-5 text-center mb-4 section-title">{{ __('nav.offers') }}</h2>
-        <div class="carousel gx-0">
+        <div class="carousel gx-0 px-1">
             @foreach($offers as $product)
             @include('sanita.partials.product-card', [
             'product' => $product,
@@ -43,9 +43,9 @@ $type = auth()->user()->type ?? 'b2c';
 
 <!-- Categories Section -->
 <section id="categories" class="py-5">
-    <div class="container text-center">
+    <div class="container gx-0 text-center">
         <h2 class="display-5 mb-4 section-title">{{ __('nav.categories') }}</h2>
-        <div class="carousel mx-auto mb-5">
+        <div class="carousel mx-auto mb-5 px-1">
             @foreach($categories as $category)
             <div class="px-0">
                 @include('sanita.partials.category-card', [
@@ -54,8 +54,8 @@ $type = auth()->user()->type ?? 'b2c';
             </div>
             @endforeach
         </div>
-        <div class="text-center mt-5 mb-0">
-            <a href="{{ route('website.categories.index', ['locale' => app()->getLocale()]) }}" class="btn btn-arctic view-all-btn">
+        <div class="text-center mt-5 mb-0 view-all-container">
+            <a href="{{ route('website.categories.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic view-all-btn">
                 <span class="text">
                     {{ __('nav.view_all_categories') }}
                     <i class="fa-solid fa-arrow-right me-1 {{ $isRtl ? 'd-none' : '' }}"></i>
@@ -69,7 +69,7 @@ $type = auth()->user()->type ?? 'b2c';
 <section id="products" class="py-5">
     <div class="container">
         <h2 class="display-5 text-center mb-4 section-title">{{ __('nav.products') }}</h2>
-        <div class="carousel gx-0">
+        <div class="carousel gx-0 px-1">
             @foreach($products as $product)
             @include('sanita.partials.product-card', [
             'product' => $product,
@@ -77,8 +77,8 @@ $type = auth()->user()->type ?? 'b2c';
             ])
             @endforeach
         </div>
-        <div class="text-center mt-5 mb-0">
-            <a href="{{ route('website.products.index', ['locale' => app()->getLocale()]) }}" class="btn btn-arctic view-all-btn">
+        <div class="text-center mt-5 mb-0 view-all-container">
+            <a href="{{ route('website.products.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic view-all-btn">
                 <span class="text">
                     {{ __('nav.view_all_products') }}
                     <i class="fa-solid fa-arrow-right me-1 {{ $isRtl ? 'd-none' : '' }}"></i>
@@ -91,7 +91,7 @@ $type = auth()->user()->type ?? 'b2c';
 <section id="brands" class="py-5">
     <div class="container text-center">
         <h2 class="display-5 mb-4 section-title">{{ __('nav.brands') }}</h2>
-        <div class="carousel mx-auto mb-5">
+        <div class="carousel mx-auto mb-5 px-1">
             @foreach($brands as $brand)
             <div class="px-0">
                 @include('sanita.partials.category-card', [
@@ -100,7 +100,7 @@ $type = auth()->user()->type ?? 'b2c';
             </div>
             @endforeach
         </div>
-        <div class="text-center mt-5 mb-0">
+        <div class="text-center mt-5 mb-0 view-all-container">
             <a href="{{ route('website.categories.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic view-all-btn">
                 <span class="text">
                     {{ __('nav.view_all_brands') }}
@@ -112,5 +112,13 @@ $type = auth()->user()->type ?? 'b2c';
 </section>
 @include('sanita.partials.contact-us')
 @include('sanita.partials.add-to-cart-modal')
-
+<style>
+    @media (max-width: 768px) {
+        html,
+        body {
+            overflow-x: hidden !important;
+            width: 100% !important;
+        }
+    }
+</style>
 @endsection

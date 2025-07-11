@@ -1,3 +1,9 @@
+:root {
+    --primary-bg: #ffffff;
+    --primary-text: black;
+    --input-border-color: #ccc;
+}
+
 /* Sidebar active link */
 .nav-link.active {
     background-color: #495057 !important;

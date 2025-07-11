@@ -1,6 +1,6 @@
 <div class="modal fade show" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg d-flex justify-content-center">
-        <div class="modal-content p-3 pb-2 w-75">
+    <div class="modal-dialog modal-fullscreen-md-down modal-dialog-centered modal-lg d-flex justify-content-center">
+        <div class="modal-content p-3 pb-2 w-75 bg-secondary">
             <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="{{ __('Close') }}"></button>
             <div class="modal-header bg-transparent border-0 justify-content-center">
                 <h2 class="display-5 text-center mb-0 fs-1 section-title">{{ __('nav.add_first_address') }}</h2>

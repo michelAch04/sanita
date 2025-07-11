@@ -129,6 +129,10 @@
     });
 
     function editStock(productId, stockValue) {
+        // Activate the first tab (input tab)
+        document.getElementById('manage-tab').click();
+
+        // Set the form values
         $('#products_id').val(productId).trigger('change');
         $('#stock').val(stockValue);
     }
@@ -154,7 +158,7 @@
                 }));
 
             const payload = {
-                distributor_id: {{ $distributor->id }},
+                distributor_id: '{{ $distributor->id }}',
                 products: products
             };
 

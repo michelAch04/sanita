@@ -51,7 +51,7 @@ class SlideshowController extends Controller
         // Ensure 'hidden' is either '0' or '1'
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048|dimensions:max_height=400', 
             'hidden' => 'nullable|in:0,1',
         ]);
 
@@ -91,7 +91,7 @@ class SlideshowController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048|dimensions:max_height=400',
             'visible' => 'nullable|boolean',
         ]);
 

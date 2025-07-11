@@ -3,55 +3,78 @@
 @section('title', __('cart.title'))
 
 @section('content')
-<section id="cart" class="pt-3">
+<section id="cart" class="pt-3 flex-grow-1 d-flex justify-content-between flex-column">
     <div class="container px-5 py-2 mb-5">
         <h2 class="display-5 text-center mb-5 section-title">🛒 {{ __('cart.heading') }}</h2>
 
         @if($cart && $cart->cartDetails->count() > 0)
-        <div class="d-flex flex-wrap justify-content-center gap-2">
+        <div class="d-flex flex-wrap justify-content-center gap-2 items-container">
             @php $cartTotal = 0; @endphp
 
             @foreach($cart->cartDetails as $detail)
-            <div class="cart-item d-flex flex-row gap-1 p-3 rounded shadow-sm align-items-center flex-wrap w-100" data-id="{{ $detail->id }}">
-                <img src="{{ asset('storage/products/' . $detail->product->id . '.' . $detail->product->extension) }}"
-                    alt="{{ $detail->product->{'name_'.app()->getLocale()} ?? $detail->product->name_en }}"
-                    class="cart-item-img rounded">
-
-                <div class="flex-grow-1 ms-2 mt-3 d-flex flex-column h-100">
-
-                    <div class="d-flex align-items-center justify-content-between">
-                        <h5 class="mb-1 text-primary">
+            <div class="cart-item d-flex flex-row gap-1 p-3 rounded shadow-sm align-items-start w-100" data-id="{{ $detail->id }}">
+                <div class="cart-item-header flex-grow-1 cursor-pointer" onclick="window.location.href='{{ route('website.product.index', ['locale' => app()->getLocale(), 'product' => $detail->product->id]) }}'">
+                    <div class="cart-img-container">
+                        <img src="{{ asset('storage/products/' . $detail->product->id . '.' . $detail->product->extension) }}"
+                            alt="{{ $detail->product->{'name_'.app()->getLocale()} ?? $detail->product->name_en }}"
+                            class="cart-item-img rounded">
+                    </div>
+                    <div class="cart-item-intro d-flex justify-content-between flex-column d-md-none ps-1 overflow-hidden">
+                        <h5 class="fallback-title text-primary m-0">
                             {{ $detail->product->{'name_'.app()->getLocale()} ?? $detail->product->name_en }}
                         </h5>
-                        <div class="fw-bold text-secondary total-price">IQD {{ number_format($detail->extended_price, 2) }}</div>
+                        <p class="fallback-description text-muted small m-0 text-truncate">
+                            {{ \Illuminate\Support\Str::limit($detail->product->{'small_description_'.app()->getLocale()} ?? $detail->product->small_description_en, 80) }}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex-grow-1 ms-2 d-flex flex-row justify-content-between h-100 w-100 cart-item-content">
+                    <div class="cart-item-main">
+                        <div class="d-flex align-items-center justify-content-between d-none d-md-block">
+                            <h5 class="mb-1 text-primary">
+                                {{ $detail->product->{'name_'.app()->getLocale()} ?? $detail->product->name_en }}
+                            </h5>
+                        </div>
+
+                        <p class="text-muted small mb-2 d-none d-md-block text-truncate">
+                            {{ \Illuminate\Support\Str::limit($detail->product->{'small_description_'.app()->getLocale()} ?? $detail->product->small_description_en, 80) }}
+                        </p>
+
+                        <div class="cart-item-conf d-flex flex-column">
+                            <div class="cart-item-price">
+                                @if($detail->old_price && $detail->old_price > $detail->shelf_price)
+                                <small class="text-decoration-line-through text-muted me-2 old-cart-item-price">IQD {{ number_format($detail->old_price, 2) }}</small>
+                                @endif
+                                <span class="fw-semibold text-dark">
+                                    IQD {{ number_format($detail->shelf_price, 2) }}
+                                    <span class="text-muted fs-6">/ {{ $detail->UOM }}</span>
+                                </span>
+                            </div>
+
+                            <form class="update-quantity-form d-flex align-items-center gap-2 mt-4 mb-2 flex-wrap" method="POST"
+                                action="{{ route('website.cart.update', ['locale' => app()->getLocale(), 'cart' => $detail->id]) }}">
+                                @csrf
+                                @method('PUT')
+                                <button type="button" class="btn btn-sm btn-decrease"><i class="fa fa-minus"></i></button>
+                                <input type="text" name="quantity" class="quantity-input" value="{{ $detail->quantity_foreign }}">
+                                <button type="button" class="btn btn-sm btn-increase"><i class="fa fa-plus"></i></button>
+                            </form>
+                        </div>
                     </div>
 
-                    <p class="text-muted small mb-2">
-                        {{ \Illuminate\Support\Str::limit($detail->product->{'small_description_'.app()->getLocale()} ?? $detail->product->small_description_en, 80) }}
-                    </p>
-
-                    <div>
-                        @if($detail->old_price && $detail->old_price > $detail->shelf_price)
-                        <small class="text-decoration-line-through text-muted me-2">IQD {{ number_format($detail->old_price, 2) }}</small>
-                        @endif
-                        <span class="fw-semibold text-dark">
-                            IQD {{ number_format($detail->shelf_price, 2) }}
-                            <span class="text-muted fs-6 ms-1">/ {{ $detail->UOM }}</span>
-                        </span>
-                    </div>
-
-                    <div class="d-flex align-items-center justify-content-between">
-                        <form class="update-quantity-form  d-flex align-items-center gap-2 mt-4 mb-2" method="POST" action="{{ route('website.cart.update', ['locale' => app()->getLocale(), 'cart' => $detail->id]) }}">
-                            @csrf
-                            @method('PUT')
-                            <button type="button" class="btn btn-sm btn-decrease"><i class="fa fa-minus"></i></button>
-                            <input type="text" name="quantity" class="quantity-input" value="{{ $detail->quantity_foreign }}">
-                            <button type="button" class="btn btn-sm btn-increase"><i class="fa fa-plus"></i></button>
-                        </form>
-                        <form class="delete-item-form mt-2" method="POST" action="{{ route('website.cart.destroy', ['locale' => app()->getLocale(), 'cart' => $detail->id]) }}">
+                    <div class="cart-item-footer d-flex flex-column justify-content-between align-items-end flex-wrap">
+                        <div class="fw-bold text-secondary total-price">
+                            IQD {{ number_format($detail->extended_price, 2) }}
+                        </div>
+                        <form class="delete-item-form me-2" method="POST"
+                            action="{{ route('website.cart.destroy', ['locale' => app()->getLocale(), 'cart' => $detail->id]) }}">
                             @csrf
                             @method('DELETE')
-                            <button type="button" class="delete-item-btn" aria-label="Remove item"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg" viewBox="0 0 24 24">
+                            <button type="button" class="delete-item-btn" aria-label="Remove item">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg"
+                                    viewBox="0 0 24 24">
                                     <polyline points="3 6 5 6 21 6"></polyline>
                                     <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
                                     <path d="M10 11v6"></path>
@@ -70,7 +93,7 @@
             <div class="empty-cart-icon">
                 🛒
             </div>
-            <div class="fs-4 fw-semibold mb-2" class="empty-cart-msg">
+            <div class="fs-4 fw-semibold mb-2 text-primary" class="empty-cart-msg">
                 {{ __('cart.empty') }}
             </div>
             <a href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles bubbles-arctic mt-3 px-4 py-2 fs-6 shadow-sm empty-cart-btn">
@@ -82,11 +105,11 @@
 
     @if($cart && $cart->cartDetails->count() > 0)
     <!-- Sticky Bottom Checkout Bar -->
-    <div class="sticky-checkout-bar shadow-sm py-3 px-4 d-flex justify-content-between align-items-center mb-0">
+    <div class="sticky-checkout-bar sticky-bottom shadow-sm py-3 px-4 d-flex justify-content-between align-items-center mb-0">
         <a href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}" class="btn bubbles me-2">
-            <span class="text"><i class="fa fa-arrow-left me-1"></i> {{ __('cart.continue_shopping') }}</span>
+            <span class="text"><i class="fa fa-arrow-left me-1"></i> {{ __('nav.back') }}</span>
         </a>
-        <div class="d-flex align-items-center flex-direction-row gap-4">
+        <div class="d-flex align-items-center flex-direction-row gap-4 total-checkout">
             <h5 class="mb-0 fw-bold text-light">{{ __('cart.cart_total') }}: <span id="cart-total">IQD {{ number_format($cart->total_amount, 2) }}</span></h5>
             <a href="{{ route('cart.checkout', ['locale' => app()->getLocale()]) }}" class="btn bubbles fw-semibold">
                 <span class="text"><i class="fa fa-credit-card me-1"></i> {{ __('cart.proceed_checkout') }}</span>

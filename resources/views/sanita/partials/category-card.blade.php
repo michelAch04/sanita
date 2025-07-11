@@ -1,4 +1,4 @@
-<div class="category-card" data-url="{{ route('website.category.index', ['locale' => app()->getLocale(), 'category' => $category->id]) }}">
+<div class="category-card mb-4" data-url="{{ route('website.category.index', ['locale' => app()->getLocale(), 'category' => $category->id]) }}">
     <div class="category-card-body p-2">
         @if($category->extension)
         <img src="{{ asset('storage/categories/' . $category->id . '.' . $category->extension) }}"
