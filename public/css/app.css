@@ -21,7 +21,7 @@
     /*--nav-bg: #f9f9f9; LIGHT = --primary-bg, DARK = --card-bg*/
     --primary-bg: #f9f9f9;
     /*--primary-bg: #f9f9f9;*/
-    --secondary-bg: #f9f9f9;
+    --secondary-bg: #ffffff;
     /*--secondary-bg: #f9f9f9;  == --card-bg*/
     --tertiary-bg: #E2E8F0;
     /*--tertiary-bg: #E2E8F0*/
@@ -871,7 +871,7 @@ section:nth-of-type(5) {
     transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     cursor: pointer;
     z-index: 1;
-    padding: 1rem 0;
+    padding: 1rem 0.5rem;
 }
 
 .category-card:active {
@@ -993,4 +993,52 @@ section:nth-of-type(5) {
 
 .footer a {
     color: var(--primary-blue);
+}
+
+.ios-checkbox.arctic {
+    --checkbox-color: var(--primary-blue);
+    --checkbox-bg: var(--secondary-blue);
+    --checkbox-border: var(--link-blue);
+}
+
+/*FILTER PAGES STYLING*/
+.filter-container {
+    height: fit-content;
+    position: sticky;
+    top: 4rem;
+    padding: 1rem;
+    border-radius: 10px;
+    width: 20%;
+    flex: 0 0 auto;
+}
+.filtered-container {
+    width: 80%;
+    flex: 0 0 auto;
+}
+.filter-sidebar .form-check > * {
+    font-size: 0.85rem;
+    --checkbox-size: 0.85rem;
+}
+.filter-sidebar .form-check .checkbox-wrapper {
+    margin-bottom: 0.1rem;
+}
+.filter-sidebar .form-check {
+    padding-left: 0.5rem;
+}
+
+/* Toggle animation */
+.toggle-content {
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    max-height: 0;
+}
+.toggle-content.expanded {
+    max-height: 1000px; /* large enough to show content */
+}
+.toggle-btn {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    line-height: 1;
 }

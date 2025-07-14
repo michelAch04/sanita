@@ -46,12 +46,50 @@ class WebsiteController extends Controller
         return view('sanita.categories.index', compact('categories'));
     }
 
-    public function products()
+    public function products(Request $request)
     {
         $products = $this->getAvailableProducts();
+
+        // ✅ Filter by brand
+        if ($request->filled('brand')) {
+            $brandIds = (array) $request->input('brand');
+            $products = $products->filter(function ($product) use ($brandIds) {
+                return in_array($product->brands_id, $brandIds);
+            });
+        }
+
+        // ✅ Filter by category
+        if ($request->filled('category')) {
+            $categoryIds = (array) $request->input('category');
+
+            // Get all subcategory IDs for the selected categories
+            $subcategoryIds = \App\Models\Subcategory::whereIn('categories_id', $categoryIds)
+                ->pluck('id')
+                ->toArray();
+
+            $products = $products->filter(function ($product) use ($subcategoryIds) {
+                return in_array($product->subcategories_id, $subcategoryIds);
+            });
+        }
+
+        // ✅ Filter by price
+        if ($request->filled('min_price')) {
+            $products = $products->filter(function ($product) use ($request) {
+                return $product->listPrices->first()?->shelf_price >= $request->min_price;
+            });
+        }
+        if ($request->filled('max_price')) {
+            $products = $products->filter(function ($product) use ($request) {
+                return $product->listPrices->first()?->shelf_price <= $request->max_price;
+            });
+        }
+
         $offers = $this->getOffers($products);
         $products = $this->paginateCollection($products, 20, 'products_page');
-        return view('sanita.products.index', compact('products', 'offers'));
+        $brands = Brand::where('hidden', 0)->where('cancelled', 0)->orderBy('name_en')->get();
+        $categories = Category::where('hidden', 0)->where('cancelled', 0)->orderBy('name_en')->get();
+
+        return view('sanita.products.index', compact('products', 'offers', 'brands', 'categories'));
     }
 
     public function offers()
@@ -86,7 +124,7 @@ class WebsiteController extends Controller
             foreach ($validSubcategories as $subcategory) {
                 $filtered = $products->filter(function ($product) use ($subcategory) {
                     return $product->subcategories_id == $subcategory->id
-                        && $product->listPrices->where('hidden', 0)->count() > 0;
+                        && $product->listPrices->where('cancelled', 0)->count() > 0;
                 })->values();
                 $productsBySubcategory[$subcategory->id] = $this->paginateCollection($filtered, 20, 'page_sub_' . $subcategory->id);
             }
@@ -111,7 +149,7 @@ class WebsiteController extends Controller
             'category' => $category,
             'productsBySubcategory' => $productsBySubcategory,
             'products' => $products,
-            'offers' => $offers
+            'offers' => $offers,
         ]);
     }
 

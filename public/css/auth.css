@@ -70,6 +70,7 @@
   width: 89%;
   height: 100%;
   background: none !important;
+  -webkit-box-shadow: 0 0 0 30px var(--secondary-bg) inset !important;
 }
 
 .login-input:focus {

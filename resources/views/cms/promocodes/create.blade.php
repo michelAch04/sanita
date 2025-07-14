@@ -22,12 +22,19 @@
                 </div>
 
                 {{-- Type --}}
-                <div class="input-container mb-5" style="width: 30%;">
-                    <select id="type" name="type" class="form-select" required>
-                        <option value="percentage">Percentage</option>
-                    </select>
-                    <label for="type" class="label">Type</label>
-                    <div class="underline"></div>
+                <div class="select-container mb-5 mt-3" style="width: 30%; position: relative;">
+                    <label class="label">Type</label>
+                    <div class="mt-2">
+                        <label class="select-label">
+                            <input type="radio" name="type" value="percentage" checked>
+                            <span>Percentage</span>
+                        </label>
+                        <label class="select-label">
+                            <input type="radio" name="type" value="fixed">
+                            <span>Fixed</span>
+                        </label>
+                        <!-- Add more options if needed -->
+                    </div>
                 </div>
 
                 {{-- Value --}}

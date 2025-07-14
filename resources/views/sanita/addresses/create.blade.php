@@ -1,4 +1,4 @@
-<div class="container mt-2 mx-1 {{ $isRtl ? 'text-end w-100' : '' }}">
+<div class="container-fluid mt-2 mx-1 {{ $isRtl ? 'text-end w-100' : '' }}">
     <form action="{{ route('addresses.store', ['locale' => app()->getLocale()]) }}" method="POST" 
         class="{{ $isRtl ? 'rtl-container' : '' }} address-form">
         @csrf

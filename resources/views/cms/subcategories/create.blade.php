@@ -60,7 +60,7 @@
                 <div class="d-flex align-items-start gap-4 mb-4 flex-wrap upload-container">
                     <div>
                         <label for="image" id="imageLabel" class="btn underline-btn">Upload Image</label>
-                        <input type="file" id="image" name="image" accept="image/*" hidden required>
+                        <input type="file" id="image" name="image" accept="image/*" hidden>
                         @error('image')
                         <div class="text-danger small mt-2">{{ $message }}</div>
                         @enderror
