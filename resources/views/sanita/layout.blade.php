@@ -220,11 +220,11 @@
     <div id="pageLoader" class="page-loader">
         <div class="cubes-container">
             <div class="loop cubes" role="status">
-                <div class="item cubes"></div>
-                <div class="item cubes"></div>
-                <div class="item cubes"></div>
-                <div class="item cubes"></div>
-                <div class="item cubes"></div>
+                <div class="loop-item cubes"></div>
+                <div class="loop-item cubes"></div>
+                <div class="loop-item cubes"></div>
+                <div class="loop-item cubes"></div>
+                <div class="loop-item cubes"></div>
             </div>
         </div>
     </div>

@@ -25,7 +25,7 @@ $(document).ready(function () {
         slidesToShow: 5,
         slidesToScroll: 1,
         arrows: false,
-        autoplay: false,
+        autoplay: true,
         autoplaySpeed: 2500,
         prevArrow:
             '<button type="button" class="slick-prev slick-arrow"><i class="fas fa-chevron-left"></i></button>',

@@ -35,12 +35,16 @@
             padding: 0.75rem;
             /* 12px */
             right: 0.5rem;
-            align-items: normal;
         }
 
         .floating-contact i {
             font-size: 1.6rem;
             /* 18px */
+        }
+        .floating-contact:hover, .floating-contact:active, .floating-contact:focus {
+            background: var(--primary-blue) !important;
+            color: var(--light-text);
+            border: none !important;
         }
     }
 

@@ -25,8 +25,7 @@
                 {{-- Type --}}
                 <div class="input-container mb-5" style="width: 30%;">
                     <select id="type" name="type" class="form-select" required>
-                        <option value="percentage" {{ old('type') }}>Percentage</option>
-                        {{-- Add other types if applicable --}}
+                        <option value="percentage">Percentage</option>
                     </select>
                     <label for="type" class="label">Type</label>
                     <div class="underline"></div>

@@ -98,7 +98,7 @@ $canDelete = $permissions && $permissions->delete;
                         </tr>
                         @empty
                         <tr class="bg-hover-light-grey">
-                            <td colspan="5" class="text-center text-muted">No orders found.</td>
+                            <td colspan="10" class="text-center text-muted">No orders found.</td>
                         </tr>
                         @endforelse
                         @endsection

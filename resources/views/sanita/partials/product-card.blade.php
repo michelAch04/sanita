@@ -57,7 +57,7 @@ data-url="{{ route('website.product.index', ['locale' => app()->getLocale(), 'pr
             </div>
 
             <div class="card__footer">
-                <div class="card__price">
+                <div class="card__price text-truncate">
                     @if($price->old_price > $price->shelf_price)
                     <small class="text-muted text-decoration-line-through me-1">
                         IQD {{ number_format($price->old_price, 2) }}
