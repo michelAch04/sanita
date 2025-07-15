@@ -6,14 +6,13 @@
 <div class="ps-5 mt-3">
 
     <div class="card-header bg-light d-flex justify-content-between align-items-center">
-        <h2 class="mb-3">Edit Promo Code</h2>
+        <h2 class="mb-3">Create Promo Code</h2>
     </div>
 
     <div class="card shadow-sm border-0">
         <div class="card-body">
-            <form action="{{ route('promocodes.create') }}" method="POST">
+            <form action="{{ route('promocodes.store') }}" method="POST">
                 @csrf
-                @method('PUT')
 
                 {{-- Code --}}
                 <div class="input-container mb-5 mt-3" style="width: 30%;">

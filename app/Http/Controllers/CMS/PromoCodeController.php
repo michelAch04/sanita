@@ -35,7 +35,7 @@ class PromoCodeController extends Controller
         ]);
         PromoCode::create($validated);
 
-        return redirect()->route('cms.promocodes.index')->with('success', 'Promo code created successfully');
+        return redirect()->route('promocodes.index')->with('success', 'Promo code created successfully');
     }
 
     /**
@@ -64,8 +64,24 @@ class PromoCodeController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $promocode = PromoCode::findOrFail($id);
+
+        $validated = $request->validate([
+            'code' => 'required|string|unique:promo_codes,code,' . $promocode->id,
+            'type' => 'required|in:percentage,fixed',
+            'value' => 'required|numeric|min:0',
+            'max_uses' => 'nullable|integer|min:1',
+            'max_uses_per_user' => 'nullable|integer|min:1',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
+
+        $promocode->update($validated);
+
+        return redirect()->route('promocodes.index')
+            ->with('success', 'Promo code updated successfully.');
     }
+
 
     /**
      * Remove the specified resource from storage.

@@ -121,6 +121,7 @@
                                 class="login-input w-100 text-primary" placeholder="{{__('cart.Enter_Promo_Code')}}">
                         </div>
                         <div>
+
                             <button type="button" id="applyPromoBtn" class="btn underline-btn">{{ __('cart.apply') }}</button>
                         </div>
                     </div>
@@ -176,4 +177,5 @@
         border: 1.5px solid #38B2AC;
     }
 </style>
+
 @endsection

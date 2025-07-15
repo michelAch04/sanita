@@ -6,7 +6,9 @@
     <meta charset="UTF-8">
     <meta name="google" content="notranslate">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Sanita')</title>
+
 
     <!-- CSS Links -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
@@ -192,10 +194,10 @@
         </div>
     </nav>
 
-<div id="content">
-    <!-- Main Content -->
-    @yield('content')
-</div>
+    <div id="content">
+        <!-- Main Content -->
+        @yield('content')
+    </div>
 
     @include('components.toast')
 
@@ -241,6 +243,7 @@
 <!-- Laravel Assets -->
 <script src="{{ asset('js/app.js') }}"></script>
 <script src="{{ asset('js/modals.js') }}"></script>
+<script src="{{ asset('js/promocode.js') }}"></script>ip
 
 <!-- Global Window Variables -->
 <script>
@@ -253,6 +256,7 @@
     }
     window.isRtl = '{{ $isRtl }}';
     window.signinUrl = "{{ route('customer.signin', ['locale' => app()->getLocale()]) }}";
+    window.validatePromoUrl = "{{ route('cart.validatepromocode', ['locale' => app()->getLocale()]) }}";
     window.csrfToken = "{{ csrf_token() }}";
     window.cartMessages = {
         addSuccess: "{{ __('nav.cart_add_success') }}",

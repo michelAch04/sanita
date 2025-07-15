@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\{Cart, CartDetail, Product, Tax, Address, Governorate, City, District, Customer};
+use App\Models\{Cart, CartDetail, Product, PromoCodeUsage, Address, Governorate, City, District, Customer, PromoCode};
+use Illuminate\Support\Carbon;
 
 class WebsiteCartController extends Controller
 {
@@ -255,6 +256,108 @@ class WebsiteCartController extends Controller
         ]);
     }
 
+    public function validatePromoCode(Request $request)
+    {
+        $user = auth('customer')->user();
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not authenticated.'
+            ], 401);
+        }
+
+        $code = $request->input('code');
+        if (!$code) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Promo code is required.'
+            ], 400);
+        }
+
+        $promo = PromoCode::where('code', $code)->first();
+        if (!$promo) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Promo code does not exist.'
+            ], 404);
+        }
+
+        $now = Carbon::now();
+
+        $startDate = $promo->start_date ? Carbon::parse($promo->start_date) : null;
+        $endDate = $promo->end_date ? Carbon::parse($promo->end_date) : null;
+
+        if ($startDate && $startDate->gt($now)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Promo code is not active yet.'
+            ], 400);
+        }
+
+        if ($endDate && $endDate->lt($now)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Promo code has expired.'
+            ], 400);
+        }
+
+        $userUsageCount = PromoCodeUsage::where('promo_code_id', $promo->id)
+            ->where('customer_id', $user->id)
+            ->count();
+
+        if (!is_null($promo->max_use_per_user) && $userUsageCount >= $promo->max_use_per_user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You have reached the maximum usage limit for this promo code.'
+            ], 400);
+        }
+
+        $totalUsageCount = PromoCodeUsage::where('promo_code_id', $promo->id)->count();
+
+        if (!is_null($promo->max_use) && $totalUsageCount >= $promo->max_use) {
+            return response()->json([
+                'success' => false,
+                'message' => 'This promo code has reached its total usage limit.'
+            ], 400);
+        }
+
+        // Get the cart total from request (frontend should send it)
+        $cartTotal = $request->input('cart_total');
+        if (!is_numeric($cartTotal) || $cartTotal <= 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid cart total.'
+            ], 400);
+        }
+
+        // Calculate discounted total based on discount type
+        $discountedTotal = $cartTotal;
+        if ($promo->discount_type === 'percentage') {
+            // discount_value assumed to be percentage like 10 for 10%
+            $discountAmount = ($promo->discount_value / 100) * $cartTotal;
+            $discountedTotal = max(0, $cartTotal - $discountAmount);
+        } elseif ($promo->discount_type === 'fixed') {
+            // discount_value assumed fixed amount
+            $discountedTotal = max(0, $cartTotal - $promo->discount_value);
+        }
+
+        return response()->json([
+            'success' => true,
+            'promo' => [
+                'id' => $promo->id,
+                'code' => $promo->code,
+                'discount_type' => $promo->discount_type,
+                'discount_value' => $promo->discount_value,
+                'start_date' => $startDate?->toDateString(),
+                'end_date' => $endDate?->toDateString(),
+            ],
+            'original_total' => number_format($cartTotal, 2),
+            'discounted_total' => number_format($discountedTotal, 2),
+            'discount_amount' => number_format($cartTotal - $discountedTotal, 2),
+        ]);
+    }
+
+
     protected function updateCartDetailPrice($detail)
     {
         $product = Product::with('listPrices')->find($detail->products_id);
@@ -334,9 +437,5 @@ class WebsiteCartController extends Controller
         }
 
         return [false, $shelf_price];
-    }
-
-    public function checkpromocode(){
-        
     }
 }

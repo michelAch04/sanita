@@ -122,7 +122,7 @@ Route::prefix('{locale}')->middleware(['localization', 'force.address.modal'])->
             'destroy' => 'website.cart.destroy',
         ]);
         Route::get('/checkout', [WebsiteCartController::class, 'checkout'])->name('cart.checkout');
-        Route::get('/checkpromocode', [WebsiteCartController::class, 'checkpromocode'])->name('cart.checkpromocode');
+        Route::post('/validatepromoCode', [WebsiteCartController::class, 'validatepromoCode'])->name('cart.validatepromocode');
 
 
         Route::post('/checkout/place-order', [WebsiteOrderController::class, 'placeOrder'])->name('website.checkout.place_order');
