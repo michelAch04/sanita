@@ -118,10 +118,10 @@
                     <div class="promo mb-4 d-flex gap-3 align-items-center flex-direction-row">
                         <div class="login-inputForm promo-code-container">
                             <input type="text" id="promo_code" name="promo_code"
-                                class="login-input w-100 text-primary" placeholder="{{__(cart.Enter_Promo_Code)}}">
+                                class="login-input w-100 text-primary" placeholder="{{__('cart.Enter_Promo_Code')}}">
                         </div>
                         <div>
-                            <button type="submit" class="btn underline-btn">{{ __('cart.apply') }}</button>
+                            <button type="button" id="applyPromoBtn" class="btn underline-btn">{{ __('cart.apply') }}</button>
                         </div>
                     </div>
                 </div>

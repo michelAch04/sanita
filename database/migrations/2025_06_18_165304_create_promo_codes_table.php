@@ -19,9 +19,8 @@ return new class extends Migration
             $table->enum('type', ['percentage']);
             $table->decimal('value');
             $table->integer('max_uses');
-            $table->integer('used_count');
+            $table->integer('used_count')->nullable();
             $table->integer('max_uses_per_user');
-            $table->decimal('min_order_value');
             $table->timestamps();
         });
     }

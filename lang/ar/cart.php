@@ -43,4 +43,6 @@ return [
     'PL' => 'طبلية',
     'conversion_case_each' => 'صندوق واحد يساوي :count قطعة',
     'conversion_pallet_each' => 'طبلية واحدة تساوي :count قطعة',
+    'Enter_Promo_Code' => 'أدخل رمز الترويج',
+
 ];

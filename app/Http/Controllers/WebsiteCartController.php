@@ -335,4 +335,8 @@ class WebsiteCartController extends Controller
 
         return [false, $shelf_price];
     }
+
+    public function checkpromocode(){
+        
+    }
 }

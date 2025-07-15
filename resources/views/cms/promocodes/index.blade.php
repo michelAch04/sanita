@@ -42,7 +42,6 @@ $canDelete = $permissions && $permissions->delete;
                             <th>Value</th>
                             <th>Start</th>
                             <th>End</th>
-                            <th>Status</th>
                             <th>Used</th>
                             <th class="text-end">Options</th>
                         </tr>
@@ -57,11 +56,6 @@ $canDelete = $permissions && $permissions->delete;
                             </td>
                             <td>{{ \Carbon\Carbon::parse($promo->start_date)->format('Y-m-d H:i') }}</td>
                             <td>{{ \Carbon\Carbon::parse($promo->end_date)->format('Y-m-d H:i') }}</td>
-                            <td>
-                                <span class="badge {{ $promo->is_active ? 'bg-success' : 'bg-secondary' }}">
-                                    {{ $promo->is_active ? 'Active' : 'Inactive' }}
-                                </span>
-                            </td>
                             <td>
                                 {{ $promo->usage_count_in_range }}
                                 @if($promo->usage_limit)
@@ -81,7 +75,7 @@ $canDelete = $permissions && $permissions->delete;
                                         </li>
                                         <li>
                                             <button type="button" class="dropdown-item text-danger bg-hover-light-grey"
-                                                onclick="confirmDelete('{{ route('promo_codes.destroy', $promo->id) }}')">
+                                                onclick="confirmDelete('{{ route('promocodes.destroy', $promo->id) }}')">
                                                 <i class="bi bi-trash3 me-2"></i>Delete
                                             </button>
                                         </li>

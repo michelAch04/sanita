@@ -59,4 +59,5 @@ return [
     'conversion_case_each' => 'One Case is equal to :count Each',
     'conversion_pallet_each' => 'One Pallet is equal to :count Each',
     'item_not_found' => 'item not found',
+    'Enter_Promo_Code' => 'Enter Promo Code',
 ];
