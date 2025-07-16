@@ -33,7 +33,6 @@ document.addEventListener("DOMContentLoaded", function () {
             })
                 .then((res) => res.json())
                 .then((data) => {
-                    console.log(data);
                     if (data.success) {
                         input.value = data.quantity;
                         originalValue = data.quantity;
@@ -48,8 +47,12 @@ document.addEventListener("DOMContentLoaded", function () {
                             ).toFixed(2)}`;
                         }
 
-                        recalculateCartTotal();
-                        showAjaxToast(
+                        const cart_total = data.cart_total;
+                        document.getElementById(
+                            "cart-total"
+                        ).textContent = `$${cart_total.toFixed(2)}`;
+
+                            showAjaxToast(
                             "success",
                             window.cartMessages.updateSuccess
                         );

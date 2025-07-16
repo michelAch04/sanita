@@ -121,7 +121,6 @@
                                 class="login-input w-100 text-primary" placeholder="{{__('cart.Enter_Promo_Code')}}">
                         </div>
                         <div>
-
                             <button type="button" id="applyPromoBtn" class="btn underline-btn">{{ __('cart.apply') }}</button>
                         </div>
                     </div>
@@ -133,11 +132,21 @@
         <div class="totals-row sticky-bottom shadow-sm mt-4 py-2 px-5 bottom-0 w-100">
             <div class="d-flex flex-row justify-content-between align-items-start align-items-md-center">
                 <div class="totals-left">
-                    <p class="mb-1"><strong>{{ __('cart.subtotal') }}:</strong> IQD {{ number_format($subtotal, 2) }}</p>
-                    <p class="mb-1"><strong>{{ __('cart.vat') }}:</strong> IQD {{ number_format($totalTax, 2) }}</p>
+                    <p class="mb-1"><strong>{{ __('cart.subtotal') }}:</strong>
+                        IQD <span id="subtotalAmount">{{ number_format($subtotal, 2) }}</span>
+                    </p>
+                    <p class="mb-1"><strong>{{ __('cart.vat') }}:</strong>
+                        IQD <span id="vatAmount">{{ number_format($totalTax, 2) }}</span>
+                    </p>
+                    <p class="mb-1 text-danger" id="discountRow" style="display: none;">
+                        <strong>{{ __('cart.discount') }}:</strong>
+                        - IQD <span id="discountAmount">0.00</span>
+                    </p>
                 </div>
                 <div class="totals-right d-flex justify-content-end flex-row mt-3 mt-md-0 h-100 gap-3">
-                    <p class="my-auto fs-5 fw-bold">{{ __('cart.total') }}: IQD {{ number_format($total, 2) }}</p>
+                    <p class="my-auto fs-5 fw-bold">
+                        {{ __('cart.total') }}: IQD <span id="finalTotal">{{ number_format($total, 2) }}</span>
+                    </p>
                     <button type="submit" class="btn bubbles fw-medium fs-6 mt-auto">
                         <span class="text">{{ __('cart.place_order') }}</span>
                     </button>
@@ -177,5 +186,4 @@
         border: 1.5px solid #38B2AC;
     }
 </style>
-
 @endsection

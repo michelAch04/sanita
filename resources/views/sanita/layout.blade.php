@@ -257,6 +257,7 @@
     window.isRtl = '{{ $isRtl }}';
     window.signinUrl = "{{ route('customer.signin', ['locale' => app()->getLocale()]) }}";
     window.validatePromoUrl = "{{ route('cart.validatepromocode', ['locale' => app()->getLocale()]) }}";
+    window.removePromoUrl = "{{ route('cart.validatepromocode' , ['locale' => app()->getLocale()]) }}";
     window.csrfToken = "{{ csrf_token() }}";
     window.cartMessages = {
         addSuccess: "{{ __('nav.cart_add_success') }}",

@@ -17,5 +17,6 @@ class PromoCode extends Model
         'start_date',
         'end_date',
         'min_order_value',
+        'used_count',
     ];
 }

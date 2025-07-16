@@ -283,7 +283,6 @@ class WebsiteCartController extends Controller
         }
 
         $now = Carbon::now();
-
         $startDate = $promo->start_date ? Carbon::parse($promo->start_date) : null;
         $endDate = $promo->end_date ? Carbon::parse($promo->end_date) : null;
 
@@ -301,28 +300,36 @@ class WebsiteCartController extends Controller
             ], 400);
         }
 
-        $userUsageCount = PromoCodeUsage::where('promo_code_id', $promo->id)
-            ->where('customer_id', $user->id)
+        $userUsageCount = PromoCodeUsage::where('promo_codes_id', $promo->id)
+            ->where('customers_id', $user->id)
             ->count();
 
-        if (!is_null($promo->max_use_per_user) && $userUsageCount >= $promo->max_use_per_user) {
+        if (!is_null($promo->max_uses_per_user) && $userUsageCount >= $promo->max_uses_per_user) {
             return response()->json([
                 'success' => false,
                 'message' => 'You have reached the maximum usage limit for this promo code.'
             ], 400);
         }
 
-        $totalUsageCount = PromoCodeUsage::where('promo_code_id', $promo->id)->count();
-
-        if (!is_null($promo->max_use) && $totalUsageCount >= $promo->max_use) {
+        $totalUsageCount = PromoCodeUsage::where('promo_codes_id', $promo->id)->count();
+        if (!is_null($promo->max_uses) && $totalUsageCount >= $promo->max_uses) {
             return response()->json([
                 'success' => false,
                 'message' => 'This promo code has reached its total usage limit.'
             ], 400);
         }
 
-        // Get the cart total from request (frontend should send it)
-        $cartTotal = $request->input('cart_total');
+        // Get cart and recalculate first
+        $cart = Cart::with('cartDetails')->where('customers_id', $user->id)->latest()->first();
+        if (!$cart) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cart not found.'
+            ], 404);
+        }
+
+
+        $cartTotal = $cart->total_amount;
         if (!is_numeric($cartTotal) || $cartTotal <= 0) {
             return response()->json([
                 'success' => false,
@@ -330,16 +337,26 @@ class WebsiteCartController extends Controller
             ], 400);
         }
 
-        // Calculate discounted total based on discount type
+        // Apply discount
+        $discountAmount = 0;
+        $discountPercentage = null;
         $discountedTotal = $cartTotal;
-        if ($promo->discount_type === 'percentage') {
-            // discount_value assumed to be percentage like 10 for 10%
-            $discountAmount = ($promo->discount_value / 100) * $cartTotal;
+
+        if ($promo->type === 'percentage') {
+            $discountPercentage = $promo->value;
+            $discountAmount = ($discountPercentage / 100) * $cartTotal;
             $discountedTotal = max(0, $cartTotal - $discountAmount);
-        } elseif ($promo->discount_type === 'fixed') {
-            // discount_value assumed fixed amount
-            $discountedTotal = max(0, $cartTotal - $promo->discount_value);
+        } elseif ($promo->type === 'fixed') {
+            $discountAmount = $promo->value;
+            $discountedTotal = max(0, $cartTotal - $discountAmount);
+            $discountPercentage = ($discountAmount / $cartTotal) * 100;
         }
+
+        // Update cart
+        $cart->discount_amount = $discountAmount;
+        $cart->discount_percentage = $discountPercentage;
+        $cart->total_amount_after_discount = $discountedTotal;
+        $cart->save();
 
         return response()->json([
             'success' => true,
@@ -353,10 +370,39 @@ class WebsiteCartController extends Controller
             ],
             'original_total' => number_format($cartTotal, 2),
             'discounted_total' => number_format($discountedTotal, 2),
-            'discount_amount' => number_format($cartTotal - $discountedTotal, 2),
+            'discount_amount' => number_format($discountAmount, 2),
+            'discount_percentage' => number_format($discountPercentage, 2),
         ]);
     }
 
+    public function removePromoCode(Request $request)
+    {
+        $user = auth('customer')->user();
+        $cart = Cart::where('customers_id', $user->id)->latest()->first();
+
+        if (!$cart) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cart not found.'
+            ], 404);
+        }
+
+        $cart->discount_amount = 0;
+        $cart->discount_percentage = null;
+        $cart->total_amount_after_discount = $cart->total_amount;
+        $cart->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Promo code removed.',
+            'cart' => [
+                'original_total' => number_format($cart->total_amount, 2),
+                'discounted_total' => number_format($cart->total_amount, 2),
+                'discount_amount' => 0,
+                'discount_percentage' => null,
+            ]
+        ]);
+    }
 
     protected function updateCartDetailPrice($detail)
     {

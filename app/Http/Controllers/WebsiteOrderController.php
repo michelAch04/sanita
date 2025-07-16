@@ -10,20 +10,23 @@ use App\Models\Product;
 use App\Models\CartDetail;
 use Illuminate\Support\Facades\DB;
 use App\Models\Customer;
+use App\Models\PromoCode;
+use App\Models\PromoCodeUsage;
 
 class WebsiteOrderController extends Controller
 {
+
+
     public function placeOrder(Request $request)
     {
-
         $customerId = auth('customer')->id();
+
         $cart = Cart::with('cartDetails.product.distributorStocks')->where('customers_id', $customerId)->first();
 
         if (!$cart || $cart->cartDetails->isEmpty()) {
             return redirect()->back()->with('error', 'Cart is empty.');
         }
 
-        // 1. Deduct stock
         foreach ($cart->cartDetails as $item) {
             $stock = $item->product->distributorStocks()->first();
             if ($stock) {
@@ -31,50 +34,82 @@ class WebsiteOrderController extends Controller
                 $stock->save();
             }
         }
-        // Temporary: Get the distributor ID from the first item in the cart
+
         $firstItem = $cart->cartDetails->first();
         $distributorStock = $firstItem->product->distributorStocks()->first();
         $distributorId = $distributorStock ? $distributorStock->distributors_id : null;
 
-        // 2. Create order header
+        $totalAmount = $cart->total_amount;
+        $totalAmountAfterDiscount = $cart->total_amount_after_discount ?: $totalAmount;
+        $discountAmount = $cart->discount_amount ?? ($totalAmount - $totalAmountAfterDiscount);
+        $discountPercentage = $cart->discount_percentage ?? null;
+        $promoCodeInput = $request->promo_code;
+
+        // Optional: fetch the promo code instance
+        $promo = null;
+        if ($promoCodeInput) {
+            $promo = PromoCode::where('code', $promoCodeInput)->first();
+        }
+
+        // Create order
         $order = Order::create([
-            'customers_id'     => $customerId,
+            'customers_id' => $customerId,
             'distributors_id' => $distributorId,
-            'addresses_id'   => $request->address_id,
-            'total_amount'    => $cart->total_amount,
-            'subtotal_amount' => $cart->subtotal_amount,
-            'tax_amount'      => $cart->tax_amount,
+            'addresses_id' => $request->address_id,
             'statuses_id' => 1,
-            'payment_method'  => $request->payment_method, // Assuming payment method is passed in the request
-            'promocode' => $request->promocode, // Assuming promocode is passed in the request
-            // Add other fields as needed (address, status, etc.)
+            'payment_method' => $request->payment_method,
+            'promocode' => $promoCodeInput,
+
+            'subtotal_amount' => $cart->subtotal_amount,
+            'tax_amount' => $cart->tax_amount,
+            'total_amount' => $totalAmount,
+            'total_amount_after_discount' => $totalAmountAfterDiscount,
+            'discount_amount' => $discountAmount,
+            'discount_percentage' => $discountPercentage,
         ]);
 
-        // 3. Create order details
         foreach ($cart->cartDetails as $item) {
             OrderDetail::create([
-                'orders_id'        => $order->id,
-                'products_id'      => $item->products_id,
-                'unit_price'      => $item->unit_price,
-                'shelf_price'     => $item->shelf_price,
-                'old_price'       => $item->old_price,
-                'extended_price'  => $item->extended_price,
+                'orders_id' => $order->id,
+                'products_id' => $item->products_id,
+                'unit_price' => $item->unit_price,
+                'shelf_price' => $item->shelf_price,
+                'old_price' => $item->old_price,
+                'extended_price' => $item->extended_price,
                 'quantity_primary' => $item->quantity_primary,
                 'quantity_foreign' => $item->quantity_foreign,
-                'UOM'             => $item->UOM,
+                'UOM' => $item->UOM,
             ]);
         }
 
-        // 4. Clear the cart
+        // Track promo usage
+        if ($promo) {
+            $usage = PromoCodeUsage::firstOrNew([
+                'promo_codes_id' => $promo->id,
+                'customers_id' => $customerId,
+            ]);
+
+            $usage->count = ($usage->count ?? 0) + 1;
+            $usage->save();
+
+            $promo->increment('used_count');
+        }
+
+        // Clear cart
         $cart->cartDetails()->delete();
         $cart->update([
-            'total_amount'    => 0,
+            'total_amount' => 0,
             'subtotal_amount' => 0,
-            'tax_amount'      => 0,
+            'tax_amount' => 0,
+            'total_amount_after_discount' => 0,
+            'discount_amount' => 0,
+            'discount_percentage' => null,
         ]);
 
-        return redirect()->route('website.orders.index', ['locale' => app()->getLocale()])->with('success', 'Order placed successfully!');
+        return redirect()->route('website.orders.index', ['locale' => app()->getLocale()])
+            ->with('success', 'Order placed successfully!');
     }
+
 
     public function index()
     {

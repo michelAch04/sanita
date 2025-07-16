@@ -18,10 +18,13 @@ return new class extends Migration
             $table->foreignId('addresses_id')->constrained('addresses')->onDelete('cascade');
             $table->foreignId('statuses_id')->constrained('statuses')->onDelete('cascade');
             $table->decimal('total_amount', 10, 2)->default(0);
+            $table->decimal('total_amount_after_discount', 10, 2)->default(0);
             $table->decimal('subtotal_amount', 10, 2)->default(0);
             $table->decimal('tax_amount', 10, 2)->default(0);
             $table->string('payment_method')->nullable();
             $table->decimal('delivery_charge', 10, 2)->default(0);
+            $table->decimal('discount_amount', 10, 2)->default(0);
+            $table->decimal('discount_percentage', 5, 2)->nullable();
             $table->string('promocode')->nullable();
             $table->tinyInteger('cancelled')->default(0);
             $table->timestamps();

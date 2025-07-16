@@ -1,55 +1,69 @@
 document.addEventListener("DOMContentLoaded", () => {
     const applyPromoBtn = document.getElementById("applyPromoBtn");
+    const promoInput = document.getElementById("promo_code");
+    const discountRow = document.getElementById("discountRow");
+    const discountAmountField = document.getElementById("discountAmount");
+    const finalTotalField = document.getElementById("finalTotal");
+
+    const csrf = document
+        .querySelector('meta[name="csrf-token"]')
+        .getAttribute("content");
+
+    let promoApplied = false;
+    let originalTotal = window.originalTotal;
 
     if (applyPromoBtn) {
         applyPromoBtn.addEventListener("click", async () => {
-            const promoCode = document
-                .getElementById("promo_code")
-                .value.trim();
+            const code = promoInput.value.trim();
 
-            if (!promoCode) {
+            if (!code) {
                 showAjaxToast("warning", "Please enter a promo code.");
                 return;
             }
-            const csrf = document
-                .querySelector('meta[name="csrf-token"]')
-                .getAttribute("content");
 
-            const url = window.validatePromoUrl;
+            const url = promoApplied
+                ? window.validatePromoUrl
+                : window.removePromoUrl;
+            const payload = { code, cart_total: originalTotal };
 
             try {
                 const response = await fetch(url, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": csrf, // CSRF token sent here
+                        "X-CSRF-TOKEN": csrf,
                         "X-Requested-With": "XMLHttpRequest",
                     },
-                    body: JSON.stringify({ code: promoCode }),
+                    body: JSON.stringify(payload),
                 });
 
                 const data = await response.json();
 
                 if (!data.success) {
-                    showAjaxToast(
-                        "warning",
-                        data.message || "Invalid promo code."
-                    );
-                } else {
-                    showAjaxToast(
-                        "success",
-                        "Promo code applied successfully!"
-                    );
-                    console.log("Promo code details:", data.promo);
+                    showAjaxToast("warning", data.message || "Promo failed.");
+                    return;
+                }
 
-                    // TODO: Update UI with discount, recalculate totals, etc.
+                if (promoApplied) {
+                    // Reset totals
+                    finalTotalField.textContent = originalTotal.toFixed(2);
+                    discountAmountField.textContent = "0.00";
+                    discountRow.style.display = "none";
+                    applyPromoBtn.textContent = "{{ __('cart.apply') }}";
+                    promoApplied = false;
+                    showAjaxToast("info", "Promo code removed.");
+                } else {
+                    // Apply discount
+                    discountAmountField.textContent = data.discount_amount;
+                    finalTotalField.textContent = data.discounted_total;
+                    discountRow.style.display = "block";
+                    applyPromoBtn.textContent = "{{ __('cart.remove') }}";
+                    promoApplied = true;
+                    showAjaxToast("success", "Promo code applied!");
                 }
             } catch (error) {
-                console.error("Error validating promo code:", error);
-                showAjaxToast(
-                    "error",
-                    "An error occurred while validating the promo code."
-                );
+                console.error("Promo error:", error);
+                showAjaxToast("error", "Something went wrong.");
             }
         });
     }
