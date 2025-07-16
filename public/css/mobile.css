@@ -101,6 +101,15 @@
     /*SHOULD STOP AT 768PX*/
 }
 
+@media (max-width: 768px) {
+    .filter-container {
+        display: none !important;
+    }
+    .filtered-container {
+        width: 100% !important;
+    }
+}
+
 @media (min-width: 613px) and (max-width: 768px) {
 
     /* ------------------- LOGIN ------------------------- */
@@ -195,6 +204,10 @@
         color: var(--light-text) !important;
         font-weight: 500 !important;
         font-size: 0.8rem !important;
+    }
+
+    .underline-arctic {
+        font-size: 0.9rem !important;
     }
 
     .navbar,
@@ -355,9 +368,7 @@
     .category-info {
         padding: 0 0.5rem !important;
     }
-    .category-index-btn {
-        font-size: 0.9rem !important;
-    }
+
     #subcategoryTabs .nav-link {
         box-shadow: 0 1px 4px rgba(0, 0, 0, 0.132) !important;
     }

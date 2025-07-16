@@ -379,6 +379,10 @@ nav {
     padding-right: 1rem;
     background-color: var(--tertiary-bg);
 }
+.search-focused .search-icon {
+    cursor: pointer;
+    pointer-events: all;
+}
 
 .right-icons-container.search-focused .nav-link:not(.expanding-search) {
     display: none;
@@ -987,6 +991,14 @@ section:nth-of-type(5) {
 .btn-arctic:focus-visible {
     background-color: var(--link-blue) !important;
     color: var(--light-text) !important;
+}
+.underline-arctic {
+    background: transparent !important;
+    border: none !important;
+    color: var(--primary-blue) !important;
+}
+.underline-arctic::after {
+    background-color: var(--primary-blue) !important;
 }
 
 /* Footer Styling */

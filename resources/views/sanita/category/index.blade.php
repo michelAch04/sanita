@@ -6,11 +6,11 @@
 <section id="category" class="py-2 pt-0 bg-light">
     <!-- Header Buttons -->
     <div class="d-flex justify-content-between align-items-center flex-wrap mb-3 p-3 pb-0">
-        <a href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}" class="btn underline-btn mb-2 category-index-btn">
+        <a href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}" class="btn underline-btn mb-2 underline-arctic">
             <span class="text"><i class="fa-solid fa-arrow-left me-1"></i> {{ __('nav.back') }}</span>
         </a>
 
-        <a href="{{ route('website.categories.index', ['locale' => app()->getLocale()]) }}" class="btn underline-btn mb-2 category-index-btn">
+        <a href="{{ route('website.categories.index', ['locale' => app()->getLocale()]) }}" class="btn underline-btn mb-2 underline-arctic">
             <span class="text">{{ __('nav.all_categories') }}<i class="fa-solid fa-arrow-right ms-1"></i></span>
         </a>
     </div>

@@ -1,126 +1,126 @@
 @php
 $minPrice = floor($eaPrices->min());
 $maxPrice = ceil($eaPrices->max());
+$panelAttribute = $panel == true ? 'panel-' : 'sidebar-';
+$panelContainer = $panel == true ? '#filterPanel' : '#filterSidebar';
 @endphp
-<form method="GET" action="{{ url()->current() }}" class="filter-form {{ $isRtl ? 'rtl-container' : '' }}">
-    <div class="filter-sidebar">
-        <h5 class="mb-0">{{ __('Filters') }}</h5>
-        <hr class="mt-1 mb-3">
-        {{-- === BRAND FILTER === --}}
-        <div class="filter-group mb-2">
-            <div class="d-flex justify-content-between align-items-center toggle-header mb-1">
-                <h6 class="mb-0">{{ __('nav.brands') }}</h6>
-                <button type="button" class="toggle-btn" data-target="#brand-filter">+</button>
-            </div>
-            <div id="brand-filter" class="toggle-content">
-                @foreach($brands as $brand)
-                @php $checkedBrands = (array) request()->input('brand', []); @endphp
-                <div class="form-check d-flex align-items-center mb-1 ps-0 ps-lg-2">
-                    <label class="ios-checkbox arctic me-1">
-                        <input type="checkbox"
-                            name="brand[]"
-                            value="{{ $brand->id }}"
-                            class="form-check-input auto-submit"
-                            {{ in_array($brand->id, $checkedBrands) ? 'checked' : '' }}>
-                        <div class="checkbox-wrapper">
-                            <div class="checkbox-bg"></div>
-                            <svg fill="none" viewBox="0 0 24 24" class="checkbox-icon">
-                                <path stroke-linejoin="round" stroke-linecap="round" stroke-width="3"
-                                    stroke="currentColor" d="M4 12L10 18L20 6"></path>
-                            </svg>
-                        </div>
-                    </label>
-                    <label class="form-check-label">
-                        {{ $brand->name_en }}
-                    </label>
-                </div>
-                @endforeach
-            </div>
-        </div>
 
-        {{-- === CATEGORY FILTER === --}}
-        <div class="filter-group mb-2">
-            <div class="d-flex justify-content-between align-items-center toggle-header mb-1">
-                <h6 class="mb-0">{{ __('nav.categories') }}</h6>
-                <button type="button" class="toggle-btn" data-target="#category-filter">+</button>
-            </div>
-            <div id="category-filter" class="toggle-content">
-                @foreach($categories as $category)
-                @php $checkedCategories = (array) request()->input('category', []); @endphp
-                <div class="form-check d-flex align-items-center mb-1 ps-0 ps-lg-2">
-                    <label class="ios-checkbox arctic me-1">
-                        <input type="checkbox"
-                            name="category[]"
-                            value="{{ $category->id }}"
-                            class="form-check-input auto-submit"
-                            {{ in_array($category->id, $checkedCategories) ? 'checked' : '' }}>
-                        <div class="checkbox-wrapper">
-                            <div class="checkbox-bg"></div>
-                            <svg fill="none" viewBox="0 0 24 24" class="checkbox-icon">
-                                <path stroke-linejoin="round" stroke-linecap="round" stroke-width="3"
-                                    stroke="currentColor" d="M4 12L10 18L20 6"></path>
-                            </svg>
-                        </div>
-                    </label>
-                    <label class="form-check-label">
-                        {{ $category->name_en }}
-                    </label>
-                </div>
-                @endforeach
-            </div>
-        </div>
-
-        {{-- === PRICE FILTER === --}}
-        <div class="filter-group mb-2">
-            <div class="d-flex justify-content-between align-items-center toggle-header mb-0">
-                <h6 class="mb-0">{{ __('cart.price') }}</h6>
-                <button type="button" class="toggle-btn" data-target="#price-filter">+</button>
-            </div>
-            <div id="price-filter" class="toggle-content">
-                <div class="d-flex flex-column align-items-center">
-                    <div class="position-relative range-wrapper w-100 mb-lg-0 mb-1 d-flex">
-                        <div class="slider-track-bg"></div>
-                        <div class="slider-range-fill" id="sliderRangeFill"></div>
-
-                        <input type="range" id="range-min" name="min_price"
-                            min="{{ $minPrice }}" max="{{ $maxPrice }}"
-                            value="{{ request('min_price', $minPrice) }}"
-                            class="range-slider" step="1">
-                        <input type="range" id="range-max" name="max_price"
-                            min="{{ $minPrice }}" max="{{ $maxPrice }}"
-                            value="{{ request('max_price', $maxPrice) }}"
-                            class="range-slider" step="1">
-                    </div>
-
-                    <div class="d-flex flex-xl-row flex-column p-0 gap-2">
-                        <div class="d-flex justify-content-between align-items-center w-100 p-0 price-range-input">
-                            <div class="engraved-label-input pe-1">
-                                <label for="range-min" class="text">{{ __('nav.minimum') }} {{ __('cart.price') }}:</label>
-                                <input type="number" id="min_price" class="input px-1 py-2"
-                                    value="{{ request('min_price', $minPrice) }}"
-                                    step="1">
-                            </div>
-                            <div class="engraved-label-input">
-                                <label for="range-max" class="text">{{ __('nav.maximum') }} {{ __('cart.price') }}:</label>
-                                <input type="number" id="max_price" class="input px-1 py-2"
-                                    value="{{ request('max_price', $maxPrice) }}"
-                                    step="1">
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn btn-success mt-xl-4 px-2 py-lg-0 py-1">
-                            {{ __('cart.apply') }}
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+{{-- === BRAND FILTER === --}}
+<div class="filter-group mb-2">
+    <div class="d-flex justify-content-between align-items-center toggle-header mb-1">
+        <h6 class="mb-0">{{ __('nav.brands') }}</h6>
+        <button type="button" class="toggle-btn" data-target="#{{ $panelAttribute }}brand-filter">+</button>
     </div>
-</form>
+    <div id="{{ $panelAttribute }}brand-filter" class="toggle-content">
+        @foreach($brands as $brand)
+        @php $checkedBrands = (array) request()->input('brand', []); @endphp
+        <div class="form-check d-flex align-items-center mb-1 ps-0 ps-lg-2">
+            <label class="ios-checkbox arctic me-1">
+                <input type="checkbox"
+                    name="brand[]"
+                    value="{{ $brand->id }}"
+                    class="form-check-input auto-submit"
+                    {{ in_array($brand->id, $checkedBrands) ? 'checked' : '' }}>
+                <div class="checkbox-wrapper">
+                    <div class="checkbox-bg"></div>
+                    <svg fill="none" viewBox="0 0 24 24" class="checkbox-icon">
+                        <path stroke-linejoin="round" stroke-linecap="round" stroke-width="3"
+                            stroke="currentColor" d="M4 12L10 18L20 6"></path>
+                    </svg>
+                </div>
+            </label>
+            <label class="form-check-label">
+                {{ $brand->name_en }}
+            </label>
+        </div>
+        @endforeach
+    </div>
+</div>
+
+{{-- === CATEGORY FILTER === --}}
+<div class="filter-group mb-2">
+    <div class="d-flex justify-content-between align-items-center toggle-header mb-1">
+        <h6 class="mb-0">{{ __('nav.categories') }}</h6>
+        <button type="button" class="toggle-btn" data-target="#{{ $panelAttribute }}category-filter">+</button>
+    </div>
+    <div id="{{ $panelAttribute }}category-filter" class="toggle-content">
+        @foreach($categories as $category)
+        @php $checkedCategories = (array) request()->input('category', []); @endphp
+        <div class="form-check d-flex align-items-center mb-1 ps-0 ps-lg-2">
+            <label class="ios-checkbox arctic me-1">
+                <input type="checkbox"
+                    name="category[]"
+                    value="{{ $category->id }}"
+                    class="form-check-input auto-submit"
+                    {{ in_array($category->id, $checkedCategories) ? 'checked' : '' }}>
+                <div class="checkbox-wrapper">
+                    <div class="checkbox-bg"></div>
+                    <svg fill="none" viewBox="0 0 24 24" class="checkbox-icon">
+                        <path stroke-linejoin="round" stroke-linecap="round" stroke-width="3"
+                            stroke="currentColor" d="M4 12L10 18L20 6"></path>
+                    </svg>
+                </div>
+            </label>
+            <label class="form-check-label">
+                {{ $category->name_en }}
+            </label>
+        </div>
+        @endforeach
+    </div>
+</div>
+
+{{-- === PRICE FILTER === --}}
+<div class="filter-group mb-2">
+    <div class="d-flex justify-content-between align-items-center toggle-header mb-0">
+        <h6 class="mb-0">{{ __('cart.price') }}</h6>
+        <button type="button" class="toggle-btn" data-target="#{{ $panelAttribute }}price-filter">+</button>
+    </div>
+    <div id="{{ $panelAttribute }}price-filter" class="toggle-content">
+        <div class="d-flex flex-column align-items-center">
+            <div class="position-relative range-wrapper w-100 mb-lg-0 mb-1 d-flex">
+                <div class="slider-track-bg"></div>
+                <div class="slider-range-fill" id="{{ $panelAttribute }}sliderRangeFill"></div>
+
+                <input type="range" id="{{ $panelAttribute }}range-min" name="min_price"
+                    min="{{ $minPrice }}" max="{{ $maxPrice }}"
+                    value="{{ request('min_price', $minPrice) }}"
+                    class="range-slider" step="1">
+                <input type="range" id="{{ $panelAttribute }}range-max" name="max_price"
+                    min="{{ $minPrice }}" max="{{ $maxPrice }}"
+                    value="{{ request('max_price', $maxPrice) }}"
+                    class="range-slider" step="1">
+            </div>
+
+            <div class="d-flex flex-xl-row flex-column p-0 gap-2">
+                <div class="d-flex justify-content-between align-items-center w-100 p-0 price-range-input">
+                    <div class="engraved-label-input pe-1">
+                        <label for="range-min" class="text">{{ __('nav.minimum') }} {{ __('cart.price') }}:</label>
+                        <input type="number" id="{{ $panelAttribute }}min_price" class="input px-1 py-2"
+                            value="{{ request('min_price', $minPrice) }}"
+                            step="1">
+                    </div>
+                    <div class="engraved-label-input">
+                        <label for="range-max" class="text">{{ __('nav.maximum') }} {{ __('cart.price') }}:</label>
+                        <input type="number" id="{{ $panelAttribute }}max_price" class="input px-1 py-2"
+                            value="{{ request('max_price', $maxPrice) }}"
+                            step="1">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success mt-xl-4 px-2 py-lg-0 py-1">
+                    {{ __('cart.apply') }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const form = document.querySelector('.filter-form');
+        const panelAttribute = "{{ $panelAttribute }}";
+        const panelContainer = "{{ $panelContainer }}";
+        const form = document.getElementById(`${panelAttribute}filterForm`);
 
         // === Auto-submit on input change ===
         form.querySelectorAll('.auto-submit').forEach(input => {
@@ -142,7 +142,7 @@ $maxPrice = ceil($eaPrices->max());
 
         activeFields.forEach(field => {
             if (urlParams.has(field) || urlParams.getAll(`${field}[]`).length > 0) {
-                const targetId = `#${field.replace('_', '-')}-filter`;
+                const targetId = `#${panelAttribute}${field.replace('_', '-')}-filter`;
                 const content = document.querySelector(targetId);
                 const toggleBtn = document.querySelector(`.toggle-btn[data-target="${targetId}"]`);
 
@@ -155,17 +155,17 @@ $maxPrice = ceil($eaPrices->max());
         });
 
         // === Expand price section on DOMContentLoaded
-        const priceContent = document.querySelector('#price-filter');
-        const priceToggleBtn = document.querySelector('.toggle-btn[data-target="#price-filter"]');
+        const priceContent = document.querySelector(`#${panelAttribute}price-filter`);
+        const priceToggleBtn = document.querySelector(`.toggle-btn[data-target="#${panelAttribute}price-filter"]`);
 
         if (priceContent && priceToggleBtn) {
-            priceContent.classList.add('expanded');
-            priceContent.style.maxHeight = priceContent.scrollHeight + 'px';
-            priceToggleBtn.textContent = '−';
+                priceContent.classList.add('expanded');
+                priceContent.style.maxHeight = priceContent.scrollHeight + 'px';
+                priceToggleBtn.textContent = '−';
         }
 
         // === Toggle on click
-        document.querySelectorAll('.toggle-btn').forEach(button => {
+        document.querySelectorAll(`${panelContainer} .toggle-btn`).forEach(button => {
             const target = document.querySelector(button.dataset.target);
 
             button.addEventListener('click', () => {
@@ -183,11 +183,12 @@ $maxPrice = ceil($eaPrices->max());
             });
         });
 
-        const rangeMin = document.getElementById('range-min');
-        const rangeMax = document.getElementById('range-max');
-        const minInput = document.getElementById('min_price');
-        const maxInput = document.getElementById('max_price');
-        const fill = document.getElementById('sliderRangeFill');
+        //=== MIN MAX INPUT HANDLING 
+        const rangeMin = document.getElementById(`${panelAttribute}range-min`);
+        const rangeMax = document.getElementById(`${panelAttribute}range-max`);
+        const minInput = document.getElementById(`${panelAttribute}min_price`);
+        const maxInput = document.getElementById(`${panelAttribute}max_price`);
+        const fill = document.getElementById(`${panelAttribute}sliderRangeFill`);
 
         const sliderMin = parseInt(rangeMin.min);
         const sliderMax = parseInt(rangeMin.max);
@@ -233,5 +234,8 @@ $maxPrice = ceil($eaPrices->max());
 
         // Initial fill
         syncFromSlider();
+
+
+        // === MODAL LOGIC
     });
 </script>

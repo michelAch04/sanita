@@ -97,12 +97,3 @@
 .footer {
     z-index: 9999;
 }
-
-.category-index-btn {
-    background: transparent !important;
-    border: none !important;
-    color: var(--primary-blue) !important;
-}
-.category-index-btn::after {
-    background-color: var(--primary-blue) !important;
-}

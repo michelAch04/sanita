@@ -14,6 +14,7 @@
     flex: 0 0 auto;
     max-height: calc(100vh - 4rem);
     overflow-y: scroll;
+    border: 1px solid var(--tertiary-bg);
 }
 
 .filter-container::-webkit-scrollbar {
@@ -171,4 +172,35 @@
 
 .empty-filter-alert .empty-filter-btn {
     border-radius: 2rem;
+}
+
+/*MODAL*/
+.filter-panel {
+    height: fit-content;
+    max-height: 80vh;
+    background: #f8f9fa;
+    z-index: 1080;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    transform: translateY(100%);
+    transition: transform 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-panel.show {
+    transform: translateY(0);
+}
+
+.filter-panel-body {
+    flex: 1;
+    overflow-y: auto;
+    max-height: calc(85vh - 56px);
+}
+
+.filter-backdrop {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 1070;
 }

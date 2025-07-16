@@ -192,10 +192,10 @@
         </div>
     </nav>
 
-<div id="content">
-    <!-- Main Content -->
-    @yield('content')
-</div>
+    <div id="content">
+        <!-- Main Content -->
+        @yield('content')
+    </div>
 
     @include('components.toast')
 
