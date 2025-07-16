@@ -600,6 +600,34 @@
     0 0 10px rgba(143, 177, 202, 0.4) inset;
 }
 
+/* ----------- ENGRAVED LABEL INPUT ------------------- */
+.engraved-label-input {
+  display: flex;
+  flex-direction: column;
+  position: static;
+  height: fit-content;
+}
+
+.engraved-label-input label.text {
+  color: var(--link-blue);
+  position: relative;
+  top: 0.5rem;
+  margin: 0 auto;
+  padding: 0;
+  background: var(--card-bg);
+  width: fit-content;
+}
+
+.engraved-label-input input[type=number].input {
+  border: 2px var(--link-blue) solid;
+  border-radius: 5px;
+  background: transparent;
+}
+
+.engraved-label-input input[type=number].input:focus {
+  outline: none;
+}
+
 /* ----------- LOADER --------------- */
 .cubes-container {
   width: 100vw;

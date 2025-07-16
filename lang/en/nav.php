@@ -36,6 +36,8 @@ return [
     'warning' => 'Warning!',
     'error' => 'Error',
     'cancel' => 'Cancel',
+    'minimum' => 'Min',
+    'maximum' => 'Max', 
     'order_history' => 'Order History',
     'order_details' => 'Order Details',
     'continue_shopping' => 'Continue Shopping'

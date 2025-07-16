@@ -68,6 +68,37 @@
         margin-right: 0.2rem !important;
     }
 
+    /* ------------- FILTER BAR ------------------- */
+    .price-range-input * {
+        font-size: 0.7rem !important;
+    }
+
+    .price-range-input input {
+        max-width: 3rem !important;
+    }
+
+    .range-slider::-webkit-slider-thumb {
+        width: 12px !important;
+        height: 12px !important;
+    }
+
+    .slider-track-bg,
+    .slider-range-fill {
+        height: 4px !important;
+    }
+
+    .range-slider {
+        top: 0.25rem !important;
+    }
+
+    .position-relative.range-wrapper {
+        height: 20px !important;
+    }
+
+    .price-range-input {
+        top: -0.75rem !important;
+    }
+    /*SHOULD STOP AT 768PX*/
 }
 
 @media (min-width: 613px) and (max-width: 768px) {

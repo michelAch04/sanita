@@ -126,7 +126,7 @@ class AuthController extends Controller
             if ($customer) {
                 return redirect()->route('sanita.index', ['locale' => app()->getLocale()])
                     ->with('success', 'Your mobile number has been verified and you are now logged in.')
-                    ->with('force_address_modal', true);    
+                    ->with('force_address_modal', true);
             }
         } catch (\Exception $e) {
             \Log::error('Unexpected error during OTP verification', ['message' => $e->getMessage()]);
@@ -170,6 +170,11 @@ class AuthController extends Controller
 
     public function showSignIn(Request $request)
     {
+        if ($request->query('showToast') == '1' && $request->has('toastMessage')) {
+            return redirect()->route('customer.signin', ['locale' => app()->getLocale()])
+                            ->with('info', $request->query('toastMessage'));
+        }
+
         return view('sanita.auth.signin');
     }
 

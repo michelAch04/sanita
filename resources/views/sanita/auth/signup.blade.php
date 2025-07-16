@@ -45,7 +45,7 @@
                 <i class="fa fa-phone"></i>
                 <input type="hidden" name="country_code" id="country_code">
                 <input id="mobile" type="tel" name="mobile"
-                    class="login-input text-primary"
+                    class="login-input text-primary {{ $isRtl ? 'rtl-container' : '' }}"
                     value="{{ old('mobile') }}"
                     data-old="{{ old('country_code') ? '+' . old('country_code') . old('mobile') : old('mobile') }}"
                     placeholder="{{ __('auth.sign_up.mobile') }}" required>
@@ -158,5 +158,16 @@
         </p>
     </form>
 </div>
-<script src="{{ asset('js/auth.js') }}"></script>
+<script type="module">
+    import ar from "{{  asset('/intl-tel-input/build/js/i18n/ar/index.js') }}";
+    import ku from "{{  asset('/intl-tel-input/build/js/i18n/ku/index.js') }}";
+    window.i18nAr = ar;
+    window.i18nKu = ku;
+    console.log(ku);
+    window.utilsScripts = {
+         ar: "{{ asset('/intl-tel-input/build/js/utils.js?1743167482095') }}",
+         default: "{{ asset('/intl-tel-input/build/js/utils.js') }}"
+    }
+</script>
+<script type="module" src="{{ asset('js/auth.js') }}"></script>
 @endsection

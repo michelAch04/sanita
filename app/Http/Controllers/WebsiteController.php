@@ -50,6 +50,11 @@ class WebsiteController extends Controller
     {
         $products = $this->getAvailableProducts();
 
+        // Get current prices
+        $eaPrices = $products->flatMap(function ($product) {
+            return $product->listPrices->first()?->pluck('shelf_price');
+        });
+
         // ✅ Filter by brand
         if ($request->filled('brand')) {
             $brandIds = (array) $request->input('brand');
@@ -89,7 +94,7 @@ class WebsiteController extends Controller
         $brands = Brand::where('hidden', 0)->where('cancelled', 0)->orderBy('name_en')->get();
         $categories = Category::where('hidden', 0)->where('cancelled', 0)->orderBy('name_en')->get();
 
-        return view('sanita.products.index', compact('products', 'offers', 'brands', 'categories'));
+        return view('sanita.products.index', compact('products', 'offers', 'brands', 'categories', 'eaPrices'));
     }
 
     public function offers()
