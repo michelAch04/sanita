@@ -3,8 +3,6 @@ return [
     'title' => 'Sanita',
     'home' => 'Home',
     'back' => 'Back',
-    'add_first_address' => 'Add Your Address',
-    'add_address_required' => 'Our website customizes products and stock availability based on your location to give you the most relevant shopping experience.',
     'categories' => 'Categories',
     'products' => 'Products',
     'brands' => 'Brands',

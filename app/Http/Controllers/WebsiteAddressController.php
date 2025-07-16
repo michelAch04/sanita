@@ -14,7 +14,7 @@ class WebsiteAddressController extends Controller
     public function index()
     {
         try {
-            $addresses =  Address::with('governorate')
+            $addresses = Address::with('governorate')
                 ->where('customers_id', auth('customer')->id())
                 ->where('cancelled', 0)
                 ->get();
@@ -24,8 +24,8 @@ class WebsiteAddressController extends Controller
             $cities = City::all();
             return view('sanita.addresses.index', compact('addresses', 'governorates', 'districts', 'cities'));
         } catch (\Exception $e) {
-            \Log::error('Error in WebsiteAddressController@destroy', ['exception' => $e]);
-            return back()->with('error', __('An error occurred while deleting the address.'));
+            \Log::error('Error in WebsiteAddressController@index', ['exception' => $e]);
+            return back()->with('error', __('address.error_deleting_address'));
         }
     }
 
@@ -49,7 +49,6 @@ class WebsiteAddressController extends Controller
                 'building' => 'required|string',
                 'floor' => 'nullable|string',
                 'notes' => 'nullable|string',
-                // 'is_default' => 'boolean', // REMOVE THIS LINE
             ]);
 
             $customerId = auth('customer')->id();
@@ -67,19 +66,20 @@ class WebsiteAddressController extends Controller
                 'building' => $request->building,
                 'floor' => $request->floor,
                 'notes' => $request->notes,
-                'is_default' => $isFirst, // Set to true if first address, otherwise false
+                'is_default' => $isFirst, // Set true if first address
             ]);
 
             if (session('force_address_modal')) {
                 session()->forget('force_address_modal');
-                return redirect()->route('sanita.index', app()->getLocale())->with('success', __('Address saved.'));
-            } else if (str_contains(url()->previous(), 'checkout')) {
-                return redirect()->route('cart.checkout', app()->getLocale())->with('success', __('Address saved.'));
-            } else
-                return redirect()->route('addresses.index', app()->getLocale())->with('success', __('Address saved.'));
+                return redirect()->route('sanita.index', app()->getLocale())->with('success', __('address.address_saved'));
+            } elseif (str_contains(url()->previous(), 'checkout')) {
+                return redirect()->route('cart.checkout', app()->getLocale())->with('success', __('address.address_saved'));
+            }
+
+            return redirect()->route('addresses.index', app()->getLocale())->with('success', __('address.address_saved'));
         } catch (\Exception $e) {
             \Log::error('Error in WebsiteAddressController@store', ['exception' => $e]);
-            return back()->with('error', __('An error occurred while saving the address.'));
+            return back()->with('error', __('address.error_saving_address'));
         }
     }
 
@@ -92,8 +92,8 @@ class WebsiteAddressController extends Controller
 
             return view('sanita.addresses.edit', compact('address', 'governorates', 'districts', 'cities'));
         } catch (\Exception $e) {
-            \Log::error('Error in WebsiteAddressController@destroy', ['exception' => $e]);
-            return back()->with('error', __('An error occurred while deleting the address.'));
+            \Log::error('Error in WebsiteAddressController@edit', ['exception' => $e]);
+            return back()->with('error', __('address.error_deleting_address'));
         }
     }
 
@@ -126,10 +126,10 @@ class WebsiteAddressController extends Controller
                 'notes' => $request->notes,
             ]);
 
-            return redirect()->route('addresses.index', app()->getLocale())->with('success', __('Address updated.'));
+            return redirect()->route('addresses.index', app()->getLocale())->with('success', __('address.address_updated'));
         } catch (\Exception $e) {
-            \Log::error('Error in WebsiteAddressController@destroy', ['exception' => $e]);
-            return back()->with('error', __('An error occurred while deleting the address.'));
+            \Log::error('Error in WebsiteAddressController@update', ['exception' => $e]);
+            return back()->with('error', __('address.error_updating_address'));
         }
     }
 
@@ -144,23 +144,22 @@ class WebsiteAddressController extends Controller
             // Set current one to default
             $address->update(['is_default' => 1]);
 
-            return back()->with('success', __('Default address updated.'));
+            return back()->with('success', __('address.default_address_updated'));
         } catch (\Exception $e) {
-            \Log::error('Error in WebsiteAddressController@destroy', ['exception' => $e]);
-            return back()->with('error', __('An error occurred while deleting the address.'));
+            \Log::error('Error in WebsiteAddressController@setDefault', ['exception' => $e]);
+            return back()->with('error', __('address.error_deleting_address'));
         }
     }
-
 
     public function destroy($locale, Address $address)
     {
         try {
             $address->where('id', $address->id)->update(['cancelled' => 1]);
 
-            return redirect()->route('addresses.index', $locale)->with('success', __('Address deleted.'));
+            return redirect()->route('addresses.index', $locale)->with('success', __('address.address_deleted'));
         } catch (\Exception $e) {
             \Log::error('Error in WebsiteAddressController@destroy', ['exception' => $e]);
-            return back()->with('error', __('An error occurred while deleting the address.'));
+            return back()->with('error', __('address.error_deleting_address'));
         }
     }
 
@@ -169,8 +168,8 @@ class WebsiteAddressController extends Controller
         try {
             return District::where('governorates_id', $request->governorates_id)->get();
         } catch (\Exception $e) {
-            \Log::error('Error in WebsiteAddressController@destroy', ['exception' => $e]);
-            return back()->with('error', __('An error occurred while deleting the address.'));
+            \Log::error('Error in WebsiteAddressController@getDistricts', ['exception' => $e]);
+            return response()->json(['error' => __('address.error_deleting_address')], 500);
         }
     }
 
@@ -180,7 +179,7 @@ class WebsiteAddressController extends Controller
             return City::where('districts_id', $request->districts_id)->get();
         } catch (\Exception $e) {
             \Log::error('Error in WebsiteAddressController@getCities', ['exception' => $e]);
-            return response()->json(['error' => 'An error occurred while fetching cities.'], 500);
+            return response()->json(['error' => __('address.error_fetching_cities')], 500);
         }
     }
 }

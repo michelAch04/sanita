@@ -99,7 +99,9 @@
                             <option value="">{{ __('cart.select_address') }}</option>
                             @foreach($addresses as $address)
                             <option value="{{ $address->id }}" {{ $address->is_default ? 'selected' : '' }}>
-                                {{ $address->title }} — {{ $address->city->name_en }}, {{ $address->district->name_en }}
+                                {{ $address->title }} —
+                                {{ $address->city->{'name_' . app()->getLocale()} ?? $address->city->name_en }},
+                                {{ $address->district->{'name_' . app()->getLocale()} ?? $address->district->name_en }}
                                 | Street {{ $address->street }}, Building {{ $address->building }}, Floor {{ $address->floor }}
                             </option>
                             @endforeach
@@ -116,10 +118,10 @@
                     <div class="promo mb-4 d-flex gap-3 align-items-center flex-direction-row">
                         <div class="login-inputForm promo-code-container">
                             <input type="text" id="promo_code" name="promo_code"
-                                class="login-input w-100 text-primary" placeholder="Enter Promo Code">
+                                class="login-input w-100 text-primary" placeholder="{{__('cart.Enter_Promo_Code')}}">
                         </div>
                         <div>
-                            <button type="submit" class="btn underline-btn">{{ __('cart.apply') }}</button>
+                            <button type="button" id="applyPromoBtn" class="btn underline-btn">{{ __('cart.apply') }}</button>
                         </div>
                     </div>
                 </div>

@@ -272,16 +272,17 @@
     window.locale = "{{ app()->getLocale() }}";
     window.url = "{{ url('') }}";
     window.addressMessages = {
-        loading: "{{ __('Loading...') }}",
-        selectCity: "{{ __('Select City') }}",
-        selectDistrict: "{{ __('Select District') }}",
-        selectGovernorate: "{{ __('Select Governorate') }}"
+        loading: "{{ __('address.Loading...') }}",
+        selectCity: "{{ __('address.Select_City') }}",
+        selectDistrict: "{{ __('address.Select_District') }}",
+        selectGovernorate: "{{ __('address.Select_Governorate') }}"
     };
     window.uomLabels = {
         EA: "{{ __('cart.EA') }}",
         CA: "{{ __('cart.CA') }}",
         PL: "{{ __('cart.PL') }}"
     };
+    window.locale = "{{ app()->getLocale() }}";
 
     window.conversionCaseEach = "{{ __('cart.conversion_case_each') }}";
     window.conversionPalletEach = "{{ __('cart.conversion_pallet_each') }}";

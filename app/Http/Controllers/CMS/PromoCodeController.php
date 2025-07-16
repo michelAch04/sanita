@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\PromoCode;
 use App\Models\Customer;
+use Carbon\Carbon;
+
 
 class PromoCodeController extends Controller
 {
@@ -26,22 +28,14 @@ class PromoCodeController extends Controller
             'code' => 'required|string|unique:promo_codes',
             'type' => 'required|in:percentage,fixed',
             'value' => 'required|numeric|min:0',
-            'usage_limit' => 'nullable|integer|min:0',
             'max_uses' => 'nullable|integer|min:1',
-            'uses_per_user' => 'nullable|integer|min:1',
+            'max_uses_per_user' => 'nullable|integer|min:1',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
-            'is_active' => 'nullable|boolean',
         ]);
+        PromoCode::create($validated);
 
-
-
-        $promo = PromoCode::create($validated);
-        if ($request->customer_ids) {
-            $promo->customers()->attach($request->customer_ids);
-        }
-
-        return redirect()->route('admin.promo_codes.index')->with('success', 'Promo code created successfully');
+        return redirect()->route('cms.promocodes.index')->with('success', 'Promo code created successfully');
     }
 
     /**
@@ -57,8 +51,13 @@ class PromoCodeController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $promocode = PromoCode::findOrFail($id);
+        // In your controller (before passing to view)
+        $promocode->start_date = Carbon::parse($promocode->start_date);
+        $promocode->end_date = Carbon::parse($promocode->end_date);
+        return view('cms.promocodes.edit', compact('promocode'));
     }
+
 
     /**
      * Update the specified resource in storage.

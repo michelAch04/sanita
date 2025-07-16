@@ -121,6 +121,9 @@ Route::prefix('{locale}')->middleware(['localization', 'force.address.modal'])->
             'update' => 'website.cart.update',
             'destroy' => 'website.cart.destroy',
         ]);
+        Route::get('/checkout', [WebsiteCartController::class, 'checkout'])->name('cart.checkout');
+        Route::get('/checkpromocode', [WebsiteCartController::class, 'checkpromocode'])->name('cart.checkpromocode');
+
 
         Route::post('/checkout/place-order', [WebsiteOrderController::class, 'placeOrder'])->name('website.checkout.place_order');
         Route::get('/orders', [WebsiteOrderController::class, 'index'])->name('website.orders.index');
@@ -132,8 +135,6 @@ Route::prefix('{locale}')->middleware(['localization', 'force.address.modal'])->
         Route::post('/addresses/{address}/set-default', [WebsiteAddressController::class, 'setDefault'])->name('addresses.setDefault');
         Route::get('/get-districts', [WebsiteAddressController::class, 'getDistricts']);
         Route::get('/get-cities', [WebsiteAddressController::class, 'getCities']);
-
-        Route::get('/checkout', [WebsiteCartController::class, 'checkout'])->name('cart.checkout');
     });
 
     Route::get('categories', [WebsiteController::class, 'categories'])->name('website.categories.index');

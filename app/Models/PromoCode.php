@@ -18,5 +18,4 @@ class PromoCode extends Model
         'end_date',
         'min_order_value',
     ];
-
 }
