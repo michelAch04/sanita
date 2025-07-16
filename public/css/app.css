@@ -25,6 +25,8 @@
     /*--secondary-bg: #f9f9f9;  == --card-bg*/
     --tertiary-bg: #E2E8F0;
     /*--tertiary-bg: #E2E8F0*/
+    --grey-bg: #c0c0c0;
+    /*--grey-bg: #c0c0c0*/
     --card-width: 14.075rem;
     /*--card-width: 17.075rem;*/
     --card-height: 20.25rem;
@@ -118,6 +120,10 @@ body.loaded #pageContent {
 
 .bg-tertiary {
     background-color: var(--tertiary-bg) !important;
+}
+
+.bg-grey {
+    background-color: var(--grey-bg) !important;
 }
 
 .cursor-pointer {
@@ -372,6 +378,10 @@ nav {
     cursor: text;
     padding-right: 1rem;
     background-color: var(--tertiary-bg);
+}
+.search-focused .search-icon {
+    cursor: pointer;
+    pointer-events: all;
 }
 
 .right-icons-container.search-focused .nav-link:not(.expanding-search) {
@@ -788,7 +798,7 @@ section:nth-of-type(5) {
 
 .slick-initialized .slick-slide {
     display: flex !important;
-    justify-content: center !important; 
+    justify-content: center !important;
     align-items: center !important;
 }
 
@@ -982,6 +992,14 @@ section:nth-of-type(5) {
     background-color: var(--link-blue) !important;
     color: var(--light-text) !important;
 }
+.underline-arctic {
+    background: transparent !important;
+    border: none !important;
+    color: var(--primary-blue) !important;
+}
+.underline-arctic::after {
+    background-color: var(--primary-blue) !important;
+}
 
 /* Footer Styling */
 .footer {
@@ -1001,44 +1019,3 @@ section:nth-of-type(5) {
     --checkbox-border: var(--link-blue);
 }
 
-/*FILTER PAGES STYLING*/
-.filter-container {
-    height: fit-content;
-    position: sticky;
-    top: 4rem;
-    padding: 1rem;
-    border-radius: 10px;
-    width: 20%;
-    flex: 0 0 auto;
-}
-.filtered-container {
-    width: 80%;
-    flex: 0 0 auto;
-}
-.filter-sidebar .form-check > * {
-    font-size: 0.85rem;
-    --checkbox-size: 0.85rem;
-}
-.filter-sidebar .form-check .checkbox-wrapper {
-    margin-bottom: 0.1rem;
-}
-.filter-sidebar .form-check {
-    padding-left: 0.5rem;
-}
-
-/* Toggle animation */
-.toggle-content {
-    overflow: hidden;
-    transition: max-height 0.4s ease;
-    max-height: 0;
-}
-.toggle-content.expanded {
-    max-height: 1000px; /* large enough to show content */
-}
-.toggle-btn {
-    background: none;
-    border: none;
-    font-size: 1.2rem;
-    cursor: pointer;
-    line-height: 1;
-}

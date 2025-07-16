@@ -46,7 +46,7 @@ $(document).ready(function () {
             },
             {
                 breakpoint: 577,
-                settings: { slidesToShow: 2, slidesToScroll: 2},
+                settings: { slidesToShow: 2, slidesToScroll: 2 },
             }
         ],
     });
@@ -169,9 +169,8 @@ $(document).ready(function () {
                     let label = window.uomLabels[uom] || uom;
                     radiosContainer.append(`
                     <label class="select-label">
-                        <input type="radio" name="UOM" value="${uom}" ${
-                        idx === 0 ? "checked" : ""
-                    }>
+                        <input type="radio" name="UOM" value="${uom}" ${idx === 0 ? "checked" : ""
+                        }>
                         <span>${label}</span>
                     </label>
                 `);
@@ -409,14 +408,18 @@ $(document).ready(function () {
     searchInput.addEventListener("keydown", function (e) {
         if (e.key === "Enter") {
             e.preventDefault();
-            const q = this.value.trim();
-            if (q) {
-                window.location.href =
-                    window.url +
-                    `/${window.locale}/search?q=${encodeURIComponent(q)}`;
-            }
+            searchContent()
         }
     });
+
+    function searchContent() {
+        const q = this.value.trim();
+        if (q) {
+            window.location.href =
+                window.url +
+                `/${window.locale}/search?q=${encodeURIComponent(q)}`;
+        }
+    }
 
     document.getElementById("menuToggle").addEventListener("click", () => {
         const offcanvas = new bootstrap.Offcanvas(
@@ -429,7 +432,7 @@ $(document).ready(function () {
         $('body').addClass('loaded');
         $("#pageLoader").fadeOut(300);
     }, 20000); // failsafe in case something blocks forever
-    
+
 });
 
 $(window).on("load", function () {
