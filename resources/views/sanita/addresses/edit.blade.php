@@ -1,10 +1,6 @@
-<<<<<<< HEAD
-<div class="container mt-2 mx-1 {{ $isRtl ? 'text-end w-100' : '' }}">
-    <form action="{{ route('addresses.update', ['locale' => app()->getLocale(), 'address' => $address->id]) }}" method="POST"
-=======
 <div class="container-fluid mt-2 mx-1 {{ $isRtl ? 'text-end w-100' : '' }}">
-    <form action="{{ route('addresses.update', ['locale' => app()->getLocale(), 'address' => $address->id]) }}" method="POST" 
->>>>>>> 87bb89cc6df85db8c4241d20796c9861565e101b
+    <form action="{{ route('addresses.update', ['locale' => app()->getLocale(), 'address' => $address->id]) }}" method="POST"
+
         class="{{ $isRtl ? 'rtl-container' : '' }} address-form">
         @csrf
         @method('PUT')
@@ -29,7 +25,7 @@
                 <select name="governorate" id="edit_governorate" class="login-input" required>
                     <option value="" disabled>{{ __('address.Select_Governorate') }}</option>
                     @foreach ($governorates as $gov)
-                    <option value="{{ $gov->id }}" {{ $address->governorate_id == $gov->id ? 'selected' : '' }}>{{ $gov->{'name_' . app()->getLocale()} ?? $gov->name_en }}</option>
+                    <option value="{{ $gov->id }}" {{ $address->governorates_id == $gov->id ? 'selected' : '' }}>{{ $gov->{'name_' . app()->getLocale()} ?? $gov->name_en }}</option>
                     @endforeach
                 </select>
             </div>
@@ -46,7 +42,7 @@
                 <select name="district" id="edit_district" class="login-input" required>
                     <option value="" disabled>{{ __('address.Select_District') }}</option>
                     @foreach ($districts as $district)
-                    <option value="{{ $district->id }}" {{ $address->district_id == $district->id ? 'selected' : '' }}>{{ $district->{'name_' . app()->getLocale()} ?? $district->name_en }}</option>
+                    <option value="{{ $district->id }}" {{ $address->districts_id == $district->id ? 'selected' : '' }}>{{ $district->{'name_' . app()->getLocale()} ?? $district->name_en }}</option>
                     @endforeach
                 </select>
             </div>
@@ -63,7 +59,7 @@
                 <select name="city" id="edit_city" class="login-input" required>
                     <option value="" disabled>{{ __('address.Select_City') }}</option>
                     @foreach ($cities as $city)
-                    <option value="{{ $city->id }}" {{ $address->city_id == $city->id ? 'selected' : '' }}>{{ $city->{'name_' . app()->getLocale()} ?? $district->name_en }}</option>
+                    <option value="{{ $city->id }}" {{ $address->cities_id == $city->id ? 'selected' : '' }}>{{ $city->{'name_' . app()->getLocale()} ?? $district->name_en }}</option>
                     @endforeach
                 </select>
             </div>
@@ -125,3 +121,9 @@
         </button>
     </form>
 </div>
+<script src="{{ asset('js/address.js') }}"></script>
+<link rel="stylesheet" href="{{ asset('css/address.css') }}" />
+@include('sanita.partials.select2',[
+'id' => '#governorate',
+'placeholder' => "{{ __('cart.select_address') }}"
+])

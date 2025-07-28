@@ -77,7 +77,7 @@ class WebsiteCartController extends Controller
                     'message' => __('cart.out_of_stock'),
                     'stock' => $product->distributorStocks->sum('stock'),
                     'requested_quantity' => $totalRequestedEA,
-                ], 422);
+                ]);
             }
 
             $cart->increment('total_amount', $extendedPrice);
@@ -161,14 +161,14 @@ class WebsiteCartController extends Controller
             if ($minQty > 0 && $newPrimaryQuantity < $minQty) {
                 return response()->json([
                     'warning' => true,
-                    'message' => "الكمية أدنى من الحد الأدنى المسموح به: {$minQty}",
+                    'message' => "cart.max_qty",
                 ]);
             }
 
             if ($maxQty > 0 && $newPrimaryQuantity > $maxQty) {
                 return response()->json([
                     'warning' => true,
-                    'message' => "الكمية تجاوزت الحد الأقصى المسموح به: {$maxQty}",
+                    'message' => "cart.min_qty",
                 ]);
             }
 
@@ -184,7 +184,7 @@ class WebsiteCartController extends Controller
             if ($totalRequestedEA > $totalStockEA) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'الكمية المطلوبة غير متوفرة في المخزون.',
+                    'message' => 'cart.out_of_stock',
                     'stock' => $totalStockEA,
                     'requested_quantity' => $totalRequestedEA,
                 ]);
@@ -212,7 +212,7 @@ class WebsiteCartController extends Controller
             \Log::error('Cart update error: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
-                'message' => 'حدث خطأ في الخادم: ' . $e->getMessage(),
+                'message' => 'cart.error' . $e->getMessage(),
             ], 500);
         }
     }

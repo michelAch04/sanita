@@ -47,7 +47,7 @@ $(document).ready(function () {
             {
                 breakpoint: 577,
                 settings: { slidesToShow: 2, slidesToScroll: 2 },
-            }
+            },
         ],
     });
 
@@ -169,8 +169,9 @@ $(document).ready(function () {
                     let label = window.uomLabels[uom] || uom;
                     radiosContainer.append(`
                     <label class="select-label">
-                        <input type="radio" name="UOM" value="${uom}" ${idx === 0 ? "checked" : ""
-                        }>
+                        <input type="radio" name="UOM" value="${uom}" ${
+                        idx === 0 ? "checked" : ""
+                    }>
                         <span>${label}</span>
                     </label>
                 `);
@@ -390,13 +391,15 @@ $(document).ready(function () {
     const searchInput = document.getElementById("searchInput");
     const searchIcon = searchInput.previousElementSibling;
     const rightIconsContainer = searchInput.closest(".right-icons-container");
-
+    const form = document.getElementById("searchForm");
+    // Expand search on focus
     searchInput.addEventListener("focus", () => {
         searchInput.classList.add("expanded");
         searchIcon.classList.add("focused");
         rightIconsContainer.classList.add("search-focused");
     });
 
+    // Collapse if input is empty on blur
     searchInput.addEventListener("blur", () => {
         if (searchInput.value.trim() === "") {
             searchInput.classList.remove("expanded");
@@ -405,21 +408,15 @@ $(document).ready(function () {
         }
     });
 
+    // On Enter key, trigger search
     searchInput.addEventListener("keydown", function (e) {
         if (e.key === "Enter") {
             e.preventDefault();
-            searchContent()
+            if (searchInput.value.trim() !== "") {
+                form.submit(); // ✅ now this works
+            }
         }
     });
-
-    function searchContent() {
-        const q = this.value.trim();
-        if (q) {
-            window.location.href =
-                window.url +
-                `/${window.locale}/search?q=${encodeURIComponent(q)}`;
-        }
-    }
 
     document.getElementById("menuToggle").addEventListener("click", () => {
         const offcanvas = new bootstrap.Offcanvas(
@@ -429,13 +426,12 @@ $(document).ready(function () {
     });
 
     setTimeout(() => {
-        $('body').addClass('loaded');
+        $("body").addClass("loaded");
         $("#pageLoader").fadeOut(300);
     }, 20000); // failsafe in case something blocks forever
-
 });
 
 $(window).on("load", function () {
-    $('body').addClass('loaded');
+    $("body").addClass("loaded");
     $("#pageLoader").fadeOut(300);
 });

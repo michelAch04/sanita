@@ -13,6 +13,8 @@ use App\Models\Address;
 use App\Models\Governorate;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use App\Models\Subcategory;
+use Illuminate\Support\Facades\DB;
 
 class WebsiteController extends Controller
 {
@@ -254,5 +256,37 @@ class WebsiteController extends Controller
             }
         }
         return $this->allProducts('b2c');
+    }
+
+    public function searchview(Request $request)
+    {
+        $query = $request->input('q');
+
+        $products = Product::where(function ($q) use ($query) {
+            $q->where('name_en', 'LIKE', "%{$query}%")
+                ->orWhere('name_ar', 'LIKE', "%{$query}%")
+                ->orWhere('name_ku', 'LIKE', "%{$query}%");
+        })->get();
+
+        $categories = Category::where(function ($q) use ($query) {
+            $q->where('name_en', 'LIKE', "%{$query}%")
+                ->orWhere('name_ar', 'LIKE', "%{$query}%")
+                ->orWhere('name_ku', 'LIKE', "%{$query}%");
+        })->get();
+
+        $subcategories = Subcategory::where(function ($q) use ($query) {
+            $q->where('name_en', 'LIKE', "%{$query}%")
+                ->orWhere('name_ar', 'LIKE', "%{$query}%")
+                ->orWhere('name_ku', 'LIKE', "%{$query}%");
+        })->get();
+
+        $brands = Brand::where(function ($q) use ($query) {
+            $q->where('name_en', 'LIKE', "%{$query}%")
+                ->orWhere('name_ar', 'LIKE', "%{$query}%")
+                ->orWhere('name_ku', 'LIKE', "%{$query}%");
+        })->get();
+
+
+        return view('sanita.search.index', compact('query', 'products', 'categories', 'subcategories', 'brands'));
     }
 }

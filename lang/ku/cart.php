@@ -43,4 +43,6 @@ return [
     'PL' => 'پەلەت',
     'conversion_case_each' => 'یەک کارتۆن دەبێت بە :count دانە',
     'Enter_Promo_Code' => 'کۆدی پرۆمو داخڵ بکە',
+    'apply' => 'جێبەجێکردن',
+    'remove' => 'لابردن',
 ];

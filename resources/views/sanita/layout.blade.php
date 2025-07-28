@@ -99,10 +99,18 @@
                     @endauth
 
                     {{-- Search --}}
-                    <div class="expanding-search nav-link">
-                        <i class="fas fa-search search-icon"></i>
-                        <input type="search" id="searchInput" placeholder="{{ __('nav.search_placeholder') }}">
-                    </div>
+                    <form id="searchForm" action="{{ route('search.index', ['locale' => app()->getLocale()]) }}" method="GET">
+                        <div class="expanding-search nav-link right-icons-container" style="position: relative;">
+                            <i class="fas fa-search search-icon"></i>
+                            <input
+                                type="search"
+                                id="searchInput"
+                                name="q"
+                                placeholder="Search..."
+                                class="form-control"
+                                autocomplete="off">
+                        </div>
+                    </form>
                 </div>
             </div>
 
@@ -244,7 +252,7 @@
 <!-- Laravel Assets -->
 <script src="{{ asset('js/app.js') }}"></script>
 <script src="{{ asset('js/modals.js') }}"></script>
-<script src="{{ asset('js/promocode.js') }}"></script>ip
+<script src="{{ asset('js/promocode.js') }}"></script>
 
 <!-- Global Window Variables -->
 <script>
@@ -259,6 +267,8 @@
     window.signinUrl = "{{ route('customer.signin', ['locale' => app()->getLocale()]) }}";
     window.validatePromoUrl = "{{ route('cart.validatepromocode', ['locale' => app()->getLocale()]) }}";
     window.removePromoUrl = "{{ route('cart.validatepromocode' , ['locale' => app()->getLocale()]) }}";
+    window.searchpage = "{{ route('search.index', ['locale' => app()->getLocale()]) }}";
+    window.searchpage = "{{ route('search.index', ['locale' => app()->getLocale()]) }}";
     window.csrfToken = "{{ csrf_token() }}";
     window.cartMessages = {
         addSuccess: "{{ __('nav.cart_add_success') }}",
@@ -274,8 +284,10 @@
         removeFailed: '{{ __("cart.remove_failed") }}',
         removeError: '{{ __("cart.remove_error") }}'
     };
+    window.removebtn = "{{ __('cart.remove') }}";
+    window.applybtn = "{{ __('cart.apply') }}";
     window.locale = "{{ app()->getLocale() }}";
-    window.url = "{{ url('') }}";
+console.log(window.applybtn);
     window.addressMessages = {
         loading: "{{ __('address.Loading...') }}",
         selectCity: "{{ __('address.Select_City') }}",
@@ -287,7 +299,6 @@
         CA: "{{ __('cart.CA') }}",
         PL: "{{ __('cart.PL') }}"
     };
-    window.locale = "{{ app()->getLocale() }}";
 
     window.conversionCaseEach = "{{ __('cart.conversion_case_each') }}";
     window.conversionPalletEach = "{{ __('cart.conversion_pallet_each') }}";
@@ -300,6 +311,7 @@
         maxQuantity: 0,
         conversionText: ''
     };
+    window.url = "{{ url('/') }}";
 </script>
 
 <!-- Per-page Scripts -->

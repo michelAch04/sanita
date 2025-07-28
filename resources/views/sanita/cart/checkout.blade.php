@@ -170,6 +170,14 @@
         </div>
     </div>
 </div>
+<script>
+    const $total = document.getElementById('finalTotal');
+    const totalText = $total.textContent.trim();
+    const numericTotal = parseFloat(totalText.replace(/,/g, '')); // Remove comma and convert to float
+    console.log(numericTotal); // Now a valid number
+
+    window.originalTotal = numericTotal;
+</script>
 
 {{-- Styles --}}
 <link href="{{ asset('css/cart.css') }}" rel="stylesheet" />

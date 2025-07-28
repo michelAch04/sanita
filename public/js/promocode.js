@@ -11,6 +11,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let promoApplied = false;
     let originalTotal = window.originalTotal;
+    let applybtn = window.applybtn;
+    let removebtn = window.removebtn;
 
     if (applyPromoBtn) {
         applyPromoBtn.addEventListener("click", async () => {
@@ -22,8 +24,9 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             const url = promoApplied
-                ? window.validatePromoUrl
-                : window.removePromoUrl;
+                ? window.removePromoUrl
+                : window.validatePromoUrl;
+
             const payload = { code, cart_total: originalTotal };
 
             try {
@@ -49,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     finalTotalField.textContent = originalTotal.toFixed(2);
                     discountAmountField.textContent = "0.00";
                     discountRow.style.display = "none";
-                    applyPromoBtn.textContent = "{{ __('cart.apply') }}";
+                    applyPromoBtn.textContent = applybtn;
                     promoApplied = false;
                     showAjaxToast("info", "Promo code removed.");
                 } else {
@@ -57,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     discountAmountField.textContent = data.discount_amount;
                     finalTotalField.textContent = data.discounted_total;
                     discountRow.style.display = "block";
-                    applyPromoBtn.textContent = "{{ __('cart.remove') }}";
+                    applyPromoBtn.textContent = removebtn;
                     promoApplied = true;
                     showAjaxToast("success", "Promo code applied!");
                 }

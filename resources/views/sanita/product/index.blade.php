@@ -143,11 +143,13 @@ return [
 'old_price' => $item->old_price,
 ];
 });
+
 @endphp
 <script>
     window.productPrices = @json($productPrices);
     window.isProductPage = true;
 </script>
+<script src="{{ asset('js/auth.js') }}"></script>
 <script src="{{ asset('js/quantity-script.js') }}"></script>
 <script src="{{ asset('js/product-page.js') }}"></script>
 @endsection

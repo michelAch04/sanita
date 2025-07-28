@@ -144,7 +144,7 @@ Route::prefix('{locale}')->middleware(['localization', 'force.address.modal'])->
     Route::get('offers', [WebsiteController::class, 'offers'])->name('website.offers.index');
     Route::get('category', [WebsiteController::class, 'category'])->name('website.category.index');
     Route::get('/product', [WebsiteController::class, 'product'])->name('website.product.index');
-
+    Route::get('/search/index', [WebsiteController::class, 'searchview'])->name('search.index');
 
     // Password reset routes
     Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');

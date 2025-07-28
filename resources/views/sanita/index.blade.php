@@ -89,7 +89,7 @@ $type = auth()->user()->type ?? 'b2c';
     </div>
 </section>
 
-<section id="brands" class="py-5">
+<!-- <section id="brands" class="py-5">
     <div class="container text-center">
         <h2 class="display-5 mb-4 section-title">{{ __('nav.brands') }}</h2>
         <div class="carousel mx-auto mb-5 px-1">
@@ -111,11 +111,12 @@ $type = auth()->user()->type ?? 'b2c';
             </a>
         </div>
     </div>
-</section>
+</section> -->
 @include('sanita.partials.contact-us')
 @include('sanita.partials.add-to-cart-modal')
 <style>
     @media (max-width: 768px) {
+
         html,
         body {
             overflow-x: hidden !important;
