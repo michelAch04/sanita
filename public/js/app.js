@@ -408,12 +408,12 @@ $(document).ready(function () {
     searchInput.addEventListener("keydown", function (e) {
         if (e.key === "Enter") {
             e.preventDefault();
-            searchContent()
+            searchContent(this)
         }
     });
 
-    function searchContent() {
-        const q = this.value.trim();
+    function searchContent(inp) {
+        const q = inp.value.trim();
         if (q) {
             window.location.href =
                 window.url +
