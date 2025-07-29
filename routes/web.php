@@ -122,7 +122,9 @@ Route::prefix('{locale}')->middleware(['localization', 'force.address.modal'])->
             'destroy' => 'website.cart.destroy',
         ]);
         Route::get('/checkout', [WebsiteCartController::class, 'checkout'])->name('cart.checkout');
-        Route::get('/checkpromocode', [WebsiteCartController::class, 'checkpromocode'])->name('cart.checkpromocode');
+        Route::post('/cart/validate-promo', [WebsiteCartController::class, 'validatePromoCode'])->name('cart.validatepromocode');
+        Route::post('/cart/remove-promo', [WebsiteCartController::class, 'removePromoCode'])->name('cart.removepromocode');
+
 
 
         Route::post('/checkout/place-order', [WebsiteOrderController::class, 'placeOrder'])->name('website.checkout.place_order');
@@ -142,7 +144,7 @@ Route::prefix('{locale}')->middleware(['localization', 'force.address.modal'])->
     Route::get('offers', [WebsiteController::class, 'offers'])->name('website.offers.index');
     Route::get('category', [WebsiteController::class, 'category'])->name('website.category.index');
     Route::get('/product', [WebsiteController::class, 'product'])->name('website.product.index');
-
+    Route::get('/search/index', [WebsiteController::class, 'searchview'])->name('search.index');
 
     // Password reset routes
     Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');

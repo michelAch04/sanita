@@ -14,6 +14,10 @@ class Order extends Model
         'subtotal_amount',
         'tax_amount',
         'total_amount',
+        'total_amount_after_discount',  // added for discount
+        'discount_amount',              // added for discount amount
+        'discount_percentage',          // added for discount percentage
+        'promocode',                   // added for storing promo code string
         'statuses_id',
         'payment_method',
         'cancelled',
@@ -33,9 +37,9 @@ class Order extends Model
     {
         return $this->belongsTo(Address::class, 'addresses_id');
     }
+
     public function status()
     {
-        return $this->belongsTo(Status::class, 'statuses_id');  
+        return $this->belongsTo(Status::class, 'statuses_id');
     }
-
 }

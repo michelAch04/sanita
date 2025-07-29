@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\{Cart, CartDetail, Product, Tax, Address, Governorate, City, District, Customer};
+use App\Models\{Cart, CartDetail, Product, PromoCodeUsage, Address, Governorate, City, District, Customer, PromoCode};
+use Illuminate\Support\Carbon;
 
 class WebsiteCartController extends Controller
 {
@@ -76,7 +77,7 @@ class WebsiteCartController extends Controller
                     'message' => __('cart.out_of_stock'),
                     'stock' => $product->distributorStocks->sum('stock'),
                     'requested_quantity' => $totalRequestedEA,
-                ], 422);
+                ]);
             }
 
             $cart->increment('total_amount', $extendedPrice);
@@ -160,14 +161,14 @@ class WebsiteCartController extends Controller
             if ($minQty > 0 && $newPrimaryQuantity < $minQty) {
                 return response()->json([
                     'warning' => true,
-                    'message' => "الكمية أدنى من الحد الأدنى المسموح به: {$minQty}",
+                    'message' => "cart.max_qty",
                 ]);
             }
 
             if ($maxQty > 0 && $newPrimaryQuantity > $maxQty) {
                 return response()->json([
                     'warning' => true,
-                    'message' => "الكمية تجاوزت الحد الأقصى المسموح به: {$maxQty}",
+                    'message' => "cart.min_qty",
                 ]);
             }
 
@@ -183,7 +184,7 @@ class WebsiteCartController extends Controller
             if ($totalRequestedEA > $totalStockEA) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'الكمية المطلوبة غير متوفرة في المخزون.',
+                    'message' => 'cart.out_of_stock',
                     'stock' => $totalStockEA,
                     'requested_quantity' => $totalRequestedEA,
                 ]);
@@ -211,7 +212,7 @@ class WebsiteCartController extends Controller
             \Log::error('Cart update error: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
-                'message' => 'حدث خطأ في الخادم: ' . $e->getMessage(),
+                'message' => 'cart.error' . $e->getMessage(),
             ], 500);
         }
     }
@@ -252,6 +253,154 @@ class WebsiteCartController extends Controller
             'governorates' => Governorate::all(),
             'districts' => District::all(),
             'cities' => City::all(),
+        ]);
+    }
+
+    public function validatePromoCode(Request $request)
+    {
+        $user = auth('customer')->user();
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not authenticated.'
+            ], 401);
+        }
+
+        $code = $request->input('code');
+        if (!$code) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Promo code is required.'
+            ], 400);
+        }
+
+        $promo = PromoCode::where('code', $code)->first();
+        if (!$promo) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Promo code does not exist.'
+            ], 404);
+        }
+
+        $now = Carbon::now();
+        $startDate = $promo->start_date ? Carbon::parse($promo->start_date) : null;
+        $endDate = $promo->end_date ? Carbon::parse($promo->end_date) : null;
+
+        if ($startDate && $startDate->gt($now)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Promo code is not active yet.'
+            ], 400);
+        }
+
+        if ($endDate && $endDate->lt($now)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Promo code has expired.'
+            ], 400);
+        }
+
+        $userUsageCount = PromoCodeUsage::where('promo_codes_id', $promo->id)
+            ->where('customers_id', $user->id)
+            ->count();
+
+        if (!is_null($promo->max_uses_per_user) && $userUsageCount >= $promo->max_uses_per_user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You have reached the maximum usage limit for this promo code.'
+            ], 400);
+        }
+
+        $totalUsageCount = PromoCodeUsage::where('promo_codes_id', $promo->id)->count();
+        if (!is_null($promo->max_uses) && $totalUsageCount >= $promo->max_uses) {
+            return response()->json([
+                'success' => false,
+                'message' => 'This promo code has reached its total usage limit.'
+            ], 400);
+        }
+
+        // Get cart and recalculate first
+        $cart = Cart::with('cartDetails')->where('customers_id', $user->id)->latest()->first();
+        if (!$cart) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cart not found.'
+            ], 404);
+        }
+
+
+        $cartTotal = $cart->total_amount;
+        if (!is_numeric($cartTotal) || $cartTotal <= 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid cart total.'
+            ], 400);
+        }
+
+        // Apply discount
+        $discountAmount = 0;
+        $discountPercentage = null;
+        $discountedTotal = $cartTotal;
+
+        if ($promo->type === 'percentage') {
+            $discountPercentage = $promo->value;
+            $discountAmount = ($discountPercentage / 100) * $cartTotal;
+            $discountedTotal = max(0, $cartTotal - $discountAmount);
+        } elseif ($promo->type === 'fixed') {
+            $discountAmount = $promo->value;
+            $discountedTotal = max(0, $cartTotal - $discountAmount);
+            $discountPercentage = ($discountAmount / $cartTotal) * 100;
+        }
+
+        // Update cart
+        $cart->discount_amount = $discountAmount;
+        $cart->discount_percentage = $discountPercentage;
+        $cart->total_amount_after_discount = $discountedTotal;
+        $cart->save();
+
+        return response()->json([
+            'success' => true,
+            'promo' => [
+                'id' => $promo->id,
+                'code' => $promo->code,
+                'discount_type' => $promo->discount_type,
+                'discount_value' => $promo->discount_value,
+                'start_date' => $startDate?->toDateString(),
+                'end_date' => $endDate?->toDateString(),
+            ],
+            'original_total' => number_format($cartTotal, 2),
+            'discounted_total' => number_format($discountedTotal, 2),
+            'discount_amount' => number_format($discountAmount, 2),
+            'discount_percentage' => number_format($discountPercentage, 2),
+        ]);
+    }
+
+    public function removePromoCode(Request $request)
+    {
+        $user = auth('customer')->user();
+        $cart = Cart::where('customers_id', $user->id)->latest()->first();
+
+        if (!$cart) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cart not found.'
+            ], 404);
+        }
+
+        $cart->discount_amount = 0;
+        $cart->discount_percentage = null;
+        $cart->total_amount_after_discount = $cart->total_amount;
+        $cart->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Promo code removed.',
+            'cart' => [
+                'original_total' => number_format($cart->total_amount, 2),
+                'discounted_total' => number_format($cart->total_amount, 2),
+                'discount_amount' => 0,
+                'discount_percentage' => null,
+            ]
         ]);
     }
 
@@ -334,9 +483,5 @@ class WebsiteCartController extends Controller
         }
 
         return [false, $shelf_price];
-    }
-
-    public function checkpromocode(){
-        
     }
 }

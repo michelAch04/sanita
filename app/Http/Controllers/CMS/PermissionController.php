@@ -44,8 +44,6 @@ class PermissionController extends Controller
         return view('cms.permission.create', compact('users', 'user', 'pages'));
     }
 
-
-
     public function update(Request $request)
     {
         $request->validate([

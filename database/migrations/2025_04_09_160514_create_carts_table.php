@@ -12,6 +12,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('customers_id')->constrained('customers')->onDelete('cascade');
             $table->decimal('total_amount'); //with vat 
+            $table->decimal('total_amount_after_discount', 10, 2)->default(0);
+            $table->decimal('discount_amount', 10, 2)->default(0);
+            $table->decimal('discount_percentage', 5, 2)->nullable();
             $table->decimal('subtotal_amount'); //without vat 
             $table->decimal('tax_amount'); // tax amount
             $table->timestamps();

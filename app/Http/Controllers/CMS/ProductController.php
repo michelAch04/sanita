@@ -80,7 +80,7 @@ class ProductController extends Controller
                 'subcategories_id' => 'required|exists:subcategories,id',
                 'brands_id' => 'required|exists:brands,id',
                 'tax_id' => 'nullable|exists:taxes,id',
-                'image' => 'nullable|image|max:2048|dimensions:ratio=1.4',
+                'image' => 'nullable|image|max:2048',
             ];
 
             foreach (['b2b', 'b2c'] as $prefix) {
@@ -219,7 +219,7 @@ class ProductController extends Controller
                 'subcategories_id' => 'required|exists:subcategories,id',
                 'brands_id' => 'required|exists:brands,id',
                 'tax_id' => 'nullable|exists:taxes,id',
-                'image' => 'nullable|image|max:2048|dimensions:ratio=1.4',
+                'image' => 'nullable|image|max:2048',
             ];
 
             foreach (['b2b', 'b2c'] as $prefix) {

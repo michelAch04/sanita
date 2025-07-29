@@ -57,13 +57,6 @@
                     <div class="underline"></div>
                 </div>
 
-                {{-- Password --}}
-                <div class="input-container mb-5">
-                    <input type="text" name="password" placeholder="">
-                    <label class="label">Password (optional)</label>
-                    <div class="underline"></div>
-                </div>
-
                 {{-- Submit & Cancel --}}
                 <div class="d-flex justify-content-end">
                     <a href="{{ route('customers.index') }}" class="btn bubbles bubbles-grey me-2">
@@ -78,13 +71,15 @@
     </div>
 </div>
 <style>
-    .checkbox-wrapper-8 .tgl + .tgl-btn {
-        background:rgb(232, 123, 190) !important;
+    .checkbox-wrapper-8 .tgl+.tgl-btn {
+        background: rgb(232, 123, 190) !important;
     }
-    .checkbox-wrapper-8 .tgl:checked + .tgl-btn {
-        background:rgb(125, 128, 221) !important;
+
+    .checkbox-wrapper-8 .tgl:checked+.tgl-btn {
+        background: rgb(125, 128, 221) !important;
     }
-    .checkbox-wrapper-8 .tgl + .tgl-btn {
+
+    .checkbox-wrapper-8 .tgl+.tgl-btn {
         width: 3.5em;
     }
 </style>
