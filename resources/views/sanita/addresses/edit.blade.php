@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-<div class="container mt-2 mx-1 {{ $isRtl ? 'text-end w-100' : '' }}">
-    <form action="{{ route('addresses.update', ['locale' => app()->getLocale(), 'address' => $address->id]) }}" method="POST"
-=======
 <div class="container-fluid mt-2 mx-1 {{ $isRtl ? 'text-end w-100' : '' }}">
     <form action="{{ route('addresses.update', ['locale' => app()->getLocale(), 'address' => $address->id]) }}" method="POST" 
->>>>>>> 87bb89cc6df85db8c4241d20796c9861565e101b
         class="{{ $isRtl ? 'rtl-container' : '' }} address-form">
         @csrf
         @method('PUT')

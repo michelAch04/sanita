@@ -45,7 +45,8 @@
 }
 
 .filter-group .form-check>*,
-.filter-group #price-filter * {
+.filter-group #panel-price-filter *,
+.filter-group #sidebar-price-filter * {
     font-size: 0.75rem;
     --checkbox-size: 0.85rem;
 }
