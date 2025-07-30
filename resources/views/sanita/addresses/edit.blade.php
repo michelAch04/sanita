@@ -1,6 +1,5 @@
 <div class="container-fluid mt-2 mx-1 {{ $isRtl ? 'text-end w-100' : '' }}">
-    <form action="{{ route('addresses.update', ['locale' => app()->getLocale(), 'address' => $address->id]) }}" method="POST"
-
+    <form action="{{ route('addresses.update', ['locale' => app()->getLocale(), 'address' => $address->id]) }}" method="POST" 
         class="{{ $isRtl ? 'rtl-container' : '' }} address-form">
         @csrf
         @method('PUT')

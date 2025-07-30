@@ -142,12 +142,47 @@ document.addEventListener("DOMContentLoaded", function () {
     phoneInputField.addEventListener("input", validatePhoneNumber);
     phoneInputField.addEventListener("blur", validatePhoneNumber);
 
-    // Form submission
-    const form = document.querySelector("form");
+    // ============================== DATE VALIDATION ========================================== //
+    function formatAndClamp(input, min, max, nextInput = null) {
+        input.addEventListener("input", function () {
+            if (!/^\d+$/.test(this.value)) {
+                this.value = ""; // reset if not all digits
+            }
+            if (this.value.length === 2) {
+                const clamped = clamp(parseInt(this.value, 10), min, max);
+                this.value = clamped.toString().padStart(2, "0");
+                if (nextInput) nextInput.focus();
+            }
+        });
+
+        input.addEventListener("blur", function () {
+            if (this.value.length === 1) {
+                const clamped = clamp(parseInt(this.value, 10), min, max);
+                this.value = clamped.toString().padStart(2, "0");
+            }
+        });
+    }
+
+    function clamp(num, min, max) {
+        return Math.min(Math.max(num, min), max);
+    }
+
     const dayInput = document.getElementById("dob_day");
     const monthInput = document.getElementById("dob_month");
     const yearInput = document.getElementById("dob_year");
     const hiddenDOB = document.getElementById("DOB");
+
+    formatAndClamp(dayInput, 1, 31, monthInput);
+    formatAndClamp(monthInput, 1, 12, yearInput);
+
+    yearInput.addEventListener("input", function () {
+        if (!/^\d+$/.test(this.value)) {
+            this.value = ""; // reset if not all digits
+        }
+    });
+
+    // Form submission
+    const form = document.querySelector("form");
 
     form.addEventListener("submit", function (e) {
         const mobileErrorDiv = document.getElementById("mobile-error");

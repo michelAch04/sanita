@@ -412,11 +412,18 @@ $(document).ready(function () {
     searchInput.addEventListener("keydown", function (e) {
         if (e.key === "Enter") {
             e.preventDefault();
-            if (searchInput.value.trim() !== "") {
-                form.submit(); // ✅ now this works
-            }
+            searchContent(this)
         }
     });
+
+    function searchContent(inp) {
+        const q = inp.value.trim();
+        if (q) {
+            window.location.href =
+                window.url +
+                `/${window.locale}/search?q=${encodeURIComponent(q)}`;
+        }
+    }
 
     document.getElementById("menuToggle").addEventListener("click", () => {
         const offcanvas = new bootstrap.Offcanvas(
