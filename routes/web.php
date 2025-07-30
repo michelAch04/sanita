@@ -139,10 +139,12 @@ Route::prefix('{locale}')->middleware(['localization', 'force.address.modal'])->
         Route::get('/get-cities', [WebsiteAddressController::class, 'getCities']);
     });
 
-    Route::get('categories', [WebsiteController::class, 'categories'])->name('website.categories.index');
-    Route::get('products', [WebsiteController::class, 'products'])->name('website.products.index');
-    Route::get('offers', [WebsiteController::class, 'offers'])->name('website.offers.index');
-    Route::get('category', [WebsiteController::class, 'category'])->name('website.category.index');
+    Route::get('/categories', [WebsiteController::class, 'categories'])->name('website.categories.index');
+    Route::get('/brands', [WebsiteController::class, 'brands'])->name('website.brands.index');
+    Route::get('/brand', [WebsiteController::class, 'brand'])->name('website.brand.index');
+    Route::get('/products', [WebsiteController::class, 'products'])->name('website.products.index');
+    Route::get('/offers', [WebsiteController::class, 'offers'])->name('website.offers.index');
+    Route::get('/category', [WebsiteController::class, 'category'])->name('website.category.index');
     Route::get('/product', [WebsiteController::class, 'product'])->name('website.product.index');
     Route::get('/search/index', [WebsiteController::class, 'searchview'])->name('search.index');
 
