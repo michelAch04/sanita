@@ -48,6 +48,15 @@ class WebsiteController extends Controller
         return view('sanita.categories.index', compact('categories'));
     }
 
+    public function brands()
+    {
+        $brands = Brand::where('hidden', 0)
+            ->where('cancelled', 0)
+            ->paginate(20);
+
+        return view('sanita.brands.index', compact('brands'));
+    }
+
     public function products(Request $request)
     {
         $products = $this->getAvailableProducts();
@@ -348,5 +357,30 @@ class WebsiteController extends Controller
 
 
         return view('sanita.search.index', compact('query', 'products', 'categories', 'subcategories', 'brands'));
+    }
+
+    public function brand(Request $request)
+    {
+        $brand_id = $request->brand;
+        $brand = Brand::find($brand_id);
+
+        if (!$brand) {
+            return redirect()->back()->with('error', 'Brand not found');
+        }
+
+        $products = $this->getAvailableProducts()->filter(function ($product) use ($brand_id) {
+            return $product->brands_id == $brand_id;
+        })->values();
+
+        // Paginate the filtered products
+        $products = $this->paginateCollection($products, 20, 'products_page');
+
+        $offers = $this->getOffers($products);
+
+        return view('sanita.brand.index', [
+            'brand' => $brand,
+            'products' => $products,
+            'offers' => $offers,
+        ]);
     }
 }
