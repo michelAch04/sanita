@@ -52,11 +52,6 @@ class WebsiteController extends Controller
     {
         $products = $this->getAvailableProducts();
 
-        // Get current prices
-        $eaPrices = $products->flatMap(function ($product) {
-            return $product->listPrices->first()?->pluck('shelf_price');
-        });
-
         // ✅ Filter by brand
         if ($request->filled('brand')) {
             $brandIds = (array) $request->input('brand');
@@ -91,6 +86,18 @@ class WebsiteController extends Controller
             });
         }
 
+        // Get current prices
+        $eaPrices = $products->flatMap(function ($product) {
+            return $product->listPrices->pluck('shelf_price');
+        });
+
+        // If no products matched, fallback to global EA prices (so min/max stay valid)
+        if ($eaPrices->isEmpty()) {
+            $eaPrices = $this->getAvailableProducts()->flatMap(function ($product) {
+                return $product->listPrices->pluck('shelf_price');
+            });
+        }
+
         $offers = $this->getOffers($products);
         $products = $this->paginateCollection($products, 20, 'products_page');
         $brands = Brand::where('hidden', 0)->where('cancelled', 0)->orderBy('name_en')->get();
@@ -99,13 +106,66 @@ class WebsiteController extends Controller
         return view('sanita.products.index', compact('products', 'offers', 'brands', 'categories', 'eaPrices'));
     }
 
-    public function offers()
+    public function offers(Request $request)
     {
         $products = $this->getAvailableProducts();
+
+        // ✅ Filter by brand
+        if ($request->filled('brand')) {
+            $brandIds = (array) $request->input('brand');
+            $products = $products->filter(function ($product) use ($brandIds) {
+                return in_array($product->brands_id, $brandIds);
+            });
+        }
+
+        // ✅ Filter by category
+        if ($request->filled('category')) {
+            $categoryIds = (array) $request->input('category');
+
+            $subcategoryIds = \App\Models\Subcategory::whereIn('categories_id', $categoryIds)
+                ->pluck('id')
+                ->toArray();
+
+            $products = $products->filter(function ($product) use ($subcategoryIds) {
+                return in_array($product->subcategories_id, $subcategoryIds);
+            });
+        }
+
+        // ✅ Filter by price
+        if ($request->filled('min_price')) {
+            $products = $products->filter(function ($product) use ($request) {
+                return $product->listPrices->first()?->shelf_price >= $request->min_price;
+            });
+        }
+        if ($request->filled('max_price')) {
+            $products = $products->filter(function ($product) use ($request) {
+                return $product->listPrices->first()?->shelf_price <= $request->max_price;
+            });
+        }
+
+        // ✅ Get offers *after filtering*
         $offers = $this->getOffers($products);
+
+        // ✅ Calculate eaPrices only from the filtered OFFERS (not from all products)
+        $eaPrices =  collect($offers)->flatMap(function ($product) {
+            return $product->listPrices->pluck('shelf_price');
+        });
+
+        // If no products matched, fallback to global EA prices (so min/max stay valid)
+        if ($eaPrices->isEmpty()) {
+            $eaPrices = $this->getAvailableProducts()->flatMap(function ($product) {
+                return $product->listPrices->pluck('shelf_price');
+            });
+        }
+
+        // ✅ Paginate offers
         $offers = $this->paginateCollection($offers, 20, 'offers_page');
 
-        return view('sanita.offers.index', compact('offers'));
+        // ✅ Send brands & categories to view (for filters)
+        $brands = Brand::where('hidden', 0)->where('cancelled', 0)->orderBy('name_en')->get();
+        $categories = Category::where('hidden', 0)->where('cancelled', 0)->orderBy('name_en')->get();
+
+        return view('sanita.offers.index', compact('offers', 'brands', 'categories', 'eaPrices'));
     }
 
     public function category(Request $request)

@@ -100,14 +100,14 @@
 
                     {{-- Search --}}
                     <form id="searchForm" action="{{ route('search.index', ['locale' => app()->getLocale()]) }}" method="GET">
-                        <div class="expanding-search nav-link right-icons-container" style="position: relative;">
+                        <div class="expanding-search nav-link" style="position: relative;">
                             <i class="fas fa-search search-icon"></i>
                             <input
                                 type="search"
                                 id="searchInput"
                                 name="q"
                                 placeholder="Search..."
-                                class="form-control"
+                                class=""
                                 autocomplete="off">
                         </div>
                     </form>

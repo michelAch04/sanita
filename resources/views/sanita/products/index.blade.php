@@ -4,7 +4,7 @@
 
 @section('content')
 <section id="products" class="py-3 products-list {{ $isRtl ? 'rtl-container' : '' }}">
-    <div class="px-5 py-2 ps-2 gx-0 w-100">
+    <div class="px-2 py-2 gx-0 w-100">
         <h2 class="display-5 text-center mb-3 mb-md-5 section-title">{{ __('nav.products') }}</h2>
 
         <div class="d-flex flex-md-row gap-md-1 flex-column">
