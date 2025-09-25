@@ -27,6 +27,7 @@ use App\Http\Controllers\CMS\CustomerController;
 use App\Http\Controllers\CMS\OrderController;
 use App\Http\Controllers\CMS\CartController;
 use App\Http\Controllers\CMS\PromoCodeController;
+use App\Http\Controllers\PosLocationController;
 
 
 /*
@@ -146,7 +147,8 @@ Route::prefix('{locale}')->middleware(['localization', 'force.address.modal'])->
     Route::get('/offers', [WebsiteController::class, 'offers'])->name('website.offers.index');
     Route::get('/category', [WebsiteController::class, 'category'])->name('website.category.index');
     Route::get('/product', [WebsiteController::class, 'product'])->name('website.product.index');
-    Route::get('/search/index', [WebsiteController::class, 'searchview'])->name('search.index');
+    Route::get('/search', [WebsiteController::class, 'searchview'])->name('search.index');
+    Route::get('/pos-locations', [PosLocationController::class, 'index'])->name('website.pos.index');
 
     // Password reset routes
     Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');

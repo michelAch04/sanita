@@ -1,9 +1,11 @@
 .login-container {
   max-width: 45%;
 }
-.login-container.signin-container{
+
+.login-container.signin-container {
   max-width: 35%;
 }
+
 .login-title {
   color: var(--primary-blue);
   text-transform: uppercase;
@@ -225,8 +227,15 @@ input:-webkit-autofill:active {
   transition: background-color 5000s ease-in-out 0s;
 }
 
-.iti--separate-dial-code .iti__selected-flag {
-  background-color: transparent;;
+.iti__selected-country-primary {
+  background-color: transparent;
+  position: relative;
+  top: -1px !important;
+}
+
+.iti .iti__selected-dial-code {
+  position: relative;
+  margin-left: 0;
 }
 
 /* ------------------------------ CHECKBOX STYLING --------------------------------- */
@@ -484,31 +493,48 @@ input:-webkit-autofill:active {
   outline: none;
 }
 
+.rtl-container #glass-female:checked~.glass-glider {
+  transform: translateX(-100%);
+}
+
+/* RTL container adjustments (from main form styles) */
 .iti__selected-country-primary {
   margin-top: 0.1rem;
 }
+
 .iti__tel-input {
   padding: 0 !important;
   padding-left: 0.25rem !important;
 }
-.rtl-container .iti__tel-input {
-  padding-left: 0 !important;
-  padding-right: 0.25rem !important;
-}
+
 .iti__arrow {
   display: none;
 }
+
 .iti {
   display: flex;
   align-items: center;
-  
 }
+
 .iti__country-container {
   position: relative;
 }
 
-.rtl-container #glass-female:checked~.glass-glider {
-  transform: translateX(-100%);
+.rtl-container .login-inputForm {
+  padding-left: 0;
+  padding-right: 10px;
+}
+
+.rtl-container .phone-group, .rtl-container .dob-group {
+  justify-content: end;
+}
+
+.rtl-container .phone-group .login-input {
+  width: 39% !important;
+}
+
+.rtl-container .iti {
+  justify-content: end;
 }
 
 .rtl-container .phone-status-icon {
@@ -516,6 +542,19 @@ input:-webkit-autofill:active {
   right: auto;
 }
 
+.rtl-container .input:not(#mobile, .small-input) {
+  margin-right: 10px;
+  margin-left: 0;
+}
+
+.rtl-container .small-input {
+  margin-right: 0;
+}
+
+.rtl-container .cl-checkbox>span::after {
+  left: auto !important;
+  right: 11px !important;
+}
 
 /* -------------------------------- STYLING ------------------------------------------ */
 .error-toast {

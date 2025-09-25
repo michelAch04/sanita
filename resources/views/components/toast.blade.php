@@ -17,7 +17,7 @@ $isRtl = 0;
 
       <div class="icon-container"><i class="fa-regular fa-circle-check text-success"></i></div>
       <div class="message-text-container">
-        <p class="message-text">Success!</p>
+        <p class="message-text">{{ __('nav.success') }}</p>
         <p class="sub-text">{{ session('success') }}</p>
       </div>
       <button type="button" class="btn-close me-1" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -38,7 +38,7 @@ $isRtl = 0;
         <i class="fas fa-circle-xmark text-danger"></i>
       </div>
       <div class="message-text-container">
-        <p class="message-text" style="color: var(--toast-color);">Oh no!</p>
+        <p class="message-text" style="color: var(--toast-color);">{{ __('nav.error') }}</p>
         <p class="sub-text">
           @if (session('error'))
           {{ session('error') }}
@@ -64,7 +64,7 @@ $isRtl = 0;
         <i class="fas fa-info-circle" style="color: var(--toast-color);"></i>
       </div>
       <div class="message-text-container">
-        <p class="message-text" style="color: var(--toast-color);">Info</p>
+        <p class="message-text" style="color: var(--toast-color);">{{ __('nav.info') }}</p>
         <p class="sub-text">{{ session('info') }}</p>
       </div>
       <button type="button" class="btn-close me-1" data-bs-dismiss="toast" aria-label="Close"></button>

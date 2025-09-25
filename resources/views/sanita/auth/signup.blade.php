@@ -41,11 +41,11 @@
         {{-- Mobile --}}
         <div class="mb-3">
             <label for="mobile" class="{{ $isRtl ? 'text-end w-100' : '' }}">{{ __('auth.sign_up.mobile') }}</label>
-            <div class="login-inputForm phone-group position-relative @error('mobile') is-invalid @enderror">
-                <i class="fa fa-phone"></i>
+            <div class="login-inputForm phone-group position-relative @error('mobile') is-invalid @enderror" dir="ltr">
+                <i class="fa fa-phone {{ app()->getLocale() !== 'en' ? 'order-last' : '' }}"></i>
                 <input type="hidden" name="country_code" id="country_code">
                 <input id="mobile" type="tel" name="mobile"
-                    class="login-input text-primary {{ $isRtl ? 'rtl-container' : '' }}"
+                    class="login-input text-primary"
                     value="{{ old('mobile') }}"
                     data-old="{{ old('country_code') ? '+' . old('country_code') . old('mobile') : old('mobile') }}"
                     placeholder="{{ __('auth.sign_up.mobile') }}" required>
@@ -108,8 +108,8 @@
         {{-- DOB --}}
         <div class="mb-3">
             <label for="dob_day" class="{{ $isRtl ? 'text-end w-100' : '' }}">{{ __('auth.sign_up.dob') }}</label>
-            <div class="login-inputForm dob-group @error('DOB') is-invalid @enderror">
-                <i class="fa fa-calendar"></i>
+            <div class="login-inputForm dob-group @error('DOB') is-invalid @enderror" dir="ltr">
+                <i class="fa fa-calendar {{ app()->getLocale() === 'ar' ? 'order-last' : '' }}"></i>
                 <input type="text" name="dob_day" id="dob_day" maxlength="2" placeholder="DD"
                     class="login-input small-input text-primary" value="{{ old('dob_day') }}">
                 <span class="slash">/</span>

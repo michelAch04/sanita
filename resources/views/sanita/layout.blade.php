@@ -138,6 +138,11 @@
                                 <i class="fa-solid fa-store me-2"></i>{{ __('nav.store') }}
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ route('website.pos.index', ['locale' => app()->getLocale()]) }}">
+                                <i class="fa-solid fa-compass me-2"></i>{{ __('nav.pos') }}
+                            </a>
+                        </li>
                         @auth('customer')
                         <li class="nav-item">
                             <a class="nav-link active" href="{{ route('website.orders.index', ['locale' => app()->getLocale()]) }}">

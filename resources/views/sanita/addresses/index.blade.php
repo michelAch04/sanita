@@ -5,7 +5,7 @@
 $sortedAddresses = $addresses->sortByDesc('is_default');
 @endphp
 @section('content')
-<section id="addresses" class="pt-4">
+<section id="addresses" class="pt-4 {{ $isRtl ? 'rtl-container' : '' }}">
     <div class="container px-5 mb-5 addre">
         <h2 class="display-5 text-center mb-5 section-title">📍 {{ __('address.Your_Addresses') }}</h2>
         @if($sortedAddresses->count() != 0)
@@ -21,10 +21,9 @@ $sortedAddresses = $addresses->sortByDesc('is_default');
             @foreach ($sortedAddresses as $address)
             <div class="cart-item d-flex flex-row justify-content-between p-3 rounded shadow-sm flex-wrap w-100">
                 {{-- Address Info --}}
-                <div class="d-flex flex-column flex-grow-1 me-3 address-info {{ $isRtl ? 'text-end w-100' : '' }}">
-
+                <div class="d-flex flex-column flex-grow-1 {{ $isRtl ? 'ms-3' : 'me-3' }} address-info">
                     <div class="d-flex align-items-center gap-2 mb-2 address-title">
-                        <h5 class="mb-0 text-primary {{ $isRtl ? 'text-end w-100' : '' }}">{{ $address->title ?? __('address.Untitled') }}</h5>
+                        <h5 class="mb-0 text-primary">{{ $address->title ?? __('address.Untitled') }}</h5>
                         @if ($address->is_default)
                         <span class="badge bg-success text-white px-2 py-1 rounded-pill fw-medium">{{ __('address.Default') }}</span>
                         @endif

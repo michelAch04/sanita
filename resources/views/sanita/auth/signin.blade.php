@@ -8,14 +8,14 @@
     <h2 class="display-5 text-center mt-4 mb-4 section-title">{{ __('auth.sign_in.title') }}</h2>
 
     <div class="{{ $isRtl ? 'rtl-container' : '' }}">
-        <form method="POST" action="{{ route('customer.signin', ['locale' => app()->getLocale()]) }}" class="login-form">
+        <form method="POST" action="{{ route('customer.signin', ['locale' => app()->getLocale()]) }}" class="login-form {{ $isRtl ? 'rtl-container' : '' }}">
             @csrf
 
             <div class="login-flex-column">
                 <label for="mobile" class="{{ $isRtl ? 'text-end w-100' : '' }}">{{ __('auth.sign_up.mobile') }}</label>
             </div>
-            <div class="login-inputForm phone-group position-relative @error('mobile') is-invalid @enderror">
-                <i class="fa fa-phone"></i>
+            <div class="login-inputForm phone-group position-relative @error('mobile') is-invalid @enderror" dir="ltr">
+                <i class="fa fa-phone {{ app()->getLocale() !== 'en' ? 'order-last' : '' }}"></i>
                 <input type="hidden" name="country_code" id="country_code">
                 <input id="mobile" type="tel" name="mobile"
                     class="login-input text-primary"

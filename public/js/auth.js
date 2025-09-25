@@ -1,6 +1,5 @@
-
 document.addEventListener("DOMContentLoaded", function () {
-    // Toast auto-dismiss
+    // ====================== TOAST AUTO-DISMISS ====================== //
     const toast = document.getElementById("toast-error");
     if (toast) {
         setTimeout(() => {
@@ -10,13 +9,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 3000);
     }
 
-    // Toggle password visibility
+    // ====================== TOGGLE PASSWORD VISIBILITY ====================== //
     const togglePassword = document.querySelector(".toggle-password");
     const passwordInput = document.querySelector("#password");
     if (togglePassword && passwordInput) {
         togglePassword.addEventListener("click", function () {
-            const type = passwordInput.type === "password" ? "text" : "password";
-            passwordInput.type = type;
+            passwordInput.type = passwordInput.type === "password" ? "text" : "password";
             this.classList.toggle("fa-eye");
             this.classList.toggle("fa-eye-slash");
         });
@@ -26,37 +24,43 @@ document.addEventListener("DOMContentLoaded", function () {
     const confirmInput = document.querySelector("#password_confirmation");
     if (toggleConfirmPassword && confirmInput) {
         toggleConfirmPassword.addEventListener("click", function () {
-            const type = confirmInput.type === "password" ? "text" : "password";
-            confirmInput.type = type;
+            confirmInput.type = confirmInput.type === "password" ? "text" : "password";
             this.classList.toggle("fa-eye");
             this.classList.toggle("fa-eye-slash");
         });
     }
 
-    // Focus first invalid input
+    // ====================== FOCUS FIRST INVALID ====================== //
     const firstInvalid = document.querySelector(".is-invalid");
-    if (firstInvalid) {
-        firstInvalid.focus();
+    if (firstInvalid) firstInvalid.focus();
+
+    // ====================== AR→EN DIGIT NORMALIZATION ====================== //
+    function normalizeDigits(input) {
+        const arabicIndic = ['\u0660', '\u0661', '\u0662', '\u0663', '\u0664', '\u0665', '\u0666', '\u0667', '\u0668', '\u0669'];
+        const easternArabicIndic = ['\u06F0', '\u06F1', '\u06F2', '\u06F3', '\u06F4', '\u06F5', '\u06F6', '\u06F7', '\u06F8', '\u06F9'];
+        return input.replace(/[\u0660-\u0669\u06F0-\u06F9]/g, (d) => {
+            let i = arabicIndic.indexOf(d);
+            if (i === -1) i = easternArabicIndic.indexOf(d);
+            return i > -1 ? i : d;
+        });
     }
 
-    // Phone validation
+    function containsArabic(text) {
+        return /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/.test(text);
+    }
+
+    // ====================== PHONE VALIDATION ====================== //
     const phoneInputField = document.querySelector("#mobile");
     const phoneValidIcon = document.getElementById("phone-valid");
     const phoneInvalidIcon = document.getElementById("phone-invalid");
     const phoneLoadingIcon = document.getElementById("phone-loading");
 
-    // Determine which i18n object to use:
-    let i18nOptions = undefined;
-    if (window.locale === 'ar') {
-        i18nOptions = window.i18nAr;
-    }
-    else if (window.locale === 'ku') {
-        i18nOptions = window.i18nKu;
-    }
-    // You can add Kurdish later if you have those files similarly loaded
+    let i18nOptions;
+    if (window.locale === "ar") i18nOptions = window.i18nAr;
+    else if (window.locale === "ku") i18nOptions = window.i18nKu;
 
     const iti = window.intlTelInput(phoneInputField, {
-        utilsScript: window.utilsScripts.ar,
+        utilsScript: window.utilsScripts.ar ?? window.utilsScript.default,
         onlyCountries: ["iq", "lb", "eg", "jo", "sa", "ae", "om", "kw", "qa", "bh"],
         initialCountry: "auto",
         geoIpLookup: callback => {
@@ -70,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
         formatOnDisplay: true,
         strictMode: true,
         separateDialCode: true,
-        i18n: i18nOptions, // pass the Arabic translations here
+        i18n: i18nOptions,
     });
 
     const oldPhone = phoneInputField.getAttribute("data-old");
@@ -81,56 +85,47 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("country_code").value = countryCode;
     }
 
-    function arabicToLatinDigits(input) {
-        const arabicDigits = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
-        return input.replace(/[٠-٩]/g, d => arabicDigits.indexOf(d));
-    }
-
     phoneInputField.addEventListener("countrychange", updateCountryCode);
     phoneInputField.addEventListener("input", updateCountryCode);
     updateCountryCode();
 
     function validatePhoneNumber() {
-        // Convert Arabic digits to Latin digits first
         let number = phoneInputField.value;
-        number = arabicToLatinDigits(number);
+
+        // Normalize Arabic digits
+        if (containsArabic(number)) {
+            number = normalizeDigits(number);
+            phoneInputField.value = number;
+        }
+
+        // Strip leading zeros if length > 2
+        if (number.startsWith("0") && number.length > 2) {
+            number = number.replace(/^0+/, "");
+            phoneInputField.value = number;
+        }
 
         const dialCode = iti.getSelectedCountryData().dialCode;
         const inputOnlyDigits = number.replace(/\D/g, "");
 
-        // Always show loading first
         phoneValidIcon.style.display = "none";
         phoneInvalidIcon.style.display = "none";
         phoneLoadingIcon.style.display = "inline";
 
         setTimeout(() => {
-            const selectedCountry = iti.getSelectedCountryData().iso2;
             let isInvalid = false;
 
-            // Basic invalid patterns
             if (
                 number.startsWith("+") ||
                 number.startsWith("00") ||
-                number.startsWith("0") ||
                 inputOnlyDigits.startsWith(dialCode)
             ) {
                 isInvalid = true;
             }
 
-            // Iraq-specific rule
-            if (selectedCountry === "iq") {
-                if (!/^\d{10}$/.test(inputOnlyDigits) || !inputOnlyDigits.startsWith("7")) {
-                    isInvalid = true;
-                }
-            }
-
-            // Final intl-tel-input check
-            const countryCode = iti.getSelectedCountryData().dialCode
-            const isValid = iti.isValidNumber(number, countryCode);
-            const numberType = iti.getNumberType(number, countryCode);
+            const isValid = iti.isValidNumber(number, dialCode);
+            const numberType = iti.getNumberType(number, dialCode);
 
             phoneLoadingIcon.style.display = "none";
-
             if (!isInvalid && isValid && numberType === 1) {
                 phoneValidIcon.style.display = "inline";
             } else {
@@ -142,24 +137,13 @@ document.addEventListener("DOMContentLoaded", function () {
     phoneInputField.addEventListener("input", validatePhoneNumber);
     phoneInputField.addEventListener("blur", validatePhoneNumber);
 
-    // ============================== DATE VALIDATION ========================================== //
-    function formatAndClamp(input, min, max, nextInput = null) {
+    // ====================== DATE VALIDATION ====================== //
+    function normalizeDateField(input) {
         input.addEventListener("input", function () {
-            if (!/^\d+$/.test(this.value)) {
-                this.value = ""; // reset if not all digits
-            }
-            if (this.value.length === 2) {
-                const clamped = clamp(parseInt(this.value, 10), min, max);
-                this.value = clamped.toString().padStart(2, "0");
-                if (nextInput) nextInput.focus();
-            }
+            this.value = normalizeDigits(this.value);
         });
-
         input.addEventListener("blur", function () {
-            if (this.value.length === 1) {
-                const clamped = clamp(parseInt(this.value, 10), min, max);
-                this.value = clamped.toString().padStart(2, "0");
-            }
+            this.value = normalizeDigits(this.value);
         });
     }
 
@@ -167,40 +151,56 @@ document.addEventListener("DOMContentLoaded", function () {
         return Math.min(Math.max(num, min), max);
     }
 
+    function formatAndClamp(input, min, max, nextInput = null) {
+        normalizeDateField(input);
+        input.addEventListener("input", function () {
+            if (!/^\d+$/.test(this.value)) this.value = "";
+            if (this.value.length === 2) {
+                this.value = clamp(parseInt(this.value, 10), min, max)
+                    .toString().padStart(2, "0");
+                if (nextInput) nextInput.focus();
+            }
+        });
+        input.addEventListener("blur", function () {
+            if (this.value.length === 1) {
+                this.value = clamp(parseInt(this.value, 10), min, max)
+                    .toString().padStart(2, "0");
+            }
+        });
+    }
+
     const dayInput = document.getElementById("dob_day");
     const monthInput = document.getElementById("dob_month");
     const yearInput = document.getElementById("dob_year");
     const hiddenDOB = document.getElementById("DOB");
 
-    formatAndClamp(dayInput, 1, 31, monthInput);
-    formatAndClamp(monthInput, 1, 12, yearInput);
+    if (dayInput && monthInput && yearInput) {
+        formatAndClamp(dayInput, 1, 31, monthInput);
+        formatAndClamp(monthInput, 1, 12, yearInput);
+        normalizeDateField(yearInput);
+    }
 
-    yearInput.addEventListener("input", function () {
-        if (!/^\d+$/.test(this.value)) {
-            this.value = ""; // reset if not all digits
-        }
-    });
+    if (yearInput) {
+        yearInput.addEventListener("input", function () {
+            if (!/^\d+$/.test(this.value)) this.value = "";
+        });
+    }
 
-    // Form submission
+    // ====================== FORM SUBMISSION ====================== //
     const form = document.querySelector("form");
-
     form.addEventListener("submit", function (e) {
         const mobileErrorDiv = document.getElementById("mobile-error");
         const mobileDiv = document.querySelector(".phone-group");
-
         mobileErrorDiv.style.display = "none";
-        mobileErrorDiv.textContent = "";
         mobileDiv.classList.remove("is-invalid");
 
-        if (
-            !iti.isValidNumber() ||
-            iti.getNumberType() !== 1
-        ) {
+        if (!iti.isValidNumber() || iti.getNumberType() !== 1) {
             e.preventDefault();
             mobileErrorDiv.textContent = window.lang_invalid_mobile || "Invalid mobile number.";
             mobileErrorDiv.style.display = "block";
             mobileDiv.classList.add("is-invalid");
             phoneInputField.focus();
+            return;
         }
 
         const day = dayInput.value.trim().padStart(2, "0");
@@ -211,9 +211,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const dobErrorDiv = document.getElementById("dob-error");
         const dobDiv = document.querySelector(".dob-group");
-
         dobErrorDiv.style.display = "none";
-        dobErrorDiv.textContent = "";
         dobDiv.classList.remove("is-invalid");
 
         if (

@@ -355,7 +355,6 @@ class WebsiteController extends Controller
                 ->orWhere('name_ku', 'LIKE', "%{$query}%");
         })->get();
 
-
         return view('sanita.search.index', compact('query', 'products', 'categories', 'subcategories', 'brands'));
     }
 

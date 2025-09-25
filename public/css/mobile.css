@@ -303,7 +303,13 @@
     .login-container {
         max-width: 97% !important;
     }
-
+    
+    .small-input {
+        width: 2.75rem;
+    }
+    .small-input-year {
+        width: 3.5rem;
+    }
 
     .login-button-submit {
         font-size: 1.1rem !important;
