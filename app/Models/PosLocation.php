@@ -11,7 +11,7 @@ class PosLocation extends Model
     protected $fillable = [
         'name',
         'address',
-        'city',
+        'cities_id',
         'phone',
         'latitude',
         'longitude',
