@@ -177,8 +177,7 @@
 
 /*MODAL*/
 .filter-panel {
-    height: fit-content;
-    max-height: 80vh;
+    min-height: 60vh;
     background: #f8f9fa;
     z-index: 1080;
     border-top-left-radius: 1rem;
