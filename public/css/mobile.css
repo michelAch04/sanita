@@ -20,7 +20,8 @@
 
     .product-container {
         flex-direction: column !important;
-        margin-top: 60px !important;
+        gap: 2rem !important;
+        padding: 1.5rem 1rem !important;
     }
 
     .product-description h1 {
@@ -44,15 +45,13 @@
         width: 100% !important;
     }
 
-    .right-column {
-        margin-top: 60px !important;
+    .left-column {
+        justify-content: center !important;
     }
 
     .left-column img {
-        width: 300px !important;
-        right: 0 !important;
-        top: -65px !important;
-        left: initial !important;
+        max-width: 380px !important;
+        width: 100% !important;
     }
 
     .product-price span {
@@ -148,7 +147,7 @@
 
     .cart-item-header {
         width: 30% !important;
-        aspect-ratio: 1.4/1;
+        aspect-ratio: 4/5;
         overflow: hidden;
     }
 
@@ -278,7 +277,7 @@
     /* ------------------- INDEX ----------------------------- */
     :root {
         --card-width: calc((100vw / 2) - 0.3rem);
-        --card-height: 16.25rem;
+        --card-height: 19rem;
         --card-title: 0.9rem;
         --card-description: 0.6rem;
         --card-line-height: 1rem;
@@ -397,13 +396,14 @@
     }
 
     /* ------------------- PRODUCT PAGE -------------------- */
-    .left-column img {
-        width: 220px !important;
-        top: -85px !important;
+    .product-container {
+        padding: 1rem 0.75rem !important;
+        gap: 1.5rem !important;
     }
 
-    .product-container {
-        padding-top: 40px !important;
+    .left-column img {
+        max-width: 280px !important;
+        width: 90% !important;
     }
 
     /* ------------------- CART ------------------------------ */
@@ -772,6 +772,6 @@
     }
 
     :root {
-        --card-height: 15.25rem;
+        --card-height: 18rem;
     }
 }
