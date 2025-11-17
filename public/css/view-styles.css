@@ -1,0 +1,214 @@
+:root {
+    --primary-bg: #ffffff;
+    --primary-text: black;
+    --input-border-color: #ccc;
+}
+
+/* Sidebar active link */
+.nav-link.active {
+    background-color: #495057 !important;
+    /* medium dark gray */
+    color: #fff !important;
+    font-weight: 600;
+}
+
+/* Sidebar base styles */
+.bg-dark {
+    background-color: #212529 !important;
+}
+
+.bg-hover-light-grey {
+    transition: background-color 0.3s ease;
+}
+
+.bg-hover-light-grey:hover {
+    background-color: rgb(245, 245, 245);
+    /* light gray or any color */
+}
+
+.bg-hover-teal {
+    transition: background-color 0.3s ease;
+}
+
+.bg-hover-teal:hover {
+    background-color: rgba(65, 190, 192, 0.1) !important;
+}
+
+.bg-grey {
+    background-color: rgba(215, 215, 215, 0.6);
+}
+
+.navbar-hover {
+    transition: background-color 0.3s ease;
+}
+
+.navbar-hover:hover {
+    background-color: #495057;
+}
+
+.btn-teal {
+    background-color: #38B2AC;
+    /* Teal */
+    color: #fff;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-teal:hover {
+    background-color: #319795 !important;
+    /* Slightly darker teal */
+    color: #fff !important;
+}
+
+.btn-teal:focus,
+.btn-teal:active {
+    background-color: #2c7a7b !important;
+    outline: none !important;
+}
+
+.form-control:focus {
+    /* Teal border */
+
+    box-shadow: 0 3px 10px rgba(56, 178, 172, 0.8);
+    border: 0;
+}
+
+.shadow-soft {
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    /* soft, full shadow */
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.w-15 {
+    width: 15% !important;
+}
+
+#app-container {
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 50px;
+    transition: width 0.3s ease;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    flex-shrink: 0;
+}
+
+.sidebar .sidebar-label {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    white-space: nowrap;
+}
+
+.sidebar:hover {
+    width: 200px;
+}
+
+.sidebar:hover .sidebar-label {
+    opacity: 1;
+}
+
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    height: 100vh;
+    z-index: 1000;
+}
+
+.sidebar-collapsed .sidebar-label {
+    display: hidden;
+}
+
+.sidebar:hover .sidebar-label {
+    display: block;
+}
+
+.sidebar-logout {
+    display: inline !important;
+}
+
+.logout-icon {
+    margin-left: 0.9rem;
+    transition: margin-left 0.2s ease;
+}
+
+.sidebar:hover .logout-icon {
+    margin-left: 0.1rem !important;
+}
+
+.upload-container {
+    border: 1.5px dashed teal;
+    padding: 0.6rem 1.4rem;
+    width: fit-content;
+}
+
+.img-thumbnail {
+    border: 0 !important;
+}
+
+/* Sidebar on the right */
+#sidebar-right {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: fit-content;
+    max-width: 35px;
+    /* collapsed */
+    transition: all 0.3s ease;
+    overflow: hidden;
+    z-index: 1040;
+    border-bottom-left-radius: 8px;
+    white-space: nowrap;
+    /* 🔐 Prevents line breaks */
+}
+
+/* Expand on hover */
+#sidebar-right:hover {
+    height: auto;
+    max-width: 220px;
+    /* enough to fit button + label */
+}
+
+/* Logout label hidden initially */
+#sidebar-right .sidebar-label {
+    display: hidden;
+    opacity: 0.5;
+    white-space: nowrap;
+    transition: all 0.4s ease;
+}
+
+/* Show label on hover */
+#sidebar-right:hover .sidebar-label {
+    display: inline;
+    opacity: 1;
+}
+
+/* Optional icon sizing */
+#sidebar-right i {
+    font-size: 1.25rem;
+    margin-left: 0.3rem;
+    margin-bottom: -0.3rem !important;
+}
+
+.nav-tabs .nav-item .nav-link.active {
+    background-color: #38B2AC !important;
+    color: #fff !important;
+    border: none !important;
+}
+
+.nav-tabs .nav-item .nav-link {
+    background: transparent !important;
+    color: #38B2AC !important;
+}
+
+.nav-tabs .nav-link {
+    margin-bottom: -0.2rem !important;
+
+}
+
+.nav-tabs {
+    border-bottom: 2px solid #38B2AC !important;
+}

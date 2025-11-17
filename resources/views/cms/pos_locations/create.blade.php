@@ -1,0 +1,78 @@
+@extends('cms.layout')
+
+@section('title', 'Create POS Location')
+
+@section('content')
+<div class="ps-5 mt-3">
+
+    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+        <h2 class="mb-3">Create POS Location</h2>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <form action="{{ route('pos_locations.store') }}" method="POST">
+                @csrf
+
+                {{-- POS Name --}}
+                <div class="input-container mb-5 mt-3" style="width: 30%;">
+                    <input type="text" id="name" name="name" value="{{ old('name') }}" required style="width: 100%;" placeholder="">
+                    <label for="name" class="label">POS Name</label>
+                    <div class="underline"></div>
+                </div>
+
+                {{-- Address --}}
+                <div class="input-container mb-5 mt-3" style="width: 30%;">
+                    <input type="text" id="address" name="address" value="{{ old('address') }}" required style="width: 100%;" placeholder="">
+                    <label for="address" class="label">Address</label>
+                    <div class="underline"></div>
+                </div>
+
+                {{-- City --}}
+                <div class="input-container mb-5 mt-3" style="width: 30%; position: relative; padding-top: 5px;">
+                    <label for="cities_id" class="label select2-label">City</label>
+                    <select id="cities_id" name="cities_id" class="styled-select select2" required>
+                        <option value="">Select a City</option>
+                        @foreach ($cities as $city)
+                        <option value="{{ $city->id }}" {{ old('cities_id') == $city->id ? 'selected' : '' }}>
+                            {{ $city->name_en }}
+                        </option>
+                        @endforeach
+                    </select>
+                    <div class="underline"></div>
+                </div>
+
+                {{-- Latitude --}}
+                <div class="input-container mb-5 mt-3" style="width: 30%;">
+                    <input type="number" step="0.000001" id="latitude" name="latitude" value="{{ old('latitude') }}" required style="width: 100%;" placeholder="">
+                    <label for="latitude" class="label">Latitude</label>
+                    <div class="underline"></div>
+                </div>
+
+                {{-- Longitude --}}
+                <div class="input-container mb-5 mt-3" style="width: 30%;">
+                    <input type="number" step="0.000001" id="longitude" name="longitude" value="{{ old('longitude') }}" required style="width: 100%;" placeholder="">
+                    <label for="longitude" class="label">Longitude</label>
+                    <div class="underline"></div>
+                </div>
+
+                {{-- Submit & Cancel --}}
+                <div class="d-flex justify-content-end">
+                    <a href="{{ route('pos_locations.index') }}" class="btn bubbles bubbles-grey me-2">
+                        <span class="text">Cancel</span>
+                    </a>
+                    <button type="submit" class="btn bubbles">
+                        <span class="text">Create</span>
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+@include('cms.partials.select2', [
+    'id' => '#cities_id',
+    'placeholder' => 'Select a City',
+])
+@endsection
