@@ -55,41 +55,70 @@ document.addEventListener("DOMContentLoaded", function () {
     const phoneInvalidIcon = document.getElementById("phone-invalid");
     const phoneLoadingIcon = document.getElementById("phone-loading");
 
-    let i18nOptions;
-    if (window.locale === "ar" && window.i18nAr) i18nOptions = window.i18nAr;
-    else if (window.locale === "ku" && window.i18nKu) i18nOptions = window.i18nKu;
+    let iti = null;
 
-    const iti = window.intlTelInput(phoneInputField, {
-        utilsScript: window.utilsScripts.ar ?? window.utilsScript.default,
-        onlyCountries: ["iq", "lb", "eg", "jo", "sa", "ae", "om", "kw", "qa", "bh"],
-        initialCountry: "auto",
-        geoIpLookup: callback => {
-            fetch("https://ipapi.co/json")
-                .then(res => res.json())
-                .then(data => callback(data.country_code))
-                .catch(() => callback("iq"));
-        },
-        nationalMode: true,
-        autoPlaceholder: "aggressive",
-        formatOnDisplay: true,
-        strictMode: true,
-        separateDialCode: true,
-        i18n: i18nOptions,
-    });
+    // Check if intlTelInput is available
+    if (typeof window.intlTelInput === "function" && phoneInputField) {
+        let i18nOptions;
+        if (window.locale === "ar" && window.i18nAr) i18nOptions = window.i18nAr;
+        else if (window.locale === "ku" && window.i18nKu) i18nOptions = window.i18nKu;
 
-    const oldPhone = phoneInputField.getAttribute("data-old");
-    if (oldPhone) iti.setNumber(oldPhone);
-
-    function updateCountryCode() {
-        const countryCode = iti.getSelectedCountryData().dialCode;
-        document.getElementById("country_code").value = countryCode;
+        try {
+            iti = window.intlTelInput(phoneInputField, {
+                utilsScript: window.utilsScripts?.ar ?? window.utilsScripts?.default ?? "",
+                onlyCountries: ["iq", "lb", "eg", "jo", "sa", "ae", "om", "kw", "qa", "bh"],
+                initialCountry: "auto",
+                geoIpLookup: callback => {
+                    fetch("https://ipapi.co/json")
+                        .then(res => res.json())
+                        .then(data => callback(data.country_code))
+                        .catch(() => callback("iq"));
+                },
+                nationalMode: true,
+                autoPlaceholder: "aggressive",
+                formatOnDisplay: true,
+                strictMode: true,
+                separateDialCode: true,
+                i18n: i18nOptions,
+            });
+        } catch (error) {
+            console.error("Failed to initialize intl-tel-input:", error);
+        }
     }
 
-    phoneInputField.addEventListener("countrychange", updateCountryCode);
-    phoneInputField.addEventListener("input", updateCountryCode);
-    updateCountryCode();
+    if (iti) {
+        const oldPhone = phoneInputField.getAttribute("data-old");
+        if (oldPhone) {
+            try {
+                iti.setNumber(oldPhone);
+            } catch (error) {
+                console.error("Failed to set old phone number:", error);
+            }
+        }
+
+        function updateCountryCode() {
+            try {
+                const countryCode = iti.getSelectedCountryData().dialCode;
+                document.getElementById("country_code").value = countryCode;
+            } catch (error) {
+                console.error("Failed to update country code:", error);
+            }
+        }
+
+        phoneInputField.addEventListener("countrychange", updateCountryCode);
+        phoneInputField.addEventListener("input", updateCountryCode);
+        updateCountryCode();
+    }
 
     function validatePhoneNumber() {
+        if (!iti) {
+            // If intl-tel-input is not initialized, just show valid icon
+            phoneLoadingIcon.style.display = "none";
+            phoneValidIcon.style.display = "inline";
+            phoneInvalidIcon.style.display = "none";
+            return;
+        }
+
         let number = phoneInputField.value;
 
         // Normalize Arabic digits
@@ -104,38 +133,52 @@ document.addEventListener("DOMContentLoaded", function () {
             phoneInputField.value = number;
         }
 
-        const dialCode = iti.getSelectedCountryData().dialCode;
-        const inputOnlyDigits = number.replace(/\D/g, "");
+        try {
+            const dialCode = iti.getSelectedCountryData().dialCode;
+            const inputOnlyDigits = number.replace(/\D/g, "");
 
-        phoneValidIcon.style.display = "none";
-        phoneInvalidIcon.style.display = "none";
-        phoneLoadingIcon.style.display = "inline";
+            phoneValidIcon.style.display = "none";
+            phoneInvalidIcon.style.display = "none";
+            phoneLoadingIcon.style.display = "inline";
 
-        setTimeout(() => {
-            let isInvalid = false;
+            setTimeout(() => {
+                let isInvalid = false;
 
-            if (
-                number.startsWith("+") ||
-                number.startsWith("00") ||
-                inputOnlyDigits.startsWith(dialCode)
-            ) {
-                isInvalid = true;
-            }
+                if (
+                    number.startsWith("+") ||
+                    number.startsWith("00") ||
+                    inputOnlyDigits.startsWith(dialCode)
+                ) {
+                    isInvalid = true;
+                }
 
-            const isValid = iti.isValidNumber(number, dialCode);
-            const numberType = iti.getNumberType(number, dialCode);
+                try {
+                    const isValid = iti.isValidNumber(number, dialCode);
+                    const numberType = iti.getNumberType(number, dialCode);
 
+                    phoneLoadingIcon.style.display = "none";
+                    if (!isInvalid && isValid && numberType == 1) {
+                        phoneValidIcon.style.display = "inline";
+                    } else {
+                        phoneInvalidIcon.style.display = "inline";
+                    }
+                } catch (error) {
+                    console.error("Phone validation error:", error);
+                    phoneLoadingIcon.style.display = "none";
+                    phoneValidIcon.style.display = "inline";
+                }
+            }, 300);
+        } catch (error) {
+            console.error("Phone validation error:", error);
             phoneLoadingIcon.style.display = "none";
-            if (!isInvalid && isValid && numberType === 1) {
-                phoneValidIcon.style.display = "inline";
-            } else {
-                phoneInvalidIcon.style.display = "inline";
-            }
-        }, 300);
+            phoneValidIcon.style.display = "inline";
+        }
     }
 
-    phoneInputField.addEventListener("input", validatePhoneNumber);
-    phoneInputField.addEventListener("blur", validatePhoneNumber);
+    if (phoneInputField) {
+        phoneInputField.addEventListener("input", validatePhoneNumber);
+        phoneInputField.addEventListener("blur", validatePhoneNumber);
+    }
 
     // ====================== DATE VALIDATION ====================== //
     function normalizeDateField(input) {
@@ -188,45 +231,71 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // ====================== FORM SUBMISSION ====================== //
     const form = document.querySelector("form");
-    form.addEventListener("submit", function (e) {
-        const mobileErrorDiv = document.getElementById("mobile-error");
-        const mobileDiv = document.querySelector(".phone-group");
-        mobileErrorDiv.style.display = "none";
-        mobileDiv.classList.remove("is-invalid");
+    if (form) {
+        form.addEventListener("submit", function (e) {
+            // Validate phone if intl-tel-input is initialized
+            if (phoneInputField && iti) {
+                const mobileErrorDiv = document.getElementById("mobile-error");
+                const mobileDiv = document.querySelector(".phone-group");
+                mobileErrorDiv.style.display = "none";
+                mobileDiv.classList.remove("is-invalid");
 
-        if (!iti.isValidNumber() || iti.getNumberType() !== 1) {
-            e.preventDefault();
-            mobileErrorDiv.textContent = window.lang_invalid_mobile || "Invalid mobile number.";
-            mobileErrorDiv.style.display = "block";
-            mobileDiv.classList.add("is-invalid");
-            phoneInputField.focus();
-            return;
-        }
+                try {
+                    if (!iti.isValidNumber() || iti.getNumberType() != 1) {
+                        e.preventDefault();
+                        mobileErrorDiv.textContent = window.lang_invalid_mobile || "Invalid mobile number.";
+                        mobileErrorDiv.style.display = "block";
+                        mobileDiv.classList.add("is-invalid");
+                        phoneInputField.focus();
+                        return;
+                    }
+                } catch (error) {
+                    console.error("Phone validation error on submit:", error);
+                    // Allow form submission if validation fails
+                }
+            } else if (phoneInputField) {
+                // Basic validation if intl-tel-input is not available
+                const mobileValue = phoneInputField.value.trim();
+                if (!mobileValue || mobileValue.length < 8) {
+                    e.preventDefault();
+                    const mobileErrorDiv = document.getElementById("mobile-error");
+                    const mobileDiv = document.querySelector(".phone-group");
+                    mobileErrorDiv.textContent = window.lang_invalid_mobile || "Invalid mobile number.";
+                    mobileErrorDiv.style.display = "block";
+                    mobileDiv.classList.add("is-invalid");
+                    phoneInputField.focus();
+                    return;
+                }
+            }
 
-        const day = dayInput.value.trim().padStart(2, "0");
-        const month = monthInput.value.trim().padStart(2, "0");
-        const year = yearInput.value.trim();
-        const iso = `${year}-${month}-${day}`;
-        const testDate = new Date(iso);
+            // Validate DOB
+            if (dayInput && monthInput && yearInput && hiddenDOB) {
+                const day = dayInput.value.trim().padStart(2, "0");
+                const month = monthInput.value.trim().padStart(2, "0");
+                const year = yearInput.value.trim();
+                const iso = `${year}-${month}-${day}`;
+                const testDate = new Date(iso);
 
-        const dobErrorDiv = document.getElementById("dob-error");
-        const dobDiv = document.querySelector(".dob-group");
-        dobErrorDiv.style.display = "none";
-        dobDiv.classList.remove("is-invalid");
+                const dobErrorDiv = document.getElementById("dob-error");
+                const dobDiv = document.querySelector(".dob-group");
+                dobErrorDiv.style.display = "none";
+                dobDiv.classList.remove("is-invalid");
 
-        if (
-            testDate &&
-            testDate.getFullYear() == year &&
-            testDate.getMonth() + 1 == parseInt(month) &&
-            testDate.getDate() == parseInt(day) &&
-            testDate.getFullYear() >= 1900
-        ) {
-            hiddenDOB.value = iso;
-        } else {
-            e.preventDefault();
-            dobErrorDiv.textContent = window.lang_invalid_date || "Invalid date.";
-            dobErrorDiv.style.display = "block";
-            dobDiv.classList.add("is-invalid");
-        }
-    });
+                if (
+                    testDate &&
+                    testDate.getFullYear() == year &&
+                    testDate.getMonth() + 1 == parseInt(month) &&
+                    testDate.getDate() == parseInt(day) &&
+                    testDate.getFullYear() >= 1900
+                ) {
+                    hiddenDOB.value = iso;
+                } else {
+                    e.preventDefault();
+                    dobErrorDiv.textContent = window.lang_invalid_date || "Invalid date.";
+                    dobErrorDiv.style.display = "block";
+                    dobDiv.classList.add("is-invalid");
+                }
+            }
+        });
+    }
 });

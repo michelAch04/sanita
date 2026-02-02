@@ -317,6 +317,8 @@ console.log(window.applybtn);
         conversionText: ''
     };
     window.url = "{{ url('/') }}";
+    window.lang_invalid_mobile = "Invalid mobile number";
+    window.lang_invalid_date = "Invalid date";
 </script>
 
 <!-- Per-page Scripts -->
