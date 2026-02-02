@@ -159,14 +159,14 @@
     </form>
 </div>
 <script type="module">
-    import ar from "{{  asset('/intl-tel-input/build/js/i18n/ar/index.js') }}";
-    import ku from "{{  asset('/intl-tel-input/build/js/i18n/ku/index.js') }}";
+    import ar from "{{  secure_asset('/intl-tel-input/build/js/i18n/ar/index.js') }}";
+    import ku from "{{  secure_asset('/intl-tel-input/build/js/i18n/ku/index.js') }}";
     window.i18nAr = ar;
     window.i18nKu = ku;
     console.log(ku);
     window.utilsScripts = {
-         ar: "{{ asset('/intl-tel-input/build/js/utils.js?1743167482095') }}",
-         default: "{{ asset('/intl-tel-input/build/js/utils.js') }}"
+         ar: "{{ secure_asset('/intl-tel-input/build/js/utils.js?1743167482095') }}",
+         default: "{{ secure_asset('/intl-tel-input/build/js/utils.js') }}"
     }
 </script>
 <script type="module" src="{{ asset('js/auth.js') }}"></script>

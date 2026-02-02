@@ -14,41 +14,77 @@ $(document).ready(function () {
         swipe: true,
     });
 
-    $(".carousel").slick({
-        centerMode: false,
-        centerPadding: "0px",
-        dots: true,
-        infinite: true,
-        draggable: true,
-        swipe: true,
-        speed: 300,
-        slidesToShow: 5,
-        slidesToScroll: 1,
-        arrows: false,
-        autoplay: true,
-        autoplaySpeed: 2500,
-        prevArrow:
-            '<button type="button" class="slick-prev slick-arrow"><i class="fas fa-chevron-left"></i></button>',
-        nextArrow:
-            '<button type="button" class="slick-next slick-arrow"><i class="fas fa-chevron-right"></i></button>',
-        responsive: [
-            {
-                breakpoint: 1200,
-                settings: { slidesToShow: 4 },
-            },
-            {
-                breakpoint: 992,
-                settings: { slidesToShow: 3 },
-            },
-            {
-                breakpoint: 768,
-                settings: { slidesToShow: 2 },
-            },
-            {
-                breakpoint: 577,
-                settings: { slidesToShow: 2, slidesToScroll: 2 },
-            },
-        ],
+    $(".carousel").each(function() {
+        const $carousel = $(this);
+        const itemCount = $carousel.children().length;
+
+        // Calculate optimal slidesToScroll to keep dots under 10
+        const maxDots = 10;
+        let slidesToShow = 5;
+        let slidesToScroll = Math.max(1, Math.ceil(itemCount / maxDots));
+
+        // Adjust based on viewport
+        if (window.innerWidth < 577) {
+            slidesToShow = 2;
+        } else if (window.innerWidth < 768) {
+            slidesToShow = 2;
+        } else if (window.innerWidth < 992) {
+            slidesToShow = 3;
+        } else if (window.innerWidth < 1200) {
+            slidesToShow = 4;
+        }
+
+        // Ensure slidesToScroll doesn't exceed slidesToShow for smooth scrolling
+        slidesToScroll = Math.max(slidesToScroll, slidesToShow);
+
+        $carousel.slick({
+            centerMode: false,
+            centerPadding: "0px",
+            dots: true,
+            infinite: true,
+            draggable: true,
+            swipe: true,
+            speed: 300,
+            slidesToShow: slidesToShow,
+            slidesToScroll: slidesToScroll,
+            arrows: false,
+            autoplay: true,
+            autoplaySpeed: 2500,
+            prevArrow:
+                '<button type="button" class="slick-prev slick-arrow"><i class="fas fa-chevron-left"></i></button>',
+            nextArrow:
+                '<button type="button" class="slick-next slick-arrow"><i class="fas fa-chevron-right"></i></button>',
+            responsive: [
+                {
+                    breakpoint: 1200,
+                    settings: {
+                        slidesToShow: 4,
+                        slidesToScroll: Math.max(4, Math.ceil(itemCount / maxDots))
+                    },
+                },
+                {
+                    breakpoint: 992,
+                    settings: {
+                        slidesToShow: 3,
+                        slidesToScroll: Math.max(3, Math.ceil(itemCount / maxDots))
+                    },
+                },
+                {
+                    breakpoint: 768,
+                    settings: {
+                        slidesToShow: 2,
+                        slidesToScroll: Math.max(2, Math.ceil(itemCount / maxDots))
+                    },
+                },
+                {
+                    breakpoint: 577,
+                    settings: {
+                        slidesToShow: 2,
+                        slidesToScroll: Math.max(2, Math.ceil(itemCount / maxDots))
+                    },
+                },
+            ],
+        });
     });
 
     // Intercept add-to-cart button click to show modal

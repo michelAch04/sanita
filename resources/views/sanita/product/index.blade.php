@@ -104,9 +104,9 @@ $inCart = in_array($product->id, $cartProductIds);
 
                 @if (!$auth)
                 {{-- Not logged in --}}
-                <button type="submit" class="btn btn-arctic">
+                <a href="{{ route('customer.signin', ['locale' => app()->getLocale()]) }}" class="btn btn-arctic">
                     <i class="fas fa-cart-plus me-2"></i> {{ __('cart.add_to_cart') }}
-                </button>
+                </a>
                 @elseif ($totalStock <= 0)
                     {{-- Out of stock --}}
                     <button class="btn btn-disabled" disabled>

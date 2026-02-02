@@ -56,8 +56,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const phoneLoadingIcon = document.getElementById("phone-loading");
 
     let i18nOptions;
-    if (window.locale === "ar") i18nOptions = window.i18nAr;
-    else if (window.locale === "ku") i18nOptions = window.i18nKu;
+    if (window.locale === "ar" && window.i18nAr) i18nOptions = window.i18nAr;
+    else if (window.locale === "ku" && window.i18nKu) i18nOptions = window.i18nKu;
 
     const iti = window.intlTelInput(phoneInputField, {
         utilsScript: window.utilsScripts.ar ?? window.utilsScript.default,
