@@ -45,25 +45,28 @@
                 </div>
 
                 {{-- Image Dominance --}}
-                <div class="mb-5">
-                    <label class="form-label fw-semibold d-block mb-1">Image Dominance</label>
-                    <p class="text-muted small mb-2">Controls how product images in this category are displayed.</p>
-                    <div class="d-flex gap-4">
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="dominance" id="dominance_height" value="height"
+                <div class="select-container mb-5 mt-3" style="position: relative;">
+                    <label class="label" style="top: -20px; color: var(--primary-color); font-size: 16px;">Image Dominance</label>
+                    <div class="mt-2">
+                        <label class="select-label">
+                            <input type="radio" name="dominance" value="height"
                                 {{ old('dominance', 'height') == 'height' ? 'checked' : '' }}>
-                            <label class="form-check-label" for="dominance_height">
-                                <i class="bi bi-phone me-1"></i> Height Dominant (Portrait — tall images)
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="dominance" id="dominance_width" value="width"
-                                {{ old('dominance') == 'width' ? 'checked' : '' }}>
-                            <label class="form-check-label" for="dominance_width">
-                                <i class="bi bi-tv me-1"></i> Width Dominant (Landscape — wide images)
-                            </label>
-                        </div>
+                            <span><i class="bi bi-phone-fill me-1"></i> Portrait</span>
+                        </label>
+                        <label class="select-label">
+                            <input type="radio" name="dominance" value="width"
+                                {{ old('dominance', 'height') == 'width' ? 'checked' : '' }}>
+                            <span><i class="bi bi-display me-1"></i> Landscape</span>
+                        </label>
+                        <label class="select-label">
+                            <input type="radio" name="dominance" value="none"
+                                {{ old('dominance', 'height') == 'none' ? 'checked' : '' }}>
+                            <span><i class="bi bi-square me-1"></i> Square</span>
+                        </label>
                     </div>
+                    <small class="text-muted d-block mt-2">
+                        <strong>Portrait</strong> — tall images (4:5). &nbsp; <strong>Landscape</strong> — wide images (5:3). &nbsp; <strong>Square</strong> — any image, no cropping (1:1).
+                    </small>
                 </div>
 
                 {{-- Upload Image --}}

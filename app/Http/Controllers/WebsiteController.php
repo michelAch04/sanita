@@ -249,7 +249,7 @@ class WebsiteController extends Controller
     public function product(Request $request)
     {
         $product_id = $request->product;
-        $product = Product::with(['subcategories', 'brand'])->where('id', $product_id)->first();
+        $product = Product::with(['subcategories.category', 'brand'])->where('id', $product_id)->first();
 
         return view('sanita.product.index', compact('product'));
     }

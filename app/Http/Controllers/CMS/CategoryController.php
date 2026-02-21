@@ -53,7 +53,7 @@ class CategoryController extends Controller
                 'name_ar' => 'required|string|max:255',
                 'name_ku' => 'required|string|max:255',
                 'image' => 'nullable|mimes:jpg,jpeg,png,gif,svg|max:2048',
-                'dominance' => 'required|in:height,width',
+                'dominance' => 'required|in:height,width,none',
             ]);
 
             $extension = null;
@@ -112,7 +112,7 @@ class CategoryController extends Controller
             'name_ku' => 'required|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'visible' => 'required|boolean',
-            'dominance' => 'required|in:height,width',
+            'dominance' => 'required|in:height,width,none',
         ]);
 
         $category->name_en = $validatedData['name_en'];

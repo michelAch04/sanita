@@ -6,6 +6,7 @@
 @php
 $auth = auth('customer')->user();
 $type = $auth->type ?? 'b2c';
+$dominance = $product->subcategories?->category?->dominance ?? 'height';
 $prices = $product->listPrices->where('type', $type);
 $price = $prices->where('UOM', 'EA')->first() ?? $prices->where('UOM', 'CA')->first() ?? $prices->where('UOM', 'PL')->first();
 $availableUOMs = $prices->where('type', $type)->pluck('UOM')->toArray();
@@ -34,7 +35,7 @@ $inCart = in_array($product->id, $cartProductIds);
     <div class="left-column">
         <img src="{{ asset('storage/products/' .$product->id .'.' .  $product->extension ) }}"
             alt="{{ $product->{'name_' . app()->getLocale()} }}"
-            class="active product-image">
+            class="active product-image {{ $dominance == 'width' || $dominance == 'none' ? 'product-image--contain' : '' }}">
     </div>
 
     <!-- Right Column -->

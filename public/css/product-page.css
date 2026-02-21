@@ -44,6 +44,10 @@ body {
     opacity: 1;
 }
 
+.left-column img.product-image--contain {
+    object-fit: contain;
+}
+
 
 /* Right Column */
 .right-column {

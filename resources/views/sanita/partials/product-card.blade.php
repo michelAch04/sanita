@@ -37,7 +37,7 @@ $inCart = in_array($product->id, $cartProductIds);
                 {{ $badge }}
             </div>
 
-            <div style="--bg-color: {{ $cardType === 'offer' ? '#a78bfa' : '#38bdf8' }}" class="card__image {{ $dominance == 'width' ? 'card__image--wide' : '' }}">
+            <div style="--bg-color: {{ $cardType === 'offer' ? '#a78bfa' : '#38bdf8' }}" class="card__image {{ $dominance == 'width' ? 'card__image--wide' : ($dominance == 'none' ? 'card__image--square' : '') }}">
                 @if($storage)
                 <img src="{{ asset('storage/' . $imagePath) }}"
                     alt="{{ $product->{'name_'.app()->getLocale()} ?? $product->name_en }}"

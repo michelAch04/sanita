@@ -581,25 +581,24 @@ section:nth-of-type(5) {
     object-fit: cover;
 }
 
-/* Width-dominant product images: landscape aspect ratio */
+/* Landscape: full wide image visible, letterboxed inside the fixed 4/5 container */
 .card__image--wide {
-    aspect-ratio: 5/3 !important;
+    background: #ffffff !important;
 }
 
-.card__image::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 30% 30%,
-            rgba(255, 255, 255, 0.1) 0%,
-            transparent 30%),
-        repeating-linear-gradient(45deg,
-            rgba(255, 255, 255, 0.1) 0px,
-            rgba(42, 67, 101, 0.1) 2px,
-            transparent 2px,
-            transparent 4px);
-    opacity: 0.5;
+.card__image--wide img {
+    object-fit: contain !important;
 }
+
+/* Square / no-dominance: full image visible, no cropping, fixed 4/5 container */
+.card__image--square {
+    background: #ffffff !important;
+}
+
+.card__image--square img {
+    object-fit: contain !important;
+}
+
 
 .card__text {
     display: flex;
