@@ -18,10 +18,9 @@ $(document).ready(function () {
         const $carousel = $(this);
         const itemCount = $carousel.children().length;
 
-        // Calculate optimal slidesToScroll to keep dots under 10
-        const maxDots = 10;
+        // Minimum scroll step of 3 to keep dot count low
+        const minScroll = 3;
         let slidesToShow = 5;
-        let slidesToScroll = Math.max(1, Math.ceil(itemCount / maxDots));
 
         // Adjust based on viewport
         if (window.innerWidth < 577) {
@@ -34,8 +33,8 @@ $(document).ready(function () {
             slidesToShow = 4;
         }
 
-        // Ensure slidesToScroll doesn't exceed slidesToShow for smooth scrolling
-        slidesToScroll = Math.max(slidesToScroll, slidesToShow);
+        // scrollStep = max(minScroll, slidesToShow) to minimize dots while staying fluid
+        const slidesToScroll = Math.max(minScroll, slidesToShow);
 
         $carousel.slick({
             centerMode: false,
@@ -59,28 +58,28 @@ $(document).ready(function () {
                     breakpoint: 1200,
                     settings: {
                         slidesToShow: 4,
-                        slidesToScroll: Math.max(4, Math.ceil(itemCount / maxDots))
+                        slidesToScroll: Math.max(minScroll, 4),
                     },
                 },
                 {
                     breakpoint: 992,
                     settings: {
                         slidesToShow: 3,
-                        slidesToScroll: Math.max(3, Math.ceil(itemCount / maxDots))
+                        slidesToScroll: Math.max(minScroll, 3),
                     },
                 },
                 {
                     breakpoint: 768,
                     settings: {
                         slidesToShow: 2,
-                        slidesToScroll: Math.max(2, Math.ceil(itemCount / maxDots))
+                        slidesToScroll: Math.max(minScroll, 2),
                     },
                 },
                 {
                     breakpoint: 577,
                     settings: {
                         slidesToShow: 2,
-                        slidesToScroll: Math.max(2, Math.ceil(itemCount / maxDots))
+                        slidesToScroll: Math.max(minScroll, 2),
                     },
                 },
             ],

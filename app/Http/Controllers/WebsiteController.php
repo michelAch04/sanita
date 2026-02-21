@@ -25,8 +25,25 @@ class WebsiteController extends Controller
         $slideshow = Slideshow::where('hidden', 0)->where('cancelled', 0)->get()->sortBy('position');
         $categories = Category::where('hidden', 0)->where('cancelled', 0)->get()->sortBy('position');
         $brands = Brand::where('hidden', 0)->where('cancelled', 0)->get()->sortBy('position');
-        $products = $this->getAvailableProducts();
-        $offers = $this->getOffers($products);
+
+        $allProducts = $this->getAvailableProducts();
+
+        // Get top 25 products by total quantity sold; fall back to first 25 if no sales data
+        $topProductIds = \App\Models\OrderDetail::select('products_id', DB::raw('SUM(quantity_primary) as total_sold'))
+            ->groupBy('products_id')
+            ->orderByDesc('total_sold')
+            ->pluck('products_id');
+
+        if ($topProductIds->isNotEmpty()) {
+            $products = $allProducts->sortBy(function ($product) use ($topProductIds) {
+                $idx = $topProductIds->search($product->id);
+                return $idx === false ? PHP_INT_MAX : $idx;
+            })->take(25)->values();
+        } else {
+            $products = $allProducts->take(25)->values();
+        }
+
+        $offers = collect($this->getOffers($allProducts))->take(25)->values();
 
         return view('sanita.index', compact(
             'aboutus',
@@ -270,7 +287,8 @@ class WebsiteController extends Controller
             'listPrices' => function ($q) use ($type) {
                 $q->select()->where('type', $type)->where('hidden', 0);
             },
-            'distributorStocks'
+            'distributorStocks',
+            'subcategories.category',
         ])
             ->where('cancelled', 0)
             ->get();

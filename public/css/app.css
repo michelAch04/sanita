@@ -581,6 +581,10 @@ section:nth-of-type(5) {
     object-fit: cover;
 }
 
+/* Width-dominant product images: landscape aspect ratio */
+.card__image--wide {
+    aspect-ratio: 5/3 !important;
+}
 
 .card__image::after {
     content: "";

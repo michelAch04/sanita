@@ -43,6 +43,28 @@
                     <label for="visible" class="tgl-btn" data-tg-on="Yes" data-tg-off="No"></label>
                 </div>
 
+                {{-- Image Dominance --}}
+                <div class="mb-5">
+                    <label class="form-label fw-semibold d-block mb-1">Image Dominance</label>
+                    <p class="text-muted small mb-2">Controls how product images in this category are displayed.</p>
+                    <div class="d-flex gap-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="dominance" id="dominance_height" value="height"
+                                {{ old('dominance', $category->dominance ?? 'height') == 'height' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="dominance_height">
+                                <i class="bi bi-phone me-1"></i> Height Dominant (Portrait — tall images)
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="dominance" id="dominance_width" value="width"
+                                {{ old('dominance', $category->dominance ?? 'height') == 'width' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="dominance_width">
+                                <i class="bi bi-tv me-1"></i> Width Dominant (Landscape — wide images)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
                 {{-- Upload Image --}}
                 <div class="d-flex align-items-start gap-4 mb-4 flex-wrap upload-container">
                     <!-- Custom Upload Button -->

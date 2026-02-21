@@ -8,6 +8,7 @@ use App\Http\Controllers\CMS\PageController;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Cart;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,6 +25,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Force HTTPS for all generated URLs when the request is secure or in production
+        if (request()->isSecure() || $this->app->environment('production')) {
+            URL::forceScheme('https');
+        }
+
         Paginator::useBootstrapFive(); // or Paginator::useBootstrapFour();
 
         View::composer('*', function ($view) {

@@ -7,6 +7,7 @@ $imagePath = 'products/' . $product->id . '.' . $product->extension;
 $storage = \Illuminate\Support\Facades\Storage::disk('public')->exists($imagePath);
 $auth = auth('customer')->user();
 $totalStock = $product->distributorStocks?->sum('stock') ?? 0;
+$dominance = $product->subcategories?->category?->dominance ?? 'height';
 
 $isNew = $product->created_at && $product->created_at->gt(\Illuminate\Support\Carbon::now()->subDays(7));
 $badge = $badge ?? ($cardType === 'offer' ? __('nav.offer') : ($isNew ? __('nav.new') : __('nav.product')));
@@ -36,7 +37,7 @@ $inCart = in_array($product->id, $cartProductIds);
                 {{ $badge }}
             </div>
 
-            <div style="--bg-color: {{ $cardType === 'offer' ? '#a78bfa' : '#38bdf8' }}" class="card__image">
+            <div style="--bg-color: {{ $cardType === 'offer' ? '#a78bfa' : '#38bdf8' }}" class="card__image {{ $dominance == 'width' ? 'card__image--wide' : '' }}">
                 @if($storage)
                 <img src="{{ asset('storage/' . $imagePath) }}"
                     alt="{{ $product->{'name_'.app()->getLocale()} ?? $product->name_en }}"

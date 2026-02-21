@@ -53,6 +53,7 @@ class CategoryController extends Controller
                 'name_ar' => 'required|string|max:255',
                 'name_ku' => 'required|string|max:255',
                 'image' => 'nullable|mimes:jpg,jpeg,png,gif,svg|max:2048',
+                'dominance' => 'required|in:height,width',
             ]);
 
             $extension = null;
@@ -65,6 +66,7 @@ class CategoryController extends Controller
                 'extension' => null,
                 'hidden' => $hidden,
                 'cancelled' => 0,
+                'dominance' => $validate['dominance'],
             ]);
 
             if ($request->hasFile('image')) {
@@ -110,12 +112,14 @@ class CategoryController extends Controller
             'name_ku' => 'required|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'visible' => 'required|boolean',
+            'dominance' => 'required|in:height,width',
         ]);
 
         $category->name_en = $validatedData['name_en'];
         $category->name_ar = $validatedData['name_ar'];
         $category->name_ku = $validatedData['name_ku'];
         $category->hidden = !$validatedData['visible']; // invert visible to store hidden
+        $category->dominance = $validatedData['dominance'];
 
         if ($request->hasFile('image')) {
             $oldPath = public_path('storage/categories/' . $category->id . '.' . $category->extension);
