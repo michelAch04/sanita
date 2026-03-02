@@ -2,7 +2,7 @@
 
     .products-list .list-container>.product-card,
     .products-list .list-container>.category-card {
-        flex: 0 0 30% !important;
+        flex: 0 0 23% !important;
     }
 }
 
@@ -13,7 +13,7 @@
 
     .products-list .list-container>.product-card,
     .products-list .list-container>.category-card {
-        flex: 0 0 46% !important;
+        flex: 0 0 31% !important;
     }
 
     /* ------------------- PRODUCT PAGE ---------------------- */
@@ -184,7 +184,7 @@
 
     .products-list .list-container>.product-card,
     .products-list .list-container>.category-card {
-        flex: 0 0 46% !important;
+        flex: 0 0 31% !important;
         margin-bottom: 0 !important;
         margin-top: 0.5rem !important;
     }
