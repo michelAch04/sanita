@@ -496,6 +496,8 @@ section:nth-of-type(5) {
     border-radius: 20px;
     position: relative;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
     transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     box-shadow: var(--card-shadow);
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -534,7 +536,7 @@ section:nth-of-type(5) {
 
 .card__content {
     padding: 0.5em 0.75em;
-    height: 100%;
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 0.75em;
