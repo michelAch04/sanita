@@ -27,9 +27,9 @@
     /*--tertiary-bg: #E2E8F0*/
     --grey-bg: #c0c0c0;
     /*--grey-bg: #c0c0c0*/
-    --card-width: 17.6rem;
+    --card-width: 20rem;
     /*--card-width: 14.075rem;*/
-    --card-height: 25rem;
+    --card-height: 27rem;
     /*--card-height: 23rem; Increased for 4:5 aspect ratio*/
     --card-title: 1rem;
     /*--card-title: 1.2em;*/
@@ -489,6 +489,7 @@ section:nth-of-type(5) {
     --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
 
     width: var(--card-width);
+    max-width: 100%;
     height: auto !important;
     min-height: var(--card-height);
     background: var(--card-bg);
@@ -565,8 +566,7 @@ section:nth-of-type(5) {
     width: 100%;
     height: auto !important;
     aspect-ratio: 1/1 !important;
-    background: linear-gradient(45deg, #617ea5, #3b5e8f);
-    /* Darker blues */
+    background: #f0f4f8;
     border-radius: 12px;
     transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
@@ -578,7 +578,7 @@ section:nth-of-type(5) {
     height: 100%;
     border-radius: 12px;
     transition: all 0.3s ease;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 

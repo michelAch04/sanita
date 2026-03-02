@@ -1,7 +1,7 @@
 .product-card {
     flex: 0 0 auto;
-    width: 30%;
-    /* 3 per row approx */
+    width: var(--card-width);
+    max-width: 100%;
 }
 
 /*FILTER PAGES STYLING*/
