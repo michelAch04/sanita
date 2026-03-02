@@ -566,7 +566,7 @@ section:nth-of-type(5) {
     width: 100%;
     height: auto !important;
     aspect-ratio: 1/1 !important;
-    background: #f0f4f8;
+    background: #ffffff;
     border-radius: 12px;
     transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
@@ -930,7 +930,7 @@ section:nth-of-type(5) {
     width: calc(var(--card-width) - 2.5rem);
     height: auto;
     aspect-ratio: 4/5;
-    object-fit: cover;
+    object-fit: contain;
     margin-top: auto;
 }
 
