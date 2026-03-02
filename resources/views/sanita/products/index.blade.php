@@ -112,6 +112,6 @@
         }
     }
 </script>
-<link rel="stylesheet" href="{{ asset('css/products-list.css') }}?v=20260302-3" />
+<link rel="stylesheet" href="{{ asset('css/products-list.css') }}?v=20260302-4" />
 @include('sanita.partials.add-to-cart-modal')
 @endsection
