@@ -20,10 +20,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/25.3.1/build/css/intlTelInput.min.css">
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/ui-tools.css') }}?v=20260302-4">
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=20260302-4">
-    <link rel="stylesheet" href="{{ asset('css/auth.css') }}?v=20260302-4">
-    <link rel="stylesheet" href="{{ asset('css/mobile.css') }}?v=20260302-4">
+    <link rel="stylesheet" href="{{ asset('css/ui-tools.css') }}?v=20260302-5">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=20260302-5">
+    <link rel="stylesheet" href="{{ asset('css/auth.css') }}?v=20260302-5">
+    <link rel="stylesheet" href="{{ asset('css/mobile.css') }}?v=20260302-5">
 </head>
 
 <!-- Start of Tawk.to Script-->
@@ -317,7 +317,7 @@ console.log(window.applybtn);
         maxQuantity: 0,
         conversionText: ''
     };
-    window.url = "{{ url('/') }}";
+    window.url = "{{ secure_url('/') }}";
     window.lang_invalid_mobile = "Invalid mobile number";
     window.lang_invalid_date = "Invalid date";
 </script>

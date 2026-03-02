@@ -136,7 +136,7 @@ $inCart = in_array($product->id, $cartProductIds);
     </div>
 </div>
 
-<link href="{{ asset('css/product-page.css') }}?v=20260302-4" rel="stylesheet">
+<link href="{{ asset('css/product-page.css') }}?v=20260302-5" rel="stylesheet">
 @php
 $productPrices = $prices->keyBy('UOM')->map(function($item) {
 return [
