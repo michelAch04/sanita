@@ -35,7 +35,7 @@ $inCart = in_array($product->id, $cartProductIds);
     <div class="left-column">
         <img src="{{ asset('storage/products/' .$product->id .'.' .  $product->extension ) }}"
             alt="{{ $product->{'name_' . app()->getLocale()} }}"
-            class="active product-image {{ $dominance == 'width' || $dominance == 'none' ? 'product-image--contain' : '' }}">
+            class="active product-image">
     </div>
 
     <!-- Right Column -->

@@ -27,9 +27,9 @@
     /*--tertiary-bg: #E2E8F0*/
     --grey-bg: #c0c0c0;
     /*--grey-bg: #c0c0c0*/
-    --card-width: 14.075rem;
-    /*--card-width: 17.075rem;*/
-    --card-height: 23rem;
+    --card-width: 17.6rem;
+    /*--card-width: 14.075rem;*/
+    --card-height: 25rem;
     /*--card-height: 23rem; Increased for 4:5 aspect ratio*/
     --card-title: 1rem;
     /*--card-title: 1.2em;*/
@@ -564,7 +564,7 @@ section:nth-of-type(5) {
 .card__image {
     width: 100%;
     height: auto !important;
-    aspect-ratio: 4/5 !important;
+    aspect-ratio: 1/1 !important;
     background: linear-gradient(45deg, #617ea5, #3b5e8f);
     /* Darker blues */
     border-radius: 12px;
@@ -579,24 +579,6 @@ section:nth-of-type(5) {
     border-radius: 12px;
     transition: all 0.3s ease;
     object-fit: cover;
-}
-
-/* Landscape: full wide image visible, letterboxed inside the fixed 4/5 container */
-.card__image--wide {
-    background: #ffffff !important;
-}
-
-.card__image--wide img {
-    object-fit: contain !important;
-}
-
-/* Square / no-dominance: full image visible, no cropping, fixed 4/5 container */
-.card__image--square {
-    background: #ffffff !important;
-}
-
-.card__image--square img {
-    object-fit: contain !important;
 }
 
 

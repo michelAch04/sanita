@@ -33,7 +33,7 @@ body {
     height: auto;
     opacity: 0;
     transition: all 0.3s ease;
-    aspect-ratio: 4/5;
+    aspect-ratio: 1/1;
     object-fit: cover;
     border-radius: 16px;
     background: #ffffff;
@@ -42,10 +42,6 @@ body {
 
 .left-column img.active {
     opacity: 1;
-}
-
-.left-column img.product-image--contain {
-    object-fit: contain;
 }
 
 
