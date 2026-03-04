@@ -1,6 +1,6 @@
 @extends('sanita.layout')
 
-@section('title', __('Checkout'))
+@section('title', __('cart.checkout'))
 
 @section('content')
 <div class="checkout-wrapper container-fluid py-5 px-0 {{ $isRtl ? 'rtl-container' : '' }}">

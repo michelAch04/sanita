@@ -1,6 +1,6 @@
 @extends('sanita.layout')
 
-@section('title', __('Brands'))
+@section('title', __('nav.brands'))
 
 @section('content')
 <section id="Brands" class="py-3 bg-light products-list">

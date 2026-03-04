@@ -1,6 +1,6 @@
 @extends('sanita.layout')
 
-@section('title', 'Home')
+@section('title', __('nav.home'))
 @php
 $type = auth()->user()->type ?? 'b2c';
 @endphp

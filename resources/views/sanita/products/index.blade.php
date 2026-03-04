@@ -1,6 +1,6 @@
 @extends('sanita.layout')
 
-@section('title', __('Products'))
+@section('title', __('nav.products'))
 
 @section('content')
 <section id="products" class="py-3 products-list {{ $isRtl ? 'rtl-container' : '' }}">

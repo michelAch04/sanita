@@ -4,7 +4,7 @@
         <div class="modal-content border-0 shadow">
             <div class="modal-header text-white">
                 <h5 class="modal-title" id="addToCartModalLabel">{{ __('cart.add_to_cart') }}</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="{{ __('nav.close') }}"></button>
             </div>
             <form id="addToCartForm">
                 <div class="modal-body">

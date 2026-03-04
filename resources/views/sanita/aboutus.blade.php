@@ -9,7 +9,7 @@
             @if ($aboutUs)
                 {{ strip_tags($aboutUs->{'textarea_' . app()->getLocale()}) }}
             @else
-                <p>About Us information is not available.</p>
+                <p>{{ __('about.not_available') }}</p>
             @endif
         </p>
     </div>

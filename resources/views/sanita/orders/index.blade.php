@@ -1,6 +1,6 @@
 @extends('sanita.layout')
 
-@section('title', __('Order History'))
+@section('title', __('nav.order_history'))
 
 @php
 $sortedOrders = $orders->sortByDesc('created_at');
@@ -46,10 +46,10 @@ $sortedOrders = $orders->sortByDesc('created_at');
                     <div class="mt-3">
                         <h6 class="mb-2 text-primary">{{ __('cart.shipping_address') }}</h6>
                         <p class="text-muted mb-1">
-                            <i class="fa fa-map-marker-alt me-1"></i> {{ $order->address->governorate->name_en }}
+                            <i class="fa fa-map-marker-alt me-1"></i> {{ $order->address->governorate->{'name_' . app()->getLocale()} ?? $order->address->governorate->name_en }}
                         </p>
                         <p class="text-muted mb-1">
-                            <i class="fa fa-city me-1"></i> {{ $order->address->city->name_en }}, {{ $order->address->district->name_en }}
+                            <i class="fa fa-city me-1"></i> {{ $order->address->city->{'name_' . app()->getLocale()} ?? $order->address->city->name_en }}, {{ $order->address->district->{'name_' . app()->getLocale()} ?? $order->address->district->name_en }}
                         </p>
                         <p class="text-muted mb-0">
                             <i class="fa fa-home me-1"></i> {{ __('address.Street') }} {{ $order->address->street }}, {{ __('address.Building') }} {{ $order->address->building }}

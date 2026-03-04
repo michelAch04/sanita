@@ -46,4 +46,8 @@ return [
     'close' => 'Close',
     'filters' => 'Filters',
     'reset_filters' => 'Reset Filters',
+    'cart_add_failed' => 'Failed to add product to cart.',
+    'cart_add_error' => 'An error occurred while adding to cart.',
+    'invalid_mobile' => 'Invalid mobile number',
+    'invalid_date' => 'Invalid date',
 ];

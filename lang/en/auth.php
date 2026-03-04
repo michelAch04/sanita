@@ -54,5 +54,11 @@ return [
         'email_title' => 'Reset Password',
         'email' => 'Email Address',
         'send_link' => 'Send Password Reset Link',
+        'reset_password' => 'Reset Password',
+        'password' => 'Password',
+        'email_address' => 'E-Mail Address',
+        'confirm_password' => 'Confirm Password',
     ],
+    'invalid_mobile' => 'Invalid mobile number',
+    'invalid_date' => 'Invalid date',
 ];

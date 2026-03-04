@@ -9,4 +9,5 @@ return [
     'no_brands' => 'No brands found.',
     'no_categories' => 'No categories found.',
     'no_offers' => 'No offers match your filters.',
+    'no_description' => 'No description available.',
 ];

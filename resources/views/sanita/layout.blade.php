@@ -107,7 +107,7 @@
                                 type="search"
                                 id="searchInput"
                                 name="q"
-                                placeholder="Search..."
+                                placeholder="{{ __('nav.search_placeholder') }}"
                                 class=""
                                 autocomplete="off">
                         </div>
@@ -318,8 +318,8 @@ console.log(window.applybtn);
         conversionText: ''
     };
     window.url = "{{ secure_url('/') }}";
-    window.lang_invalid_mobile = "Invalid mobile number";
-    window.lang_invalid_date = "Invalid date";
+    window.lang_invalid_mobile = "{{ __('nav.invalid_mobile') }}";
+    window.lang_invalid_date = "{{ __('nav.invalid_date') }}";
 </script>
 
 <!-- Per-page Scripts -->

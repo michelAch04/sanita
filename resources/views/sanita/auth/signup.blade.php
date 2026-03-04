@@ -1,6 +1,6 @@
 @extends('sanita.layout')
 
-@section('title', 'Sign Up')
+@section('title', __('auth.sign_up.title'))
 
 @section('content')
 

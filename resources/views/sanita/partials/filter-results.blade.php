@@ -30,7 +30,7 @@ $panelContainer = $panel == true ? '#filterPanel' : '#filterSidebar';
                 </div>
             </label>
             <label class="form-check-label">
-                {{ $brand->name_en }}
+                {{ $brand->{'name_' . app()->getLocale()} ?? $brand->name_en }}
             </label>
         </div>
         @endforeach
@@ -62,7 +62,7 @@ $panelContainer = $panel == true ? '#filterPanel' : '#filterSidebar';
                 </div>
             </label>
             <label class="form-check-label">
-                {{ $category->name_en }}
+                {{ $category->{'name_' . app()->getLocale()} ?? $category->name_en }}
             </label>
         </div>
         @endforeach

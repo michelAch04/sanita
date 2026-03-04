@@ -124,5 +124,5 @@
 <link rel="stylesheet" href="{{ asset('css/address.css') }}" />
 @include('sanita.partials.select2',[
 'id' => '#governorate',
-'placeholder' => "{{ __('cart.select_address') }}"
+'placeholder' => __('cart.select_address')
 ])
