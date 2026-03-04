@@ -42,4 +42,7 @@ return [
     'search_title' => 'ئەنجامی گەڕان بۆ',
     'cancel' => 'هەڵوەشاندنەوە',
     'continue_shopping' => 'دەستپێکردنەوەی کڕین',
+    'close' => 'داخستن',
+    'brands' => 'مارکەکان',
+    'view_all_brands' => '← هەموو مارکەکان',
 ];

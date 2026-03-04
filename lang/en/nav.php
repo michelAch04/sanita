@@ -42,5 +42,6 @@ return [
     'pos' => 'Find Us Nearby',
     'pos_title' => 'Find a POS Near You',
     'search_title' => 'Search results for',
-    'continue_shopping' => 'Continue Shopping'
+    'continue_shopping' => 'Continue Shopping',
+    'close' => 'Close',
 ];

@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow">
             <div class="modal-header text-white">
-                <h5 class="modal-title" id="addToCartModalLabel">Add to Cart</h5>
+                <h5 class="modal-title" id="addToCartModalLabel">{{ __('cart.add_to_cart') }}</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="addToCartForm">

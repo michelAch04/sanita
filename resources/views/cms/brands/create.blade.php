@@ -48,6 +48,7 @@
                     <div>
                         <label for="image" id="imageLabel" class="btn underline-btn">Upload Image</label>
                         <input type="file" id="image" name="image" accept="image/*" hidden required>
+                        <small class="text-muted d-block mt-1">Best ratio: 4:5 portrait (e.g. 560×700 px)</small>
                     </div>
 
                     <!-- Image Preview -->

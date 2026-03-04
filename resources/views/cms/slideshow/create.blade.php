@@ -39,6 +39,7 @@
                     <div>
                         <label for="image" id="imageLabel" class="btn underline-btn">Upload Image</label>
                         <input type="file" id="image" name="image" accept="image/*" hidden required>
+                        <small class="text-muted d-block mt-1">Best: full-width landscape, max 400 px tall (e.g. 1280×400 px)</small>
                         @error('image')
                             <div class="text-danger small mt-2">{{ $message }}</div>
                         @enderror

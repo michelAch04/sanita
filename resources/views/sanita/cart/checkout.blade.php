@@ -102,7 +102,7 @@
                                 {{ $address->title }} —
                                 {{ $address->city->{'name_' . app()->getLocale()} ?? $address->city->name_en }},
                                 {{ $address->district->{'name_' . app()->getLocale()} ?? $address->district->name_en }}
-                                | Street {{ $address->street }}, Building {{ $address->building }}, Floor {{ $address->floor }}
+                                | {{ __('address.Street') }} {{ $address->street }}, {{ __('address.Building') }} {{ $address->building }}, {{ __('address.Floor') }} {{ $address->floor }}
                             </option>
                             @endforeach
                         </select>
@@ -161,8 +161,8 @@
     <div class="modal-dialog modal-fullscreen-md-down modal-dialog-centered modal-lg d-flex justify-content-center">
         <div class="modal-content p-3 pb-2 w-75 bg-secondary">
             <div class="modal-header border-0">
-                <h2 class="display-5 login-title text-center mb-0 fs-1">{{ __('Add New Address') }}</h2>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('Close') }}"></button>
+                <h2 class="display-5 login-title text-center mb-0 fs-1">{{ __('address.Add_New_Address') }}</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('nav.close') }}"></button>
             </div>
             <div class="modal-body d-flex justify-content-center">
                 @include('sanita.addresses.create') {{-- We'll extract the form here --}}

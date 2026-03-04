@@ -65,4 +65,5 @@ return [
     'error' => 'An error occurred',
     'max_qty' => 'The quantity is below the minimum allowed: :minQty',
     'min_qty' => 'The quantity exceeds the maximum allowed: :maxQty',
+    'discount' => 'Discount',
 ];

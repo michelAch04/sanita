@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Sales Order #{{ $order->id }}</title>
+    <title>{{ __('order.sales_order') }} #{{ $order->id }}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -115,37 +115,37 @@
             <h1>Sanita</h1>
             <table class="info-table">
                 <tr>
-                    <td class="label">Address:</td>
+                    <td class="label">{{ __('order.address_label') }}:</td>
                     <td class="value">Iraq - Erbil</td>
                 </tr>
                 <tr>
-                    <td class="label">Postal Code:</td>
+                    <td class="label">{{ __('order.postal_code') }}:</td>
                     <td class="value">112354</td>
                 </tr>
                 <tr>
-                    <td class="label">Phone:</td>
+                    <td class="label">{{ __('order.phone_label') }}:</td>
                     <td class="value">+964 7 73 466 5969</td>
                 </tr>
                 <tr>
-                    <td class="label">Fax:</td>
+                    <td class="label">{{ __('order.fax_label') }}:</td>
                     <td class="value">+964 7 73 466 5969</td>
                 </tr>
             </table>
         </div>
         <div class="right" style="text-align: right;">
-            <h1>SALES ORDER</h1>
+            <h1>{{ __('order.sales_order') }}</h1>
             <table class="info-table" style="float: right;">
                 <tr>
-                    <td class="label">Print Date:</td>
+                    <td class="label">{{ __('order.print_date') }}:</td>
                     <td class="value">{{ now()->format('d M Y') }}</td>
                 </tr>
                 <tr>
-                    <td class="label">Order #:</td>
+                    <td class="label">{{ __('order.order_num') }}:</td>
                     <td class="value">{{ $order->id }}</td>
                 </tr>
                 <tr>
-                    <td class="label">Payment Status:</td>
-                    <td class="value">{{ $order->payment_method ?? 'NOT PAID (COD)' }}</td>
+                    <td class="label">{{ __('order.payment_status') }}:</td>
+                    <td class="value">{{ $order->payment_method ?? __('order.not_paid_cod') }}</td>
                 </tr>
             </table>
         </div>
@@ -155,80 +155,80 @@
         @php $address = $order->customer->addresses->first(); @endphp
 
         <div class="ship-to">
-            <div class="section-title">SHIP TO</div>
+            <div class="section-title">{{ __('order.ship_to') }}</div>
             <table class="info-table">
                 <tr>
-                    <td class="label">Governorate:</td>
+                    <td class="label">{{ __('address.Governorate') }}:</td>
                     <td class="value">{{ $address?->governorate?->name_en ?? 'N/A' }}</td>
                 </tr>
                 <tr>
-                    <td class="label">District:</td>
+                    <td class="label">{{ __('address.District') }}:</td>
                     <td class="value">{{ $address?->district?->name_en ?? 'N/A' }}</td>
                 </tr>
                 <tr>
-                    <td class="label">City:</td>
+                    <td class="label">{{ __('address.City') }}:</td>
                     <td class="value">{{ $address?->city?->name_en ?? 'N/A' }}</td>
                 </tr>
                 <tr>
-                    <td class="label">Details:</td>
+                    <td class="label">{{ __('order.details') }}:</td>
                     <td class="value">
                         {{
-                            ($address?->street ? 'Street - ' . $address->street . ' ' : '') .
-                            ($address?->building ? 'Building - ' . $address->building . ' ' : '') .
-                            ($address?->floor ? 'Floor - ' . $address->floor : '') ?: 'N/A'
+                            ($address?->street ? __('order.street_prefix') . ' - ' . $address->street . ' ' : '') .
+                            ($address?->building ? __('order.building_prefix') . ' - ' . $address->building . ' ' : '') .
+                            ($address?->floor ? __('order.floor_prefix') . ' - ' . $address->floor : '') ?: 'N/A'
                         }}
                     </td>
                 </tr>
                 <tr>
-                    <td class="label">Full Name:</td>
+                    <td class="label">{{ __('order.full_name') }}:</td>
                     <td class="value">{{ $order->customer->first_name }}</td>
                 </tr>
                 <tr>
-                    <td class="label">Phone:</td>
+                    <td class="label">{{ __('order.phone_label') }}:</td>
                     <td class="value">{{ $order->customer->mobile }}</td>
                 </tr>
                 <tr>
-                    <td class="label">Email:</td>
+                    <td class="label">{{ __('order.email_label') }}:</td>
                     <td class="value">{{ $order->customer->email }}</td>
                 </tr>
             </table>
         </div>
 
         <div class="sold-to">
-            <div class="section-title">SOLD TO</div>
+            <div class="section-title">{{ __('order.sold_to') }}</div>
             <table class="info-table">
                 <tr>
-                    <td class="label">Governorate:</td>
+                    <td class="label">{{ __('address.Governorate') }}:</td>
                     <td class="value">{{ $address?->governorate?->name_en ?? 'N/A' }}</td>
                 </tr>
                 <tr>
-                    <td class="label">District:</td>
+                    <td class="label">{{ __('address.District') }}:</td>
                     <td class="value">{{ $address?->district?->name_en ?? 'N/A' }}</td>
                 </tr>
                 <tr>
-                    <td class="label">City:</td>
+                    <td class="label">{{ __('address.City') }}:</td>
                     <td class="value">{{ $address?->city?->name_en ?? 'N/A' }}</td>
                 </tr>
                 <tr>
-                    <td class="label">Details:</td>
+                    <td class="label">{{ __('order.details') }}:</td>
                     <td class="value">
                         {{
-                            ($address?->street ? 'Street - ' . $address->street . ' ' : '') .
-                            ($address?->building ? 'Building - ' . $address->building . ' ' : '') .
-                            ($address?->floor ? 'Floor - ' . $address->floor : '') ?: 'N/A'
+                            ($address?->street ? __('order.street_prefix') . ' - ' . $address->street . ' ' : '') .
+                            ($address?->building ? __('order.building_prefix') . ' - ' . $address->building . ' ' : '') .
+                            ($address?->floor ? __('order.floor_prefix') . ' - ' . $address->floor : '') ?: 'N/A'
                         }}
                     </td>
                 </tr>
                 <tr>
-                    <td class="label">Full Name:</td>
+                    <td class="label">{{ __('order.full_name') }}:</td>
                     <td class="value">{{ $order->customer->first_name }}</td>
                 </tr>
                 <tr>
-                    <td class="label">Phone:</td>
+                    <td class="label">{{ __('order.phone_label') }}:</td>
                     <td class="value">{{ $order->customer->mobile }}</td>
                 </tr>
                 <tr>
-                    <td class="label">Email:</td>
+                    <td class="label">{{ __('order.email_label') }}:</td>
                     <td class="value">{{ $order->customer->email }}</td>
                 </tr>
             </table>
@@ -238,12 +238,12 @@
     <table class="items-table">
         <thead>
             <tr>
-                <th>CODE</th>
-                <th>ITEM DESCRIPTION</th>
-                <th>QTY</th>
-                <th>Unit Of Measure</th>
-                <th>UNIT PRICE</th>
-                <th>TOTAL</th>
+                <th>{{ __('order.code') }}</th>
+                <th>{{ __('order.item_description') }}</th>
+                <th>{{ __('order.qty') }}</th>
+                <th>{{ __('order.unit_of_measure') }}</th>
+                <th>{{ __('order.unit_price') }}</th>
+                <th>{{ __('order.total') }}</th>
             </tr>
         </thead>
         <tbody>
@@ -262,8 +262,8 @@
 
     <table class="totals">
         <tr>
-            <td><strong>Total</strong></td>
-            <td><strong>IQD</strong></td>
+            <td><strong>{{ __('order.total') }}</strong></td>
+            <td><strong>{{ __('order.currency') }}</strong></td>
             <td><strong>{{ number_format($order->total_amount, 2) }}</strong></td>
         </tr>
     </table>

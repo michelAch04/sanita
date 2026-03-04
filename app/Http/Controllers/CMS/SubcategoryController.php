@@ -51,7 +51,7 @@ class SubcategoryController extends Controller
             'name_en' => 'required|string|max:255',
             'name_ar' => 'required|string|max:255',
             'name_ku' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'visible' => 'nullable|boolean',
             'position' => 'nullable|integer|min:0',
         ]);
@@ -98,7 +98,7 @@ class SubcategoryController extends Controller
             'name_en' => 'required|string|max:255',
             'name_ar' => 'required|string|max:255',
             'name_ku' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'visible' => 'nullable|boolean',
         ]);
 

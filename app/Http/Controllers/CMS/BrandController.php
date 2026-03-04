@@ -93,7 +93,7 @@ class BrandController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'visible' => 'nullable|boolean', // visible is the checkbox name in the form
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         ]);
 
 

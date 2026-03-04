@@ -61,6 +61,7 @@
                     <div>
                         <label for="image" id="imageLabel" class="btn underline-btn">Upload Image</label>
                         <input type="file" id="image" name="image" accept="image/*" hidden>
+                        <small class="text-muted d-block mt-1">Best ratio: 1:1 square (e.g. 800×800 px)</small>
                         @error('image')
                         <div class="text-danger small mt-2">{{ $message }}</div>
                         @enderror
