@@ -24,4 +24,11 @@ return [
     'street_prefix'    => 'Street',
     'building_prefix'  => 'Building',
     'floor_prefix'     => 'Floor',
+    'your_orders'      => 'Your Orders',
+    'order_number'     => 'Order #:number',
+    'placed_on'        => 'Placed On',
+    'status'           => 'Status',
+    'order_again'      => 'Order Again',
+    'view_details'     => 'View Details',
+    'no_orders'        => 'No orders found.',
 ];

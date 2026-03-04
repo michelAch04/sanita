@@ -24,4 +24,11 @@ return [
     'street_prefix'    => 'شوێنەوار',
     'building_prefix'  => 'بینا',
     'floor_prefix'     => 'قەبارە',
+    'your_orders'      => 'داواکاریەکانت',
+    'order_number'     => 'داواکاری #:number',
+    'placed_on'        => 'ڕێکەوتی داواکاری',
+    'status'           => 'دۆخ',
+    'order_again'      => 'داواکاری دووبارە',
+    'view_details'     => 'بینینی وردەکاری',
+    'no_orders'        => 'هیچ داواکاریەک نەدۆزرایەوە.',
 ];

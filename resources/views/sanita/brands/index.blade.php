@@ -5,10 +5,10 @@
 @section('content')
 <section id="Brands" class="py-3 bg-light products-list">
     <div class="px-5 py-2 gx-0 w-100">
-        <h2 class="display-5 text-center mb-5 section-title">{{ __('nav.Brands') }}</h2>
+        <h2 class="display-5 text-center mb-5 section-title">{{ __('nav.brands') }}</h2>
 
         @if($brands->isEmpty())
-        <p class="text-center">{{ __('No brands found.') }}</p>
+        <p class="text-center">{{ __('product.no_brands') }}</p>
         @else
         <div class="d-flex flex-wrap justify-content-center gap-2 list-container">
             @foreach( $brands as $brand)

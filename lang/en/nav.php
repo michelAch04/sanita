@@ -44,4 +44,6 @@ return [
     'search_title' => 'Search results for',
     'continue_shopping' => 'Continue Shopping',
     'close' => 'Close',
+    'filters' => 'Filters',
+    'reset_filters' => 'Reset Filters',
 ];

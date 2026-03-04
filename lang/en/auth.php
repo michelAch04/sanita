@@ -18,6 +18,7 @@ return [
         'otp' => 'OTP Code',
         'submit' => 'Verify',
         'no_account_register' => 'Don\'t have an account? Register',
+        'resend_otp' => 'Resend OTP',
     ],
 
     'failed' => 'These credentials do not match our records.',

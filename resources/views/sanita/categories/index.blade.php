@@ -8,7 +8,7 @@
         <h2 class="display-5 text-center mb-5 section-title">{{ __('nav.categories') }}</h2>
 
         @if($categories->isEmpty())
-        <p class="text-center">{{ __('No categories found.') }}</p>
+        <p class="text-center">{{ __('product.no_categories') }}</p>
         @else
         <div class="d-flex flex-wrap justify-content-center gap-2 list-container">
             @foreach($categories as $category)

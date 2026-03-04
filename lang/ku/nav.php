@@ -45,4 +45,6 @@ return [
     'close' => 'داخستن',
     'brands' => 'مارکەکان',
     'view_all_brands' => '← هەموو مارکەکان',
+    'filters' => 'فلتەرەکان',
+    'reset_filters' => 'ڕیستی فلتەرەکان',
 ];

@@ -12,7 +12,7 @@
                 <form method="GET" action="{{ url()->current() }}" id="sidebar-filterForm"
                     class="filter-form {{ $isRtl ? 'rtl-container' : '' }}">
                     <div class="filter-sidebar" id="filterSidebar">
-                        <h5 class="mb-0">{{ __('Filters') }}</h5>
+                        <h5 class="mb-0">{{ __('nav.filters') }}</h5>
                         <hr class="mt-1 mb-3">
                         @include('sanita.partials.filter-results',
                         ['brands' => $brands,
@@ -26,7 +26,7 @@
 
             <button class="btn underline-btn underline-arctic d-md-none ms-4 align-self-start"
                 onclick="toggleFilterPanel()">
-                <i class="fa fa-filter me-1"></i> {{ __('Filters') }}
+                <i class="fa fa-filter me-1"></i> {{ __('nav.filters') }}
             </button>
 
             @if($products->isEmpty())
@@ -35,10 +35,10 @@
                     <i class="fa-solid fa-filter-circle-xmark"></i>
                 </div>
                 <div class="fs-4 fw-semibold mb-2 text-primary empty-filter-msg">
-                    {{ __('No products match your filters.') }}
+                    {{ __('product.no_products_filter') }}
                 </div>
                 <a href="{{ url()->current() }}" class="btn bubbles bubbles-arctic mt-3 px-4 py-2 fs-6 shadow-sm empty-filter-btn">
-                    <span class="text"><i class="fa fa-filter me-2"></i> {{ __('Reset Filters') }}</span>
+                    <span class="text"><i class="fa fa-filter me-2"></i> {{ __('nav.reset_filters') }}</span>
                 </a>
             </div>
             @else
@@ -64,7 +64,7 @@
 
 <div id="filterPanel" class="filter-panel d-none fixed-bottom">
     <div class="filter-panel-header d-flex justify-content-between align-items-center px-3 py-2 border-bottom">
-        <h5 class="mb-0">{{ __('Filters') }}</h5>
+        <h5 class="mb-0">{{ __('nav.filters') }}</h5>
         <button class="btn-close" onclick="toggleFilterPanel()"></button>
     </div>
     <div class="filter-panel-body px-3 py-2 overflow-auto">

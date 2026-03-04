@@ -24,4 +24,11 @@ return [
     'street_prefix'    => 'الشارع',
     'building_prefix'  => 'المبنى',
     'floor_prefix'     => 'الطابق',
+    'your_orders'      => 'طلباتك',
+    'order_number'     => 'طلب #:number',
+    'placed_on'        => 'تاريخ الطلب',
+    'status'           => 'الحالة',
+    'order_again'      => 'إعادة الطلب',
+    'view_details'     => 'عرض التفاصيل',
+    'no_orders'        => 'لا توجد طلبات.',
 ];
