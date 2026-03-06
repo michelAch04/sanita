@@ -1,12 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Toasts auto show
-    document.querySelectorAll(".toast").forEach((toastEl) => {
-        new bootstrap.Toast(toastEl, {
-            delay: 5000,
-        }).show();
-    });
+    // Read CSRF token from meta tag if not already set
+    if (!window.csrfToken) {
+        const meta = document.querySelector('meta[name="csrf-token"]');
+        if (meta) window.csrfToken = meta.getAttribute('content');
+    }
 
-    // Delete confirmation logic
+    // Delete confirmation logic — defined first so toast errors can't block it
     window.confirmDelete = function (routeTemplate) {
         const modal = bootstrap.Modal.getOrCreateInstance(
             document.getElementById("deleteModal")
@@ -40,6 +39,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
         });
     };
+
+    // Toasts auto show — after confirmDelete so a Bootstrap load failure can't block it
+    try {
+        document.querySelectorAll(".toast").forEach((toastEl) => {
+            new bootstrap.Toast(toastEl, { delay: 5000 }).show();
+        });
+    } catch (e) {}
 });
 
 function showAjaxToast(status, message) {
