@@ -20,10 +20,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/25.3.1/build/css/intlTelInput.min.css">
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/ui-tools.css') }}?v=20260306-2">
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=20260306-2">
-    <link rel="stylesheet" href="{{ asset('css/auth.css') }}?v=20260306-2">
-    <link rel="stylesheet" href="{{ asset('css/mobile.css') }}?v=20260306-2">
+    <link rel="stylesheet" href="{{ asset('css/ui-tools.css') }}?v=20260306-3">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=20260306-3">
+    <link rel="stylesheet" href="{{ asset('css/auth.css') }}?v=20260306-3">
+    <link rel="stylesheet" href="{{ asset('css/mobile.css') }}?v=20260306-3">
 </head>
 
 <!-- Start of Tawk.to Script-->
@@ -256,9 +256,9 @@
 <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/25.3.1/build/js/i18n/ar/index.min.js"></script>
 
 <!-- Laravel Assets -->
-<script src="{{ asset('js/app.js?v=20260306-2') }}"></script>
-<script src="{{ asset('js/modals.js?v=20260306-2') }}"></script>
-<script src="{{ asset('js/promocode.js?v=20260306-2') }}"></script>
+<script src="{{ asset('js/app.js?v=20260306-3') }}"></script>
+<script src="{{ asset('js/modals.js?v=20260306-3') }}"></script>
+<script src="{{ asset('js/promocode.js?v=20260306-3') }}"></script>
 
 <!-- Global Window Variables -->
 <script>

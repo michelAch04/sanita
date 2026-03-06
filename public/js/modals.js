@@ -28,13 +28,15 @@ function confirmDelete(routeTemplate) {
         modal.hide();
         fetch(routeTemplate, {
             method: 'POST',
+            redirect: 'manual',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'X-CSRF-TOKEN': window.csrfToken,
             },
             body: '_method=DELETE',
         }).then(function (response) {
-            if (response.ok || response.redirected) {
+            // opaqueredirect = server redirected after delete (success)
+            if (response.ok || response.redirected || response.type === 'opaqueredirect') {
                 window.location.reload();
             } else {
                 showAjaxToast('failed', 'Failed to delete. Please try again.');
