@@ -9,8 +9,12 @@
 // Top-level function — always available as soon as this script loads,
 // regardless of DOMContentLoaded timing or toast errors.
 function confirmDelete(routeTemplate) {
-    // Convert to relative path to avoid mixed-content blocks on HTTPS
-    try { routeTemplate = new URL(routeTemplate).pathname; } catch (e) {}
+    // Force same protocol as current page to prevent mixed-content blocks on HTTPS
+    try {
+        var u = new URL(routeTemplate);
+        u.protocol = window.location.protocol;
+        routeTemplate = u.href;
+    } catch (e) {}
 
     var modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('deleteModal'));
     modal.show();
