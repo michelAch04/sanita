@@ -16,4 +16,9 @@ class Category extends Model
     {
         return $this->hasMany(Subcategory::class, 'categories_id')->where('hidden', 0);
     }
+
+    public function brands()
+    {
+        return $this->belongsToMany(Brand::class, 'brand_category');
+    }
 }

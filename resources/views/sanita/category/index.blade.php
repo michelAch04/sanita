@@ -9,7 +9,6 @@
         <a href="{{ route('sanita.index', ['locale' => app()->getLocale()]) }}" class="btn underline-btn mb-2 underline-arctic">
             <span class="text"><i class="fa-solid fa-arrow-left me-1"></i> {{ __('nav.back') }}</span>
         </a>
-
         <a href="{{ route('website.categories.index', ['locale' => app()->getLocale()]) }}" class="btn underline-btn mb-2 underline-arctic">
             <span class="text">{{ __('nav.all_categories') }}<i class="fa-solid fa-arrow-right ms-1"></i></span>
         </a>
@@ -23,100 +22,85 @@
             </h2>
         </div>
 
+        @php $hasSubcatFilter = $validSubcategories->count() > 1; @endphp
 
-        @if($category->subcategories->count() > 1)
-        <!-- Multiple subcategories: Show tabs -->
-        <div class="subcategory-tabs-container mb-4 position-relative">
-            <!-- Left Arrow -->
+        @if($categoryBrands->isNotEmpty())
+        <!-- Brand Filter Row -->
+        <div class="subcategory-tabs-container {{ $hasSubcatFilter ? 'mb-2' : 'mb-4' }} position-relative" id="brandFilterContainer">
             <button class="scroll-btn scroll-left" aria-label="Scroll left">
                 <i class="fa-solid fa-chevron-left"></i>
             </button>
+            <div class="subcategory-tabs-wrapper">
+                <ul class="nav nav-pills flex-nowrap" id="brandFilterTabs" role="tablist">
+                    <li class="nav-item">
+                        <button class="nav-link active" data-brand="0" type="button">
+                            <img src="{{ asset('images/login/sanita.png') }}" alt="All Brands" class="brand-pill-img">
+                            <span>{{ __('nav.all_brands') ?? 'All Brands' }}</span>
+                        </button>
+                    </li>
+                    @foreach($categoryBrands as $brand)
+                    <li class="nav-item">
+                        <button class="nav-link" data-brand="{{ $brand->id }}" type="button">
+                            <img src="{{ $brand->extension ? asset('storage/brands/' . $brand->id . '.' . $brand->extension) : asset('images/login/sanita.png') }}"
+                                 alt="{{ $brand->{'name_'.app()->getLocale()} ?? $brand->name_en }}"
+                                 class="brand-pill-img">
+                            <span>{{ $brand->{'name_'.app()->getLocale()} ?? $brand->name_en }}</span>
+                        </button>
+                    </li>
+                    @endforeach
+                </ul>
+            </div>
+            <button class="scroll-btn scroll-right" aria-label="Scroll right">
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </div>
+        @endif
 
-            <!-- Scrollable Nav Tabs -->
+        @if($hasSubcatFilter)
+        <!-- Subcategory Filter Row -->
+        <div class="subcategory-tabs-container mb-4 position-relative" id="subcatFilterContainer">
+            <button class="scroll-btn scroll-left" aria-label="Scroll left">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
             <div class="subcategory-tabs-wrapper">
                 <ul class="nav nav-pills flex-nowrap" id="subcategoryTabs" role="tablist">
-                    @foreach($category->subcategories as $index => $subcategory)
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link @if($index === 0) active @endif"
-                            id="tab-{{ $subcategory->id }}"
-                            data-bs-toggle="pill"
-                            data-bs-target="#content-{{ $subcategory->id }}"
-                            type="button"
-                            role="tab"
-                            onclick="activeIndex = '{{ $index }}';">
+                    <li class="nav-item">
+                        <button class="nav-link active" data-subcat="0" type="button">
+                            {{ __('nav.all_subcategories') ?? 'All Subcategories' }}
+                        </button>
+                    </li>
+                    @foreach($validSubcategories as $subcategory)
+                    <li class="nav-item">
+                        <button class="nav-link" data-subcat="{{ $subcategory->id }}" type="button">
                             {{ $subcategory->{'name_'.app()->getLocale()} ?? $subcategory->name_en }}
                         </button>
                     </li>
                     @endforeach
                 </ul>
             </div>
-
-            <!-- Right Arrow -->
             <button class="scroll-btn scroll-right" aria-label="Scroll right">
                 <i class="fa-solid fa-chevron-right"></i>
             </button>
         </div>
-
-        <div class="tab-content" id="subcategoryTabContent">
-            @foreach($category->subcategories as $index => $subcategory)
-            @php
-            $subProducts = $productsBySubcategory[$subcategory->id] ?? null;
-            @endphp
-            <div class="tab-pane fade @if($index === 0) show active @endif"
-                id="content-{{ $subcategory->id }}"
-                role="tabpanel">
-                @if($subProducts && $subProducts->isNotEmpty())
-                <div class="products-list">
-                    <div class="d-flex flex-wrap justify-content-center gap-2 list-container">
-                        @foreach($subProducts as $product)
-                        @php
-                        $isOffer = $offers && in_array($product, $offers);
-                        $cardType = $isOffer ? 'offer' : 'product';
-                        $badge = $isOffer ? __('nav.offer') : null;
-                        @endphp
-                        @include('sanita.partials.product-card', [
-                        'product' => $product,
-                        'cardType' => $cardType,
-                        'badge' => $badge
-                        ])
-                        @endforeach
-                    </div>
-                </div>
-                <div class="d-flex justify-content-center mt-0">
-                    {{ $subProducts->withQueryString()->links('pagination::bootstrap-5') }}
-                </div>
-                @else
-                <p class="text-center pt-5 text-primary">{{ __('No products available in this subcategory.') }}</p>
-                @endif
-            </div>
-            @endforeach
-        </div>
-
-        @elseif($category->subcategories->count() === 1)
-        <!-- Exactly one subcategory: show products directly -->
-        @php
-        $onlySubcategory = $category->subcategories->first();
-        $products = $productsBySubcategory[$onlySubcategory->id] ?? $products ?? collect();
-        @endphp
-        @if($products->isNotEmpty())
-        <div class="products-list">
-            <div class="d-flex flex-wrap justify-content-center gap-2 list-container">
-                @foreach($products as $product)
-                @include('sanita.partials.product-card', [
-                'product' => $product,
-                'cardType' => 'product'
-                ]) @endforeach
-            </div>
-        </div>
-        <div class="d-flex justify-content-center mt-0">
-            {{ $products->withQueryString()->links('pagination::bootstrap-5') }}
-        </div>
-        @else
-        <p class="text-center pt-5 text-primary">{{ __('No products available in this category.') }}</p>
         @endif
 
+        @if($allProducts->isNotEmpty())
+        <div class="products-list">
+            <div class="d-flex flex-wrap justify-content-center gap-2 list-container">
+                @foreach($allProducts as $product)
+                @php
+                $isOffer = $offers && in_array($product, $offers);
+                $cardType = $isOffer ? 'offer' : 'product';
+                $badge = $isOffer ? __('nav.offer') : null;
+                @endphp
+                @include('sanita.partials.product-card', ['product' => $product, 'cardType' => $cardType, 'badge' => $badge])
+                @endforeach
+            </div>
+        </div>
+        <p class="no-results-msg text-center pt-5 text-primary" style="display:none;">
+            {{ __('No products match your selection.') }}
+        </p>
         @else
-        <!-- No subcategories -->
         <p class="text-center pt-5 text-primary">{{ __('No products available in this category.') }}</p>
         @endif
     </div>
@@ -126,82 +110,85 @@
 @include('sanita.partials.contact-us')
 <link href="{{ asset('css/category.css') }}" rel="stylesheet" />
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const wrapper = document.querySelector(".subcategory-tabs-wrapper");
-        const btnLeft = document.querySelector(".scroll-left");
-        const btnRight = document.querySelector(".scroll-right");
-        const navLinks = wrapper?.querySelectorAll("#subcategoryTabs .nav-link");
-        const tabsContent = document.querySelectorAll('#subcategoryTabContent .tab-pane');
-        let activeIndex = 0;
+document.addEventListener("DOMContentLoaded", function () {
 
+    var activeBrand = 0;
+    var activeSubcat = 0;
 
-        if (!wrapper || !btnLeft || !btnRight || !navLinks?.length) return;
-
-        // Scroll to next tab
-        btnRight.addEventListener("click", () => {
-            btnRight.classList.add('activated');
-            activeIndex++;
-            if (activeIndex >= navLinks.length) activeIndex = navLinks.length - 1;
-            updateActiveLink();
-
-            const targetBtn = navLinks[activeIndex];
-            const offset = targetBtn.offsetLeft + targetBtn.offsetWidth - wrapper.offsetWidth;
-
-            wrapper.scrollTo({
-                left: offset,
-                behavior: "smooth"
-            });
-
-            setTimeout(() => btnRight.classList.remove('activated'), 300);
-        });
-
-        // Scroll to previous tab
-        btnLeft.addEventListener("click", () => {
-            btnLeft.classList.add('activated');
-            activeIndex--;
-            if (activeIndex < 0) activeIndex = 0;
-            updateActiveLink();
-
-            const targetBtn = navLinks[activeIndex];
-            const offset = targetBtn.offsetLeft - wrapper.offsetLeft;
-
-            wrapper.scrollTo({
-                left: offset,
-                behavior: "smooth"
-            });
-
-            setTimeout(() => btnLeft.classList.remove('activated'), 300);
-        });
-
-
-        function updateActiveLink() {
-            if (activeIndex > navLinks.length - 1 || activeIndex < 0) {
-                activeIndex = activeIndex < 0 ? 0 : navLinks.length - 1;
-                return;
+    // ── Combined filter ───────────────────────────────────────────────────
+    function applyFilters() {
+        var visible = 0;
+        document.querySelectorAll('.product-card[data-brand-id]').forEach(function (card) {
+            var brandMatch = activeBrand === 0 || parseInt(card.dataset.brandId) === activeBrand;
+            var subcatMatch = activeSubcat === 0 || parseInt(card.dataset.subcategoryId) === activeSubcat;
+            var show = brandMatch && subcatMatch;
+            if (show) {
+                card.style.removeProperty('display');
+                visible++;
+            } else {
+                card.style.setProperty('display', 'none', 'important');
             }
-            const currentActive = document.querySelector('#subcategoryTabs .nav-link.active');
-            const currentActiveTab = document.querySelector('#subcategoryTabContent .tab-pane.active');
+        });
+        var noMsg = document.querySelector('.no-results-msg');
+        if (noMsg) noMsg.style.display = visible === 0 ? '' : 'none';
+    }
 
-            currentActive.classList.remove('active');
-            currentActiveTab.classList.remove('show');
-            currentActiveTab.classList.remove('active');
+    // ── Generic scrollable filter row initializer ─────────────────────────
+    function initFilterRow(containerId, onActivate) {
+        var container = document.getElementById(containerId);
+        if (!container) return;
 
-            navLinks[activeIndex].classList.add('active');
-            tabsContent[activeIndex].classList.add('show');
-            tabsContent[activeIndex].classList.add('active');
+        var wrapper = container.querySelector('.subcategory-tabs-wrapper');
+        var btnLeft = container.querySelector('.scroll-left');
+        var btnRight = container.querySelector('.scroll-right');
+        var pills = Array.from(container.querySelectorAll('.nav-link'));
+        if (!wrapper || !pills.length) return;
+
+        var idx = 0;
+        pills.forEach(function (p, i) { if (p.classList.contains('active')) idx = i; });
+
+        function activate(newIdx) {
+            idx = Math.max(0, Math.min(newIdx, pills.length - 1));
+            pills.forEach(function (p) { p.classList.remove('active'); });
+            pills[idx].classList.add('active');
+            onActivate(pills[idx]);
+            applyFilters();
         }
+
+        pills.forEach(function (pill, i) {
+            pill.addEventListener('click', function () { activate(i); });
+        });
+
+        if (btnRight) {
+            btnRight.addEventListener('click', function () {
+                btnRight.classList.add('activated');
+                activate(idx + 1);
+                var t = pills[idx];
+                wrapper.scrollTo({ left: t.offsetLeft + t.offsetWidth - wrapper.offsetWidth, behavior: 'smooth' });
+                setTimeout(function () { btnRight.classList.remove('activated'); }, 300);
+            });
+        }
+
+        if (btnLeft) {
+            btnLeft.addEventListener('click', function () {
+                btnLeft.classList.add('activated');
+                activate(idx - 1);
+                var t = pills[idx];
+                wrapper.scrollTo({ left: t.offsetLeft - wrapper.offsetLeft, behavior: 'smooth' });
+                setTimeout(function () { btnLeft.classList.remove('activated'); }, 300);
+            });
+        }
+    }
+
+    // ── Initialise rows ───────────────────────────────────────────────────
+    initFilterRow('brandFilterContainer', function (pill) {
+        activeBrand = parseInt(pill.dataset.brand ?? 0);
     });
 
-    function initBtnWidth(navLinks) {
-        // Make all nav-link buttons same width as the widest one
-        let maxWidth = 0;
-        navLinks.forEach(btn => {
-            btn.style.width = 'auto'; // reset if previously set
-            const btnWidth = btn.offsetWidth;
-            if (btnWidth > maxWidth) maxWidth = btnWidth;
-        });
-        navLinks.forEach(btn => btn.style.width = maxWidth + 'px');
-    }
+    initFilterRow('subcatFilterContainer', function (pill) {
+        activeSubcat = parseInt(pill.dataset.subcat ?? 0);
+    });
+});
 </script>
 
 @endsection

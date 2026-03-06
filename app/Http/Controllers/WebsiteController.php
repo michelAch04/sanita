@@ -197,52 +197,35 @@ class WebsiteController extends Controller
     public function category(Request $request)
     {
         $category_id = $request->category;
-        $category = Category::with('subcategories')->find($category_id);
+        $category = Category::with('subcategories', 'brands')->find($category_id);
 
         if (!$category) {
             return redirect()->back()->with('error', 'Category not found');
         }
 
-        // Only include visible subcategories (not hidden or cancelled)
         $validSubcategories = $category->subcategories->filter(function ($sub) {
             return !$sub->hidden && !$sub->cancelled;
-        });
+        })->values();
 
-        $productsBySubcategory = [];
-        $products = collect();
+        $allProducts = collect();
 
-        if ($validSubcategories->count() > 1) {
-            // Multiple subcategories: get products paginated per subcategory
-            $products = $this->getAvailableProducts();
-            foreach ($validSubcategories as $subcategory) {
-                $filtered = $products->filter(function ($product) use ($subcategory) {
-                    return $product->subcategories_id == $subcategory->id
-                        && $product->listPrices->where('cancelled', 0)->count() > 0;
-                })->values();
-                $productsBySubcategory[$subcategory->id] = $this->paginateCollection($filtered, 20, 'page_sub_' . $subcategory->id);
-            }
-        } elseif ($validSubcategories->count() === 1) {
-            // Exactly one subcategory: show products of that subcategory without tabs
-            $subcategory = $validSubcategories->first();
-            $products = $this->getAvailableProducts();
-            $filtered = $products->filter(function ($product) use ($subcategory) {
-                return $product->subcategories_id == $subcategory->id
-                    && $product->listPrices->where('hidden', 0)->count() > 0;
+        if ($validSubcategories->isNotEmpty()) {
+            $subcategoryIds = $validSubcategories->pluck('id');
+            $allProducts = $this->getAvailableProducts()->filter(function ($product) use ($subcategoryIds) {
+                return $subcategoryIds->contains($product->subcategories_id)
+                    && $product->listPrices->where('cancelled', 0)->count() > 0;
             })->values();
-            $productsBySubcategory[$subcategory->id] = $this->paginateCollection($filtered, 20, 'page_sub_' . $subcategory->id);
-        } else {
-            // No subcategories = no products
-            $products = collect();
-            $productsBySubcategory = [];
         }
 
-        $offers = $this->getOffers($products);
+        $offers = $this->getOffers($allProducts);
+        $categoryBrands = $category->brands->where('hidden', 0)->where('cancelled', 0)->values();
 
         return view('sanita.category.index', [
-            'category' => $category,
-            'productsBySubcategory' => $productsBySubcategory,
-            'products' => $products,
-            'offers' => $offers,
+            'category'          => $category,
+            'validSubcategories' => $validSubcategories,
+            'allProducts'       => $allProducts,
+            'offers'            => $offers,
+            'categoryBrands'    => $categoryBrands,
         ]);
     }
 

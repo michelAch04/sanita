@@ -44,6 +44,25 @@
                     <label for="visible" class="tgl-btn" data-tg-on="Yes" data-tg-off="No"></label>
                 </div>
 
+                {{-- Linked Categories --}}
+                @if($categories->isNotEmpty())
+                <div class="mb-5">
+                    <label class="form-label fw-semibold mb-3" style="color: var(--primary-color); font-size: 16px;">Linked Categories</label>
+                    <div class="d-flex flex-wrap gap-3">
+                        @foreach($categories as $category)
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="categories[]"
+                                id="cat_{{ $category->id }}" value="{{ $category->id }}"
+                                {{ in_array($category->id, old('categories', $selectedCategories)) ? 'checked' : '' }}>
+                            <label class="form-check-label" for="cat_{{ $category->id }}">
+                                {{ $category->name_en }}
+                            </label>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+
                 {{-- Upload Image --}}
                 <div class="d-flex align-items-start gap-4 mb-4 flex-wrap upload-container">
                     <!-- Custom Upload Button -->

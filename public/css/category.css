@@ -94,6 +94,66 @@
     width: 18%;
 }
 
+/* Brand filter pills — identical base to #subcategoryTabs, vertical layout */
+#brandFilterTabs {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+}
+
+#brandFilterTabs .nav-link {
+    border-radius: 2rem;
+    padding: 0.5rem 0.9rem;
+    background-color: var(--secondary-bg);
+    color: var(--primary-blue) !important;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.132);
+    font-weight: 500;
+    font-size: 0.95rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    min-width: 68px;
+    white-space: nowrap;
+}
+
+#brandFilterTabs .nav-link:hover {
+    background-color: var(--link-blue);
+    color: var(--light-text) !important;
+}
+
+#brandFilterTabs .nav-link.active {
+    background-color: var(--primary-blue) !important;
+    color: var(--light-text) !important;
+}
+
+.brand-pill-img {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+    border-radius: 3px;
+    display: block;
+}
+
+@media (max-width: 768px) {
+    #brandFilterTabs {
+        gap: 0.4rem;
+    }
+
+    #brandFilterTabs .nav-link {
+        font-size: 0.85rem;
+        padding: 0.4rem 0.7rem;
+        min-width: 58px;
+    }
+
+    .brand-pill-img {
+        width: 26px;
+        height: 26px;
+    }
+}
+
 .footer {
     z-index: 9999;
 }

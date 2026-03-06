@@ -11,17 +11,13 @@ $isRtl = 0;
                 <h5 class="modal-title" id="deleteModalLabel">{{__('delete.Confirm_Deletion')}}</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="deleteForm" method="POST">
-                @csrf
-                @method('DELETE')
-                <div class="modal-body">
-                    {{__('delete.Confirm_Deletion_Message')}}
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="opacity: 0.63;">{{__('delete.Cancel')}}</button>
-                    <button type="submit" class="btn btn-danger" style="background-color:rgba(204, 0, 0, 0.63);">{{__('delete.Delete')}}</button>
-                </div>
-            </form>
+            <div class="modal-body">
+                {{__('delete.Confirm_Deletion_Message')}}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="opacity: 0.63;">{{__('delete.Cancel')}}</button>
+                <button type="button" id="deleteConfirmBtn" class="btn btn-danger" style="background-color:rgba(204, 0, 0, 0.63);">{{__('delete.Delete')}}</button>
+            </div>
         </div>
     </div>
 </div>

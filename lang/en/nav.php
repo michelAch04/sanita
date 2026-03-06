@@ -19,6 +19,8 @@ return [
     'menu' => 'Menu',
     'view_all_categories' => 'View All Categories',
     'all_categories' => 'Categories',
+    'all_brands' => 'All Brands',
+    'all_subcategories' => 'All',
     'view_all_products' => 'View All Products',
     'view_all_offers' => 'View All Offers',
     'view_all_brands' => 'View All Brands',

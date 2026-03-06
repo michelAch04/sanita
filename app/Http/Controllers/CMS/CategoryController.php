@@ -4,6 +4,7 @@ namespace App\Http\Controllers\CMS;
 
 use App\Http\Controllers\Controller;
 
+use App\Models\Brand;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
@@ -38,14 +39,13 @@ class CategoryController extends Controller
 
     public function create()
     {
-        return view('cms.categories.create');
+        $brands = Brand::where('cancelled', 0)->where('hidden', 0)->orderBy('name_en')->get();
+        return view('cms.categories.create', compact('brands'));
     }
 
     public function store(Request $request)
     {
         try {
-            // Checkbox value: visible = 1 (checked), not present if unchecked
-            // So we invert it to store 'hidden' in DB
             $hidden = $request->has('visible') ? 0 : 1;
 
             $validate = $request->validate([
@@ -54,6 +54,8 @@ class CategoryController extends Controller
                 'name_ku' => 'required|string|max:255',
                 'image' => 'nullable|mimes:jpg,jpeg,png,gif,svg',
                 'dominance' => 'required|in:height,width,none',
+                'brands' => 'nullable|array',
+                'brands.*' => 'exists:brands,id',
             ]);
 
             $extension = null;
@@ -74,9 +76,10 @@ class CategoryController extends Controller
                 $imageName = $category->id . '.' . $extension;
                 $request->file('image')->move(public_path('storage/categories'), $imageName);
 
-                // Update category with extension
                 $category->update(['extension' => $extension]);
             }
+
+            $category->brands()->sync($request->input('brands', []));
 
             return redirect()->route('categories.index')->with('success', 'Category created successfully.');
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -95,15 +98,15 @@ class CategoryController extends Controller
                 return redirect()->route('categories.index')->with('error', 'This category is cancelled and cannot be edited.');
             }
 
-            return view('cms.categories.edit', compact('category'));
+            $brands = Brand::where('cancelled', 0)->where('hidden', 0)->orderBy('name_en')->get();
+            $selectedBrands = $category->brands->pluck('id')->toArray();
+
+            return view('cms.categories.edit', compact('category', 'brands', 'selectedBrands'));
         } catch (\Exception $e) {
             return redirect()->route('categories.index')->with('error', 'Failed to fetch category: ' . $e->getMessage());
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Category $category)
     {
         $validatedData = $request->validate([
@@ -113,12 +116,14 @@ class CategoryController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
             'visible' => 'required|boolean',
             'dominance' => 'required|in:height,width,none',
+            'brands' => 'nullable|array',
+            'brands.*' => 'exists:brands,id',
         ]);
 
         $category->name_en = $validatedData['name_en'];
         $category->name_ar = $validatedData['name_ar'];
         $category->name_ku = $validatedData['name_ku'];
-        $category->hidden = !$validatedData['visible']; // invert visible to store hidden
+        $category->hidden = !$validatedData['visible'];
         $category->dominance = $validatedData['dominance'];
 
         if ($request->hasFile('image')) {
@@ -135,12 +140,11 @@ class CategoryController extends Controller
         }
         $category->save();
 
+        $category->brands()->sync($request->input('brands', []));
+
         return redirect()->route('categories.index')->with('success', 'Category updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Category $category)
     {
         $oldPath = public_path('storage/categories/' . $category->id . '.' . $category->extension);
@@ -148,10 +152,9 @@ class CategoryController extends Controller
             unlink($oldPath);
         }
 
-
         $category->update(['cancelled' => 1]);
 
-        return redirect()->route('categories.index')->with('success', 'categories deleted successfully.');
+        return redirect()->route('categories.index')->with('success', 'Category deleted successfully.');
     }
 
     public function reorder(Request $request)

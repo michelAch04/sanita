@@ -5,6 +5,7 @@ namespace App\Http\Controllers\CMS;
 use App\Http\Controllers\Controller;
 
 use App\Models\Brand;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class BrandController extends Controller
@@ -36,44 +37,44 @@ class BrandController extends Controller
 
     public function create()
     {
-        return view('cms.brands.create');
+        $categories = Category::where('cancelled', 0)->where('hidden', 0)->orderBy('name_en')->get();
+        return view('cms.brands.create', compact('categories'));
     }
 
     public function store(Request $request)
     {
-        // Validate the request
         $request->validate([
-            'name_en' => 'required|string|max:255|unique:brands,name',
-            'name_ar' => 'required|string|max:255|unique:brands,name',
-            'name_ku' => 'required|string|max:255|unique:brands,name',
-            'visible' => 'nullable|boolean', // visible is the checkbox name in the form
+            'name_en' => 'required|string|max:255|unique:brands,name_en',
+            'name_ar' => 'required|string|max:255|unique:brands,name_ar',
+            'name_ku' => 'required|string|max:255|unique:brands,name_ku',
+            'visible' => 'nullable|boolean',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif',
+            'categories' => 'nullable|array',
+            'categories.*' => 'exists:categories,id',
         ]);
 
         try {
-            // Determine if brand is hidden (checkbox not checked = hidden)
             $isHidden = $request->has('visible') ? 0 : 1;
 
-            // Create the brand without the image first to get the ID
             $brand = Brand::create([
-                'name' => $request->name,
+                'name_en' => $request->name_en,
+                'name_ar' => $request->name_ar,
+                'name_ku' => $request->name_ku,
                 'hidden' => $isHidden,
-                'extension' => 'png', // temporary value
+                'extension' => 'png',
                 'cancelled' => 0,
             ]);
 
-            // Handle the image upload
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $extension = $image->getClientOriginalExtension();
                 $imageName = $brand->id . '.' . $extension;
                 $image->storeAs('brands', $imageName, 'public');
 
-                // Update the brand with the correct extension
-                $brand->update([
-                    'extension' => $extension,
-                ]);
+                $brand->update(['extension' => $extension]);
             }
+
+            $brand->categories()->sync($request->input('categories', []));
 
             return redirect()->route('brands.index')->with('success', 'Brand created successfully.');
         } catch (\Exception $e) {
@@ -84,43 +85,49 @@ class BrandController extends Controller
 
     public function edit(Brand $brand)
     {
-        return view('cms.brands.edit', compact('brand'));
+        $categories = Category::where('cancelled', 0)->where('hidden', 0)->orderBy('name_en')->get();
+        $selectedCategories = $brand->categories->pluck('id')->toArray();
+        return view('cms.brands.edit', compact('brand', 'categories', 'selectedCategories'));
     }
 
     public function update(Request $request, $id)
     {
-
         $request->validate([
-            'name' => 'required|string|max:255',
-            'visible' => 'nullable|boolean', // visible is the checkbox name in the form
+            'name_en' => 'required|string|max:255',
+            'name_ar' => 'required|string|max:255',
+            'name_ku' => 'required|string|max:255',
+            'visible' => 'nullable|boolean',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'categories' => 'nullable|array',
+            'categories.*' => 'exists:categories,id',
         ]);
-
-
 
         try {
             $brand = Brand::findOrFail($id);
 
-            // Convert visible checkbox into hidden DB value (inverted logic)
             $hidden = $request->has('visible') ? 0 : 1;
 
-            // Update name and hidden status
             $brand->update([
-                'name' => $request->name,
+                'name_en' => $request->name_en,
+                'name_ar' => $request->name_ar,
+                'name_ku' => $request->name_ku,
                 'hidden' => $hidden,
             ]);
 
-            // Handle optional image upload
             if ($request->hasFile('image')) {
+                $oldPath = public_path('storage/brands/' . $brand->id . '.' . $brand->extension);
+                if (file_exists($oldPath)) {
+                    unlink($oldPath);
+                }
                 $image = $request->file('image');
                 $extension = $image->getClientOriginalExtension();
                 $imageName = $brand->id . '.' . $extension;
-                $request->image->move(public_path('storage/brands'), $imageName);
+                $image->move(public_path('storage/brands'), $imageName);
 
-                $brand->update([
-                    'extension' => $extension,
-                ]);
+                $brand->update(['extension' => $extension]);
             }
+
+            $brand->categories()->sync($request->input('categories', []));
 
             return redirect()->route('brands.index')->with('success', 'Brand updated successfully.');
         } catch (\Exception $e) {
@@ -139,7 +146,7 @@ class BrandController extends Controller
 
             $brand->update(['cancelled' => 1]);
 
-            return redirect()->route('brands.index')->with('success', 'brand deleted successfully.');
+            return redirect()->route('brands.index')->with('success', 'Brand deleted successfully.');
         } catch (\Exception $e) {
             return redirect()->route('brands.index')->with('error', 'Failed to delete brand: ' . $e->getMessage());
         }

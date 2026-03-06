@@ -69,6 +69,25 @@
                     </small>
                 </div>
 
+                {{-- Linked Brands --}}
+                @if($brands->isNotEmpty())
+                <div class="mb-5">
+                    <label class="form-label fw-semibold mb-3" style="color: var(--primary-color); font-size: 16px;">Linked Brands</label>
+                    <div class="d-flex flex-wrap gap-3">
+                        @foreach($brands as $brand)
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="brands[]"
+                                id="brand_{{ $brand->id }}" value="{{ $brand->id }}"
+                                {{ in_array($brand->id, old('brands', [])) ? 'checked' : '' }}>
+                            <label class="form-check-label" for="brand_{{ $brand->id }}">
+                                {{ $brand->name_en }}
+                            </label>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+
                 {{-- Upload Image --}}
                 <div class="d-flex align-items-start gap-4 mb-4 flex-wrap upload-container">
                     <!-- Custom Upload Button -->

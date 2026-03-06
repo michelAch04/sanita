@@ -8,15 +8,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Delete confirmation logic
     window.confirmDelete = function (routeTemplate) {
-        const form = document.getElementById("deleteForm");
-        if (!form) {
-            return;
-        }
-        form.action = routeTemplate;
         const modal = bootstrap.Modal.getOrCreateInstance(
             document.getElementById("deleteModal")
         );
         modal.show();
+
+        const btn = document.getElementById("deleteConfirmBtn");
+        // Clone to remove previous listeners
+        const newBtn = btn.cloneNode(true);
+        btn.parentNode.replaceChild(newBtn, btn);
+
+        newBtn.addEventListener("click", function () {
+            modal.hide();
+            fetch(routeTemplate, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-CSRF-TOKEN": window.csrfToken,
+                },
+                body: "_method=DELETE",
+            })
+                .then(function (response) {
+                    if (response.ok || response.redirected) {
+                        window.location.reload();
+                    } else {
+                        showAjaxToast("failed", "Failed to delete. Please try again.");
+                    }
+                })
+                .catch(function () {
+                    showAjaxToast("failed", "Network error. Please try again.");
+                });
+        });
     };
 });
 

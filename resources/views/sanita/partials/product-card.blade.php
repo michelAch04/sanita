@@ -27,7 +27,9 @@ $inCart = in_array($product->id, $cartProductIds);
 
 @if($price && $price->shelf_price > 0)
 <div class="product-card mb-4  {{ !$auth || $totalStock > 0 ? '' : 'out-of-stock-card' }} d-flex justify-content-center align-items-center"
-    data-url="{{ route('website.product.index', ['locale' => app()->getLocale(), 'product' => $product->id]) }}">
+    data-url="{{ route('website.product.index', ['locale' => app()->getLocale(), 'product' => $product->id]) }}"
+    data-brand-id="{{ $product->brands_id ?? 0 }}"
+    data-subcategory-id="{{ $product->subcategories_id ?? 0 }}">
     <div class="card">
         <div class="card__shine"></div>
         <div class="card__glow"></div>
