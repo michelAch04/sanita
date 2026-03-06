@@ -18,8 +18,8 @@
 
 
 
-    <link href="{{ asset('css/ui-tools.css') }}" rel="stylesheet" />
-    <link href="{{ asset('css/view-styles.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/ui-tools.css?v=20260306-1') }}" rel="stylesheet" />
+    <link href="{{ asset('css/view-styles.css?v=20260306-1') }}" rel="stylesheet" />
     @stack('styles') <!-- For page-specific CSS -->
 </head>
 
@@ -75,9 +75,9 @@
 
     @stack('scripts') <!-- For page-specific JS -->
 
-    <script src="{{ asset('js/modals.js') }}"></script>
-    <script src="{{ asset('js/ajax-live-search.js') }}"></script>
-    <script src="{{ asset('js/file-input.js') }}"></script>
+    <script src="{{ asset('js/modals.js?v=20260306-1') }}"></script>
+    <script src="{{ asset('js/ajax-live-search.js?v=20260306-1') }}"></script>
+    <script src="{{ asset('js/file-input.js?v=20260306-1') }}"></script>
     <!-- jQuery (required for Select2) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Summernote JS -->

@@ -1,48 +1,56 @@
-document.addEventListener("DOMContentLoaded", () => {
-    // Read CSRF token from meta tag if not already set
+// Read CSRF token immediately on script parse (before DOMContentLoaded)
+(function () {
     if (!window.csrfToken) {
-        const meta = document.querySelector('meta[name="csrf-token"]');
+        var meta = document.querySelector('meta[name="csrf-token"]');
+        if (meta) window.csrfToken = meta.getAttribute('content');
+    }
+})();
+
+// Top-level function — always available as soon as this script loads,
+// regardless of DOMContentLoaded timing or toast errors.
+function confirmDelete(routeTemplate) {
+    // Convert to relative path to avoid mixed-content blocks on HTTPS
+    try { routeTemplate = new URL(routeTemplate).pathname; } catch (e) {}
+
+    var modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('deleteModal'));
+    modal.show();
+
+    var btn = document.getElementById('deleteConfirmBtn');
+    // Clone to remove any previously attached listeners
+    var newBtn = btn.cloneNode(true);
+    btn.parentNode.replaceChild(newBtn, btn);
+
+    newBtn.addEventListener('click', function () {
+        modal.hide();
+        fetch(routeTemplate, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRF-TOKEN': window.csrfToken,
+            },
+            body: '_method=DELETE',
+        }).then(function (response) {
+            if (response.ok || response.redirected) {
+                window.location.reload();
+            } else {
+                showAjaxToast('failed', 'Failed to delete. Please try again.');
+            }
+        }).catch(function () {
+            showAjaxToast('failed', 'Network error. Please try again.');
+        });
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Re-read CSRF in case the meta tag wasn't available during initial parse
+    if (!window.csrfToken) {
+        var meta = document.querySelector('meta[name="csrf-token"]');
         if (meta) window.csrfToken = meta.getAttribute('content');
     }
 
-    // Delete confirmation logic — defined first so toast errors can't block it
-    window.confirmDelete = function (routeTemplate) {
-        const modal = bootstrap.Modal.getOrCreateInstance(
-            document.getElementById("deleteModal")
-        );
-        modal.show();
-
-        const btn = document.getElementById("deleteConfirmBtn");
-        // Clone to remove previous listeners
-        const newBtn = btn.cloneNode(true);
-        btn.parentNode.replaceChild(newBtn, btn);
-
-        newBtn.addEventListener("click", function () {
-            modal.hide();
-            fetch(routeTemplate, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                    "X-CSRF-TOKEN": window.csrfToken,
-                },
-                body: "_method=DELETE",
-            })
-                .then(function (response) {
-                    if (response.ok || response.redirected) {
-                        window.location.reload();
-                    } else {
-                        showAjaxToast("failed", "Failed to delete. Please try again.");
-                    }
-                })
-                .catch(function () {
-                    showAjaxToast("failed", "Network error. Please try again.");
-                });
-        });
-    };
-
-    // Toasts auto show — after confirmDelete so a Bootstrap load failure can't block it
+    // Toasts auto show — wrapped so a Bootstrap CDN failure can't throw here
     try {
-        document.querySelectorAll(".toast").forEach((toastEl) => {
+        document.querySelectorAll('.toast').forEach(function (toastEl) {
             new bootstrap.Toast(toastEl, { delay: 5000 }).show();
         });
     } catch (e) {}
