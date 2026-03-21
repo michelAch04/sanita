@@ -99,7 +99,7 @@
     .pos-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr); /* mobile: 2 columns */
-        gap: 3px 1px;                          /* row-gap col-gap */
+        gap: 5px 3px;                          /* row-gap col-gap */
         max-width: 960px;
         margin-inline: auto;
     }
@@ -154,9 +154,11 @@
     }
 
     @media (max-width: 575px) {
-        .pos-filter-chip { font-size: 0.71rem; padding: 0.18rem 0.5rem; }
-        .pos-card-name   { font-size: 0.88rem; }
-        .pos-card-address { font-size: 0.76rem; }
+        .pos-filter-chip  { font-size: 0.71rem; padding: 0.18rem 0.5rem; }
+        .pos-card-name    { font-size: 0.76rem; }
+        .pos-card-address { font-size: 0.65rem; }
+        .pos-card-badge   { font-size: 0.62rem; padding: 0.15rem 0.45rem; }
+        .pos-card-icon    { font-size: 1rem; }
     }
 </style>
 @endsection

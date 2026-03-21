@@ -46,7 +46,7 @@ class PosLocationController extends Controller
         if ($cityFilter) {
             $query->where('cities_id', $cityFilter);
         }
-        $locations = $query->paginate(30)->withQueryString();
+        $locations = $query->paginate(24)->withQueryString();
 
         // City chips — only if at least one location has a city assigned
         $cityCounts = PosLocation::with('city')
