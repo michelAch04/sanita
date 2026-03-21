@@ -39,9 +39,9 @@ class PosController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'address' => 'required|string|max:255',
-            'cities_id' => 'required|exists:cities,id',
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
+            'cities_id' => 'nullable|exists:cities,id',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
         ]);
 
         PosLocation::create($validated);
@@ -60,9 +60,9 @@ class PosController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'address' => 'required|string|max:255',
-            'cities_id' => 'required|exists:cities,id',
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
+            'cities_id' => 'nullable|exists:cities,id',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
         ]);
 
         $pos_location->update($validated);

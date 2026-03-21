@@ -43,6 +43,7 @@ return [
     'order_details' => 'Order Details',
     'pos' => 'Find Us Nearby',
     'pos_title' => 'Find a POS Near You',
+    'pos_no_locations' => 'No locations available yet.',
     'search_title' => 'Search results for',
     'continue_shopping' => 'Continue Shopping',
     'close' => 'Close',

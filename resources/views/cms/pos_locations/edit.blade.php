@@ -31,8 +31,8 @@
 
                 {{-- City Select --}}
                 <div class="input-container mb-5 mt-3" style="width: 30%; position: relative; padding-top: 5px;">
-                    <label for="cities_id" class="label select2-label">City</label>
-                    <select id="cities_id" name="cities_id" class="styled-select" required>
+                    <label for="cities_id" class="label select2-label">City <small class="text-muted">(optional)</small></label>
+                    <select id="cities_id" name="cities_id" class="styled-select">
                         <option value="">Select a City</option>
                         @foreach ($cities as $city)
                         <option value="{{ $city->id }}" {{ old('cities_id', $pos->cities_id) == $city->id ? 'selected' : '' }}>
@@ -45,15 +45,15 @@
 
                 {{-- Latitude --}}
                 <div class="input-container mb-5 mt-3" style="width: 30%;">
-                    <input type="number" step="0.000001" id="latitude" name="latitude" value="{{ old('latitude', $pos->latitude) }}" required style="width: 100%;">
-                    <label for="latitude" class="label">Latitude</label>
+                    <input type="number" step="0.000001" id="latitude" name="latitude" value="{{ old('latitude', $pos->latitude) }}" style="width: 100%;">
+                    <label for="latitude" class="label">Latitude <small class="text-muted">(optional)</small></label>
                     <div class="underline"></div>
                 </div>
 
                 {{-- Longitude --}}
                 <div class="input-container mb-5 mt-3" style="width: 30%;">
-                    <input type="number" step="0.000001" id="longitude" name="longitude" value="{{ old('longitude', $pos->longitude) }}" required style="width: 100%;">
-                    <label for="longitude" class="label">Longitude</label>
+                    <input type="number" step="0.000001" id="longitude" name="longitude" value="{{ old('longitude', $pos->longitude) }}" style="width: 100%;">
+                    <label for="longitude" class="label">Longitude <small class="text-muted">(optional)</small></label>
                     <div class="underline"></div>
                 </div>
 

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\PosLocation;
 use App\Models\Address;
-use Illuminate\Http\Request;
 
 class PosLocationController extends Controller
 {
@@ -35,6 +34,10 @@ class PosLocationController extends Controller
         // Get all POS locations
         $locations = PosLocation::all();
 
-        return view('sanita.pos.index', compact('locations', 'defaultLat', 'defaultLng', 'zoom'));
+        // Show list view if no location has coordinates yet; switch to map when they do
+        $hasCoords = $locations->contains(fn($l) => $l->latitude != null && $l->longitude != null);
+        $view = $hasCoords ? 'sanita.pos.index' : 'sanita.pos.list';
+
+        return view($view, compact('locations', 'defaultLat', 'defaultLng', 'zoom'));
     }
 }

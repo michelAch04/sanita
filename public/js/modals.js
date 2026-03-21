@@ -9,10 +9,15 @@
 // Top-level function — always available as soon as this script loads,
 // regardless of DOMContentLoaded timing or toast errors.
 function confirmDelete(routeTemplate) {
-    // Force same protocol as current page to prevent mixed-content blocks on HTTPS
+    // Only upgrade to HTTPS — never downgrade. This prevents mixed-content blocks on
+    // HTTPS pages while also avoiding the "not secure" browser warning that appears when
+    // an ISP proxy strips HTTPS and serves the page over HTTP (the old code forced the
+    // delete URL to HTTP in that case, triggering the warning).
     try {
         var u = new URL(routeTemplate);
-        u.protocol = window.location.protocol;
+        if (window.location.protocol === 'https:') {
+            u.protocol = 'https:';
+        }
         routeTemplate = u.href;
     } catch (e) {}
 
