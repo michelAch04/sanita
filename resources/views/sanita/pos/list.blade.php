@@ -109,7 +109,14 @@
     }
 
     @media (min-width: 992px) {
-        .pos-grid { grid-template-columns: repeat(5, 1fr); }
+        .pos-grid { 
+            grid-template-columns: repeat(5, 1fr);
+         }
+    }
+    @media(min-width: 1100px) {
+        .pos-grid {
+            max-width: 1000px;
+        }
     }
 
     .pos-card {
