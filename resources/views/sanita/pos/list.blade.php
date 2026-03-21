@@ -115,7 +115,7 @@
     }
     @media(min-width: 1100px) {
         .pos-grid {
-            max-width: 1000px;
+            max-width: none; /* allow full width on large screens */
         }
     }
 
