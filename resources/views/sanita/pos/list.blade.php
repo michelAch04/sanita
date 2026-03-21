@@ -4,9 +4,9 @@
 
 @section('content')
 <div class="pos-page" dir="rtl">
-    <div class="container py-3 px-2 px-sm-3">
+    <div class="container my-4 px-3">
 
-        <h2 class="display-6 text-center mb-3 section-title">{{ __('nav.pos_title') }}</h2>
+        <h2 class="display-5 text-center mb-4 section-title px-1">{{ __('nav.pos_title') }}</h2>
 
         {{-- City filter chips (only rendered if any location has a city assigned) --}}
         @if ($cityCounts->isNotEmpty())
@@ -33,10 +33,11 @@
                 <p class="mt-3 text-secondary">{{ __('nav.pos_no_locations') }}</p>
             </div>
         @else
-            <div class="row g-2">
+            {{-- gx-0: no horizontal gap (cards touch) | gy-1: 4px row gap for row distinction --}}
+            <div class="row gx-0 gy-1">
                 @foreach ($locations as $loc)
-                <div class="col-6 col-md-4 col-lg-3">
-                    <div class="pos-card bg-white rounded p-2 d-flex flex-column gap-1">
+                <div class="col-6 col-sm-4 col-lg-3">
+                    <div class="pos-card bg-white p-2 d-flex flex-column gap-1">
                         <div class="d-flex align-items-start gap-1">
                             <i class="bi bi-geo-alt-fill pos-card-icon mt-1"></i>
                             <span class="pos-card-name">{{ $loc->name }}</span>
@@ -53,7 +54,7 @@
             </div>
 
             @if ($locations->hasPages())
-            <div class="d-flex justify-content-center list-pagination mt-3">
+            <div dir="ltr" class="d-flex justify-content-center list-pagination mt-3">
                 {{ $locations->links('pagination::bootstrap-5') }}
             </div>
             @endif
@@ -94,50 +95,43 @@
         color: #fff;
     }
 
+    /* Cells use outline so borders never double-up when touching */
     .pos-card {
-        border: 1px solid var(--tertiary-bg);
+        outline: 1px solid var(--tertiary-bg);
         height: 100%;
-        transition: box-shadow 0.15s ease, transform 0.15s ease;
-    }
-
-    .pos-card:hover {
-        box-shadow: 0 3px 10px rgba(42, 67, 101, 0.1) !important;
-        transform: translateY(-1px);
     }
 
     .pos-card-icon {
-        font-size: 0.85rem;
+        font-size: 1.3rem;
         color: var(--primary-blue);
         flex-shrink: 0;
     }
 
     .pos-card-name {
         font-weight: 600;
-        font-size: 0.82rem;
+        font-size: 0.95rem;
         color: var(--primary-text);
         line-height: 1.3;
     }
 
     .pos-card-address {
-        font-size: 0.74rem;
+        font-size: 0.82rem;
         color: var(--secondary-text);
-        line-height: 1.4;
+        padding-inline-start: 0.25rem;
     }
 
     .pos-card-badge {
         display: inline-block;
-        font-size: 0.66rem;
+        font-size: 0.72rem;
         font-weight: 500;
         color: var(--primary-blue);
         background-color: var(--hover-blue);
         border-radius: 20px;
-        padding: 0.12rem 0.45rem;
+        padding: 0.2rem 0.65rem;
         align-self: flex-end;
     }
 
     @media (max-width: 612px) {
-        .pos-card-name  { font-size: 0.76rem; }
-        .pos-card-address { font-size: 0.68rem; }
         .pos-filter-chip { font-size: 0.71rem; padding: 0.18rem 0.5rem; }
     }
 </style>
