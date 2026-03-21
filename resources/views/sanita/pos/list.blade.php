@@ -36,7 +36,7 @@
             <div class="pos-grid">
                 @foreach ($locations as $loc)
                 <div class="pos-card bg-white p-2 d-flex flex-column gap-1">
-                    <div class="d-flex align-items-start gap-1">
+                    <div class="d-flex align-items-center gap-1">
                         <i class="bi bi-geo-alt-fill pos-card-icon mt-1"></i>
                         <span class="pos-card-name">{{ $loc->name }}</span>
                     </div>
@@ -109,7 +109,7 @@
     }
 
     @media (min-width: 992px) {
-        .pos-grid { grid-template-columns: repeat(4, 1fr); }
+        .pos-grid { grid-template-columns: repeat(5, 1fr); }
     }
 
     .pos-card {
