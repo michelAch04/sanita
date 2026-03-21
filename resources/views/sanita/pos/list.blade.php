@@ -33,22 +33,19 @@
                 <p class="mt-3 text-secondary">{{ __('nav.pos_no_locations') }}</p>
             </div>
         @else
-            {{-- gx-0: no horizontal gap (cards touch) | gy-1: 4px row gap for row distinction --}}
-            <div class="row gx-0 gy-1">
+            <div class="pos-grid">
                 @foreach ($locations as $loc)
-                <div class="col-6 col-sm-4 col-lg-3">
-                    <div class="pos-card bg-white p-2 d-flex flex-column gap-1">
-                        <div class="d-flex align-items-start gap-1">
-                            <i class="bi bi-geo-alt-fill pos-card-icon mt-1"></i>
-                            <span class="pos-card-name">{{ $loc->name }}</span>
-                        </div>
-                        <p class="pos-card-address mb-0">{{ $loc->address }}</p>
-                        @if ($loc->city && !$cityFilter)
-                            <span class="pos-card-badge">
-                                {{ $loc->city->{'name_' . app()->getLocale()} ?? $loc->city->name_ar ?? $loc->city->name_en }}
-                            </span>
-                        @endif
+                <div class="pos-card bg-white p-2 d-flex flex-column gap-1">
+                    <div class="d-flex align-items-start gap-1">
+                        <i class="bi bi-geo-alt-fill pos-card-icon mt-1"></i>
+                        <span class="pos-card-name">{{ $loc->name }}</span>
                     </div>
+                    <p class="pos-card-address mb-0">{{ $loc->address }}</p>
+                    @if ($loc->city && !$cityFilter)
+                        <span class="pos-card-badge">
+                            {{ $loc->city->{'name_' . app()->getLocale()} ?? $loc->city->name_ar ?? $loc->city->name_en }}
+                        </span>
+                    @endif
                 </div>
                 @endforeach
             </div>
@@ -68,6 +65,7 @@
         text-align: right;
     }
 
+    /* ── Filter chips ─────────────────────────────── */
     .pos-filter-wrap {
         display: flex;
         flex-wrap: wrap;
@@ -95,10 +93,29 @@
         color: #fff;
     }
 
-    /* Cells use outline so borders never double-up when touching */
+    /* ── Location grid ────────────────────────────── */
+    /* CSS Grid avoids the percentage-width rounding issues of Bootstrap cols.
+       outline instead of border prevents 2px double-lines where cells touch. */
+    .pos-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* mobile: 2 columns */
+        gap: 3px 1px;                          /* row-gap col-gap */
+        max-width: 960px;
+        margin-inline: auto;
+    }
+
+    @media (min-width: 576px) {
+        .pos-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (min-width: 992px) {
+        .pos-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+
     .pos-card {
         outline: 1px solid var(--tertiary-bg);
         height: 100%;
+        min-width: 0; /* prevent overflow inside grid cell */
     }
 
     .pos-card-icon {
@@ -112,12 +129,16 @@
         font-size: 0.95rem;
         color: var(--primary-text);
         line-height: 1.3;
+        overflow-wrap: break-word;
+        word-break: break-word;
     }
 
     .pos-card-address {
         font-size: 0.82rem;
         color: var(--secondary-text);
         padding-inline-start: 0.25rem;
+        overflow-wrap: break-word;
+        word-break: break-word;
     }
 
     .pos-card-badge {
@@ -129,10 +150,13 @@
         border-radius: 20px;
         padding: 0.2rem 0.65rem;
         align-self: flex-end;
+        white-space: nowrap;
     }
 
-    @media (max-width: 612px) {
+    @media (max-width: 575px) {
         .pos-filter-chip { font-size: 0.71rem; padding: 0.18rem 0.5rem; }
+        .pos-card-name   { font-size: 0.88rem; }
+        .pos-card-address { font-size: 0.76rem; }
     }
 </style>
 @endsection
